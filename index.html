@@ -96,18 +96,6 @@ function loadZukan(){var b=document.getElementById('zkBtn'),l=document.getElemen
 function renderZukan(){var q=(document.getElementById('zkSearch').value||'').trim().toLowerCase();var tree={},total=0,hits=0;for(var i=0;i<zkData.length;i++){var r=zkData[i],m=q&&r.n.toLowerCase().indexOf(q)>=0;total++;if(m)hits++;if(q&&!m)continue;if(!tree[r.d])tree[r.d]={};if(!tree[r.d][r.c])tree[r.d][r.c]={};var sk=r.s||'_';if(!tree[r.d][r.c][sk])tree[r.d][r.c][sk]={};var hk=r.h||'_';if(!tree[r.d][r.c][sk][hk])tree[r.d][r.c][sk][hk]=[];tree[r.d][r.c][sk][hk].push({n:r.n,u:r.u,m:m})}var op=!!q,html='';var l1k=Object.keys(tree);l1k.sort(function(a){return a==='通常ゆる'?-1:1});for(var i1=0;i1<l1k.length;i1++){var d=l1k[i1],bg=L1C[d]||'#6c757d',l2k=Object.keys(tree[d]),l2h='';for(var i2=0;i2<l2k.length;i2++){var c=l2k[i2],l3=tree[d][c],l3k=Object.keys(l3),hasL3=!(l3k.length===1&&l3k[0]==='_'),l3h='';for(var i3=0;i3<l3k.length;i3++){var s=l3k[i3],l4=l3[s],l4k=Object.keys(l4),cards='';for(var i4=0;i4<l4k.length;i4++){var h=l4k[i4],chars=l4[h];if(h!=='_')cards+='<div class="zk-head">'+h+'</div>';for(var ic=0;ic<chars.length;ic++){var ch=chars[ic];cards+='<div class="zk-card'+(ch.m?' zk-match':'')+'"><img src="'+ch.u+'" loading="lazy"><div class="zk-name">'+ch.n+'</div></div>'}}if(hasL3&&s!=='_'){l3h+='<div style="margin:2px 0"><button class="zk-b3'+(op?' op':'')+'" onclick="tgl(this)">'+s+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'"><div class="zk-grid">'+cards+'</div></div></div>'}else{l3h+='<div class="zk-grid">'+cards+'</div>'}}l2h+='<div style="margin:3px 0"><button class="zk-b2'+(op?' op':'')+'" onclick="tgl(this)">'+c+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'">'+l3h+'</div></div>'}html+='<div class="zk-l1"><button class="zk-b1'+(op?' op':'')+'" style="background:'+bg+'" onclick="tgl(this)">'+d+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'">'+l2h+'</div></div>'}document.getElementById('zkCount').textContent=q?hits+'件ヒット / 全'+total+'体':'全'+total+'体';var box=document.getElementById('zkBox');box.innerHTML=html||'<p class="text-muted mt-3">該当なし</p>';if(q&&hits>0){var f=box.querySelector('.zk-match');if(f)f.scrollIntoView({behavior:'smooth',block:'center'})}}
 function tgl(b){b.classList.toggle('op');b.nextElementSibling.classList.toggle('op')}
 function toggleAll(){var bs=document.querySelectorAll('.zk-b1,.zk-b2,.zk-b3'),any=false;for(var i=0;i<bs.length;i++){if(bs[i].classList.contains('op')){any=true;break}}for(var i=0;i<bs.length;i++){if(any){bs[i].classList.remove('op');bs[i].nextElementSibling.classList.remove('op')}else{bs[i].classList.add('op');bs[i].nextElementSibling.classList.add('op')}}}
-function loadStats(){
-  document.getElementById('statsBox').innerHTML='読み込み中...';
-  api({api:'stats'}).then(function(s){
-    var pct=((s.total/s.limit)*100).toFixed(2);
-    var color=s.total<10000?'success':s.total<18000?'warning':'danger';
-    document.getElementById('statsBox').innerHTML=
-      '<div class="mt-2 text-start" style="max-width:300px;margin:auto">'+
-      '<div class="mb-1">📅 '+s.date+'</div>'+
-      '<div class="progress mb-1" style="height:20px"><div class="progress-bar bg-'+color+'" style="width:'+pct+'%">'+s.total+' / '+s.limit+'</div></div>'+
-      '<div>master: '+s.master+' / zukan: '+s.zukan+' / tier: '+s.tier+'</div>'+
-      '</div>';
-  }).catch(function(){document.getElementById('statsBox').innerHTML='<span class="text-danger">取得失敗</span>'});
 }
 </script>
 </body>
