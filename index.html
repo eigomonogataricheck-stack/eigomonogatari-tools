@@ -54,3 +54,49 @@
   <div class="accordion mb-4" id="acc"><div class="accordion-item"><h2 class="accordion-header">
     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#det">詳細条件を設定する</button></h2>
     <div id="det" class="accordion-collapse collapse"><div class="accordion-body bg-light">
+      <label>開催国</label><select id="country" class="form-select form-select-sm"><option value="">指定なし</option></select>
+      <div class="row mt-2"><div class="col-6"><label>～以降（イベント日時）</label><input type="date" id="dateMin" class="form-control form-control-sm"></div><div class="col-6"><label>～以前（イベント日時）</label><input type="date" id="dateMax" class="form-control form-control-sm"></div></div>
+      <div class="row mt-2"><div class="col-6"><label>最低ランク(故障中)</label><select id="rankMin" class="form-select form-select-sm"><option value="">指定なし</option></select></div><div class="col-6"><label>最高ランク(故障中)</label><select id="rankMax" class="form-select form-select-sm"><option value="">指定なし</option></select></div></div>
+      <div class="row mt-2"><div class="col-6"><label>レート最小</label><input type="number" id="rateMin" class="form-control form-control-sm"></div><div class="col-6"><label>レート最大</label><input type="number" id="rateMax" class="form-control form-control-sm"></div></div>
+      <div class="row mt-2"><div class="col-6"><label>枠 (1-5)</label><select id="waku" class="form-select form-select-sm"><option value="">指定なし</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+        <div class="col-6"><label>補正の有無</label><select id="hosei" class="form-select form-select-sm"><option value="0" selected>補正を含まない</option><option value="">補正を含む</option><option value="1">補正のみ</option></select></div></div>
+      <label class="mt-2">最小データ数 <span class="small-info">(推奨10以上)</span></label><input type="number" id="minCount" class="form-control form-control-sm" value="10">
+      <label class="mt-2">ターゲットキャラ (相性/対メタ用)</label><select id="target" class="form-select form-select-sm"><option value="">相性/対メタを選択している場合はキャラを選択してください</option></select>
+    </div></div>
+  </div></div>
+  <button class="btn btn-primary w-100 py-3 fw-bold shadow-sm" onclick="execTier()" id="btn">Tierを生成・表示</button>
+  <div id="loader" class="text-center mt-3" style="display:none"><div class="spinner-border text-primary me-2"></div><span>計算中...</span></div>
+  <div id="tier-result" class="mt-4"></div>
+
+  <hr class="my-5">
+  <h4 class="text-center mb-3">📖 キャラ図鑑</h4>
+  <button class="btn btn-outline-success w-100 py-2 fw-bold" onclick="loadZukan()" id="zkBtn">キャラ図鑑を表示</button>
+  <div id="zkLoader" class="text-center mt-3" style="display:none"><div class="spinner-border text-success me-2"></div><span>読み込み中...</span></div>
+  <div id="zkControls" style="display:none" class="mt-3">
+    <input type="text" id="zkSearch" class="form-control mb-2" placeholder="キャラ名で検索...">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <span id="zkCount" class="text-muted small me-auto"></span>
+      <button class="btn btn-sm btn-outline-secondary" onclick="toggleAll()">全て開く/閉じる</button>
+    </div>
+  </div>
+  <div id="zkBox"></div>
+  <footer class="text-center mt-5 text-muted small">
+    <p>英語物語 非公式ツール</p>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+var API_BASE='https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';
+function api(p){var u=API_BASE+'?'+Object.keys(p).map(function(k){return k+'='+encodeURIComponent(p[k])}).join('&');return fetch(u).then(function(r){return r.json()})}
+window.onload=function(){
+  api({api:'master'}).then(function(d){var f=function(id,l){var e=document.getElementById(id);l.forEach(function(v){e.add(new Option(v,v))})};f('attribute',d.shibari);f('country',d.country);f('rankMin',d.rank);f('rankMax',d.rank);f('target',d.targetChars)}).catch(function(){});
+};
+function execTier(){var b=document.getElementById('btn'),l=document.getElementById('loader'),r=document.getElementById('tier-result');b.disabled=true;l.style.display='block';r.innerHTML='';var p={api:'tier',mode:document.getElementById('mode').value,attribute:document.getElementById('attribute').value,cost:document.getElementById('cost').value,country:document.getElementById('country').value,dateMin:document.getElementById('dateMin').value,dateMax:document.getElementById('dateMax').value,rankMin:document.getElementById('rankMin').value,rankMax:document.getElementById('rankMax').value,rateMin:document.getElementById('rateMin').value,rateMax:document.getElementById('rateMax').value,waku:document.getElementById('waku').value,hosei:document.getElementById('hosei').value,minCount:document.getElementById('minCount').value,target:document.getElementById('target').value};api(p).then(function(res){b.disabled=false;l.style.display='none';if(res.success){var h='<h5 class="mb-3 border-bottom pb-2">生成結果</h5>';res.data.forEach(function(row){if(!row.images.length)return;h+='<div class="tier-row"><div class="rank-label text-secondary">'+row.rankName+'</div><div class="icon-list">'+row.images.map(function(u){return'<img src="'+u+'">'}).join('')+'</div></div>'});r.innerHTML=h||'<p class="text-muted">該当データなし。</p>'}else{r.innerHTML='<div class="alert alert-danger">'+res.error+'</div>'}}).catch(function(){b.disabled=false;l.style.display='none';r.innerHTML='<div class="alert alert-danger">通信失敗</div>'})}
+var zkData=null,zkTimer=null;var L1C={'通常ゆる':'#198754','特殊ゆる':'#dc3545'};
+function loadZukan(){var b=document.getElementById('zkBtn'),l=document.getElementById('zkLoader');b.disabled=true;l.style.display='block';api({api:'zukan'}).then(function(d){l.style.display='none';b.style.display='none';zkData=d;document.getElementById('zkControls').style.display='block';document.getElementById('zkSearch').addEventListener('input',function(){clearTimeout(zkTimer);zkTimer=setTimeout(renderZukan,200)});renderZukan()}).catch(function(){l.style.display='none';b.disabled=false;document.getElementById('zkBox').innerHTML='<div class="alert alert-danger">読み込み失敗</div>'})}
+function renderZukan(){var q=(document.getElementById('zkSearch').value||'').trim().toLowerCase();var tree={},total=0,hits=0;for(var i=0;i<zkData.length;i++){var r=zkData[i],m=q&&r.n.toLowerCase().indexOf(q)>=0;total++;if(m)hits++;if(q&&!m)continue;if(!tree[r.d])tree[r.d]={};if(!tree[r.d][r.c])tree[r.d][r.c]={};var sk=r.s||'_';if(!tree[r.d][r.c][sk])tree[r.d][r.c][sk]={};var hk=r.h||'_';if(!tree[r.d][r.c][sk][hk])tree[r.d][r.c][sk][hk]=[];tree[r.d][r.c][sk][hk].push({n:r.n,u:r.u,m:m})}var op=!!q,html='';var l1k=Object.keys(tree);l1k.sort(function(a){return a==='通常ゆる'?-1:1});for(var i1=0;i1<l1k.length;i1++){var d=l1k[i1],bg=L1C[d]||'#6c757d',l2k=Object.keys(tree[d]),l2h='';for(var i2=0;i2<l2k.length;i2++){var c=l2k[i2],l3=tree[d][c],l3k=Object.keys(l3),hasL3=!(l3k.length===1&&l3k[0]==='_'),l3h='';for(var i3=0;i3<l3k.length;i3++){var s=l3k[i3],l4=l3[s],l4k=Object.keys(l4),cards='';for(var i4=0;i4<l4k.length;i4++){var h=l4k[i4],chars=l4[h];if(h!=='_')cards+='<div class="zk-head">'+h+'</div>';for(var ic=0;ic<chars.length;ic++){var ch=chars[ic];cards+='<div class="zk-card'+(ch.m?' zk-match':'')+'"><img src="'+ch.u+'" loading="lazy"><div class="zk-name">'+ch.n+'</div></div>'}}if(hasL3&&s!=='_'){l3h+='<div style="margin:2px 0"><button class="zk-b3'+(op?' op':'')+'" onclick="tgl(this)">'+s+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'"><div class="zk-grid">'+cards+'</div></div></div>'}else{l3h+='<div class="zk-grid">'+cards+'</div>'}}l2h+='<div style="margin:3px 0"><button class="zk-b2'+(op?' op':'')+'" onclick="tgl(this)">'+c+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'">'+l3h+'</div></div>'}html+='<div class="zk-l1"><button class="zk-b1'+(op?' op':'')+'" style="background:'+bg+'" onclick="tgl(this)">'+d+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'">'+l2h+'</div></div>'}document.getElementById('zkCount').textContent=q?hits+'件ヒット / 全'+total+'体':'全'+total+'体';var box=document.getElementById('zkBox');box.innerHTML=html||'<p class="text-muted mt-3">該当なし</p>';if(q&&hits>0){var f=box.querySelector('.zk-match');if(f)f.scrollIntoView({behavior:'smooth',block:'center'})}}
+function tgl(b){b.classList.toggle('op');b.nextElementSibling.classList.toggle('op')}
+function toggleAll(){var bs=document.querySelectorAll('.zk-b1,.zk-b2,.zk-b3'),any=false;for(var i=0;i<bs.length;i++){if(bs[i].classList.contains('op')){any=true;break}}for(var i=0;i<bs.length;i++){if(any){bs[i].classList.remove('op');bs[i].nextElementSibling.classList.remove('op')}else{bs[i].classList.add('op');bs[i].nextElementSibling.classList.add('op')}}}
+</script>
+</body>
+</html>
