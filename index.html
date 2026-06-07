@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body{padding:20px;background:#f8f9fa;font-family:sans-serif}
+    .container{max-width:640px;background:#fff;padding:25px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+    .tier-row{display:flex;align-items:center;border-bottom:1px solid #dee2e6;padding:10px 0}
+    .rank-label{width:50px;font-weight:bold;font-size:1.1rem;color:#333}
+    .icon-list img{width:45px;height:45px;margin:2px;border-radius:5px;border:1px solid #ccc}
+    label{font-size:.85rem;font-weight:bold;color:#666;margin-top:8px}
+    .small-info{font-size:.75rem;color:#888;font-weight:normal}
+
+    .zk-l1{margin-bottom:8px}
+    .zk-b1{width:100%;text-align:left;font-weight:bold;font-size:.9rem;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;color:#fff;display:flex;justify-content:space-between;align-items:center}
+    .zk-b1:hover{filter:brightness(1.1)}
+    .zk-b2{width:100%;text-align:left;font-weight:bold;font-size:.82rem;padding:6px 12px;border:1px solid #dee2e6;border-radius:6px;cursor:pointer;background:#e9ecef;color:#333;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+    .zk-b2:hover{background:#dee2e6}
+    .zk-b3{width:100%;text-align:left;font-weight:bold;font-size:.76rem;padding:5px 10px;border:1px solid #eee;border-radius:5px;cursor:pointer;background:#f8f9fa;color:#495057;display:flex;justify-content:space-between;align-items:center;margin-top:3px}
+    .zk-b3:hover{background:#e9ecef}
+    .zk-b1 .ar,.zk-b2 .ar,.zk-b3 .ar{transition:transform .2s;font-size:.65rem}
+    .zk-b1.op .ar,.zk-b2.op .ar,.zk-b3.op .ar{transform:rotate(90deg)}
+    .zk-bd{display:none;padding:4px 4px 4px 8px}
+    .zk-bd.op{display:block}
+    .zk-head{font-size:.72rem;font-weight:bold;color:#fff;background:#6c757d;padding:3px 8px;border-radius:4px;margin:8px 0 4px;width:100%}
+    .zk-grid{display:flex;flex-wrap:wrap;gap:4px;padding:2px 0}
+    .zk-card{width:64px;text-align:center;transition:transform .12s}
+    .zk-card:hover{transform:scale(1.1)}
+    .zk-card img{width:54px;height:54px;border-radius:6px;border:1px solid #dee2e6;object-fit:cover;background:#f0f0f0}
+    .zk-name{font-size:.52rem;line-height:1.1;margin-top:1px;word-break:break-all;color:#555}
+    .zk-match img{border:2px solid #ffc107!important;box-shadow:0 0 5px rgba(255,193,7,.5)}
+    .zk-match .zk-name{color:#d63384;font-weight:bold}
+    .zk-cnt{font-size:.6rem;margin-left:6px;opacity:.8}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h4 class="text-center mb-4">Tier表生成</h4>
+  <div class="mb-3">
+    <label>モード（相性と対メタは詳細条件でキャラを選択）</label>
+    <select id="mode" class="form-select">
+      <option>ランクアップ率</option><option>使用者数</option><option>相性</option><option>対メタ</option>
+    </select>
+  </div>
+  <div class="row mb-3">
+    <div class="col-6"><label>属性（縛り）</label><select id="attribute" class="form-select"><option value="">指定なし</option></select></div>
+    <div class="col-6"><label>コスト（縛り）</label>
+      <select id="cost" class="form-select"><option value="">指定なし</option><option value="低">低 (~150)</option><option value="中">中 (151~220)</option><option value="高">高 (221~350)</option><option value="超高">超高 (351~)</option></select>
+    </div>
+  </div>
+  <div class="accordion mb-4" id="acc"><div class="accordion-item"><h2 class="accordion-header">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#det">詳細条件を設定する</button></h2>
+    <div id="det" class="accordion-collapse collapse"><div class="accordion-body bg-light">
+      <label>開催国</label><select id="country" class="form-select form-select-sm"><option value="">指定なし</option></select>
+      <div class="row mt-2"><div class="col-6"><label>～以降（イベント日時）</label><input type="date" id="dateMin" class="form-control form-control-sm"></div><div class="col-6"><label>～以前（イベント日時）</label><input type="date" id="dateMax" class="form-control form-control-sm"></div></div>
+      <div class="row mt-2"><div class="col-6"><label>最低ランク(故障中)</label><select id="rankMin" class="form-select form-select-sm"><option value="">指定なし</option></select></div><div class="col-6"><label>最高ランク(故障中)</label><select id="rankMax" class="form-select form-select-sm"><option value="">指定なし</option></select></div></div>
+      <div class="row mt-2"><div class="col-6"><label>レート最小</label><input type="number" id="rateMin" class="form-control form-control-sm"></div><div class="col-6"><label>レート最大</label><input type="number" id="rateMax" class="form-control form-control-sm"></div></div>
+      <div class="row mt-2"><div class="col-6"><label>枠 (1-5)</label><select id="waku" class="form-select form-select-sm"><option value="">指定なし</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+        <div class="col-6"><label>補正の有無</label><select id="hosei" class="form-select form-select-sm"><option value="0" selected>補正を含まない</option><option value="">補正を含む</option><option value="1">補正のみ</option></select></div></div>
+      <label class="mt-2">最小データ数 <span class="small-info">(推奨10以上)</span></label><input type="number" id="minCount" class="form-control form-control-sm" value="10">
+      <label class="mt-2">ターゲットキャラ (相性/対メタ用)</label><select id="target" class="form-select form-select-sm"><option value="">相性/対メタを選択している場合はキャラを選択してください</option></select>
+    </div></div>
+  </div></div>
+  <button class="btn btn-primary w-100 py-3 fw-bold shadow-sm" onclick="exec()" id="btn">Tierを生成・表示</button>
+  <div id="loader" class="text-center mt-3" style="display:none"><div class="spinner-border text-primary me-2"></div><span>計算中...</span></div>
+  <div id="tier-result" class="mt-4"></div>
+
+  <hr class="my-5">
+  <h4 class="text-center mb-3"> キャラ図鑑</h4>
+  <button class="btn btn-outline-success w-100 py-2 fw-bold" onclick="loadZukan()" id="zkBtn">キャラ図鑑を表示</button>
+  <div id="zkLoader" class="text-center mt-3" style="display:none"><div class="spinner-border text-success me-2"></div><span>読み込み中...</span></div>
+  <div id="zkControls" style="display:none" class="mt-3">
+    <input type="text" id="zkSearch" class="form-control mb-2" placeholder="キャラ名で検索...">
+    <div class="d-flex justify-content:space-between align-items-center mb-2">
+      <span id="zkCount" class="text-muted small me-auto"></span>
+      <button class="btn btn-sm btn-outline-secondary" onclick="toggleAll()">全て開く/閉じる</button>
+    </div>
+  </div>
+  <div id="zkBox"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+window.onload = function(){
+  google.script.run.withSuccessHandler(function(data){
+    var fill = function(id,list){ var el=document.getElementById(id); list.forEach(function(v){el.add(new Option(v,v))}); };
+    fill('attribute',data.shibari); fill('country',data.country); fill('rankMin',data.rank); fill('rankMax',data.rank); fill('target',data.targetChars);
+  }).getMasterData();
+};
+
+function exec(){
+  var btn=document.getElementById('btn'),ld=document.getElementById('loader'),rd=document.getElementById('tier-result');
+  btn.disabled=true;ld.style.display='block';rd.innerHTML='';
+  var f={mode:document.getElementById('mode').value,attribute:document.getElementById('attribute').value,cost:document.getElementById('cost').value,country:document.getElementById('country').value,dateMin:document.getElementById('dateMin').value,dateMax:document.getElementById('dateMax').value,rankMin:document.getElementById('rankMin').value,rankMax:document.getElementById('rankMax').value,rateMin:document.getElementById('rateMin').value,rateMax:document.getElementById('rateMax').value,waku:document.getElementById('waku').value,hosei:document.getElementById('hosei').value,minCount:document.getElementById('minCount').value,target:document.getElementById('target').value};
+  google.script.run.withSuccessHandler(function(res){
+    btn.disabled=false;ld.style.display='none';
+    if(res.success){var h='<h5 class="mb-3 border-bottom pb-2">生成結果</h5>';res.data.forEach(function(row){if(!row.images.length)return;h+='<div class="tier-row"><div class="rank-label text-secondary">'+row.rankName+'</div><div class="icon-list">'+row.images.map(function(u){return'<img src="'+u+'">'}).join('')+'</div></div>'});rd.innerHTML=h||'<p class="text-muted">該当データなし。</p>';}
+    else{rd.innerHTML='<div class="alert alert-danger">'+res.error+'</div>';}
+  }).withFailureHandler(function(){btn.disabled=false;ld.style.display='none';rd.innerHTML='<div class="alert alert-danger">通信失敗</div>';}).runProcessFromWeb(f);
+}
+
+/* ===== 図鑑 ===== */
+var zkData=null,zkTimer=null;
+var L1_COLORS={'通常ゆる':'#198754','特殊ゆる':'#dc3545'};
+
+function loadZukan(){
+  var btn=document.getElementById('zkBtn'),ld=document.getElementById('zkLoader');
+  btn.disabled=true;ld.style.display='block';
+  google.script.run.withSuccessHandler(function(data){
+    ld.style.display='none';btn.style.display='none';
+    zkData=data;
+    document.getElementById('zkControls').style.display='block';
+    document.getElementById('zkSearch').addEventListener('input',function(){clearTimeout(zkTimer);zkTimer=setTimeout(renderZukan,200);});
+    renderZukan();
+  }).withFailureHandler(function(){
+    ld.style.display='none';btn.disabled=false;
+    document.getElementById('zkBox').innerHTML='<div class="alert alert-danger">読み込み失敗</div>';
+  }).getZukanData();
+}
+
+function buildTree(data,q){
+  var tree={},total=0,hits=0;
+  for(var i=0;i<data.length;i++){
+    var r=data[i];
+    var match=q&&r.n.toLowerCase().indexOf(q)>=0;
+    total++;
+    if(match) hits++;
+    if(q&&!match) continue;
+    if(!tree[r.d]) tree[r.d]={};
+    if(!tree[r.d][r.c]) tree[r.d][r.c]={};
+    var sKey=r.s||'_';
+    if(!tree[r.d][r.c][sKey]) tree[r.d][r.c][sKey]={};
+    var hKey=r.h||'_';
+    if(!tree[r.d][r.c][sKey][hKey]) tree[r.d][r.c][sKey][hKey]=[];
+    tree[r.d][r.c][sKey][hKey].push({n:r.n,u:r.u,m:match});
+  }
+  return{tree:tree,total:total,hits:hits};
+}
+
+function renderZukan(){
+  var q=(document.getElementById('zkSearch').value||'').trim().toLowerCase();
+  var res=buildTree(zkData,q);
+  var tree=res.tree,html='';
+  var op=!!q;
+
+  var l1keys=Object.keys(tree);
+  l1keys.sort(function(a,b){return a==='通常ゆる'?-1:1;});
+
+  for(var i1=0;i1<l1keys.length;i1++){
+    var d=l1keys[i1],l2=tree[d];
+    var bg=L1_COLORS[d]||'#6c757d';
+    var l2keys=Object.keys(l2);
+    var l2html='';
+
+    for(var i2=0;i2<l2keys.length;i2++){
+      var c=l2keys[i2],l3=l2[c];
+      var l3keys=Object.keys(l3);
+      var hasL3=!(l3keys.length===1&&l3keys[0]==='_');
+      var l3html='';
+
+      for(var i3=0;i3<l3keys.length;i3++){
+        var s=l3keys[i3],l4=l3[s];
+        var l4keys=Object.keys(l4);
+        var cards='';
+
+        for(var i4=0;i4<l4keys.length;i4++){
+          var h=l4keys[i4],chars=l4[h];
+          if(h!=='_') cards+='<div class="zk-head">'+h+'</div>';
+          for(var ic=0;ic<chars.length;ic++){
+            var ch=chars[ic];
+            cards+='<div class="zk-card'+(ch.m?' zk-match':'')+'"><img src="'+ch.u+'" loading="lazy"><div class="zk-name">'+ch.n+'</div></div>';
+          }
+        }
+
+        if(hasL3&&s!=='_'){
+          l3html+='<div style="margin:2px 0"><button class="zk-b3'+(op?' op':'')+'" onclick="tgl(this)">'+s+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'"><div class="zk-grid">'+cards+'</div></div></div>';
+        } else {
+          l3html+='<div class="zk-grid">'+cards+'</div>';
+        }
+      }
+
+      l2html+='<div style="margin:3px 0"><button class="zk-b2'+(op?' op':'')+'" onclick="tgl(this)">'+c+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'">'+l3html+'</div></div>';
+    }
+
+    html+='<div class="zk-l1"><button class="zk-b1'+(op?' op':'')+'" style="background:'+bg+'" onclick="tgl(this)">'+d+' <span class="ar">▶</span></button><div class="zk-bd'+(op?' op':'')+'">'+l2html+'</div></div>';
+  }
+
+  document.getElementById('zkCount').textContent=q?res.hits+'件ヒット / 全'+res.total+'体':'全'+res.total+'体';
+  var box=document.getElementById('zkBox');
+  box.innerHTML=html||'<p class="text-muted mt-3">該当なし</p>';
+  if(q&&res.hits>0){var f=box.querySelector('.zk-match');if(f)f.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+function tgl(b){b.classList.toggle('op');b.nextElementSibling.classList.toggle('op');}
+
+function toggleAll(){
+  var bs=document.querySelectorAll('.zk-b1,.zk-b2,.zk-b3'),any=false;
+  for(var i=0;i<bs.length;i++){if(bs[i].classList.contains('op')){any=true;break;}}
+  for(var i=0;i<bs.length;i++){
+    if(any){bs[i].classList.remove('op');bs[i].nextElementSibling.classList.remove('op');}
+    else{bs[i].classList.add('op');bs[i].nextElementSibling.classList.add('op');}
+  }
+}
+</script>
+</body>
+</html>
