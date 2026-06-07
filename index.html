@@ -82,7 +82,8 @@
   <div id="zkBox"></div>
   <footer class="text-center mt-5 text-muted small">
     <p>英語物語 非公式ツール</p>
-    <div id="statsBox">API: 読み込み中...</div>
+    <a href="javascript:void(0)" onclick="api({api:'stats'}).then(function(s){document.getElementById('st').textContent='本日: '+s.total+' / '+s.limit}).catch(function(){document.getElementById('st').textContent='取得失敗'})">API使用量を確認</a>
+    <div id="st"></div>
   </footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
