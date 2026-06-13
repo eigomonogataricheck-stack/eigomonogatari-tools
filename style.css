@@ -1,0 +1,26 @@
+body{padding:20px;background:#f8f9fa;font-family:sans-serif}
+.container{max-width:640px;background:#fff;padding:25px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1);margin:auto}
+.tier-row{display:flex;align-items:center;border-bottom:1px solid #dee2e6;padding:10px 0}
+.rank-label{width:50px;font-weight:bold;font-size:1.1rem;color:#333}
+.icon-list img{width:45px;height:45px;margin:2px;border-radius:5px;border:1px solid #ccc}
+label{font-size:.85rem;font-weight:bold;color:#666;margin-top:8px}
+.small-info{font-size:.75rem;color:#888;font-weight:normal}
+.zk-l1{margin-bottom:8px}
+.zk-b1{width:100%;text-align:left;font-weight:bold;font-size:.9rem;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.zk-b1:hover{filter:brightness(1.1)}
+.zk-b2{width:100%;text-align:left;font-weight:bold;font-size:.82rem;padding:6px 12px;border:1px solid #dee2e6;border-radius:6px;cursor:pointer;background:#e9ecef;color:#333;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.zk-b2:hover{background:#dee2e6}
+.zk-b3{width:100%;text-align:left;font-weight:bold;font-size:.76rem;padding:5px 10px;border:1px solid #eee;border-radius:5px;cursor:pointer;background:#f8f9fa;color:#495057;display:flex;justify-content:space-between;align-items:center;margin-top:3px}
+.zk-b3:hover{background:#e9ecef}
+.zk-b1 .ar,.zk-b2 .ar,.zk-b3 .ar{transition:transform .2s;font-size:.65rem}
+.zk-b1.op .ar,.zk-b2.op .ar,.zk-b3.op .ar{transform:rotate(90deg)}
+.zk-bd{display:none;padding:4px 4px 4px 8px}
+.zk-bd.op{display:block}
+.zk-head{font-size:.72rem;font-weight:bold;color:#fff;background:#6c757d;padding:3px 8px;border-radius:4px;margin:8px 0 4px;width:100%}
+.zk-grid{display:flex;flex-wrap:wrap;gap:4px;padding:2px 0}
+.zk-card{width:64px;text-align:center;transition:transform .12s}
+.zk-card:hover{transform:scale(1.1)}
+.zk-card img{width:54px;height:54px;border-radius:6px;border:1px solid #dee2e6;object-fit:cover;background:#f0f0f0}
+.zk-name{font-size:.52rem;line-height:1.1;margin-top:1px;word-break:break-all;color:#555}
+.zk-match img{border:2px solid #ffc107!important;box-shadow:0 0 5px rgba(255,193,7,.5)}
+.zk-match .zk-name{color:#d63384;font-weight:bold}
