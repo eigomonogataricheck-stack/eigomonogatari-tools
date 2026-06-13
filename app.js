@@ -71,7 +71,7 @@ function renderZukan(){var q=(document.getElementById('zkSearch').value||'').tri
 function tgl(b){b.classList.toggle('op');b.nextElementSibling.classList.toggle('op')}
 function toggleAll(){var bs=document.querySelectorAll('.zk-b1,.zk-b2,.zk-b3'),any=false;for(var i=0;i<bs.length;i++){if(bs[i].classList.contains('op')){any=true;break}}for(var i=0;i<bs.length;i++){if(any){bs[i].classList.remove('op');bs[i].nextElementSibling.classList.remove('op')}else{bs[i].classList.add('op');bs[i].nextElementSibling.classList.add('op')}}}
 
-var OPINION_URL = '【https://script.google.com/macros/s/AKfycbwHn_uCnvuMkpVO1e4li2qvYQwO_OT5Alvt78Q0MUu9aDhBGsNC-SCNIAnSFtiQ88ZLcg/exec】';
+var OPINION_URL = '【https://script.google.com/macros/s/AKfycbwJXK9LaQumgM2vGGwb0gLKaPCWkOhOkp3p7qIuY8JuA88kplRiyQTyCAEkS-f6hTo5Nw/exec】';
 
 function submitOpinion() {
   var t = document.getElementById('opinionText');
