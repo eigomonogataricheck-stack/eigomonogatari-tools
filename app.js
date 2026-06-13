@@ -16,12 +16,13 @@ window.onload=function(){
 };
 
 function execTier(){
+  var gt_=function(id){var s=document.getElementById(id);return s.options[s.selectedIndex].text;};
   var logKey=[
-    document.getElementById('mode').value,
-    document.getElementById('attribute').value,
-    document.getElementById('cost').value,
-    document.getElementById('waku').value,
-    document.getElementById('hosei').value,
+    gt_('mode'),
+    gt_('attribute'),
+    gt_('cost'),
+    gt_('waku'),
+    gt_('hosei'),
     document.getElementById('minCount').value
   ].join('|');
   fetch(OPINION_URL+'?api=tierlog&params='+encodeURIComponent(logKey)).catch(function(){});
