@@ -24,8 +24,8 @@
           </select>
         </div>
         <div class="row mb-3">
-          <div class="col-6"><label>属性（縛り）</label><select id="attribute" class="form-select"><option value="">指定なし</option></select></div>
-          <div class="col-6"><label>コスト帯</label>
+          <div class="col-6"><label>属性縛り</label><select id="attribute" class="form-select"><option value="">指定なし</option></select></div>
+          <div class="col-6"><label>コスト帯縛り</label>
             <select id="cost" class="form-select"><option value="">指定なし</option><option value="低">低 (~150)</option><option value="中">中 (151~220)</option><option value="高">高 (221~350)</option><option value="超高">超高 (351~)</option></select>
           </div>
         </div>
@@ -49,7 +49,7 @@
     <div class="col-lg-5">
       <div class="side-sticky">
         <div class="panel">
-          <h4 class="text-center mb-3">📖 キャラ図鑑</h4>
+          <h4 class="text-center mb-3">キャラ図鑑</h4>
           <button class="btn btn-outline-success w-100 py-2 fw-bold" onclick="loadZukan()" id="zkBtn">キャラ図鑑を表示</button>
           <div id="zkLoader" class="text-center mt-3" style="display:none"><div class="spinner-border text-success me-2"></div><span>読み込み中...</span></div>
           <div id="zkControls" style="display:none" class="mt-3">
@@ -63,7 +63,7 @@
         </div>
 
         <div id="opinionBox" class="panel mt-3">
-          <p style="margin:0 0 8px;color:#555;font-size:14px;">📮 意見箱（匿名で送信されます）</p>
+          <p style="margin:0 0 8px;color:#555;font-size:14px;">意見箱（匿名で送信されます）</p>
           <textarea id="opinionText" rows="3" class="form-control mb-2" placeholder="要望・不具合・感想など何でもどうぞ"></textarea>
           <div class="text-end">
             <button onclick="submitOpinion()" class="btn btn-primary btn-sm px-4">送信</button>
