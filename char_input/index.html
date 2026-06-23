@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<title>英語物語 キャラ入力</title>
+<style>
+  :root { --bg:#f5f7fa; --panel:#fff; --border:#d0d7de; --accent:#0969da; --err:#cf222e; --ok:#1a7f37; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:0; background:var(--bg); font-family:system-ui,-apple-system,"Segoe UI","Hiragino Sans",sans-serif; }
+  .container { max-width:1400px; margin:0 auto; padding:12px; }
+  .panel { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  h2 { margin:0 0 12px; font-size:1.1rem; }
+  button { padding:8px 16px; border:1px solid var(--border); background:#fff; border-radius:6px; cursor:pointer; font-size:14px; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button:hover { opacity:.85; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
+  label { display:block; font-size:13px; font-weight:600; margin-bottom:4px; color:#444; }
+  input[type=number], input[type=text], select { width:100%; padding:6px 8px; border:1px solid var(--border); border-radius:4px; font-size:14px; }
+  input.err, select.err { border-color:var(--err); background:#fef2f2; }
+  .grid-form { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
+  .field { display:flex; flex-direction:column; }
+  .field.hidden { display:none; }
+  .radio-group { display:flex; gap:6px; flex-wrap:wrap; }
+  .radio-group label { display:inline-flex; align-items:center; gap:4px; font-weight:normal; cursor:pointer; padding:4px 8px; border:1px solid var(--border); border-radius:4px; background:#fafbfc; margin:0; }
+  .zukan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:6px; max-height:70vh; overflow-y:auto; }
+  .zukan-cell { position:relative; border:1px solid var(--border); border-radius:6px; padding:4px; text-align:center; cursor:pointer; background:#fff; }
+  .zukan-cell:hover { background:#f0f6ff; }
+  .zukan-cell.done { background:#dafbe1; border-color:#1a7f37; }
+  .zukan-cell img { width:100%; height:auto; max-width:64px; }
+  .zukan-cell .name { font-size:11px; word-break:break-all; line-height:1.2; margin-top:2px; }
+  .zukan-cell .id { position:absolute; top:2px; left:4px; font-size:10px; color:#666; }
+  .header-info { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .header-info img { width:64px; height:64px; }
+  .header-info .name-id { font-size:1rem; font-weight:bold; }
+  .msg { padding:8px 12px; border-radius:4px; margin-bottom:8px; font-size:13px; }
+  .msg.err { background:#fef2f2; color:var(--err); border:1px solid var(--err); }
+  .msg.ok { background:#dafbe1; color:var(--ok); border:1px solid var(--ok); }
+  .search { padding:6px 10px; border:1px solid var(--border); border-radius:4px; width:200px; }
+  .actions { display:flex; gap:8px; margin-top:12px; }
+  @media (max-width:600px) {
+    .container { padding:6px; }
+    .panel { padding:10px; }
+    .zukan-grid { grid-template-columns:repeat(auto-fill,minmax(70px,1fr)); }
+  }
+</style>
+</head><body>
+<div class="container">
+  <div id="screen-top" class="panel">
+    <h2>英語物語 キャラ情報入力</h2>
+    <div class="row">
+      <button class="primary" onclick="startContinue()">続きから入力</button>
+      <button onclick="openZukan()">図鑑から選ぶ</button>
+    </div>
+    <div id="status" style="margin-top:8px;font-size:13px;color:#666;"></div>
+  </div>
+
+  <div id="screen-zukan" class="panel" style="display:none;">
+    <h2>図鑑から選択</h2>
+    <div class="row">
+      <button onclick="showScreen('top')">← 戻る</button>
+      <input class="search" id="zukan-search" placeholder="名前/IDで検索" oninput="renderZukan()">
+      <label style="font-weight:normal;display:inline-flex;gap:4px;align-items:center;margin:0;">
+        <input type="checkbox" id="hide-done" onchange="renderZukan()"> 入力済を隠す
+      </label>
+      <span id="zukan-count" style="font-size:13px;color:#666;"></span>
+    </div>
+    <div class="zukan-grid" id="zukan-grid"></div>
+  </div>
+
+  <div id="screen-form" class="panel" style="display:none;">
+    <div class="row">
+      <button onclick="backFromForm()">← 戻る</button>
+      <span style="font-size:13px;color:#666;" id="form-mode-label"></span>
+    </div>
+    <div class="header-info">
+      
+      <div class="name-id">
+        <div id="f-name"></div>
+        <div style="font-size:12px;color:#666;">ID: <span id="f-id"></span></div>
+      </div>
+    </div>
+    <div id="msg-area"></div>
+    <form id="char-form" onsubmit="event.preventDefault(); submitForm();">
+      <div class="grid-form">
+        <div class="field">
+          <label>属性 *</label>
+          <select id="f-attr">
+            <option value="">--</option>
+            <option>全</option><option>火</option><option>水</option><option>風</option>
+            <option>火水</option><option>水風</option><option>火風</option>
+          </select>
+        </div>
+        <div class="field"><label>Cost *</label><input type="number" id="f-cost"></div>
+        <div class="field"><label>HP *</label><input type="number" id="f-hp"></div>
+        <div class="field"><label>Power *</label><input type="number" id="f-power"></div>
+        <div class="field"><label>必要ターン数 *</label><input type="number" id="f-cd"></div>
+        <div class="field">
+          <label>効果 *</label>
+          <select id="f-skillType" onchange="onSkillTypeChange()">
+            <option value="">--</option>
+            <option>集中</option><option>遅延</option><option>短縮</option>
+            <option>色変</option><option>蘇生</option><option>回復</option>
+            <option>シールド</option><option>全体攻撃</option><option>連撃</option>
+            <option>攻撃力アップ</option>
+          </select>
+        </div>
+        <div class="field" id="field-dur"><label>継続ターン数 *</label><input type="number" id="f-dur"></div>
+        <div class="field" id="field-by">
+          <label>適用者 *</label>
+          <select id="f-by"><option value="">--</option></select>
+        </div>
+        <div class="field" id="field-tgt">
+          <label>対象者 *</label>
+          <select id="f-tgt"><option value="">--</option></select>
+        </div>
+        <div class="field" id="field-val">
+          <label id="f-val-label">効果量 *</label>
+          <input type="number" id="f-val">
+          <div class="radio-group" id="f-val-radio" style="display:none;">
+            <label><input type="radio" name="val-color" value="火">火</label>
+            <label><input type="radio" name="val-color" value="水">水</label>
+            <label><input type="radio" name="val-color" value="風">風</label>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit" class="primary">送信 (Ctrl+Enter)</button>
+        <button type="button" onclick="resetSkillFields()">スキル欄クリア</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ====== ここにGASのデプロイURLを貼る ======
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyOBJ8f0T27L5kKMAVApteXn73BSglWqNnI4fY9pq058J1SQ-S3_8BdnmspJz5tnxg38Q/exec';
+// ==========================================
+
+const SKILL_MATRIX = {
+  '集中':       { val:'percent', by:['リーダー','自身'],                       tgt:['敵全員','火','水','風'], dur:true  },
+  '遅延':       { val:'number',  by:null,                                       tgt:['敵全員','火','水','風'], dur:false },
+  '短縮':       { val:'number',  by:['リーダー','火','水','風','全'],          tgt:null,                       dur:false },
+  '色変':       { val:'color',   by:['全','自身'],                              tgt:null,                       dur:true  },
+  '蘇生':       { val:'percent', by:['リーダー','火','水','風','全'],          tgt:null,                       dur:false },
+  '回復':       { val:'percent', by:['リーダー','自身','火','水','風','全'],   tgt:null,                       dur:true  },
+  'シールド':   { val:'percent', by:['自身','火','水','風','全'],               tgt:['敵全員','火','水','風'], dur:true  },
+  '全体攻撃':   { val:null,      by:['自身','火','水','風','全'],               tgt:null,                       dur:true  },
+  '連撃':       { val:'number',  by:['リーダー','自身','火','水','風','全'],   tgt:null,                       dur:true  },
+  '攻撃力アップ':{ val:'percent', by:['リーダー','自身','火','水','風','全'],   tgt:['敵全員','火','水','風'], dur:true  }
+};
+const ICON_URL = id => 'https://englishstoryserver.com/Icon/Icon/Icon' + id + '.png';
+
+let zukanData = [];
+let currentMode = 'continue';
+let currentId = null;
+
+function showScreen(name) {
+  ['top','zukan','form'].forEach(s => {
+    document.getElementById('screen-'+s).style.display = (s===name) ? '' : 'none';
+  });
+}
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+function showMsg(type, text) {
+  document.getElementById('msg-area').innerHTML = '<div class="msg '+type+'">'+text+'</div>';
+}
+function clearMsg() { document.getElementById('msg-area').innerHTML = ''; }
+
+async function apiGet(params) {
+  const url = GAS_URL + '?' + new URLSearchParams(params).toString();
+  const r = await fetch(url);
+  return r.json();
+}
+async function apiPost(body) {
+  // Content-Type を text/plain にすることでCORSプリフライト回避（GASのCORS制約対策）
+  const r = await fetch(GAS_URL, {
+    method:'POST',
+    body: JSON.stringify(body),
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+  });
+  return r.json();
+}
+
+async function startContinue() {
+  setStatus('次の未入力キャラを取得中...');
+  try {
+    const r = await apiGet({api:'nextEmpty'});
+    if (!r.id) { setStatus('未入力キャラはありません'); return; }
+    currentMode = 'continue';
+    await openForm(r.id);
+  } catch(e) { setStatus('エラー: '+e.message); }
+}
+
+async function openZukan() {
+  setStatus('図鑑を読み込み中...');
+  try {
+    if (zukanData.length === 0) zukanData = await apiGet({api:'zukan'});
+    setStatus('');
+    showScreen('zukan');
+    renderZukan();
+  } catch(e) { setStatus('エラー: '+e.message); }
+}
+
+function renderZukan() {
+  const q = document.getElementById('zukan-search').value.trim().toLowerCase();
+  const hideDone = document.getElementById('hide-done').checked;
+  const grid = document.getElementById('zukan-grid');
+  let html = '';
+  let count = 0, doneCount = 0;
+  for (const c of zukanData) {
+    if (c.hasData) doneCount++;
+    if (hideDone && c.hasData) continue;
+    if (q && !String(c.id).includes(q) && !c.name.toLowerCase().includes(q)) continue;
+    html += '<div class="zukan-cell '+(c.hasData?'done':'')+'" onclick="openSingle('+c.id+')">'
+      + '<div class="id">'+c.id+'</div>'
+      + '<img src="'+ICON_URL(c.id)+'" loading="lazy" onerror="this.style.opacity=0.2">'
+      + '<div class="name">'+c.name+'</div>'
+      + '</div>';
+    count++;
+  }
+  grid.innerHTML = html;
+  document.getElementById('zukan-count').textContent =
+    '表示 '+count+'件 / 入力済 '+doneCount+' / 全 '+zukanData.length;
+}
+
+async function openSingle(id) {
+  currentMode = 'single';
+  await openForm(id);
+}
+
+async function openForm(id) {
+  currentId = id;
+  clearMsg();
+  setStatus('');
+  document.getElementById('form-mode-label').textContent =
+    currentMode === 'continue' ? 'モード: 続きから入力' : 'モード: 図鑑から選択';
+  document.getElementById('f-id').textContent = id;
+  document.getElementById('f-icon').src = ICON_URL(id);
+  document.getElementById('f-name').textContent = '読み込み中...';
+  showScreen('form');
+
+  try {
+    const c = await apiGet({api:'character', id: id});
+    if (!c) { showMsg('err', 'キャラ取得失敗'); return; }
+    document.getElementById('f-name').textContent = c.name;
+    document.getElementById('f-attr').value  = c.attr || '';
+    document.getElementById('f-cost').value  = c.cost  != null ? c.cost  : '';
+    document.getElementById('f-hp').value    = c.hp    != null ? c.hp    : '';
+    document.getElementById('f-power').value = c.power != null ? c.power : '';
+    document.getElementById('f-cd').value    = c.cd    != null ? c.cd    : '';
+    document.getElementById('f-skillType').value = c.skillType || '';
+    document.getElementById('f-dur').value   = c.dur   != null ? c.dur   : '';
+    document.getElementById('f-val').value   =
+      (typeof c.val === 'number' || (c.val && ['火','水','風'].indexOf(c.val)<0)) ? c.val : '';
+    onSkillTypeChange();
+    if (c.by)  document.getElementById('f-by').value  = c.by;
+    if (c.tgt) document.getElementById('f-tgt').value = c.tgt;
+    if (c.skillType === '色変' && ['火','水','風'].indexOf(c.val)>=0) {
+      document.querySelector('input[name=val-color][value="'+c.val+'"]').checked = true;
+    }
+    document.getElementById('f-attr').focus();
+  } catch(e) { showMsg('err', 'エラー: '+e.message); }
+}
+
+function onSkillTypeChange() {
+  const t = document.getElementById('f-skillType').value;
+  const m = SKILL_MATRIX[t];
+  const fdur = document.getElementById('field-dur');
+  const fby  = document.getElementById('field-by');
+  const ftgt = document.getElementById('field-tgt');
+  const fval = document.getElementById('field-val');
+  if (!m) {
+    fdur.classList.add('hidden'); fby.classList.add('hidden');
+    ftgt.classList.add('hidden'); fval.classList.add('hidden');
+    return;
+  }
+  fdur.classList.toggle('hidden', !m.dur);
+  if (m.by) {
+    fby.classList.remove('hidden');
+    const sel = document.getElementById('f-by');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">--</option>' + m.by.map(v => '<option>'+v+'</option>').join('');
+    if (m.by.indexOf(prev)>=0) sel.value = prev;
+  } else { fby.classList.add('hidden'); }
+  if (m.tgt) {
+    ftgt.classList.remove('hidden');
+    const sel = document.getElementById('f-tgt');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">--</option>' + m.tgt.map(v => '<option>'+v+'</option>').join('');
+    if (m.tgt.indexOf(prev)>=0) sel.value = prev;
+  } else { ftgt.classList.add('hidden'); }
+  const valLabel = document.getElementById('f-val-label');
+  const valInput = document.getElementById('f-val');
+  const valRadio = document.getElementById('f-val-radio');
+  if (m.val === null) {
+    fval.classList.add('hidden');
+  } else {
+    fval.classList.remove('hidden');
+    if (m.val === 'color') {
+      valInput.style.display = 'none';
+      valRadio.style.display = '';
+      valLabel.textContent = '効果量(色) *';
+    } else {
+      valInput.style.display = '';
+      valRadio.style.display = 'none';
+      valLabel.textContent = m.val === 'percent' ? '効果量(%) *' : '効果量 *';
+    }
+  }
+}
+
+function resetSkillFields() {
+  document.getElementById('f-skillType').value = '';
+  document.getElementById('f-dur').value = '';
+  document.getElementById('f-val').value = '';
+  document.querySelectorAll('input[name=val-color]').forEach(r => r.checked = false);
+  onSkillTypeChange();
+}
+
+function collectForm() {
+  const t = document.getElementById('f-skillType').value;
+  const m = SKILL_MATRIX[t] || {};
+  let val = '';
+  if (m.val === 'color') {
+    const c = document.querySelector('input[name=val-color]:checked');
+    val = c ? c.value : '';
+  } else if (m.val) {
+    val = document.getElementById('f-val').value;
+  }
+  return {
+    attr:  document.getElementById('f-attr').value,
+    cost:  document.getElementById('f-cost').value,
+    hp:    document.getElementById('f-hp').value,
+    power: document.getElementById('f-power').value,
+    cd:    document.getElementById('f-cd').value,
+    skillType: t,
+    dur: m.dur ? document.getElementById('f-dur').value : '',
+    by:  m.by  ? document.getElementById('f-by').value  : '',
+    tgt: m.tgt ? document.getElementById('f-tgt').value : '',
+    val: val
+  };
+}
+
+function validate(data) {
+  const errs = [];
+  document.querySelectorAll('.err').forEach(el => el.classList.remove('err'));
+  const need = (id, val, label) => {
+    if (val === '' || val == null) {
+      errs.push(label);
+      const el = document.getElementById(id);
+      if (el) el.classList.add('err');
+    }
+  };
+  need('f-attr',  data.attr,  '属性');
+  need('f-cost',  data.cost,  'Cost');
+  need('f-hp',    data.hp,    'HP');
+  need('f-power', data.power, 'Power');
+  need('f-cd',    data.cd,    '必要ターン数');
+  need('f-skillType', data.skillType, '効果');
+  const m = SKILL_MATRIX[data.skillType] || {};
+  if (m.dur) need('f-dur', data.dur, '継続ターン数');
+  if (m.by)  need('f-by',  data.by,  '適用者');
+  if (m.tgt) need('f-tgt', data.tgt, '対象者');
+  if (m.val) {
+    if (m.val === 'color') {
+      if (!data.val) errs.push('効果量(色)');
+    } else {
+      if (data.val === '' || data.val == null) errs.push('効果量');
+    }
+  }
+  return errs;
+}
+
+async function submitForm() {
+  const data = collectForm();
+  const errs = validate(data);
+  if (errs.length) {
+    showMsg('err', '未入力: ' + errs.join(', '));
+    return;
+  }
+  clearMsg();
+  showMsg('ok', '送信中...');
+  try {
+    const r = await apiPost({action:'save', id: currentId, data: data});
+    if (r.error) { showMsg('err', '保存失敗: '+r.error); return; }
+    const idx = zukanData.findIndex(c => c.id === currentId);
+    if (idx >= 0) zukanData[idx].hasData = true;
+    if (currentMode === 'continue') {
+      if (r.nextId) {
+        await openForm(r.nextId);
+      } else {
+        showScreen('top');
+        setStatus('全キャラ入力完了！');
+      }
+    } else {
+      showScreen('zukan');
+      renderZukan();
+    }
+  } catch(e) { showMsg('err', '保存失敗: '+e.message); }
+}
+
+function backFromForm() {
+  if (currentMode === 'continue') showScreen('top');
+  else { showScreen('zukan'); renderZukan(); }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 'Enter') {
+    const f = document.getElementById('screen-form');
+    if (f.style.display !== 'none') submitForm();
+  }
+});
+
+(async () => {
+  try {
+    zukanData = await apiGet({api:'zukan'});
+    setStatus('図鑑読込済 '+zukanData.length+'件（入力済 '+zukanData.filter(c=>c.hasData).length+'件）');
+  } catch(e) { setStatus('図鑑キャッシュ失敗: '+e.message); }
+})();
+</script>
+</body></html>
