@@ -15,8 +15,8 @@
 <p class="sub">合計値を入力すると、総当たりで最もスコアが高い配分を計算します。</p>
 <section class="card">
 <div class="inputs">
-<div class="field"><label for="self">自分の HP + Power</label><input id="self" type="number" min="2" max="5000" step="1" value="1000" inputmode="numeric"></div>
-<div class="field"><label for="opp">相手の HP + Power</label><input id="opp" type="number" min="2" max="5000" step="1" value="1000" inputmode="numeric"></div>
+<div class="field"><label for="self">自分の HP + Power</label><input id="self" type="number" min="2" step="1" value="1000" inputmode="numeric"></div>
+<div class="field"><label for="opp">相手の HP + Power</label><input id="opp" type="number" min="2" step="1" value="1000" inputmode="numeric"></div>
 </div>
 <button id="calc">最適比を計算</button><div id="spin" class="spinner"></div><div id="error" class="error"></div>
 <div id="result" class="result">
@@ -37,7 +37,7 @@ function turnsToDefeat(hp,power){const x=1+hp*.3/(power*1.296);return Math.max(1
 function calculate(selfTotal,oppTotal){let bestScore=-Infinity,bestHP=1,tieCount=0;for(let hp=1;hp<selfTotal;hp++){const power=selfTotal-hp;let score=0;for(let ohp=1;ohp<oppTotal;ohp++){const op=oppTotal-ohp;const mine=turnsToDefeat(ohp,power);const theirs=turnsToDefeat(hp,op);if(mine<theirs)score++;else if(mine>theirs)score--;}
 if(score>bestScore){bestScore=score;bestHP=hp;tieCount=1}else if(score===bestScore){tieCount++;if(hp>bestHP)bestHP=hp;}}
 return{hp:bestHP,power:selfTotal-bestHP,score:bestScore,tieCount};}
-$('calc').addEventListener('click',()=>{const s=Number($('self').value),o=Number($('opp').value);$('error').textContent='';$('result').style.display='none';if(!Number.isInteger(s)||!Number.isInteger(o)||s<2||o<2||s>5000||o>5000){$('error').textContent='2〜5000の整数を入力してください。';return;}
+$('calc').addEventListener('click',()=>{const s=Number($('self').value),o=Number($('opp').value);$('error').textContent='';$('result').style.display='none';if(!Number.isInteger(s)||!Number.isInteger(o)||s<2||o<2){$('error').textContent='2以上の整数を入力してください。';return;}
 $('calc').disabled=true;$('spin').style.display='block';setTimeout(()=>{try{const r=calculate(s,o);const hpP=r.hp/s*100,powP=r.power/s*100;$('ratio').textContent=`相手 ÷ 自分 = ${(o/s).toFixed(6)}`;$('hpValue').textContent=r.hp.toLocaleString();$('powerValue').textContent=r.power.toLocaleString();$('hpPct').textContent=`${hpP.toFixed(1)}%`;$('powerPct').textContent=`${powP.toFixed(1)}%`;$('hpBar').style.width=hpP+'%';$('powerBar').style.width=powP+'%';$('score').textContent=`総当たり素点: ${r.score.toLocaleString()}`;$('ties').textContent=`最高点の配分: ${r.tieCount.toLocaleString()}通り`;$('result').style.display='block';}catch(e){$('error').textContent='計算できませんでした。';}finally{$('calc').disabled=false;$('spin').style.display='none';}},30);});
 </script>
 </body>
