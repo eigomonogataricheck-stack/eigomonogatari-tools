@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>最適HP / Power計算機</title>
+<style>
+:root{--bg:#0b1020;--card:#151c32;--line:#2a3556;--text:#f6f7fb;--muted:#aeb8d2;--blue:#4f7cff;--red:#ef3d74;--gold:#ffd166}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#182344 0,#0b1020 55%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;display:grid;place-items:center;padding:24px}.app{width:min(780px,100%)}h1{font-size:clamp(25px,5vw,40px);margin:0 0 8px}.sub{color:var(--muted);margin:0 0 24px}.card{background:rgba(21,28,50,.94);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,4vw,34px);box-shadow:0 24px 70px #0007}.inputs{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field label{display:block;color:var(--muted);font-weight:700;margin-bottom:8px}.field input{width:100%;background:#0e1529;color:var(--text);border:1px solid #334166;border-radius:13px;font-size:24px;padding:14px 16px;outline:none}.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #4f7cff33}button{width:100%;margin-top:18px;border:0;border-radius:14px;padding:15px;background:linear-gradient(135deg,#4f7cff,#7657ff);color:white;font-size:19px;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.error{color:#ff9bad;min-height:24px;margin:12px 0 0}.result{display:none;margin-top:22px;border-top:1px solid var(--line);padding-top:22px}.ratio{font-size:18px;color:var(--muted);margin-bottom:14px}.big{display:grid;grid-template-columns:1fr 1fr;gap:14px}.stat{border-radius:18px;padding:20px}.hp{background:#4f7cff1c;border:1px solid #4f7cff66}.power{background:#ef3d741c;border:1px solid #ef3d7466}.name{font-weight:900;font-size:18px}.value{font-size:clamp(32px,7vw,55px);line-height:1.05;font-weight:950;margin:8px 0}.pct{color:var(--muted);font-size:18px}.bar{height:20px;border-radius:999px;overflow:hidden;background:#0e1529;margin-top:22px;display:flex}.bar-hp{background:var(--blue)}.bar-power{background:var(--red)}.meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);margin-top:13px;font-size:14px}.note{margin-top:18px;color:var(--muted);font-size:14px;line-height:1.65}.spinner{display:none;margin:12px auto 0;width:30px;height:30px;border:3px solid #ffffff33;border-top-color:white;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}@media(max-width:590px){.inputs,.big{grid-template-columns:1fr}.meta{display:block}.meta span{display:block;margin-top:5px}}
+</style>
+</head>
+<body>
+<main class="app">
+<h1>最適HP / Power計算機</h1>
+<p class="sub">合計値を入力すると、総当たりで最もスコアが高い配分を計算します。</p>
+<section class="card">
+<div class="inputs">
+<div class="field"><label for="self">自分の HP + Power</label><input id="self" type="number" min="2" max="5000" step="1" value="1000" inputmode="numeric"></div>
+<div class="field"><label for="opp">相手の HP + Power</label><input id="opp" type="number" min="2" max="5000" step="1" value="1000" inputmode="numeric"></div>
+</div>
+<button id="calc">最適比を計算</button><div id="spin" class="spinner"></div><div id="error" class="error"></div>
+<div id="result" class="result">
+<div id="ratio" class="ratio"></div>
+<div class="big">
+<div class="stat hp"><div class="name">HP</div><div id="hpValue" class="value"></div><div id="hpPct" class="pct"></div></div>
+<div class="stat power"><div class="name">Power</div><div id="powerValue" class="value"></div><div id="powerPct" class="pct"></div></div>
+</div>
+<div class="bar"><div id="hpBar" class="bar-hp"></div><div id="powerBar" class="bar-power"></div></div>
+<div class="meta"><span id="score"></span><span id="ties"></span></div>
+</div>
+<p class="note">計算条件: 1ターン目のダメージは Power × 1.296。生存するごとに次ターンのPowerが1.3倍。勝ち+1、引き分け0、負け-1。同点ならHPが多い配分を採用。</p>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function turnsToDefeat(hp,power){const x=1+hp*.3/(power*1.296);return Math.max(1,Math.ceil(Math.log(x)/Math.log(1.3)-1e-12));}
+function calculate(selfTotal,oppTotal){let bestScore=-Infinity,bestHP=1,tieCount=0;for(let hp=1;hp<selfTotal;hp++){const power=selfTotal-hp;let score=0;for(let ohp=1;ohp<oppTotal;ohp++){const op=oppTotal-ohp;const mine=turnsToDefeat(ohp,power);const theirs=turnsToDefeat(hp,op);if(mine<theirs)score++;else if(mine>theirs)score--;}
+if(score>bestScore){bestScore=score;bestHP=hp;tieCount=1}else if(score===bestScore){tieCount++;if(hp>bestHP)bestHP=hp;}}
+return{hp:bestHP,power:selfTotal-bestHP,score:bestScore,tieCount};}
+$('calc').addEventListener('click',()=>{const s=Number($('self').value),o=Number($('opp').value);$('error').textContent='';$('result').style.display='none';if(!Number.isInteger(s)||!Number.isInteger(o)||s<2||o<2||s>5000||o>5000){$('error').textContent='2〜5000の整数を入力してください。';return;}
+$('calc').disabled=true;$('spin').style.display='block';setTimeout(()=>{try{const r=calculate(s,o);const hpP=r.hp/s*100,powP=r.power/s*100;$('ratio').textContent=`相手 ÷ 自分 = ${(o/s).toFixed(6)}`;$('hpValue').textContent=r.hp.toLocaleString();$('powerValue').textContent=r.power.toLocaleString();$('hpPct').textContent=`${hpP.toFixed(1)}%`;$('powerPct').textContent=`${powP.toFixed(1)}%`;$('hpBar').style.width=hpP+'%';$('powerBar').style.width=powP+'%';$('score').textContent=`総当たり素点: ${r.score.toLocaleString()}`;$('ties').textContent=`最高点の配分: ${r.tieCount.toLocaleString()}通り`;$('result').style.display='block';}catch(e){$('error').textContent='計算できませんでした。';}finally{$('calc').disabled=false;$('spin').style.display='none';}},30);});
+</script>
+</body>
+</html>
