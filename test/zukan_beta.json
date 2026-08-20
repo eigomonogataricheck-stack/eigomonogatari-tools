@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T19:33:48.646Z",
+  "generatedAt": "2026-08-20T20:04:01.257Z",
   "characters": [
     {
       "id": 1189,
@@ -3988,7 +3988,7 @@
       "details": {
         "id": 2083,
         "name": "呵々Doの閑雅・ルー",
-        "attribute": "水風",
+        "attribute": "火水",
         "cost": 85,
         "hp": 5800,
         "power": 2800,
@@ -12158,7 +12158,7 @@
       "details": {
         "id": 2083,
         "name": "呵々Doの閑雅・ルー",
-        "attribute": "水風",
+        "attribute": "火水",
         "cost": 85,
         "hp": 5800,
         "power": 2800,
