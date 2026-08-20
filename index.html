@@ -1,100 +1,175 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>英語物語 Tier表生成 & キャラ図鑑</title>
-  <meta name="description" content="英語物語の対戦キャラTier表を自動生成。キャラ図鑑で全キャラを検索・閲覧できます。">
-  <meta name="keywords" content="英語物語,Tier表,キャラ図鑑,ゆる,対戦">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container py-4">
-  <div class="row g-4 align-items-start">
-
-    <!-- ===== 左カラム：Tier生成 ===== -->
-    <div class="col-lg-7">
-      <div class="panel">
-        <h4 class="text-center mb-4">Tier表生成</h4>
-        <div class="mb-3">
-          <label>モード</label>
-          <select id="mode" class="form-select">
-            <option>ランクアップ率</option><option>使用者数</option>
-          </select>
-        </div>
-        <div class="row mb-3">
-          <div class="col-6"><label>属性縛り</label><select id="attribute" class="form-select"><option value="">指定なし</option></select></div>
-          <div class="col-6"><label>コスト帯縛り</label>
-            <select id="cost" class="form-select"><option value="">指定なし</option><option value="低">低 (~150)</option><option value="中">中 (151~220)</option><option value="高">高 (221~350)</option><option value="超高">超高 (351~)</option></select>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-4"><label>枠 (1-5)</label>
-            <select id="waku" class="form-select"><option value="">指定なし</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
-          </div>
-          <div class="col-4"><label>補正</label>
-            <select id="hosei" class="form-select"><option value="0" selected>含まない</option><option value="">含む</option><option value="1">補正のみ</option></select>
-          </div>
-          <div class="col-4"><label>信頼度</label>
-            <select id="minCount" class="form-select"><option value="5">低</option><option value="10" selected>中</option><option value="20">高</option></select>
-          </div>
-        </div>
-        <button class="btn btn-primary w-100 py-3 fw-bold shadow-sm" onclick="execTier()" id="btn" disabled>データ読み込み中...</button>
-        <div id="tier-result" class="mt-4"></div>
-      </div>
-    </div>
-
-    <!-- ===== 右カラム：図鑑 + 意見箱（PCはsticky） ===== -->
-    <div class="col-lg-5">
-      <div class="side-sticky">
-        <div class="panel">
-          <h4 class="text-center mb-3">キャラ図鑑</h4>
-          <button class="btn btn-outline-success w-100 py-2 fw-bold" onclick="loadZukan()" id="zkBtn">キャラ図鑑を表示</button>
-          <div id="zkLoader" class="text-center mt-3" style="display:none"><div class="spinner-border text-success me-2"></div><span>読み込み中...</span></div>
-          <div id="zkControls" style="display:none" class="mt-3">
-            <input type="text" id="zkSearch" class="form-control mb-2" placeholder="キャラ名で検索...">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <span id="zkCount" class="text-muted small me-auto"></span>
-              <button class="btn btn-sm btn-outline-secondary" onclick="toggleAll()">全て開く/閉じる</button>
-            </div>
-          </div>
-          <div id="zkBox" class="zk-scroll"></div>
-        </div>
-
-        <div id="opinionBox" class="panel mt-3">
-          <p style="margin:0 0 8px;color:#555;font-size:14px;">意見箱（匿名で送信されます）</p>
-          <textarea id="opinionText" rows="3" class="form-control mb-2" placeholder="要望・不具合・感想など何でもどうぞ！仕事の愚痴でも大丈夫です"></textarea>
-          <div class="text-end">
-            <button id="opinionSubmit" onclick="submitOpinion()" class="btn btn-primary btn-sm px-4">送信</button>
-          </div>
-          <p id="opinionMsg" style="margin:8px 0 0;font-size:13px;color:#888;"></p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <footer class="text-center mt-5 text-muted small">
-    <p>英語物語 非公式ツール</p>
-  </footer>
-</div>
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>英語物語 対戦ツール</title><style>
+body{padding:20px;background:#f8f9fa;font-family:sans-serif}
+.container{max-width:640px;background:#fff;padding:25px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1);margin:auto}
+.tier-row{display:flex;align-items:center;border-bottom:1px solid #dee2e6;padding:10px 0}
+.rank-label{width:50px;font-weight:bold;font-size:1.1rem;color:#333}
+.icon-list img{width:45px;height:45px;margin:2px;border-radius:5px;border:1px solid #ccc}
+label{font-size:.85rem;font-weight:bold;color:#666;margin-top:8px}
+.small-info{font-size:.75rem;color:#888;font-weight:normal}
+.zk-l1{margin-bottom:8px}
+.zk-b1{width:100%;text-align:left;font-weight:bold;font-size:.9rem;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.zk-b1:hover{filter:brightness(1.1)}
+.zk-b2{width:100%;text-align:left;font-weight:bold;font-size:.82rem;padding:6px 12px;border:1px solid #dee2e6;border-radius:6px;cursor:pointer;background:#e9ecef;color:#333;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.zk-b2:hover{background:#dee2e6}
+.zk-b3{width:100%;text-align:left;font-weight:bold;font-size:.76rem;padding:5px 10px;border:1px solid #eee;border-radius:5px;cursor:pointer;background:#f8f9fa;color:#495057;display:flex;justify-content:space-between;align-items:center;margin-top:3px}
+.zk-b3:hover{background:#e9ecef}
+.zk-b1 .ar,.zk-b2 .ar,.zk-b3 .ar{transition:transform .2s;font-size:.65rem}
+.zk-b1.op .ar,.zk-b2.op .ar,.zk-b3.op .ar{transform:rotate(90deg)}
+.zk-bd{display:none;padding:4px 4px 4px 8px}
+.zk-bd.op{display:block}
+.zk-head{font-size:.72rem;font-weight:bold;color:#fff;background:#6c757d;padding:3px 8px;border-radius:4px;margin:8px 0 4px;width:100%}
+.zk-grid{display:flex;flex-wrap:wrap;gap:4px;padding:2px 0}
+.zk-card{width:64px;text-align:center;transition:transform .12s}
+.zk-card:hover{transform:scale(1.1)}
+.zk-card img{width:54px;height:54px;border-radius:6px;border:1px solid #dee2e6;object-fit:cover;background:#f0f0f0}
+.zk-name{font-size:.52rem;line-height:1.1;margin-top:1px;word-break:break-all;color:#555}
+.zk-match img{border:2px solid #ffc107!important;box-shadow:0 0 5px rgba(255,193,7,.5)}
+.zk-match .zk-name{color:#d63384;font-weight:bold}
 
 
-<div id="zkModal" class="zk-modal" role="dialog" aria-modal="true" aria-labelledby="zkModalName" aria-hidden="true">
-  <button class="zk-modal-nav zk-modal-prev" type="button" onclick="switchCharacterDetails(-1)" aria-label="前のキャラ">&#10094;</button>
-  <div id="zkModalPanel" class="zk-modal-panel">
-    <button id="zkModalClose" class="zk-modal-close" type="button" onclick="closeCharacterDetails()" aria-label="閉じる">&times;</button>
-    <div class="zk-modal-hero">
-      <div id="zkModalImageFrame" class="zk-modal-image-frame"><img id="zkModalImage" class="zk-modal-image" src="" alt=""></div>
-      <div><h5 id="zkModalName" class="zk-modal-name"></h5><div id="zkModalMeta" class="zk-modal-meta"></div></div>
-    </div>
-    <div id="zkModalStats" class="zk-modal-stats"></div>
-    <div id="zkModalSkillBlock" class="zk-modal-skill-block"><div class="zk-modal-skill-head"><div class="zk-modal-label">ゆるスキル</div><div id="zkModalSkillTurn" class="zk-modal-turn"></div></div><p id="zkModalSkill" class="zk-modal-skill"></p></div>
-  </div>
-  <button class="zk-modal-nav zk-modal-next" type="button" onclick="switchCharacterDetails(1)" aria-label="次のキャラ">&#10095;</button>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+/* キャラ詳細 */
+.zk-has-details{cursor:pointer;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.zk-has-details img{box-shadow:0 0 0 2px rgba(25,135,84,.18)}
+.zk-has-details::after{content:'詳細';display:inline-block;margin-top:2px;padding:1px 4px;border-radius:999px;background:#e8f5ee;color:#157347;font-size:.46rem;font-weight:bold}
+.zk-has-details:focus-visible{outline:3px solid rgba(13,110,253,.35);outline-offset:2px;border-radius:7px}
+.zk-pressing{transform:scale(.94)!important;opacity:.72}
+body.zk-modal-open{overflow:hidden}
+.zk-modal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,25,30,.62);backdrop-filter:blur(3px)}
+.zk-modal.op{display:flex}
+.zk-modal-panel{position:relative;width:min(100%,430px);max-height:88vh;overflow:auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 18px 55px rgba(0,0,0,.28)}
+.zk-modal-close{position:absolute;top:9px;right:11px;width:36px;height:36px;border:0;border-radius:50%;background:#f1f3f5;color:#495057;font-size:1.6rem;line-height:1;cursor:pointer}
+.zk-modal-close:hover{background:#e9ecef}
+.zk-modal-hero{display:flex;align-items:center;gap:16px;padding-right:30px;margin-bottom:16px}
+.zk-modal-image{width:92px;height:92px;border-radius:13px;border:1px solid #dee2e6;object-fit:cover;background:#f0f0f0}
+.zk-modal-name{margin:0 0 5px;font-size:1.15rem;font-weight:700;line-height:1.35}
+.zk-modal-meta{color:#198754;font-size:.84rem;font-weight:700}
+.zk-modal-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.zk-stat{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:8px;background:#f8f9fa;font-size:.78rem}
+.zk-stat span{color:#6c757d}
+.zk-stat strong{color:#212529}
+.zk-modal-skill-block{margin-top:15px;padding:12px;border-radius:10px;background:#f0f8f3;border-left:4px solid #198754}
+.zk-modal-label{margin-bottom:4px;color:#157347;font-size:.75rem;font-weight:700}
+.zk-modal-skill{margin:0;color:#343a40;font-size:.88rem;line-height:1.65}
+@media (max-width:480px){
+  .zk-modal{align-items:flex-end;padding:10px}
+  .zk-modal-panel{width:100%;max-height:90vh;border-radius:18px 18px 12px 12px;padding:20px}
+  .zk-modal-image{width:82px;height:82px}
+}
+
+
+/* 属性テーマ・キャラ切り替え */
+.zk-modal-panel{--zk-accent:#6c757d;--zk-soft:#f1f3f5;--zk-theme:#6c757d;--zk-theme-soft:#f1f3f5;background:#fff;overflow:hidden}
+.zk-modal-panel::before{content:'';position:absolute;z-index:1;top:0;left:0;right:0;height:8px;background:var(--zk-theme)}
+.zk-modal-image{border:3px solid var(--zk-accent);box-shadow:0 5px 16px color-mix(in srgb,var(--zk-accent) 24%,transparent)}
+.zk-modal-meta{color:var(--zk-accent)}
+.zk-modal-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.zk-stat{background:var(--zk-theme-soft)}
+.zk-stat strong{color:var(--zk-accent)}
+.zk-modal-skill-block{background:var(--zk-theme-soft);border-left-color:var(--zk-accent)}
+.zk-modal-label{color:var(--zk-accent)}
+.zk-modal-skill-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:5px}
+.zk-modal-turn{flex:none;padding:3px 8px;border-radius:999px;background:var(--zk-theme);color:#fff;font-size:.7rem;font-weight:700}
+.zk-modal-nav{position:relative;z-index:2;flex:0 0 auto;width:46px;height:64px;border:0;border-radius:12px;background:rgba(255,255,255,.94);color:#343a40;font-size:2rem;line-height:1;box-shadow:0 5px 18px rgba(0,0,0,.22);cursor:pointer}
+.zk-modal-nav:hover{transform:scale(1.06);background:#fff}
+.zk-modal-prev{margin-right:12px}
+.zk-modal-next{margin-left:12px}
+@media (max-width:600px){
+  .zk-modal{display:none;grid-template-columns:42px minmax(0,1fr) 42px;align-items:end;gap:5px;padding:10px 4px}
+  .zk-modal.op{display:grid}
+  .zk-modal-panel{grid-column:2;width:100%;padding:18px 16px}
+  .zk-modal-nav{position:fixed;top:50%;transform:translateY(-50%);width:40px;height:58px;border-radius:10px;font-size:1.65rem}
+  .zk-modal-nav:hover{transform:translateY(-50%) scale(1.04)}
+  .zk-modal-prev{left:3px;margin:0}
+  .zk-modal-next{right:3px;margin:0}
+}
+
+
+/* スマホ操作とTier詳細 */
+.zk-card,.zk-card img,.icon-list img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.zk-card img,.icon-list img{-webkit-user-drag:none}
+.icon-list img[data-tier-id]{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.icon-list img[data-tier-id]:hover{transform:scale(1.08);box-shadow:0 0 0 2px rgba(13,110,253,.25)}
+.icon-list img[data-tier-id]:focus-visible{outline:3px solid rgba(13,110,253,.4);outline-offset:2px}
+@media (max-width:600px){
+  .zk-modal{display:none;grid-template-columns:42px minmax(0,1fr) 42px;align-items:center;gap:5px;padding:10px 4px}
+  .zk-modal.op{display:grid}
+  .zk-modal-panel{grid-column:2;align-self:center;width:100%;max-height:88vh;border-radius:18px;padding:18px 16px}
+}
+
+
+/* 鮮明な属性表示・タップ操作 */
+.zk-has-details{touch-action:manipulation}
+.zk-has-details::after{background:var(--zk-accent,#157347);color:#fff}
+.zk-stat{border:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);box-shadow:inset 5px 0 0 var(--zk-accent)}
+.zk-modal-skill-block{border-top:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-right:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-bottom:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff)}
+.zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:saturate(1.55)}
+
+
+/* ステータス枠は元の形に戻し、色選定だけを調整 */
+.zk-stat{border:0;box-shadow:none;background:var(--zk-theme-soft)}
+.zk-modal-skill-block{border-top:0;border-right:0;border-bottom:0;border-left:4px solid var(--zk-accent)}
+.zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:none}
+
+/* 意見箱 */
+.opinion-box{padding:18px;border:1px solid #dee2e6;border-radius:12px;background:#fff}
+.opinion-title{margin:0 0 8px;color:#555;font-size:14px}
+.opinion-msg{min-height:20px;margin:8px 0 0;font-size:13px;color:#888}
+.opinion-success{color:#198754}
+.opinion-error{color:#dc3545}
+
+
+/* 今回の視認性調整: 詳細表示は控えめ、ステータス枠は通常形 */
+.zk-has-details::after{background:#e8f5ee;color:#157347;font-size:.46rem;padding:1px 4px;box-shadow:none}
+.zk-stat{border:0!important;box-shadow:none!important;background:var(--zk-theme-soft)}
+.zk-modal-skill-block{border-top:0!important;border-right:0!important;border-bottom:0!important;border-left:4px solid var(--zk-accent)!important}
+
+
+/* 画面幅を広く使用 */
+.container{width:calc(100vw - 32px);max-width:1600px!important;margin:0 auto;padding:28px 32px}
+@media (max-width:767px){body{padding:8px}.container{width:100%;max-width:none!important;padding:16px}}
+
+/* 詳細画像の属性枠。複合属性では --zk-theme がグラデーションになる */
+.zk-modal-image-frame{flex:0 0 auto;width:98px;height:98px;padding:3px;border-radius:15px;background:var(--zk-theme);box-shadow:0 5px 16px color-mix(in srgb,var(--zk-accent) 24%,transparent)}
+.zk-modal-image-frame .zk-modal-image{display:block;width:100%;height:100%;border:0!important;border-radius:12px;box-shadow:none;object-fit:cover;background:#f0f0f0}
+@media (max-width:480px){.zk-modal-image-frame{width:88px;height:88px}}
+
+
+/* スキル説明文の属性語・数値強調 */
+.skill-attribute{display:inline;padding:0 .14em;border-radius:.28em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.skill-attribute-fire{color:#c62828;background:rgba(239,83,80,.16);box-shadow:inset 0 -2px 0 rgba(229,57,53,.58)}
+.skill-attribute-water{color:#0d47a1;background:rgba(66,165,245,.17);box-shadow:inset 0 -2px 0 rgba(25,118,210,.58)}
+.skill-attribute-wind{color:#4f7300;background:rgba(139,195,74,.20);box-shadow:inset 0 -2px 0 rgba(124,191,25,.62)}
+.skill-attribute-all{color:#6a1b9a;background:rgba(171,71,188,.15);box-shadow:inset 0 -2px 0 rgba(142,36,170,.52)}
+.skill-number{display:inline;padding:0 .12em;border-radius:.22em;color:#8a4f00;background:linear-gradient(transparent 54%,rgba(255,193,7,.42) 54%);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+
+</style></head><body>
+<div id="buildMarker" style="position:fixed;right:8px;bottom:8px;z-index:99999;padding:5px 9px;border-radius:999px;background:#202124;color:#fff;font:700 11px/1.2 sans-serif;opacity:.82">UI BUILD 20260821-01</div><header class="topbar"><b>英語物語 対戦ツール</b><button id="menuToggle" class="hamburger" aria-label="メニューを開閉" aria-expanded="true"><span></span><span></span><span></span></button></header><div class="layout"><aside id="sidebar" class="sidebar open"><nav><button class="navitem active" data-page="calculator">計算機</button><button class="navitem" data-page="zukan">図鑑</button><button class="navitem" data-page="tier">Tier表</button><button class="navitem" data-page="opinion">意見箱</button></nav></aside><main class="content">
+<section id="page-calculator" class="page active"><div class="panel"><h1>ダメージ計算機</h1><div class="battle-grid"><article class="fighter attack"><h2>攻撃キャラ</h2><button id="attackerPicker" class="character-pick"><span class="character-image"></span><span><strong>未選択</strong><small>タップして図鑑から選択</small></span></button><div class="fields"><label>Power<input id="attackerPower" type="number" min="0" value="0"></label><label>属性<select id="attackerAttribute"></select></label><label>解答速度<select id="answerSpeed"><option value="1.2">Excellent（×1.2）</option><option value="1">Correct（×1.0）</option></select></label><label>自力モード<select id="selfMode"><option value="1.2">あり（×1.2）</option><option value="1">なし（×1.0）</option></select></label><label>イベント補正<select id="attackerEvent"><option value="1">なし（×1.0）</option><option value="1.5">あり（×1.5）</option></select></label><label>問題レベル<select id="questionLevel"><option value="1.45">小学生（×1.45）</option><option value="1.5">中1（×1.5）</option><option value="1.55">中2（×1.55）</option><option value="1.6">中3（×1.6）</option><option value="1.65">高1（×1.65）</option><option value="1.7">高2（×1.7）</option><option value="1.75">高3（×1.75）</option><option value="1.8" selected>難関（×1.8）</option></select></label></div><div class="skill-box"><div><b>ゆるスキル</b><p id="attackerSkill">キャラ未選択</p><small id="attackerEffect"></small></div><button id="attackerSkillBtn" disabled>スキル使用</button></div></article>
+<article class="fighter defend"><h2>攻撃対象キャラ</h2><button id="defenderPicker" class="character-pick"><span class="character-image"></span><span><strong>未選択</strong><small>タップして図鑑から選択</small></span></button><div class="fields"><label>HP<input id="defenderHp" type="number" min="0" value="0"></label><label>属性<select id="defenderAttribute"></select></label><label>イベント補正<select id="defenderEvent"><option value="1">なし（×1.0）</option><option value="1.5">あり（×1.5）</option></select></label><label>追加軽減率（%、カンマ区切り）<input id="cutRates" placeholder="例: 30,20"></label></div><div class="skill-box"><div><b>ゆるスキル</b><p id="defenderSkill">キャラ未選択</p><small id="defenderEffect"></small></div><button id="defenderSkillBtn" disabled>スキル使用</button></div></article></div><button id="swap" class="swap">⇄ 攻守を入れ替え</button><section class="damage-card"><p>予想ダメージ</p><div id="damageRange" class="damage-range">0 ～ 0 ダメージ <span>（基準 0）</span></div><div class="damage-meta"><span>属性相性 <b id="attributeRate">1</b></span><span>1発あたり <b id="damagePercent">0%～0%（基準0%）</b></span></div><div id="killResult" class="kill-result">数値を入力してください</div></section><section class="ghost"><h2>幽霊攻撃への耐久</h2><div id="ghostResult">攻撃対象のHPを入力してください</div></section></div></section>
+<section id="page-zukan" class="page"><div class="panel"><h1>キャラ図鑑</h1><div class="zukan-controls"><input id="zkSearch" placeholder="キャラ名で検索"><span id="zkCount"></span><button id="toggleAll">全て開く／閉じる</button></div><div id="zkStatus">読み込み中...</div><div id="zkBox"></div></div></section>
+<section id="page-tier" class="page"><div class="panel"><h1>Tier表</h1><div class="tier-controls"><label>モード<select id="mode"><option>ランクアップ率</option><option>使用者数</option></select></label><label>属性縛り<select id="attribute"><option value="">指定なし</option></select></label><label>コスト帯<select id="cost"><option value="">指定なし</option><option>低</option><option>中</option><option>高</option><option>超高</option></select></label><label>枠<select id="waku"><option value="">指定なし</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label><label>補正<select id="hosei"><option value="0">含まない</option><option value="">含む</option><option value="1">補正のみ</option></select></label><label>信頼度<select id="minCount"><option value="5">低</option><option value="10" selected>中</option><option value="20">高</option></select></label></div><button id="tierBtn" class="primary">Tierを生成・表示</button><div id="tierResult"></div></div></section><section id="page-opinion" class="page"><div class="panel opinion"><h1>意見箱</h1><p>匿名で送信されます</p><textarea id="opinionText" rows="7" placeholder="要望・不具合・感想など"></textarea><button id="opinionSubmit" class="primary">送信</button><p id="opinionMsg"></p></div></section></main></div>
+<div id="picker" class="overlay" hidden><div class="picker-panel"><button class="close" data-close="picker">×</button><h2 id="pickerTitle">キャラを選択</h2><input id="pickerSearch" placeholder="キャラ名で検索"><div id="pickerBox"></div></div></div><div id="detail" class="detail-overlay" hidden><button id="detailPrev" class="detail-nav prev">‹</button><article id="detailPanel" class="detail-panel"><button class="close" data-close="detail">×</button><div class="detail-hero"><div class="detail-image-frame"><img id="detailImage" alt=""></div><div><h2 id="detailName"></h2><p id="detailMeta"></p></div></div><div id="detailStats" class="detail-stats"></div><section id="detailSkillBlock" class="detail-skill"><header><b>ゆるスキル</b><span id="detailTurn"></span></header><p id="detailSkill"></p></section><div id="detailActions" class="detail-actions"><button data-role="attacker">攻撃キャラに設定</button><button data-role="defender">攻撃対象に設定</button><button data-role="picker">選択する</button></div></article><button id="detailNext" class="detail-nav next">›</button></div><script>
+const $=id=>document.getElementById(id),ATTRS=['火','水','風','火水','水風','火風','全'];
+const A={'火':{'火':2/3,'水':1/3,'風':1,'火水':1/2,'水風':2/3,'火風':5/6,'全':2/3},'水':{'火':1,'水':2/3,'風':1/3,'火水':5/6,'水風':1/2,'火風':2/3,'全':2/3},'風':{'火':1/3,'水':1,'風':2/3,'火水':2/3,'水風':5/6,'火風':1/2,'全':2/3},'火水':{'火':5/6,'水':1/2,'風':2/3,'火水':2/3,'水風':7/12,'火風':3/4,'全':2/3},'水風':{'火':2/3,'水':5/6,'風':1/2,'火水':3/4,'水風':2/3,'火風':7/12,'全':2/3},'火風':{'火':1/2,'水':2/3,'風':5/6,'火水':7/12,'水風':3/4,'火風':2/3,'全':2/3},'全':{'火':2/3,'水':2/3,'風':2/3,'火水':2/3,'水風':2/3,'火風':2/3,'全':2/3}};
+let chars=[],tierData=null,idx=-1,order=[],pickRole=null,picking=false,sel={attacker:null,defender:null},on={attacker:false,defender:false};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+addEventListener('DOMContentLoaded',()=>{ATTRS.forEach(x=>{$('attackerAttribute').add(new Option(x,x));$('defenderAttribute').add(new Option(x,x))});bind();load();calc()});
+function bind(){$('menuToggle').onclick=()=>{let x=$('sidebar').classList.toggle('open');$('menuToggle').setAttribute('aria-expanded',x)};document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>page(b.dataset.page));$('attackerPicker').onclick=()=>picker('attacker');$('defenderPicker').onclick=()=>picker('defender');$('swap').onclick=swap;$('zkSearch').oninput=zukan;$('pickerSearch').oninput=pickerGrid;$('toggleAll').onclick=()=>{let a=[...$('zkBox').querySelectorAll('.zk-body')],x=!a.some(e=>e.classList.contains('open'));a.forEach(e=>e.classList.toggle('open',x))};document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).hidden=true);document.querySelectorAll('#detailActions button').forEach(b=>b.onclick=()=>choose(b.dataset.role));$('detailPrev').onclick=()=>nav(-1);$('detailNext').onclick=()=>nav(1);['attackerPower','defenderHp','attackerAttribute','defenderAttribute','cutRates','answerSpeed','selfMode','attackerEvent','defenderEvent','questionLevel'].forEach(id=>$(id).oninput=calc);$('attackerSkillBtn').onclick=()=>skill('attacker');$('defenderSkillBtn').onclick=()=>skill('defender');$('tierBtn').onclick=tier;$('opinionSubmit').onclick=opinion}
+function page(n){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===n))}
+async function load(){try{let raw=await fetch('zukan_beta.json?v=20260821-01',{cache:'no-store'}).then(r=>r.json());chars=Array.isArray(raw)?raw:(Array.isArray(raw.characters)?raw.characters:[]);if(!chars.length)throw Error('characters配列が空です');$('zkStatus').textContent='';zukan()}catch(e){$('zkStatus').textContent='図鑑JSONを読み込めません: '+e.message}try{tierData=await fetch('tier_all_patterns.json').then(r=>r.json());Object.entries(tierData.meta.shibari).forEach(([id,n])=>$('attribute').add(new Option(n,id)))}catch(e){tierData=null}}
+function list(q=''){q=q.trim().toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').toLowerCase().includes(q))}
+function tree(items,box,open=false){let t={};items.forEach(({c,i})=>{let a=c.largeCategory||'未分類',b=c.middleCategory||'その他',s=c.smallCategory||'その他',h=c.heading||'';((((t[a]??={})[b]??={})[s]??={})[h]??=[]).push({c,i})});box.innerHTML='';Object.entries(t).forEach(([a,m])=>{let x=fold(a,'zk-b1',open),xb=x.lastChild;Object.entries(m).forEach(([b,sm])=>{let y=fold(b,'zk-b2',open),yb=y.lastChild;Object.entries(sm).forEach(([s,hs])=>{let z=fold(s,'zk-b3',open),zb=z.lastChild;Object.entries(hs).forEach(([h,cs])=>{if(h){let q=document.createElement('div');q.className='zk-head';q.textContent=h;zb.append(q)}let g=document.createElement('div');g.className='zk-grid';cs.forEach(({c,i})=>{let v=document.createElement('button');v.className='zk-card';v.innerHTML='<img loading="lazy" src="'+esc(c.imageUrl||'')+'"><small>'+esc(c.name||'')+'</small>';v.onclick=()=>detail(i,open);g.append(v)});zb.append(g)});yb.append(z)});xb.append(y)});let w=document.createElement('div');w.className='zk-l1';w.append(x);box.append(w)})}
+function fold(n,c,o){let w=document.createElement('div'),b=document.createElement('button'),d=document.createElement('div');b.className=c;b.innerHTML=esc(n)+' <span>▶</span>';d.className='zk-body'+(o?' open':'');b.onclick=()=>d.classList.toggle('open');w.append(b,d);return w}
+function zukan(){let a=list($('zkSearch').value);$('zkCount').textContent=a.length+'件 / 全'+chars.length+'体';tree(a,$('zkBox'))}function picker(r){pickRole=r;$('pickerTitle').textContent=(r==='attacker'?'攻撃キャラ':'攻撃対象キャラ')+'を選択';$('pickerSearch').value='';pickerGrid();$('picker').hidden=false}function pickerGrid(){tree(list($('pickerSearch').value),$('pickerBox'),true)}
+function theme(a){let c={火:['#e53935','#ffe7e5'],水:['#1976d2','#e3f0ff'],風:['#7cbf19','#edf8d8']},f=['火','水','風'].filter(x=>String(a||'').includes(x));return !f.length?['#6c757d','#6c757d','#f1f3f5']:[c[f[0]][0],f.length>1?'linear-gradient(135deg,'+f.map(x=>c[x][0]).join(',')+')':c[f[0]][0],f.length>1?'linear-gradient(135deg,'+f.map(x=>c[x][1]).join(',')+')':c[f[0]][1]]}
+function detail(i,p=false){let c=chars[i],d=c?.details||{};if(!c)return;idx=i;picking=p;order=list(p?$('pickerSearch').value:$('zkSearch').value).map(x=>x.i);let [a,t,s]=theme(d.attribute),pn=$('detailPanel');pn.style.setProperty('--accent',a);pn.style.setProperty('--theme',t);pn.style.setProperty('--soft',s);$('detailImage').src=c.imageUrl||'';$('detailName').textContent=c.name||d.name||'';$('detailMeta').textContent=[d.rare,d.attribute,d.cost!=null?'Cost '+d.cost:null].filter(Boolean).join(' / ');$('detailStats').innerHTML=[['Cost',d.cost],['最大突破数',d.limitBreak],['無凸HP',d.hp],['無凸Power',d.power],['完凸HP',d.limitHp],['完凸Power',d.limitPower]].filter(x=>x[1]!=null&&x[1]!=='').map(x=>'<div class="detail-stat"><span>'+x[0]+'</span><b>'+Number(x[1]).toLocaleString()+'</b></div>').join('');$('detailSkillBlock').hidden=!d.skill;$('detailSkill').innerHTML=fmt(d.skill||'');$('detailTurn').textContent=d.skillTurn!=null?'必要ターン '+d.skillTurn:'';document.querySelector('[data-role="attacker"]').hidden=p;document.querySelector('[data-role="defender"]').hidden=p;document.querySelector('[data-role="picker"]').hidden=!p;$('detail').hidden=false}
+function fmt(s){return esc(s).replace(/(火|水|風|全)(?=属性|員)/g,m=>'<span class="skill-attribute skill-'+({火:'fire',水:'water',風:'wind',全:'all'}[m])+'">'+m+'</span>').replace(/(\d+(?:\.\d+)?%?)/g,'<span class="skill-number">$1</span>')}function nav(d){let p=order.indexOf(idx);if(p>=0)detail(order[(p+d+order.length)%order.length],picking)}
+function choose(r){if(r==='picker')r=pickRole;if(!r||!chars[idx])return;set(r,chars[idx]);$('detail').hidden=$('picker').hidden=true;page('calculator')}
+function attr(x){let s=String(x||'');return ATTRS.filter(a=>a!=='全').sort((a,b)=>b.length-a.length).find(a=>s===a||s.includes(a))||'全'}function set(r,c,keep=false){sel[r]=c;if(!keep)on[r]=false;let d=c.details||{},p=$(r+'Picker');p.querySelector('.character-image').style.backgroundImage='url("'+String(c.imageUrl||'').replace(/"/g,'')+'")';p.querySelector('strong').textContent=c.name||'';p.querySelector('small').textContent=[d.rare,d.attribute,d.cost!=null?'Cost '+d.cost:null].filter(Boolean).join(' / ');$(r==='attacker'?'attackerPower':'defenderHp').value=Math.floor(Number(r==='attacker'?(d.limitPower??d.power??0):(d.limitHp??d.hp??0))||0);$(r+'Attribute').value=attr(d.attribute);$(r+'Skill').textContent=d.skill||'スキルなし';$(r+'SkillBtn').disabled=!d.skill;sync(r);calc()}function clear(r){sel[r]=null;on[r]=false;let p=$(r+'Picker');p.querySelector('.character-image').style.backgroundImage='';p.querySelector('strong').textContent='未選択';p.querySelector('small').textContent='タップして図鑑から選択';$(r==='attacker'?'attackerPower':'defenderHp').value=0;$(r+'Skill').textContent='キャラ未選択';$(r+'SkillBtn').disabled=true;sync(r)}function swap(){let a=sel.attacker,d=sel.defender,x=on.attacker,y=on.defender;if(d){on.attacker=y;set('attacker',d,true)}else clear('attacker');if(a){on.defender=x;set('defender',a,true)}else clear('defender');calc()}function skill(r){on[r]=!on[r];sync(r);calc()}function sync(r){let b=$(r+'SkillBtn');b.textContent=on[r]?'スキル解除':'スキル使用';b.classList.toggle('active',on[r])}
+function effects(r){let o={atk:1,cuts:[],hits:1,attribute:null,labels:[]},d=sel[r]?.details;if(!d||!on[r])return o;(d.skillEffects||[]).forEach(e=>{let n=String(e.effect||''),v=parseFloat(e.value);if(r==='attacker'&&n.includes('攻撃力')&&isFinite(v)){o.atk*=1+v/100;o.labels.push('攻撃力+'+v+'%')}if(r==='defender'&&(n.includes('軽減')||n.includes('シールド')||n.includes('攻撃集中'))&&isFinite(v)){o.cuts.push(Math.min(100,v));o.labels.push(v+'%軽減')}if(r==='attacker'&&(n.includes('連続')||n.includes('連撃'))&&isFinite(v)){o.hits=Math.max(1,v);o.labels.push(v+'回連続')}if(n.includes('属性変更')){let m=String(e.value||e.target||'').match(/火水|水風|火風|火|水|風|全/);if(m)o.attribute=m[0]}});return o}
+function cuts(a){return [...a].sort((x,y)=>y-x).reduce((m,s,i)=>m*(1-(s/100)*3/(2*(i+1)+1)),1)}function nums(s){return String(s||'').split(',').map(Number).filter(isFinite).map(x=>Math.max(0,Math.min(100,x)))}function percent(x,h){return h?Math.floor(x/h*100):0}function fraction(v){for(let [n,s] of [[1,'1'],[1/3,'1/3'],[1/2,'1/2'],[7/12,'7/12'],[2/3,'2/3'],[3/4,'3/4'],[5/6,'5/6']])if(Math.abs(v-n)<1e-9)return s;return String(v)}
+function calc(){let p=Math.max(0,+$('attackerPower').value||0),hp=Math.floor(Math.max(0,+$('defenderHp').value||0)*(+$('defenderEvent').value||1)),aa=$('attackerAttribute').value,da=$('defenderAttribute').value,ae=effects('attacker'),de=effects('defender');aa=ae.attribute||aa;da=de.attribute||da;let items=(+$('answerSpeed').value||1)*(+$('selfMode').value||1)*(+$('attackerEvent').value||1)*(+$('questionLevel').value||1)*ae.atk,rate=A[aa]?.[da]??1,base=p*items*.75*rate*cuts(nums($('cutRates').value).concat(de.cuts))*ae.hits,min=Math.floor(base*.9),mid=Math.floor(base),max=Math.floor(base*1.1);$('damageRange').innerHTML=min.toLocaleString()+' ～ '+max.toLocaleString()+' ダメージ <span>（基準 '+mid.toLocaleString()+'）</span>';$('attributeRate').textContent=fraction(rate);$('damagePercent').textContent=percent(min,hp)+'%～'+percent(max,hp)+'%（基準'+percent(mid,hp)+'%）';$('killResult').textContent=p&&hp?(min>=hp?'最小ダメージでも撃破可能':max>=hp?'乱数で撃破可能':'撃破不可 / 基準時の残りHP '+Math.max(0,hp-mid).toLocaleString()):'数値を入力してください';$('attackerEffect').textContent=on.attacker?(ae.labels.join('・')||'計算対象の効果なし'):'';$('defenderEffect').textContent=on.defender?(de.labels.join('・')||'計算対象の効果なし'):'';ghost(hp)}function ghost(h){if(!h){$('ghostResult').textContent='攻撃対象のHPを入力してください';return}let b=1000*1.944*(2/3),mn=Math.floor(b*.9),md=Math.floor(b),mx=Math.floor(b*1.1),e=Math.ceil(h/mx),l=Math.ceil(h/mn),s=Math.ceil(h/md);$('ghostResult').innerHTML='<div class="ghost-grid"><div><b>'+Math.max(0,e-1)+'発～'+Math.max(0,l-1)+'発耐える</b><small>基準 '+Math.max(0,s-1)+'発</small></div><div><b>'+e+'発～'+l+'発目で撃破</b><small>基準 '+s+'発目</small></div><div><b>1発 '+percent(mn,h)+'%～'+percent(mx,h)+'%</b><small>基準 '+percent(md,h)+'%</small></div></div>'}
+function tier(){if(!tierData){$('tierResult').textContent='Tierデータを読み込めませんでした';return}let hv=$('hosei').value,key=($('attribute').value||'*')+'|'+($('cost').value||'*')+'|'+($('waku').value||'*')+'|'+(hv===''?'*':hv),b=tierData.data[key];if(!b){$('tierResult').textContent='該当データなし';return}let mode=$('mode').value,min=+$('minCount').value,a=Object.entries(b).map(([id,d])=>({id:+id,count:d[0],rate:d[0]?d[1]/d[0]:0})).filter(x=>x.count>=min).sort((x,y)=>mode==='使用者数'?y.count-x.count:y.rate-x.rate),max=a[0]?.count||0,th=mode==='使用者数'?[max/2,max/3,max/4,max/5,max/6,max/7,max/8,0]:[.4,.25,.1,0,-.1,-.25,-.4,-Infinity],names=['S','A','B','C','D','E','F','G'],g=names.map(()=>[]);a.forEach(x=>g[th.findIndex(t=>(mode==='使用者数'?x.count:x.rate)>=t)].push(x.id));$('tierResult').innerHTML=g.map((x,i)=>x.length?'<div class="tier-row"><b>'+names[i]+'</b><div class="tier-icons">'+x.map(id=>{let c=chars.find(q=>+q.id===id);return c?'<img data-id="'+id+'" src="'+esc(c.imageUrl||'')+'">':''}).join('')+'</div></div>':'').join('');$('tierResult').querySelectorAll('[data-id]').forEach(im=>im.onclick=()=>{let i=chars.findIndex(c=>+c.id===+im.dataset.id);if(i>=0)detail(i)})}
+const OPINION_URL='https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';function opinion(){let t=$('opinionText').value.trim();if(!t){$('opinionMsg').textContent='内容を入力してください';return}$('opinionSubmit').disabled=true;$('opinionMsg').textContent='送信中...';fetch(OPINION_URL+'?api=opinion&text='+encodeURIComponent(t),{mode:'no-cors'}).then(()=>{$('opinionText').value='';$('opinionMsg').textContent='送信しました'}).finally(()=>$('opinionSubmit').disabled=false)}
+
+</script></body></html>
