@@ -39,16 +39,17 @@ function normalizeParty(v){v=String(v??'').trim().replace(/属性/g,'');const al
 function normalizeEffect(e){if(!e||typeof e!=='object')return null;let type=String(pick(e,['スキル効果','effect','type','name'])).trim();if(!type)return null;const aliases={'属性変更':'色変','属性変化':'色変','攻撃力増加':'攻撃力アップ','連続攻撃':'連撃','ダメージ軽減':'シールド','被ダメージ減少':'シールド','被ダメージ軽減':'シールド','攻撃集中':'集中'};type=aliases[type]||type;return{type,value:pick(e,['効果量','value','amount','rate']),applier:normalizeParty(pick(e,['適用者','applier','source'])),target:normalizeParty(pick(e,['対象者','target','recipient'])),raw:e,source:'structured'}}
 function parseSkillText(c){let text=String(c?.details?.skill||c?.skill||''),out=[],m;
   if((m=text.match(/(?:自身|味方全員|リーダー)の属性を(火水|水風|風火|火風|火|水|風|全)属性に変更/)))out.push({type:'色変',value:canon(m[1]),applier:text.includes('リーダー')?'リーダー':text.includes('味方全員')?'全員':'自身',target:''});
-  if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の)?(?:味方全員|自身|リーダー)の攻撃力を(\d+(?:\.\d+)?)%増加/)))out.push({type:'攻撃力アップ',value:Number(m[2]),applier:m[1]?canon(m[1]):text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:''});
-  if((m=text.match(/(火水|水風|風火|火風|火|水|風|全)属性の敵に対する(?:味方全員|自身|リーダー)の攻撃力を(\d+(?:\.\d+)?)%増加/)))out.push({type:'攻撃力アップ',value:Number(m[2]),applier:text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:canon(m[1])});
+  const enemyAttack=text.match(/(火水|水風|風火|火風|火|水|風|全)属性の敵に対する(?:味方全員|自身|リーダー)の攻撃力を(\d+(?:\.\d+)?)%増加/);
+  if(enemyAttack){m=enemyAttack;out.push({type:'攻撃力アップ',value:Number(m[2]),applier:text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:canon(m[1])})}
+  else if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の)?(?:味方全員|自身|リーダー)の攻撃力を(\d+(?:\.\d+)?)%増加/)))out.push({type:'攻撃力アップ',value:Number(m[2]),applier:m[1]?canon(m[1]):text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:''});
   if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の敵からの)?ダメージを(\d+(?:\.\d+)?)%軽減するシールド/)))out.push({type:'シールド',value:Number(m[2]),applier:'全員',target:m[1]?canon(m[1]):'敵全員'});
   if((m=text.match(/攻撃を(?:自身|リーダー)に集中させる\((\d+(?:\.\d+)?)%カット\)/)))out.push({type:'集中',value:Number(m[1]),applier:text.includes('リーダー')?'リーダー':'自身',target:'敵全員'});
   if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の)?(?:味方全員|自身|リーダー)のHPを(\d+(?:\.\d+)?)%回復/)))out.push({type:'回復',value:Number(m[2]),applier:m[1]?canon(m[1]):text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:''});
   if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の)?(?:味方全員|自身|リーダー)の攻撃が(\d+)回連続攻撃/)))out.push({type:'連撃',value:Number(m[2]),applier:m[1]?canon(m[1]):text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:''});
   return out;
 }
-function effectUsable(e){return IGNORED_EFFECTS.includes(e.type)||(e.type==='色変'?ATTRS.includes(canon(e.value)):numberOf(e.value)!==0)}
-function semanticEffectKey(e){return [e.type,canon(e.value),normalizeParty(e.applier),normalizeParty(e.target)].join('|')}
+function effectUsable(e){return IGNORED_EFFECTS.includes(e.type)||(e.type==='色変'?ATTRS.includes(canon(e.value)):effectValue(e)!==0)}
+function semanticEffectKey(e){return [e.type,e.type==='色変'?canon(e.value):effectValue(e),normalizeParty(e.applier),normalizeParty(e.target)].join('|')}
 function effectsOf(c){
   const structured=structuredEffects(c).filter(effectUsable);
   const parsed=parseSkillText(c).map(e=>({...e,applier:normalizeParty(e.applier),target:normalizeParty(e.target),source:'parsed'})).filter(effectUsable);
@@ -60,7 +61,7 @@ function effectsOf(c){
 }
 function containsAttribute(current,condition){let cur=canon(current),cond=canon(condition);if(!cond)return true;if(ALWAYS_APPLIERS.includes(condition)||ALWAYS_TARGETS.includes(condition))return true;if(cond==='全員'||cond==='敵全員')return true;if(cond==='全')return true;if(['火水','水風','風火'].includes(cond))return cur===cond;return cur.includes(cond)}
 function applicable(effect,applierAttr,targetAttr){let applierOK=!effect.applier||ALWAYS_APPLIERS.includes(effect.applier)||containsAttribute(applierAttr,effect.applier);let targetOK=!effect.target||ALWAYS_TARGETS.includes(effect.target)||containsAttribute(targetAttr,effect.target);return applierOK&&targetOK}
-function effectValue(e){return numberOf(e.value)}
+function effectValue(e){let v=numberOf(e.value);if(e.source==='structured'&&['攻撃力アップ','シールド','集中','回復'].includes(e.type)&&Math.abs(v)>0&&Math.abs(v)<=10)v=Math.round(v*1000000)/10000;return v}
 function computeSkills(attackerAttr,defenderAttr){let state={attackerAttr:canon(attackerAttr),defenderAttr:canon(defenderAttr),attackMultiplier:1,hits:1,cuts:[],attackerHeal:0,defenderHeal:0,attackerLabels:[],defenderLabels:[]};
   let active=[];for(const role of ['attacker','defender'])if(skillEnabled[role]&&selected[role])for(const e of effectsOf(selected[role]))active.push({role,e});
   // 各自の色変を最優先。同一側で複数成立した場合は後のものを採用。
