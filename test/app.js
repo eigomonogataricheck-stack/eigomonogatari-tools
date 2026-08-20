@@ -5,8 +5,62 @@ function el(id){return document.getElementById(id)}
 window.onload=function(){ATTRS.forEach(function(a){el('attackerAttribute').add(new Option(a,a));el('defenderAttribute').add(new Option(a,a))});bindUi();preloadZukanData();loadTier();calculateDamage()};
 function bindUi(){el('menuToggle').onclick=function(){el('sideMenu').classList.toggle('is-open')};document.querySelectorAll('[data-page]').forEach(function(b){b.onclick=function(){showPage(b.dataset.page)}});el('opinionOpen').onclick=function(){el('opinionModal').hidden=false};document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=function(){el(b.dataset.close).hidden=true}});el('attackerSelect').onclick=function(){openPicker('attacker')};el('defenderSelect').onclick=function(){openPicker('defender')};el('pickerSearch').oninput=renderPicker;el('zkBtn').onclick=loadZukan;el('zkSearch').oninput=renderZukan;el('toggleAll').onclick=toggleAll;el('zkModalClose').onclick=closeCharacterDetails;el('prevCharacter').onclick=function(){switchCharacterDetails(-1)};el('nextCharacter').onclick=function(){switchCharacterDetails(1)};document.querySelectorAll('[data-select]').forEach(function(b){b.onclick=function(){selectDetail(b.dataset.select)}});el('swapCharacters').onclick=swapCharacters;el('attackerSkillButton').onclick=function(){toggleSkill('attacker')};el('defenderSkillButton').onclick=function(){toggleSkill('defender')};['attackerPower','defenderHp','attackerAttribute','defenderAttribute'].forEach(function(id){el(id).oninput=calculateDamage;el(id).onchange=calculateDamage});el('tierButton').onclick=execTier;el('opinionSubmit').onclick=submitOpinion}
 function showPage(page){document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+page)});document.querySelectorAll('[data-page]').forEach(function(b){b.classList.toggle('active',b.dataset.page===page)});if(innerWidth<801)el('sideMenu').classList.remove('is-open');window.scrollTo(0,0)}
-function preloadZukanData(){return fetch('zukan_beta.json').then(function(r){if(!r.ok)throw Error();return r.json()}).then(function(d){zkData=d;return d}).catch(function(){zkData=[];return[]})}
-function loadTier(){fetch('tier_all_patterns.json').then(function(r){return r.json()}).then(function(d){tierData=d;Object.keys(d.meta.shibari||{}).forEach(function(id){el('attribute').add(new Option(d.meta.shibari[id],id))})}).catch(function(){})}
+function preloadZukanData(){
+  if(zkData.length)return Promise.resolve(zkData);
+  return fetch(encodeURI('英語物語キャラ図鑑.xlsx'),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw Error('図鑑ファイル HTTP '+r.status);return r.arrayBuffer()})
+    .then(function(buffer){
+      if(typeof XLSX==='undefined')throw Error('Excel読込ライブラリを読み込めませんでした');
+      var book=XLSX.read(buffer,{type:'array'});
+      zkData=parseCatalogWorkbook_(book);
+      if(!zkData.length)throw Error('図鑑データを検出できませんでした');
+      return zkData;
+    });
+}
+function normalizeHeader_(v){return String(v==null?'':v).replace(/[\s　_]/g,'').toLowerCase()}
+function findHeaderRow_(rows){
+  var keys=['キャラ名','名称','画像url','画像','属性','power','hp'];
+  for(var i=0;i<Math.min(rows.length,30);i++){
+    var hs=(rows[i]||[]).map(normalizeHeader_);
+    var score=keys.filter(function(k){return hs.indexOf(normalizeHeader_(k))>=0}).length;
+    if(score>=2)return i;
+  }
+  return 0;
+}
+function parseCatalogWorkbook_(book){
+  var preferred=['キャラマスター','キャラクターマスター','図鑑データ','図鑑マスター','ゆる図鑑'];
+  var names=preferred.filter(function(n){return book.SheetNames.indexOf(n)>=0}).concat(book.SheetNames.filter(function(n){return preferred.indexOf(n)<0}));
+  var best=[];
+  names.forEach(function(name){
+    var rows=XLSX.utils.sheet_to_json(book.Sheets[name],{header:1,defval:'',raw:false});
+    if(rows.length<2)return;
+    var hi=findHeaderRow_(rows),headers=(rows[hi]||[]).map(normalizeHeader_);
+    function col(candidates){for(var i=0;i<candidates.length;i++){var x=headers.indexOf(normalizeHeader_(candidates[i]));if(x>=0)return x}return-1}
+    var C={id:col(['キャラID','ID']),name:col(['キャラ名','名称','名前']),image:col(['画像URL','imageUrl','画像']),attribute:col(['属性']),cost:col(['Cost','コスト']),hp:col(['HP','無凸HP']),power:col(['Power','無凸Power']),limitBreak:col(['限界突破数','最大突破数']),limitHp:col(['限界HP','完凸HP']),limitPower:col(['限界Power','完凸Power']),skillTurn:col(['必要ターン数','必要ターン']),skill:col(['ゆるスキル','スキル']),rare:col(['rare','レア度']),large:col(['大分類']),middle:col(['中分類']),small:col(['小分類']),heading:col(['見出し'])};
+    if(C.name<0)return;
+    var get=function(r,i){return i>=0?r[i]:''},num=function(v){var n=Number(String(v).replace(/,/g,''));return Number.isFinite(n)?n:null};
+    var out=rows.slice(hi+1).filter(function(r){return String(get(r,C.name)).trim()}).map(function(r,index){return{id:get(r,C.id)||index+1,name:get(r,C.name),imageUrl:extractImageUrl_(get(r,C.image)),largeCategory:get(r,C.large)||'通常ゆる',middleCategory:get(r,C.middle)||'その他',smallCategory:get(r,C.small)||'',heading:get(r,C.heading)||'',details:{name:get(r,C.name),attribute:get(r,C.attribute),cost:num(get(r,C.cost)),hp:num(get(r,C.hp)),power:num(get(r,C.power)),limitBreak:num(get(r,C.limitBreak)),limitHp:num(get(r,C.limitHp)),limitPower:num(get(r,C.limitPower)),skillTurn:num(get(r,C.skillTurn)),skill:get(r,C.skill),rare:get(r,C.rare)}}});
+    if(out.length>best.length)best=out;
+  });
+  return best;
+}
+function extractImageUrl_(value){
+  var s=String(value||'');
+  var m=s.match(/https?:\/\/[^"')\s]+/);
+  return m?m[0]:s;
+}
+function loadTier(){
+  fetch('tier_all_patterns.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('Tierファイル HTTP '+r.status);return r.json()}).then(function(d){tierData=d;Object.keys((d.meta&&d.meta.shibari)||{}).forEach(function(id){el('attribute').add(new Option(d.meta.shibari[id],id))})}).catch(function(error){console.error(error);el('tier-result').textContent='tier_all_patterns.jsonを読み込めませんでした。'});
+  fetch(encodeURI('英語物語_属性相性.csv'),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.text()}).then(loadAttributeCsv_).catch(function(error){console.error('属性相性CSV',error)});
+}
+function loadAttributeCsv_(text){
+  var rows=text.replace(/^\uFEFF/,'').trim().split(/\r?\n/).map(parseCsvLine_);
+  if(rows.length<2)return;
+  var heads=rows[0].slice(1);
+  rows.slice(1).forEach(function(row){var attack=row[0];if(!ATTR[attack])ATTR[attack]={};heads.forEach(function(defense,i){var raw=String(row[i+1]||'').trim(),parts=raw.split('/'),n=parts.length===2?[Number(parts[0]),Number(parts[1])]:decimalToFraction_(Number(raw));if(Number.isFinite(n[0])&&Number.isFinite(n[1])&&n[1])ATTR[attack][defense]=n})});
+}
+function parseCsvLine_(line){var out=[],cur='',quote=false;for(var i=0;i<line.length;i++){var ch=line[i];if(ch==='"'){if(quote&&line[i+1]==='"'){cur+='"';i++}else quote=!quote}else if(ch===','&&!quote){out.push(cur);cur=''}else cur+=ch}out.push(cur);return out}
+function decimalToFraction_(v){if(v===.5)return[1,2];if(v===.75)return[3,4];if(v===0)return[0,1];return[Math.round(v*1000),1000]}
 function loadZukan(){el('zkLoader').hidden=false;preloadZukanData().then(function(){el('zkLoader').hidden=true;el('zkBtn').hidden=true;el('zkControls').hidden=false;renderZukan()})}
 function renderCards(list){return list.map(function(c){return '<div class="zk-card" data-index="'+c.index+'" tabindex="0"><img src="'+esc(c.imageUrl)+'"><div class="zk-name">'+esc(c.name)+'</div></div>'}).join('')}
 function dataset(q){q=(q||'').trim().toLowerCase();return zkData.map(function(r,i){return{index:i,name:r.name||'',imageUrl:r.imageUrl||'',row:r}}).filter(function(c){return !q||c.name.toLowerCase().indexOf(q)>-1})}
@@ -31,7 +85,16 @@ function effectiveAttr(role){var base=el(role+'Attribute').value;if(!skillActive
 function calculateDamage(){var p=Math.max(0,+el('attackerPower').value||0),hp=Math.max(0,+el('defenderHp').value||0),pair=ATTR[effectiveAttr('attacker')][effectiveAttr('defender')],ratio=pair[0]/pair[1],atk=skillActive.attacker&&selected.attacker?parseSkill(selected.attacker.details.skill,'attacker').attack:1,cut=skillActive.defender&&selected.defender?parseSkill(selected.defender.details.skill,'defender').cut:0,base=p*atk*1.944*ratio*(1-cut),min=Math.floor(base*.9),mid=Math.floor(base),max=Math.floor(base*1.1);el('damageMin').textContent=n(min);el('damageBase').textContent=n(mid);el('damageMax').textContent=n(max);el('attributeFraction').textContent=pair[1]===1?String(pair[0]):pair[0]+'/'+pair[1];el('damagePercentMin').textContent=pct(min,hp);el('damagePercentBase').textContent=pct(mid,hp);el('damagePercentMax').textContent=pct(max,hp);ghost(hp)}
 function ghost(hp){var min=Math.floor(1000*1.944*(2/3)*.9),mid=Math.floor(1000*1.944*(2/3)),max=Math.floor(1000*1.944*(2/3)*1.1);if(!hp){el('ghostHits').textContent='0発';el('ghostHitsBase').textContent='0発';['ghostPercentMin','ghostPercentBase','ghostPercentMax'].forEach(function(i){el(i).textContent='0.0'});return}var lo=Math.max(0,Math.ceil(hp/max)-1),center=Math.max(0,Math.ceil(hp/mid)-1),hi=Math.max(0,Math.ceil(hp/min)-1);el('ghostHits').textContent=(lo===hi?lo:lo+'～'+hi)+'発耐える';el('ghostHitsBase').textContent=center+'発耐える';el('ghostPercentMin').textContent=pct(min,hp);el('ghostPercentBase').textContent=pct(mid,hp);el('ghostPercentMax').textContent=pct(max,hp)}
 function pct(v,hp){return hp?(v/hp*100).toFixed(1):'0.0'}function n(v){return v.toLocaleString('ja-JP')}
-function execTier(){if(!tierData){el('tier-result').textContent='Tierデータの読み込みに失敗しました。';return}var hv=el('hosei').value,key=(el('attribute').value||'*')+'|'+(el('cost').value||'*')+'|'+(el('waku').value||'*')+'|'+(hv===''?'*':hv),b=tierData.data[key];if(!b){el('tier-result').textContent='該当データなし。';return}var mode=el('mode').value,min=+el('minCount').value,arr=Object.keys(b).map(function(id){return{id:+id,count:b[id][0],rate:b[id][0]?b[id][1]/b[id][0]:0}}).filter(function(x){return x.count>=min}).sort(function(a,c){return mode==='使用者数'?c.count-a.count:c.rate-a.rate}),mx=arr.length?arr[0].count:0,ths=mode==='使用者数'?[mx/2,mx/3,mx/4,mx/5,mx/6,mx/7,mx/8,0]:[.4,.25,.1,0,-.1,-.25,-.4,-Infinity],names=['S','A','B','C','D','E','F','G'],groups=names.map(function(){return[]});arr.forEach(function(x){var v=mode==='使用者数'?x.count:x.rate,i=ths.findIndex(function(t){return v>=t});groups[i].push(x.id)});el('tier-result').innerHTML=groups.map(function(g,i){if(!g.length)return'';return '<div class="tier-row"><div class="rank-label">'+names[i]+'</div><div class="icon-list">'+g.map(function(id){var c=zkData.find(function(z){return+z.id===id});return c?'<img data-tier-id="'+id+'" src="'+esc(c.imageUrl||'')+'">':''}).join('')+'</div></div>'}).join('');el('tier-result').querySelectorAll('[data-tier-id]').forEach(function(img){img.onclick=function(){var i=zkData.findIndex(function(z){return+z.id===+img.dataset.tierId});if(i>=0)openCharacterDetails(i,false)}})}
+function execTier(){
+  if(!tierData){el('tier-result').textContent='tier_all_patterns.jsonを読み込めませんでした。';return}
+  var hv=el('hosei').value,key=(el('attribute').value||'*')+'|'+(el('cost').value||'*')+'|'+(el('waku').value||'*')+'|'+(hv===''?'*':hv),b=tierData.data[key];
+  if(!b){el('tier-result').textContent='該当データなし。';return}
+  var mode=el('mode').value,min=+el('minCount').value,arr=Object.keys(b).map(function(id){return{id:+id,count:b[id][0],rate:b[id][0]?b[id][1]/b[id][0]:0}}).filter(function(x){return x.count>=min}).sort(function(a,c){return mode==='使用者数'?c.count-a.count:c.rate-a.rate});
+  var mx=arr.length?arr[0].count:0,ths=mode==='使用者数'?[mx/2,mx/3,mx/4,mx/5,mx/6,mx/7,mx/8,0]:[.4,.25,.1,0,-.1,-.25,-.4,-Infinity],names=['S','A','B','C','D','E','F','G'],groups=names.map(function(){return[]});
+  arr.forEach(function(x){var v=mode==='使用者数'?x.count:x.rate,i=ths.findIndex(function(t){return v>=t});if(i>=0)groups[i].push(x.id)});
+  el('tier-result').innerHTML=groups.map(function(g,i){if(!g.length)return'';return '<div class="tier-row"><div class="rank-label">'+names[i]+'</div><div class="icon-list">'+g.map(function(id){var c=zkData.find(function(z){return String(z.id)===String(id)});return c?'<img data-tier-id="'+id+'" src="'+esc(c.imageUrl||'')+'">':''}).join('')+'</div></div>'}).join('')||'<p>該当データなし。</p>';
+  el('tier-result').querySelectorAll('[data-tier-id]').forEach(function(img){img.onclick=function(){var i=zkData.findIndex(function(z){return String(z.id)===String(img.dataset.tierId)});if(i>=0)openCharacterDetails(i,false)}})
+}
 function getTheme(a){var s=String(a||''),f=s.indexOf('火')>-1,w=s.indexOf('水')>-1,g=s.indexOf('風')>-1;if(f&&w)return{a:'#e53935',b:'linear-gradient(135deg,#e53935,#1976d2)',s:'#f4efff'};if(w&&g)return{a:'#1976d2',b:'linear-gradient(135deg,#1976d2,#7cbf19)',s:'#edf8f3'};if(f&&g)return{a:'#e53935',b:'linear-gradient(135deg,#e53935,#7cbf19)',s:'#fff2e5'};if(f)return{a:'#e53935',b:'#e53935',s:'#ffe7e5'};if(w)return{a:'#1976d2',b:'#1976d2',s:'#e3f0ff'};if(g)return{a:'#7cbf19',b:'#7cbf19',s:'#edf8d8'};return{a:'#6c757d',b:'#6c757d',s:'#f1f3f5'}}
-var OPINION_URL='https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';function submitOpinion(){var text=el('opinionText').value.trim();if(!text){el('opinionMsg').textContent='内容を入力してください。';return}el('opinionSubmit').disabled=true;el('opinionMsg').textContent='送信中...';fetch(OPINION_URL+'?api=opinion&text='+encodeURIComponent(text)).then(function(r){if(!r.ok)throw Error();el('opinionText').value='';el('opinionMsg').textContent='送信しました。'}).catch(function(){el('opinionMsg').textContent='送信に失敗しました。'}).finally(function(){el('opinionSubmit').disabled=false})}
+var OPINION_URL='https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';function submitOpinion(){var text=el('opinionText').value.trim();if(!text){el('opinionMsg').textContent='内容を入力してください。';return}el('opinionSubmit').disabled=true;el('opinionMsg').textContent='送信中...';fetch(OPINION_URL+'?api=opinion&text='+encodeURIComponent(text)+'&ua='+encodeURIComponent(navigator.userAgent)+'&ref='+encodeURIComponent(location.href)).then(function(r){if(!r.ok)throw Error();el('opinionText').value='';el('opinionMsg').textContent='送信しました。'}).catch(function(){el('opinionMsg').textContent='送信に失敗しました。'}).finally(function(){el('opinionSubmit').disabled=false})}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
