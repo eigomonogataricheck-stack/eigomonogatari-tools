@@ -71,6 +71,7 @@ var zkPressTimer = null;
 var zkPressStart = null;
 var zkSuppressClick = false;
 var zkCurrentIndex = -1;
+var zkDisplayedDetailOrder = [];
 var L1C = {'通常ゆる':'#198754','特殊ゆる':'#dc3545'};
 
 function loadZukan(){
@@ -140,6 +141,7 @@ function renderZukan(){
 
   var opened = !!query;
   var html = '';
+  zkDisplayedDetailOrder = [];
   var largeKeys = Object.keys(tree);
   largeKeys.sort(function(a){ return a === '通常ゆる' ? -1 : 1; });
 
@@ -160,6 +162,7 @@ function renderZukan(){
           if(heading !== '_') cards += '<div class="zk-head">' + escapeHtml(heading) + '</div>';
 
           characters.forEach(function(character){
+            if(character.hasDetails) zkDisplayedDetailOrder.push(character.index);
             cards += '<div class="zk-card' +
               (character.matched ? ' zk-match' : '') +
               (character.hasDetails ? ' zk-has-details' : '') +
@@ -281,6 +284,7 @@ function openCharacterDetails(index){
   panel.style.setProperty('--zk-accent', theme.accent);
   panel.style.setProperty('--zk-soft', theme.soft);
   panel.style.setProperty('--zk-theme', theme.background);
+  panel.style.setProperty('--zk-theme-soft', theme.softBackground);
 
   document.getElementById('zkModalImage').src = character.imageUrl || '';
   document.getElementById('zkModalImage').alt = character.name || '';
@@ -323,16 +327,17 @@ function openCharacterDetails(index){
 }
 
 function switchCharacterDetails(direction){
-  if(!zkData || zkCurrentIndex < 0) return;
+  if(!zkData || zkCurrentIndex < 0 || zkDisplayedDetailOrder.length === 0) return;
 
-  var index = zkCurrentIndex;
-  for(var count = 0; count < zkData.length; count++){
-    index = (index + direction + zkData.length) % zkData.length;
-    if(zkData[index] && zkData[index].details){
-      openCharacterDetails(index);
-      return;
-    }
-  }
+  // JSON配列順ではなく、現在画面に並んでいる順番で移動する。
+  var position = zkDisplayedDetailOrder.indexOf(zkCurrentIndex);
+  if(position === -1) position = 0;
+
+  var nextPosition = (
+    position + direction + zkDisplayedDetailOrder.length
+  ) % zkDisplayedDetailOrder.length;
+
+  openCharacterDetails(zkDisplayedDetailOrder[nextPosition]);
 }
 
 function getAttributeTheme_(attribute){
@@ -342,25 +347,34 @@ function getAttributeTheme_(attribute){
     '風': {solid:'#7fbd27', soft:'#f4fae9'}
   };
   var text = String(attribute || '');
-  var found = ['火','水','風'].filter(function(type){ return text.indexOf(type) >= 0; });
+  var found = ['火','水','風'].filter(function(type){
+    return text.indexOf(type) >= 0;
+  });
 
   if(found.length === 0){
-    return {accent:'#6c757d', soft:'#f1f3f5', background:'#6c757d'};
-  }
-  if(found.length === 1){
-    return {accent:colors[found[0]].solid, soft:colors[found[0]].soft, background:colors[found[0]].solid};
+    return {
+      accent:'#6c757d',
+      background:'#6c757d',
+      softBackground:'#f1f3f5'
+    };
   }
 
-  var stops = found.map(function(type, i){
-    var start = Math.round(i * 100 / found.length);
-    var end = Math.round((i + 1) * 100 / found.length);
-    return colors[type].solid + ' ' + start + '%, ' + colors[type].solid + ' ' + end + '%';
-  }).join(', ');
+  if(found.length === 1){
+    return {
+      accent:colors[found[0]].solid,
+      background:colors[found[0]].solid,
+      softBackground:colors[found[0]].soft
+    };
+  }
+
+  // 複合属性は均等な斜めグラデーションにする。
+  var solidColors = found.map(function(type){ return colors[type].solid; });
+  var softColors = found.map(function(type){ return colors[type].soft; });
 
   return {
-    accent: colors[found[0]].solid,
-    soft: 'linear-gradient(135deg,' + found.map(function(type){ return colors[type].soft; }).join(',') + ')',
-    background: 'linear-gradient(135deg,' + stops + ')'
+    accent:colors[found[0]].solid,
+    background:'linear-gradient(135deg, ' + solidColors.join(', ') + ')',
+    softBackground:'linear-gradient(135deg, ' + softColors.join(', ') + ')'
   };
 }
 
