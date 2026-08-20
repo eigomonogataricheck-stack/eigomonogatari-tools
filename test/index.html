@@ -8,7 +8,7 @@
 
 /* build 20260821-11 */
 .opinion p{margin:0 0 10px;color:#5f6368}.opinion textarea{display:block;width:100%;min-height:150px;resize:vertical}.opinion .primary{margin-top:10px}.opinion-link{margin-top:14px!important}.opinion-link a{color:#0b57d0;font-weight:700;text-decoration:none}.opinion-link a:hover{text-decoration:underline}
-</style><meta name="eigo-ui-build" content="20260821-15"></head><body>
+</style><meta name="eigo-ui-build" content="20260821-16"></head><body>
 <header class="topbar"><button id="menuToggle" class="hamburger" aria-label="メニュー開閉"><i></i><i></i><i></i></button><b>英語物語 対戦ツール</b></header>
 <div class="shell"><aside id="sidebar" class="sidebar open"><button data-page="calculator" class="active">計算機</button><button data-page="zukan">図鑑</button><button data-page="tier">Tier表</button><button data-page="opinion">意見箱</button></aside><main>
 <section id="page-calculator" class="page active"><div class="panel"><h1>ダメージ計算機</h1><div class="battle">
@@ -39,15 +39,68 @@ function move(dir){lastDirection=dir<0?-1:1;let p=detailOrder.indexOf(current);i
 function norm(x){let s=String(x||'');return ATTRS.filter(a=>a!=='全').sort((a,b)=>b.length-a.length).find(a=>s.includes(a))||'全'}function setCharacter(role,c,keep=false){selected[role]=c;if(!keep)skillEnabled[role]=false;let d=c.details||{},p=$(role+'Picker');p.querySelector('.portrait').style.backgroundImage='url("'+String(c.imageUrl||'').replace(/"/g,'')+'")';p.querySelector('strong').textContent=c.name||'';p.querySelector('small').textContent=[d.rare,d.attribute,d.cost!=null?'Cost '+d.cost:null].filter(Boolean).join(' / ');$(role==='attacker'?'attackerPower':'defenderHp').value=Number(role==='attacker'?(d.limitPower??d.power??0):(d.limitHp??d.hp??0));$(role+'Attribute').value=norm(d.attribute);$(role+'Skill').textContent=d.skill||'スキルなし';$(role+'SkillBtn').disabled=!d.skill;syncSkill(role);calculate()}function clearRole(role){selected[role]=null;skillEnabled[role]=false;let p=$(role+'Picker');p.querySelector('.portrait').style.backgroundImage='';p.querySelector('strong').textContent='未選択';p.querySelector('small').textContent='タップして図鑑から選択';$(role==='attacker'?'attackerPower':'defenderHp').value=0;syncSkill(role)}function swap(){let a=selected.attacker,d=selected.defender,as=skillEnabled.attacker,ds=skillEnabled.defender;if(d){skillEnabled.attacker=ds;setCharacter('attacker',d,true)}else clearRole('attacker');if(a){skillEnabled.defender=as;setCharacter('defender',a,true)}else clearRole('defender')}function toggleSkill(r){skillEnabled[r]=!skillEnabled[r];syncSkill(r);calculate()}function syncSkill(r){let b=$(r+'SkillBtn');b.textContent=skillEnabled[r]?'スキル解除':'スキル使用';b.classList.toggle('active',skillEnabled[r])}
 function parseAmount(value){if(typeof value==='number')return value;if(value==null)return NaN;let n=parseFloat(String(value).replace('%','').trim());return Number.isFinite(n)?n:NaN}
 function canonicalAttr(value){let text=String(value??'').trim().replaceAll('火風','風火');let pair=['火水','水風','風火'].find(x=>text.includes(x));if(pair)return pair;if(text.includes('全'))return'全';if(text.includes('火'))return'火';if(text.includes('水'))return'水';if(text.includes('風'))return'風';return text}
-function canonicalCondition(value){if(Array.isArray(value))return value.map(canonicalCondition);if(value==null)return null;let text=String(value).trim().replaceAll('火風','風火');if(!text)return null;if(text.includes('敵全員'))return'敵全員';let pair=['火水','水風','風火'].find(x=>text.includes(x));if(pair)return pair;if(text.includes('属性')){if(text.includes('火'))return'火';if(text.includes('水'))return'水';if(text.includes('風'))return'風';if(text.includes('全'))return'全'}if(text.includes('味方全員')||text==='全員')return'全員';if(text.includes('リーダー'))return'リーダー';if(text.includes('自身')||text.includes('自分'))return'自身';if(text==='火'||text==='水'||text==='風'||text==='全')return text;return text}
-function attrIncludes(current,condition){current=canonicalAttr(current);condition=canonicalCondition(condition);if(Array.isArray(condition))return condition.length===0||condition.some(x=>attrIncludes(current,x));if(!condition||['自身','リーダー','全員','敵全員'].includes(condition))return true;if(condition==='全')return current==='全';if(['火水','水風','風火'].includes(condition))return current===condition;return current.includes(condition)}
+function canonicalCondition(value){
+  if(Array.isArray(value))return value.map(canonicalCondition);
+  if(value==null)return null;
+  const raw=String(value).trim().replaceAll('火風','風火');
+  if(!raw)return null;
+  const scopeOnly={'自身':'自身','自分':'自身','リーダー':'リーダー','全員':'全員','味方全員':'全員','敵全員':'敵全員'};
+  if(scopeOnly[raw])return scopeOnly[raw];
+  const attributeMatch=raw.match(/(火水|水風|風火|火|水|風|全)属性/);
+  if(attributeMatch)return attributeMatch[1];
+  if(/^(火水|水風|風火|火|水|風|全)$/.test(raw))return raw;
+  return raw;
+}
+function attrIncludes(current,condition){
+  current=canonicalAttr(current);
+  condition=canonicalCondition(condition);
+  if(Array.isArray(condition))return condition.length===0||condition.some(x=>attrIncludes(current,x));
+  if(!condition||['自身','リーダー','全員','敵全員'].includes(condition))return true;
+  if(condition==='全')return current==='全';
+  if(['火水','水風','風火'].includes(condition))return current===condition;
+  if(['火','水','風'].includes(condition))return current.includes(condition);
+  return false;
+}
 function effectList(role){if(!skillEnabled[role])return[];let effects=selected[role]?.details?.skillEffects;return Array.isArray(effects)?effects:[]}
 function effectName(effect){let name=String(effect?.effect??'').trim();if(['被ダメージ減少','ダメージ軽減','軽減'].includes(name))return'シールド';if(['攻撃力増加','攻撃力上昇'].includes(name))return'攻撃力アップ';return name}
 function allyCondition(effect){return effect?.allyCondition??effect?.appliedTo??null}
 function enemyCondition(effect){return effect?.enemyCondition??effect?.target??null}
 function calculatorEnabled(effect){if(effect?.calculatorEnabled===false)return false;return !['遅延','短縮','蘇生','全体攻撃'].includes(effectName(effect))}
 function colorAfter(role,baseAttr){let current=canonicalAttr(baseAttr);for(let effect of effectList(role)){if(effectName(effect)!=='色変'||!calculatorEnabled(effect))continue;if(!attrIncludes(current,allyCondition(effect)))continue;let changed=canonicalAttr(effect.amount??effect.value);if(ATTRS.includes(changed))current=changed}return current}
-function collectSkillState(attackerAttr,defenderAttr,baseHp){let state={attackMultiplier:1,hits:1,cuts:[],recovery:0,attackerLabels:[],defenderLabels:[]};for(let role of ['attacker','defender']){let ownAttr=role==='attacker'?attackerAttr:defenderAttr,opponentAttr=role==='attacker'?defenderAttr:attackerAttr,labels=role==='attacker'?state.attackerLabels:state.defenderLabels;for(let effect of effectList(role)){let name=effectName(effect);if(name==='色変'){labels.push('色変→'+ownAttr);continue}if(!calculatorEnabled(effect)){labels.push(name+'：計算対象外');continue}let ownCondition=allyCondition(effect),opponentCondition=enemyCondition(effect);if(!attrIncludes(ownAttr,ownCondition)){labels.push(name+'：適用者条件外（'+canonicalCondition(ownCondition)+'）');continue}if(!attrIncludes(opponentAttr,opponentCondition)){labels.push(name+'：対象者条件外（'+canonicalCondition(opponentCondition)+'）');continue}let amount=parseAmount(effect.amount??effect.value);if(name==='攻撃力アップ'&&role==='attacker'&&Number.isFinite(amount)){state.attackMultiplier*=1+amount/100;labels.push('攻撃力+'+amount+'%')}else if((name==='シールド'||name==='集中')&&role==='defender'&&Number.isFinite(amount)){state.cuts.push(amount);labels.push(name+amount+'%')}else if(name==='回復'&&role==='defender'&&Number.isFinite(amount)){let recovered=Math.floor(baseHp*amount/100*.5);state.recovery+=recovered;labels.push('回復+'+recovered.toLocaleString()+'（'+amount+'%の半分）')}else if(name==='連撃'&&role==='attacker'&&Number.isFinite(amount)){state.hits+=Math.max(0,Math.floor(amount)-1);labels.push(Math.floor(amount)+'回連撃')}else{labels.push(name+'：現在の計算結果には影響なし')}}}return state}
+function collectSkillState(attackerAttr,defenderAttr,baseHp){
+  const state={attackMultiplier:1,hits:1,cuts:[],recovery:0,attackerLabels:[],defenderLabels:[]};
+  for(const role of ['attacker','defender']){
+    const ownerAttr=role==='attacker'?attackerAttr:defenderAttr;
+    const opponentAttr=role==='attacker'?defenderAttr:attackerAttr;
+    const labels=role==='attacker'?state.attackerLabels:state.defenderLabels;
+    for(const effect of effectList(role)){
+      const name=effectName(effect);
+      if(name==='色変'){labels.push('色変→'+ownerAttr);continue}
+      if(!calculatorEnabled(effect)){labels.push(name+'：計算対象外');continue}
+      const ownerCondition=allyCondition(effect);
+      const targetCondition=enemyCondition(effect);
+      const ownerMatches=attrIncludes(ownerAttr,ownerCondition);
+      const targetMatches=attrIncludes(opponentAttr,targetCondition);
+      if(!ownerMatches){labels.push(name+'：適用者条件外（現在'+ownerAttr+' / 条件'+String(canonicalCondition(ownerCondition)??'なし')+'）');continue}
+      if(!targetMatches){labels.push(name+'：対象者条件外（現在'+opponentAttr+' / 条件'+String(canonicalCondition(targetCondition)??'なし')+'）');continue}
+      const amount=parseAmount(effect.amount??effect.value);
+      if(name==='攻撃力アップ'){
+        if(role==='attacker'&&Number.isFinite(amount)){state.attackMultiplier*=1+amount/100;labels.push('攻撃力+'+amount+'%')}
+        else labels.push('攻撃力アップ：現在の役割では未使用');
+      }else if(name==='シールド'||name==='集中'){
+        if(role==='defender'&&Number.isFinite(amount)){state.cuts.push(amount);labels.push(name+amount+'%')}
+        else labels.push(name+'：現在の役割では未使用');
+      }else if(name==='回復'){
+        if(role==='defender'&&Number.isFinite(amount)){const recovered=Math.floor(baseHp*amount/100*.5);state.recovery+=recovered;labels.push('回復+'+recovered.toLocaleString()+'（'+amount+'%の半分）')}
+        else labels.push('回復：現在の役割では未使用');
+      }else if(name==='連撃'){
+        if(role==='attacker'&&Number.isFinite(amount)){state.hits+=Math.max(0,Math.floor(amount)-1);labels.push(Math.floor(amount)+'回連撃')}
+        else labels.push('連撃：現在の役割では未使用');
+      }else labels.push(name+'：現在の計算結果には影響なし');
+    }
+  }
+  return state;
+}
 function cutMultiplier(values){let rates=Array.isArray(values)?values:String(values||'').split(',');return rates.map(parseAmount).filter(Number.isFinite).map(x=>Math.max(0,Math.min(100,x))).sort((a,b)=>b-a).reduce((m,x,i)=>m*(1-(x/100)*3/(2*(i+1)+1)),1)}
 function pct(x,h){return h?Math.floor(x/h*100):0}
 function fraction(v){for(let [n,s] of [[1,'1'],[1/3,'1/3'],[1/2,'1/2'],[7/12,'7/12'],[2/3,'2/3'],[3/4,'3/4'],[5/6,'5/6']])if(Math.abs(v-n)<1e-9)return s;return String(v)}
