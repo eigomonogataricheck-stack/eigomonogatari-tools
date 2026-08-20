@@ -2,6 +2,7 @@ var tierData=null;
 
 window.onload=function(){
   bindZukanDetails();
+  preloadZukanData();
   fetch('tier_all_patterns.json').then(function(r){return r.json()}).then(function(d){
     tierData=d;
     var sel=document.getElementById('attribute');
@@ -53,13 +54,14 @@ function execTier(){
     for(var i=0;i<th.length;i++){if(val>=th[i]){tiers[i].push(x.cId);break}}
   });
 
+  tierDisplayedIds = [];
   var html='<h5 class="mb-3 border-bottom pb-2">生成結果</h5>';
   var any=false;
   tiers.forEach(function(cs,i){
     if(!cs.length)return;
     any=true;
     html+='<div class="tier-row"><div class="rank-label text-secondary">'+tierNames[i]+'</div><div class="icon-list">';
-    cs.forEach(function(cId){html+='<img src="https://englishstoryserver.com/Icon/Icon/Icon'+cId+'.png" loading="lazy" draggable="false" role="button" tabindex="0" data-tier-id="'+cId+'" alt="キャラ詳細">'});
+    cs.forEach(function(cId){tierDisplayedIds.push(Number(cId));html+='<img src="https://englishstoryserver.com/Icon/Icon/Icon'+cId+'.png" loading="lazy" draggable="false" role="button" tabindex="0" data-tier-id="'+cId+'" alt="キャラ詳細">'});
     html+='</div></div>';
   });
   r.innerHTML=any?html:'<p class="text-muted">該当データなし。</p>';
@@ -74,7 +76,29 @@ var zkSuppressClick = false;
 var zkCurrentIndex = -1;
 var zkDisplayedDetailOrder = [];
 var zkDetailsBound = false;
+var tierDisplayedIds = [];
+var zkDataPromise = null;
 var L1C = {'通常ゆる':'#198754','特殊ゆる':'#dc3545'};
+
+function preloadZukanData(){
+  if(Array.isArray(zkData)) return Promise.resolve(zkData);
+  if(zkDataPromise) return zkDataPromise;
+
+  zkDataPromise = fetch('zukan_beta.json')
+    .then(function(response){
+      if(!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    })
+    .then(function(data){
+      zkData = data;
+      return data;
+    })
+    .catch(function(error){
+      zkDataPromise = null;
+      throw error;
+    });
+  return zkDataPromise;
+}
 
 function loadZukan(){
   var button = document.getElementById('zkBtn');
@@ -82,11 +106,7 @@ function loadZukan(){
   button.disabled = true;
   loader.style.display = 'block';
 
-  fetch('zukan_beta.json')
-    .then(function(response){
-      if(!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
-    })
+  preloadZukanData()
     .then(function(data){
       loader.style.display = 'none';
       button.style.display = 'none';
@@ -249,7 +269,7 @@ function bindZukanDetails(){
       zkSuppressClick = false;
       return;
     }
-    if(!isTouchDevice()) openCharacterDetails(Number(card.dataset.zkIndex));
+    openCharacterDetails(Number(card.dataset.zkIndex));
   });
 
   box.addEventListener('keydown', function(event){
@@ -261,32 +281,8 @@ function bindZukanDetails(){
     }
   });
 
-  box.addEventListener('pointerdown', function(event){
-    if(event.pointerType === 'mouse') return;
-    var card = event.target.closest('.zk-has-details');
-    if(!card) return;
+  // 図鑑はPC・スマホとも通常タップで開く。
 
-    zkPressStart = {x:event.clientX, y:event.clientY, card:card};
-    card.classList.add('zk-pressing');
-    clearTimeout(zkPressTimer);
-    zkPressTimer = setTimeout(function(){
-      zkSuppressClick = true;
-      card.classList.remove('zk-pressing');
-      openCharacterDetails(Number(card.dataset.zkIndex));
-      if(navigator.vibrate) navigator.vibrate(20);
-    }, 500);
-  });
-
-  box.addEventListener('pointermove', function(event){
-    if(!zkPressStart) return;
-    if(Math.abs(event.clientX - zkPressStart.x) > 10 || Math.abs(event.clientY - zkPressStart.y) > 10){
-      cancelZukanPress();
-    }
-  });
-
-  ['pointerup','pointercancel','pointerleave'].forEach(function(type){
-    box.addEventListener(type, cancelZukanPress);
-  });
 
   document.getElementById('zkModal').addEventListener('click', function(event){
     if(event.target === this) closeCharacterDetails();
@@ -327,8 +323,8 @@ function openCharacterDetails(index){
     ['最大突破数', details.limitBreak],
     ['無凸のHP', details.hp],
     ['無凸のPower', details.power],
-    ['最大HP', details.limitHp],
-    ['最大Power', details.limitPower]
+    ['完凸のHP', details.limitHp],
+    ['完凸のPower', details.limitPower]
   ];
 
   document.getElementById('zkModalStats').innerHTML = stats
@@ -358,32 +354,19 @@ function openCharacterDetails(index){
 
 function openTierCharacterDetails(characterId){
   var id = Number(characterId);
-
-  function openFromData(){
-    if(!Array.isArray(zkData)) return;
-    var index = zkData.findIndex(function(character){
-      return Number(character.id) === id && !!character.details;
-    });
-    if(index >= 0) openCharacterDetails(index);
-  }
-
-  if(Array.isArray(zkData)){
-    openFromData();
-    return;
-  }
-
-  fetch('zukan_beta.json')
-    .then(function(response){
-      if(!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
+  preloadZukanData()
+    .then(function(){
+      var indexById = new Map();
+      zkData.forEach(function(character,index){
+        if(character.details) indexById.set(Number(character.id),index);
+      });
+      zkDisplayedDetailOrder = tierDisplayedIds
+        .map(function(tierId){ return indexById.get(Number(tierId)); })
+        .filter(function(index){ return index !== undefined; });
+      var index = indexById.get(id);
+      if(index !== undefined) openCharacterDetails(index);
     })
-    .then(function(data){
-      zkData = data;
-      openFromData();
-    })
-    .catch(function(error){
-      console.error('キャラ詳細の読み込みに失敗しました。', error);
-    });
+    .catch(function(error){ console.error('キャラ詳細の読み込みに失敗しました。',error); });
 }
 
 function switchCharacterDetails(direction){

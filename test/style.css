@@ -94,3 +94,11 @@ body.zk-modal-open{overflow:hidden}
   .zk-modal.op{display:grid}
   .zk-modal-panel{grid-column:2;align-self:center;width:100%;max-height:88vh;border-radius:18px;padding:18px 16px}
 }
+
+
+/* 鮮明な属性表示・タップ操作 */
+.zk-has-details{touch-action:manipulation}
+.zk-has-details::after{background:var(--zk-accent,#157347);color:#fff}
+.zk-stat{border:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);box-shadow:inset 5px 0 0 var(--zk-accent)}
+.zk-modal-skill-block{border-top:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-right:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-bottom:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff)}
+.zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:saturate(1.55)}
