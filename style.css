@@ -1,23 +1,10 @@
 body{padding:20px;background:#f8f9fa;font-family:sans-serif}
-.container{max-width:1400px;margin:auto;padding:0 10px}
-
-/* === パネル（各カード） === */
-.panel{background:#fff;padding:25px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-
-/* === 2カラム sticky === */
-@media (min-width: 992px){
-  .side-sticky{position:sticky;top:20px}
-  .zk-scroll{max-height:70vh;overflow-y:auto}
-}
-
-/* === Tier === */
+.container{max-width:640px;background:#fff;padding:25px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1);margin:auto}
 .tier-row{display:flex;align-items:center;border-bottom:1px solid #dee2e6;padding:10px 0}
 .rank-label{width:50px;font-weight:bold;font-size:1.1rem;color:#333}
 .icon-list img{width:45px;height:45px;margin:2px;border-radius:5px;border:1px solid #ccc}
 label{font-size:.85rem;font-weight:bold;color:#666;margin-top:8px}
 .small-info{font-size:.75rem;color:#888;font-weight:normal}
-
-/* === 図鑑 === */
 .zk-l1{margin-bottom:8px}
 .zk-b1{width:100%;text-align:left;font-weight:bold;font-size:.9rem;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;color:#fff;display:flex;justify-content:space-between;align-items:center}
 .zk-b1:hover{filter:brightness(1.1)}
@@ -37,3 +24,110 @@ label{font-size:.85rem;font-weight:bold;color:#666;margin-top:8px}
 .zk-name{font-size:.52rem;line-height:1.1;margin-top:1px;word-break:break-all;color:#555}
 .zk-match img{border:2px solid #ffc107!important;box-shadow:0 0 5px rgba(255,193,7,.5)}
 .zk-match .zk-name{color:#d63384;font-weight:bold}
+
+
+/* キャラ詳細 */
+.zk-has-details{cursor:pointer;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.zk-has-details img{box-shadow:0 0 0 2px rgba(25,135,84,.18)}
+.zk-has-details::after{content:'詳細';display:inline-block;margin-top:2px;padding:1px 4px;border-radius:999px;background:#e8f5ee;color:#157347;font-size:.46rem;font-weight:bold}
+.zk-has-details:focus-visible{outline:3px solid rgba(13,110,253,.35);outline-offset:2px;border-radius:7px}
+.zk-pressing{transform:scale(.94)!important;opacity:.72}
+body.zk-modal-open{overflow:hidden}
+.zk-modal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,25,30,.62);backdrop-filter:blur(3px)}
+.zk-modal.op{display:flex}
+.zk-modal-panel{position:relative;width:min(100%,430px);max-height:88vh;overflow:auto;background:#fff;border-radius:18px;padding:22px;box-shadow:0 18px 55px rgba(0,0,0,.28)}
+.zk-modal-close{position:absolute;top:9px;right:11px;width:36px;height:36px;border:0;border-radius:50%;background:#f1f3f5;color:#495057;font-size:1.6rem;line-height:1;cursor:pointer}
+.zk-modal-close:hover{background:#e9ecef}
+.zk-modal-hero{display:flex;align-items:center;gap:16px;padding-right:30px;margin-bottom:16px}
+.zk-modal-image{width:92px;height:92px;border-radius:13px;border:1px solid #dee2e6;object-fit:cover;background:#f0f0f0}
+.zk-modal-name{margin:0 0 5px;font-size:1.15rem;font-weight:700;line-height:1.35}
+.zk-modal-meta{color:#198754;font-size:.84rem;font-weight:700}
+.zk-modal-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.zk-stat{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:8px;background:#f8f9fa;font-size:.78rem}
+.zk-stat span{color:#6c757d}
+.zk-stat strong{color:#212529}
+.zk-modal-skill-block{margin-top:15px;padding:12px;border-radius:10px;background:#f0f8f3;border-left:4px solid #198754}
+.zk-modal-label{margin-bottom:4px;color:#157347;font-size:.75rem;font-weight:700}
+.zk-modal-skill{margin:0;color:#343a40;font-size:.88rem;line-height:1.65}
+@media (max-width:480px){
+  .zk-modal{align-items:flex-end;padding:10px}
+  .zk-modal-panel{width:100%;max-height:90vh;border-radius:18px 18px 12px 12px;padding:20px}
+  .zk-modal-image{width:82px;height:82px}
+}
+
+
+/* 属性テーマ・キャラ切り替え */
+.zk-modal-panel{--zk-accent:#6c757d;--zk-soft:#f1f3f5;--zk-theme:#6c757d;--zk-theme-soft:#f1f3f5;background:#fff;overflow:hidden}
+.zk-modal-panel::before{content:'';position:absolute;z-index:1;top:0;left:0;right:0;height:8px;background:var(--zk-theme)}
+.zk-modal-image{border:3px solid var(--zk-accent);box-shadow:0 5px 16px color-mix(in srgb,var(--zk-accent) 24%,transparent)}
+.zk-modal-meta{color:var(--zk-accent)}
+.zk-modal-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.zk-stat{background:var(--zk-theme-soft)}
+.zk-stat strong{color:var(--zk-accent)}
+.zk-modal-skill-block{background:var(--zk-theme-soft);border-left-color:var(--zk-accent)}
+.zk-modal-label{color:var(--zk-accent)}
+.zk-modal-skill-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:5px}
+.zk-modal-turn{flex:none;padding:3px 8px;border-radius:999px;background:var(--zk-theme);color:#fff;font-size:.7rem;font-weight:700}
+.zk-modal-nav{position:relative;z-index:2;flex:0 0 auto;width:46px;height:64px;border:0;border-radius:12px;background:rgba(255,255,255,.94);color:#343a40;font-size:2rem;line-height:1;box-shadow:0 5px 18px rgba(0,0,0,.22);cursor:pointer}
+.zk-modal-nav:hover{transform:scale(1.06);background:#fff}
+.zk-modal-prev{margin-right:12px}
+.zk-modal-next{margin-left:12px}
+@media (max-width:600px){
+  .zk-modal{display:none;grid-template-columns:42px minmax(0,1fr) 42px;align-items:end;gap:5px;padding:10px 4px}
+  .zk-modal.op{display:grid}
+  .zk-modal-panel{grid-column:2;width:100%;padding:18px 16px}
+  .zk-modal-nav{position:fixed;top:50%;transform:translateY(-50%);width:40px;height:58px;border-radius:10px;font-size:1.65rem}
+  .zk-modal-nav:hover{transform:translateY(-50%) scale(1.04)}
+  .zk-modal-prev{left:3px;margin:0}
+  .zk-modal-next{right:3px;margin:0}
+}
+
+
+/* スマホ操作とTier詳細 */
+.zk-card,.zk-card img,.icon-list img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.zk-card img,.icon-list img{-webkit-user-drag:none}
+.icon-list img[data-tier-id]{cursor:pointer;transition:transform .12s,box-shadow .12s}
+.icon-list img[data-tier-id]:hover{transform:scale(1.08);box-shadow:0 0 0 2px rgba(13,110,253,.25)}
+.icon-list img[data-tier-id]:focus-visible{outline:3px solid rgba(13,110,253,.4);outline-offset:2px}
+@media (max-width:600px){
+  .zk-modal{display:none;grid-template-columns:42px minmax(0,1fr) 42px;align-items:center;gap:5px;padding:10px 4px}
+  .zk-modal.op{display:grid}
+  .zk-modal-panel{grid-column:2;align-self:center;width:100%;max-height:88vh;border-radius:18px;padding:18px 16px}
+}
+
+
+/* 鮮明な属性表示・タップ操作 */
+.zk-has-details{touch-action:manipulation}
+.zk-has-details::after{background:var(--zk-accent,#157347);color:#fff}
+.zk-stat{border:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);box-shadow:inset 5px 0 0 var(--zk-accent)}
+.zk-modal-skill-block{border-top:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-right:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-bottom:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff)}
+.zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:saturate(1.55)}
+
+
+/* ステータス枠は元の形に戻し、色選定だけを調整 */
+.zk-stat{border:0;box-shadow:none;background:var(--zk-theme-soft)}
+.zk-modal-skill-block{border-top:0;border-right:0;border-bottom:0;border-left:4px solid var(--zk-accent)}
+.zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:none}
+
+/* 意見箱 */
+.opinion-box{padding:18px;border:1px solid #dee2e6;border-radius:12px;background:#fff}
+.opinion-title{margin:0 0 8px;color:#555;font-size:14px}
+.opinion-msg{min-height:20px;margin:8px 0 0;font-size:13px;color:#888}
+.opinion-success{color:#198754}
+.opinion-error{color:#dc3545}
+
+
+/* 今回の視認性調整: 詳細表示は控えめ、ステータス枠は通常形 */
+.zk-has-details::after{background:#e8f5ee;color:#157347;font-size:.46rem;padding:1px 4px;box-shadow:none}
+.zk-stat{border:0!important;box-shadow:none!important;background:var(--zk-theme-soft)}
+.zk-modal-skill-block{border-top:0!important;border-right:0!important;border-bottom:0!important;border-left:4px solid var(--zk-accent)!important}
+
+
+/* 画面幅を広く使用 */
+.container{width:calc(100vw - 32px);max-width:1600px!important;margin:0 auto;padding:28px 32px}
+@media (max-width:767px){body{padding:8px}.container{width:100%;max-width:none!important;padding:16px}}
+
+/* 詳細画像の属性枠。複合属性では --zk-theme がグラデーションになる */
+.zk-modal-image-frame{flex:0 0 auto;width:98px;height:98px;padding:3px;border-radius:15px;background:var(--zk-theme);box-shadow:0 5px 16px color-mix(in srgb,var(--zk-accent) 24%,transparent)}
+.zk-modal-image-frame .zk-modal-image{display:block;width:100%;height:100%;border:0!important;border-radius:12px;box-shadow:none;object-fit:cover;background:#f0f0f0}
+@media (max-width:480px){.zk-modal-image-frame{width:88px;height:88px}}
