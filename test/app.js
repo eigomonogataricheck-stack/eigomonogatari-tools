@@ -1,14 +1,677 @@
-const $=id=>document.getElementById(id),ATTRS=['火','水','風','火水','水風','火風','全'];const A={'火':{'火':2/3,'水':1/3,'風':1,'火水':1/2,'水風':2/3,'火風':5/6,'全':2/3},'水':{'火':1,'水':2/3,'風':1/3,'火水':5/6,'水風':1/2,'火風':2/3,'全':2/3},'風':{'火':1/3,'水':1,'風':2/3,'火水':2/3,'水風':5/6,'火風':1/2,'全':2/3},'火水':{'火':5/6,'水':1/2,'風':2/3,'火水':2/3,'水風':7/12,'火風':3/4,'全':2/3},'水風':{'火':2/3,'水':5/6,'風':1/2,'火水':3/4,'水風':2/3,'火風':7/12,'全':2/3},'火風':{'火':1/2,'水':2/3,'風':5/6,'火水':7/12,'水風':3/4,'火風':2/3,'全':2/3},'全':{'火':2/3,'水':2/3,'風':2/3,'火水':2/3,'水風':2/3,'火風':2/3,'全':2/3}};let chars=[],tierData=null,cur=-1,order=[],pickRole=null,picking=false,lastDir=1,sel={attacker:null,defender:null},skillOn={attacker:false,defender:false};const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-addEventListener('DOMContentLoaded',()=>{ATTRS.forEach(a=>{$('attackerAttribute').add(new Option(a,a));$('defenderAttribute').add(new Option(a,a))});bind();load();calc()});
-function bind(){$('menuToggle').onclick=()=>$('sidebar').classList.toggle('open');document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>show(b.dataset.page));$('attackerPicker').onclick=()=>openPicker('attacker');$('defenderPicker').onclick=()=>openPicker('defender');$('zkSearch').oninput=renderZukan;$('pickerSearch').oninput=renderPicker;$('toggleAll').onclick=()=>{let a=[...$('zkBox').querySelectorAll('.zk-body')],o=!a.some(x=>x.classList.contains('open'));a.forEach(x=>x.classList.toggle('open',o))};document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).hidden=true);document.querySelectorAll('#detailActions button').forEach(b=>b.onclick=()=>choose(b.dataset.role));$('detailPrev').onclick=()=>move(-1);$('detailNext').onclick=()=>move(1);['attackerPower','defenderHp','attackerAttribute','defenderAttribute','answerSpeed','selfMode','attackerEvent','defenderEvent','questionLevel','cutRates'].forEach(id=>$(id).oninput=calc);$('attackerSkillBtn').onclick=()=>toggleSkill('attacker');$('defenderSkillBtn').onclick=()=>toggleSkill('defender');$('swap').onclick=swap;$('tierBtn').onclick=execTier;$('opinionSubmit').onclick=submitOpinion;document.addEventListener('keydown',e=>{if($('detail').hidden)return;let tag=document.activeElement?.tagName||'',edit=['INPUT','TEXTAREA','SELECT'].includes(tag),k=e.key.toLowerCase();if(edit)return;if(k==='a'||k==='j'||e.key==='ArrowLeft'){e.preventDefault();move(-1)}else if(k==='d'||k==='k'||e.key==='ArrowRight'){e.preventDefault();move(1)}else if(e.key==='Enter'||e.key===' '){e.preventDefault();move(lastDir)}})}
-function show(n){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n))}
-async function load(){try{let raw=await fetch('zukan_beta.json',{cache:'no-store'}).then(r=>r.json());chars=Array.isArray(raw)?raw:Array.isArray(raw.characters)?raw.characters:[];$('zkStatus').textContent='';renderZukan()}catch(e){$('zkStatus').textContent='図鑑データを読み込めません'}try{tierData=await fetch('tier_all_patterns.json').then(r=>r.json());Object.entries(tierData.meta.shibari).forEach(([id,n])=>$('attribute').add(new Option(n,id)))}catch(e){}}
-function filtered(q){q=(q||'').trim().toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').toLowerCase().includes(q))}
-function tree(items,box,open){let t={};items.forEach(({c,i})=>{let a=c.largeCategory||'未分類',b=c.middleCategory||'その他',s=c.smallCategory||'その他',h=c.heading||'';((((t[a]??={})[b]??={})[s]??={})[h]??=[]).push({c,i})});box.innerHTML='';Object.entries(t).forEach(([a,m])=>{let x=fold(a,'zk-b1',open),xb=x.lastChild;Object.entries(m).forEach(([b,sm])=>{let y=fold(b,'zk-b2',open),yb=y.lastChild;Object.entries(sm).forEach(([s,hs])=>{let z=fold(s,'zk-b3',open),zb=z.lastChild;Object.entries(hs).forEach(([h,cs])=>{if(h){let q=document.createElement('div');q.className='zk-head';q.textContent=h;zb.append(q)}let g=document.createElement('div');g.className='zk-grid';cs.forEach(({c,i})=>{let v=document.createElement('button');v.className='zk-card';v.innerHTML='<img loading="lazy" src="'+esc(c.imageUrl||'')+'"><small>'+esc(c.name||'')+'</small>';v.onclick=()=>detail(i,open);g.append(v)});zb.append(g)});yb.append(z)});xb.append(y)});box.append(x)})}
-function fold(n,c,o){let w=document.createElement('div'),b=document.createElement('button'),d=document.createElement('div');w.className='zk-l1';b.className=c;b.innerHTML=esc(n)+' <span>▶</span>';d.className='zk-body'+(o?' open':'');b.onclick=()=>d.classList.toggle('open');w.append(b,d);return w}function renderZukan(){let a=filtered($('zkSearch').value);$('zkCount').textContent=a.length+'件 / 全'+chars.length+'体';tree(a,$('zkBox'),false)}function openPicker(r){pickRole=r;$('pickerTitle').textContent=(r==='attacker'?'攻撃キャラ':'攻撃対象キャラ')+'を選択';$('pickerSearch').value='';renderPicker();$('picker').hidden=false}function renderPicker(){tree(filtered($('pickerSearch').value),$('pickerBox'),true)}
-function theme(a){let c={火:['#e53935','#ffe7e5'],水:['#1976d2','#e3f0ff'],風:['#7cbf19','#edf8d8']},f=['火','水','風'].filter(x=>String(a||'').includes(x));return !f.length?['#6c757d','#6c757d','#f1f3f5']:[c[f[0]][0],f.length>1?'linear-gradient(135deg,'+f.map(x=>c[x][0]).join(',')+')':c[f[0]][0],f.length>1?'linear-gradient(135deg,'+f.map(x=>c[x][1]).join(',')+')':c[f[0]][1]]}
-function detail(i,p=false){let c=chars[i],d=c?.details||{};if(!c)return;cur=i;picking=p;order=filtered(p?$('pickerSearch').value:$('zkSearch').value).map(x=>x.i);let [a,t,s]=theme(d.attribute),pn=$('detailPanel');pn.style.setProperty('--accent',a);pn.style.setProperty('--theme',t);pn.style.setProperty('--soft',s);$('detailImage').src=c.imageUrl||'';$('detailName').textContent=c.name||'';$('detailMeta').textContent=[d.rare,d.attribute,d.cost!=null?'Cost '+d.cost:null].filter(Boolean).join(' / ');$('detailStats').innerHTML=[['Cost',d.cost],['最大突破数',d.limitBreak],['無凸HP',d.hp],['無凸Power',d.power],['完凸HP',d.limitHp],['完凸Power',d.limitPower]].filter(x=>x[1]!=null&&x[1]!=='').map(x=>'<div class="stat"><span>'+x[0]+'</span><b>'+Number(x[1]).toLocaleString()+'</b></div>').join('');$('detailSkillBlock').hidden=!d.skill;$('detailSkill').textContent=d.skill||'';$('detailTurn').textContent=d.skillTurn!=null?'必要ターン '+d.skillTurn:'';document.querySelector('[data-role="attacker"]').hidden=p;document.querySelector('[data-role="defender"]').hidden=p;document.querySelector('[data-role="picker"]').hidden=!p;$('detail').hidden=false}
-function move(d){lastDir=d<0?-1:1;let p=order.indexOf(cur);if(p>=0&&order.length)detail(order[(p+lastDir+order.length)%order.length],picking)}function choose(r){if(r==='picker')r=pickRole;if(!r||!chars[cur])return;setChar(r,chars[cur]);$('detail').hidden=$('picker').hidden=true;show('calculator')}function norm(x){let s=String(x||'');return ATTRS.filter(a=>a!=='全').sort((a,b)=>b.length-a.length).find(a=>s.includes(a))||'全'}
-function setChar(r,c,keep=false){sel[r]=c;if(!keep)skillOn[r]=false;let d=c.details||{},p=$(r+'Picker');p.querySelector('.pic').style.backgroundImage='url("'+String(c.imageUrl||'').replace(/"/g,'')+'")';p.querySelector('b').textContent=c.name||'';p.querySelector('small').textContent=[d.rare,d.attribute,d.cost!=null?'Cost '+d.cost:null].filter(Boolean).join(' / ');$(r==='attacker'?'attackerPower':'defenderHp').value=Number(r==='attacker'?(d.limitPower??d.power??0):(d.limitHp??d.hp??0));$(r+'Attribute').value=norm(d.attribute);$(r+'Skill').textContent=d.skill||'スキルなし';$(r+'SkillBtn').disabled=!d.skill;sync(r);calc()}function clear(r){sel[r]=null;skillOn[r]=false;let p=$(r+'Picker');p.querySelector('.pic').style.backgroundImage='';p.querySelector('b').textContent='未選択';p.querySelector('small').textContent='タップして図鑑から選択';$(r==='attacker'?'attackerPower':'defenderHp').value=0;sync(r)}function swap(){let a=sel.attacker,d=sel.defender,x=skillOn.attacker,y=skillOn.defender;if(d){skillOn.attacker=y;setChar('attacker',d,true)}else clear('attacker');if(a){skillOn.defender=x;setChar('defender',a,true)}else clear('defender')}function toggleSkill(r){skillOn[r]=!skillOn[r];sync(r);calc()}function sync(r){let b=$(r+'SkillBtn');b.textContent=skillOn[r]?'スキル解除':'スキル使用';b.classList.toggle('active',skillOn[r])}
-function cuts(s){return String(s||'').split(',').map(Number).filter(Number.isFinite).sort((a,b)=>b-a).reduce((m,x,i)=>m*(1-(x/100)*3/(2*(i+1)+1)),1)}function pct(x,h){return h?Math.floor(x/h*100):0}function frac(v){for(let [n,s] of [[1,'1'],[1/3,'1/3'],[1/2,'1/2'],[7/12,'7/12'],[2/3,'2/3'],[3/4,'3/4'],[5/6,'5/6']])if(Math.abs(v-n)<1e-9)return s;return String(v)}function calc(){let p=Math.max(0,+$('attackerPower').value||0),hp=Math.floor(Math.max(0,+$('defenderHp').value||0)*(+$('defenderEvent').value||1)),rate=A[$('attackerAttribute').value]?.[$('defenderAttribute').value]??1,base=p*(+$('answerSpeed').value||1)*(+$('selfMode').value||1)*(+$('attackerEvent').value||1)*(+$('questionLevel').value||1)*.75*rate*cuts($('cutRates').value),mn=Math.floor(base*.9),md=Math.floor(base),mx=Math.floor(base*1.1);$('damageRange').textContent=mn.toLocaleString()+' ～ '+mx.toLocaleString()+'（基準 '+md.toLocaleString()+'）';$('attributeRate').textContent=frac(rate);$('damagePercent').textContent=pct(mn,hp)+'%～'+pct(mx,hp)+'%（基準'+pct(md,hp)+'%）';$('killResult').textContent=p&&hp?(mn>=hp?'確定撃破':mx>=hp?'乱数撃破':'撃破不可 / 基準時残りHP '+Math.max(0,hp-md).toLocaleString()):'数値を入力してください';ghost(hp)}function ghost(h){if(!h){$('ghostResult').textContent='攻撃対象のHPを入力してください';return}let b=1000*1.944*2/3,mn=Math.floor(b*.9),md=Math.floor(b),mx=Math.floor(b*1.1),e=Math.ceil(h/mx),l=Math.ceil(h/mn),s=Math.ceil(h/md);$('ghostResult').innerHTML='<div class="ghost-grid"><div><b>'+Math.max(0,e-1)+'～'+Math.max(0,l-1)+'発耐える</b><small>基準'+Math.max(0,s-1)+'発</small></div><div><b>'+e+'～'+l+'発目で撃破</b><small>基準'+s+'発目</small></div><div><b>'+pct(mn,h)+'%～'+pct(mx,h)+'%</b><small>基準'+pct(md,h)+'%</small></div></div>'}
-function execTier(){if(!tierData){$('tierResult').textContent='Tierデータを読み込めませんでした';return}let hv=$('hosei').value,key=($('attribute').value||'*')+'|'+($('cost').value||'*')+'|'+($('waku').value||'*')+'|'+(hv===''?'*':hv),b=tierData.data[key];$('tierResult').textContent=b?'Tierデータを読み込みました':'該当データなし'}const OPINION_URL='https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';function submitOpinion(){let t=$('opinionText').value.trim();if(!t){$('opinionMsg').textContent='内容を入力してください';return}fetch(OPINION_URL+'?api=opinion&text='+encodeURIComponent(t),{mode:'no-cors'}).then(()=>{$('opinionText').value='';$('opinionMsg').textContent='送信しました'})}
+var tierData=null;
+
+window.onload=function(){
+  bindZukanDetails();
+  preloadZukanData();
+  fetch('tier_all_patterns.json').then(function(r){return r.json()}).then(function(d){
+    tierData=d;
+    var sel=document.getElementById('attribute');
+    var sb=d.meta.shibari;
+    Object.keys(sb).forEach(function(id){sel.add(new Option(sb[id],id))});
+    var btn=document.getElementById('btn');
+    btn.disabled=false;
+    btn.textContent='Tierを生成・表示';
+  }).catch(function(){
+    document.getElementById('btn').textContent='読み込み失敗';
+    document.getElementById('tier-result').innerHTML='<div class="alert alert-danger">Tierデータの読み込みに失敗しました。</div>';
+  });
+};
+
+function execTier(){
+  var sk=document.getElementById('attribute').value||'*';
+  var ck=document.getElementById('cost').value||'*';
+  var wk=document.getElementById('waku').value||'*';
+  var hv=document.getElementById('hosei').value;
+  var hk=hv===''?'*':hv;
+  var key=sk+'|'+ck+'|'+wk+'|'+hk;
+  var bucket=tierData.data[key];
+  var r=document.getElementById('tier-result');
+  if(!bucket){r.innerHTML='<p class="text-muted">該当データなし。</p>';return}
+
+  var mode=document.getElementById('mode').value;
+  var minCount=Number(document.getElementById('minCount').value);
+  var results=[];
+  Object.keys(bucket).forEach(function(cId){
+    var d=bucket[cId];
+    if(d[0]<minCount)return;
+    results.push({cId:cId,count:d[0],rate:d[0]?d[1]/d[0]:0});
+  });
+  if(mode==='使用者数'){results.sort(function(a,b){return b.count-a.count})}
+  else{results.sort(function(a,b){return b.rate-a.rate})}
+
+  var tierNames=['S','A','B','C','D','E','F','G'];
+  var th;
+  if(mode==='使用者数'){
+    var m=results.length?results[0].count:0;
+    th=[m/2,m/3,m/4,m/5,m/6,m/7,m/8,0];
+  }else{
+    th=[0.4,0.25,0.1,0,-0.1,-0.25,-0.4,-Infinity];
+  }
+
+  var tiers=tierNames.map(function(){return[]});
+  results.forEach(function(x){
+    var val=mode==='使用者数'?x.count:x.rate;
+    for(var i=0;i<th.length;i++){if(val>=th[i]){tiers[i].push(x.cId);break}}
+  });
+
+  tierDisplayedIds = [];
+  var html='<h5 class="mb-3 border-bottom pb-2">生成結果</h5>';
+  var any=false;
+  tiers.forEach(function(cs,i){
+    if(!cs.length)return;
+    any=true;
+    html+='<div class="tier-row"><div class="rank-label text-secondary">'+tierNames[i]+'</div><div class="icon-list">';
+    cs.forEach(function(cId){tierDisplayedIds.push(Number(cId));html+='<img src="https://englishstoryserver.com/Icon/Icon/Icon'+cId+'.png" loading="lazy" draggable="false" role="button" tabindex="0" data-tier-id="'+cId+'" alt="キャラ詳細">'});
+    html+='</div></div>';
+  });
+  r.innerHTML=any?html:'<p class="text-muted">該当データなし。</p>';
+}
+
+/* === 図鑑 === */
+var zkData = null;
+var zkTimer = null;
+var zkPressTimer = null;
+var zkPressStart = null;
+var zkSuppressClick = false;
+var zkCurrentIndex = -1;
+var zkDisplayedDetailOrder = [];
+
+// 1 = 次、-1 = 前
+var zkLastDirection = 1;
+var zkDetailsBound = false;
+var tierDisplayedIds = [];
+var zkDataPromise = null;
+var L1C = {'通常ゆる':'#198754','特殊ゆる':'#dc3545'};
+
+function preloadZukanData(){
+  if(Array.isArray(zkData)) return Promise.resolve(zkData);
+  if(zkDataPromise) return zkDataPromise;
+
+  zkDataPromise = fetch('zukan_beta.json')
+    .then(function(response){
+      if(!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    })
+    .then(function(data){
+      zkData = data;
+      return data;
+    })
+    .catch(function(error){
+      zkDataPromise = null;
+      throw error;
+    });
+  return zkDataPromise;
+}
+
+function loadZukan(){
+  var button = document.getElementById('zkBtn');
+  var loader = document.getElementById('zkLoader');
+  button.disabled = true;
+  loader.style.display = 'block';
+
+  preloadZukanData()
+    .then(function(data){
+      loader.style.display = 'none';
+      button.style.display = 'none';
+      zkData = data;
+      document.getElementById('zkControls').style.display = 'block';
+      document.getElementById('zkSearch').addEventListener('input', function(){
+        clearTimeout(zkTimer);
+        zkTimer = setTimeout(renderZukan, 200);
+      });
+      bindZukanDetails();
+      renderZukan();
+    })
+    .catch(function(error){
+      console.error(error);
+      loader.style.display = 'none';
+      button.disabled = false;
+      document.getElementById('zkBox').innerHTML =
+        '<div class="alert alert-danger">図鑑データの読み込みに失敗しました。</div>';
+    });
+}
+
+function renderZukan(){
+  var query = (document.getElementById('zkSearch').value || '').trim().toLowerCase();
+  var tree = {};
+  var total = 0;
+  var hits = 0;
+
+  for(var i = 0; i < zkData.length; i++){
+    var row = zkData[i];
+    var name = row.name || '';
+    var matched = !!query && name.toLowerCase().indexOf(query) >= 0;
+    total++;
+    if(matched) hits++;
+    if(query && !matched) continue;
+
+    var large = row.largeCategory || '_';
+    var middle = row.middleCategory || '_';
+    var small = row.smallCategory || '_';
+    var heading = row.heading || '_';
+
+    if(!tree[large]) tree[large] = {};
+    if(!tree[large][middle]) tree[large][middle] = {};
+    if(!tree[large][middle][small]) tree[large][middle][small] = {};
+    if(!tree[large][middle][small][heading]) tree[large][middle][small][heading] = [];
+
+    tree[large][middle][small][heading].push({
+      index: i,
+      name: name,
+      imageUrl: row.imageUrl || '',
+      matched: matched,
+      hasDetails: !!row.details
+    });
+  }
+
+  var opened = !!query;
+  var html = '';
+  zkDisplayedDetailOrder = [];
+  var largeKeys = Object.keys(tree);
+  largeKeys.sort(function(a){ return a === '通常ゆる' ? -1 : 1; });
+
+  largeKeys.forEach(function(large){
+    var middleHtml = '';
+
+    Object.keys(tree[large]).forEach(function(middle){
+      var smallTree = tree[large][middle];
+      var smallKeys = Object.keys(smallTree);
+      var hasSmallLevel = !(smallKeys.length === 1 && smallKeys[0] === '_');
+      var smallHtml = '';
+
+      smallKeys.forEach(function(small){
+        var cards = '';
+
+        Object.keys(smallTree[small]).forEach(function(heading){
+          var characters = smallTree[small][heading];
+          if(heading !== '_') cards += '<div class="zk-head">' + escapeHtml(heading) + '</div>';
+
+          characters.forEach(function(character){
+            if(character.hasDetails) zkDisplayedDetailOrder.push(character.index);
+            cards += '<div class="zk-card' +
+              (character.matched ? ' zk-match' : '') +
+              (character.hasDetails ? ' zk-has-details' : '') +
+              '" data-zk-index="' + character.index + '"' +
+              (character.hasDetails ? ' tabindex="0" role="button" aria-label="' + escapeHtml(character.name) + 'の詳細を表示"' : '') + '>' +
+              '<img src="' + escapeHtml(character.imageUrl) + '" alt="' + escapeHtml(character.name) + '" loading="lazy" draggable="false">' +
+              '<div class="zk-name">' + escapeHtml(character.name) + '</div>' +
+              '</div>';
+          });
+        });
+
+        if(hasSmallLevel && small !== '_'){
+          smallHtml += '<div style="margin:2px 0">' +
+            '<button class="zk-b3' + (opened ? ' op' : '') + '" onclick="tgl(this)">' +
+            escapeHtml(small) + ' <span class="ar">▶</span></button>' +
+            '<div class="zk-bd' + (opened ? ' op' : '') + '"><div class="zk-grid">' + cards + '</div></div></div>';
+        }else{
+          smallHtml += '<div class="zk-grid">' + cards + '</div>';
+        }
+      });
+
+      middleHtml += '<div style="margin:3px 0">' +
+        '<button class="zk-b2' + (opened ? ' op' : '') + '" onclick="tgl(this)">' +
+        escapeHtml(middle) + ' <span class="ar">▶</span></button>' +
+        '<div class="zk-bd' + (opened ? ' op' : '') + '">' + smallHtml + '</div></div>';
+    });
+
+    html += '<div class="zk-l1">' +
+      '<button class="zk-b1' + (opened ? ' op' : '') + '" style="background:' + (L1C[large] || '#6c757d') + '" onclick="tgl(this)">' +
+      escapeHtml(large) + ' <span class="ar">▶</span></button>' +
+      '<div class="zk-bd' + (opened ? ' op' : '') + '">' + middleHtml + '</div></div>';
+  });
+
+  document.getElementById('zkCount').textContent = query
+    ? hits + '件ヒット / 全' + total + '体'
+    : '全' + total + '体';
+
+  var box = document.getElementById('zkBox');
+  box.innerHTML = html || '<p class="text-muted mt-3">該当なし</p>';
+
+  if(query && hits > 0){
+    var first = box.querySelector('.zk-match');
+    if(first) first.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+function bindZukanDetails(){
+  if(zkDetailsBound) return;
+  zkDetailsBound = true;
+
+  var box = document.getElementById('zkBox');
+
+  box.addEventListener('contextmenu', function(event){
+    if(event.target.closest('.zk-card')) event.preventDefault();
+  });
+
+  box.addEventListener('dragstart', function(event){
+    if(event.target.closest('.zk-card')) event.preventDefault();
+  });
+
+  document.getElementById('tier-result').addEventListener('click', function(event){
+    var image = event.target.closest('[data-tier-id]');
+    if(image) openTierCharacterDetails(image.dataset.tierId);
+  });
+
+  document.getElementById('tier-result').addEventListener('keydown', function(event){
+    var image = event.target.closest('[data-tier-id]');
+    if(image && (event.key === 'Enter' || event.key === ' ')){
+      event.preventDefault();
+      openTierCharacterDetails(image.dataset.tierId);
+    }
+  });
+
+  document.getElementById('tier-result').addEventListener('contextmenu', function(event){
+    if(event.target.closest('[data-tier-id]')) event.preventDefault();
+  });
+
+  box.addEventListener('click', function(event){
+    var card = event.target.closest('.zk-has-details');
+    if(!card) return;
+    if(zkSuppressClick){
+      zkSuppressClick = false;
+      return;
+    }
+    openCharacterDetails(Number(card.dataset.zkIndex));
+  });
+
+  box.addEventListener('keydown', function(event){
+    var card = event.target.closest('.zk-has-details');
+    if(!card) return;
+    if(event.key === 'Enter' || event.key === ' '){
+      event.preventDefault();
+      openCharacterDetails(Number(card.dataset.zkIndex));
+    }
+  });
+
+  // 図鑑はPC・スマホとも通常タップで開く。
+
+
+  var modal = document.getElementById('zkModal');
+  if(modal){
+    modal.addEventListener('click', function(event){
+      if(event.target === this) closeCharacterDetails();
+    });
+  }
+
+  document.addEventListener(
+  'keydown',
+  function(event) {
+    // Escは入力中でも詳細を閉じられる
+    if (event.key === 'Escape') {
+      closeCharacterDetails();
+      return;
+    }
+
+    // 詳細画面が開いていない場合は無効
+    var modal =
+      document.getElementById('zkModal');
+
+    if (
+      !modal ||
+      !modal.classList.contains('op')
+    ) {
+      return;
+    }
+
+    // 検索欄、意見箱、選択欄などへの入力中は無効
+    if (isShortcutInputActive_()) {
+      return;
+    }
+
+    var key =
+      String(event.key || '').toLowerCase();
+
+    // A、J、←: 前
+    if (
+      key === 'a' ||
+      key === 'j' ||
+      event.key === 'ArrowLeft'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(-1);
+      return;
+    }
+
+    // D、K、→: 次
+    if (
+      key === 'd' ||
+      key === 'k' ||
+      event.key === 'ArrowRight'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(1);
+      return;
+    }
+
+    // Space、Enter:
+    // 最後に操作した方向を繰り返す
+    if (
+      event.code === 'Space' ||
+      event.key === 'Enter'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(
+        zkLastDirection
+      );
+    }
+  }
+);
+}
+
+function cancelZukanPress(){
+  clearTimeout(zkPressTimer);
+  if(zkPressStart && zkPressStart.card) zkPressStart.card.classList.remove('zk-pressing');
+  zkPressStart = null;
+}
+
+function openCharacterDetails(index){
+  var character = zkData[index];
+  if(!character || !character.details) return;
+
+  zkCurrentIndex = index;
+  var details = character.details;
+  var theme = getAttributeTheme_(details.attribute);
+  var panel = document.getElementById('zkModalPanel');
+  panel.style.setProperty('--zk-accent', theme.accent);
+  panel.style.setProperty('--zk-soft', theme.soft);
+  panel.style.setProperty('--zk-theme', theme.background);
+  panel.style.setProperty('--zk-theme-soft', theme.softBackground);
+
+  document.getElementById('zkModalImage').src = character.imageUrl || '';
+  document.getElementById('zkModalImage').alt = character.name || '';
+  document.getElementById('zkModalName').textContent = character.name || details.name || '';
+  document.getElementById('zkModalMeta').textContent = [details.rare, details.attribute].filter(Boolean).join(' / ');
+
+  // 左上から右、次に左下から右の順番
+  var stats = [
+    ['Cost', details.cost],
+    ['最大突破数', details.limitBreak],
+    ['無凸HP', details.hp],
+    ['無凸Power', details.power],
+    ['完凸HP', details.limitHp],
+    ['完凸Power', details.limitPower]
+  ];
+
+  document.getElementById('zkModalStats').innerHTML = stats
+    .filter(function(item){ return item[1] !== null && item[1] !== undefined && item[1] !== ''; })
+    .map(function(item){
+      return '<div class="zk-stat"><span>' + escapeHtml(item[0]) + '</span><strong>' + escapeHtml(String(item[1])) + '</strong></div>';
+    }).join('');
+
+  var skillBlock = document.getElementById('zkModalSkillBlock');
+  if(details.skill){
+    document.getElementById('zkModalSkill').innerHTML = formatSkillText_(details.skill);
+    document.getElementById('zkModalSkillTurn').textContent =
+      details.skillTurn !== null && details.skillTurn !== undefined
+        ? '必要ターン ' + details.skillTurn
+        : '';
+    skillBlock.style.display = '';
+  }else{
+    skillBlock.style.display = 'none';
+  }
+
+  var modal = document.getElementById('zkModal');
+  modal.classList.add('op');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('zk-modal-open');
+  document.getElementById('zkModalClose').focus();
+}
+
+function openTierCharacterDetails(characterId){
+  var id = Number(characterId);
+  preloadZukanData()
+    .then(function(){
+      var indexById = new Map();
+      zkData.forEach(function(character,index){
+        if(character.details) indexById.set(Number(character.id),index);
+      });
+      zkDisplayedDetailOrder = tierDisplayedIds
+        .map(function(tierId){ return indexById.get(Number(tierId)); })
+        .filter(function(index){ return index !== undefined; });
+      var index = indexById.get(id);
+      if(index !== undefined) openCharacterDetails(index);
+    })
+    .catch(function(error){ console.error('キャラ詳細の読み込みに失敗しました。',error); });
+}
+
+function switchCharacterDetails(direction) {
+  if (
+    !zkData ||
+    zkCurrentIndex < 0 ||
+    zkDisplayedDetailOrder.length === 0
+  ) {
+    return;
+  }
+
+  // キーボード・画面ボタンの両方で方向を記憶
+  zkLastDirection = direction < 0 ? -1 : 1;
+
+  var position =
+    zkDisplayedDetailOrder.indexOf(zkCurrentIndex);
+
+  if (position === -1) {
+    position = 0;
+  }
+
+  var nextPosition = (
+    position +
+    zkLastDirection +
+    zkDisplayedDetailOrder.length
+  ) % zkDisplayedDetailOrder.length;
+
+  openCharacterDetails(
+    zkDisplayedDetailOrder[nextPosition]
+  );
+}
+
+function isShortcutInputActive_() {
+  var element = document.activeElement;
+
+  if (!element) {
+    return false;
+  }
+
+  var tagName =
+    String(element.tagName || '').toLowerCase();
+
+  return (
+    tagName === 'input' ||
+    tagName === 'textarea' ||
+    tagName === 'select' ||
+    element.isContentEditable
+  );
+}
+
+function getAttributeTheme_(attribute){
+  var colors = {
+    '火': {solid:'#e53935', soft:'#ffe7e5'},
+    '水': {solid:'#1976d2', soft:'#e3f0ff'},
+    '風': {solid:'#7cbf19', soft:'#edf8d8'}
+  };
+  var text = String(attribute || '');
+  var found = ['火','水','風'].filter(function(type){
+    return text.indexOf(type) >= 0;
+  });
+
+  if(found.length === 0){
+    return {
+      accent:'#6c757d',
+      background:'#6c757d',
+      softBackground:'#f1f3f5'
+    };
+  }
+
+  if(found.length === 1){
+    return {
+      accent:colors[found[0]].solid,
+      background:colors[found[0]].solid,
+      softBackground:colors[found[0]].soft
+    };
+  }
+
+  // 複合属性は均等な斜めグラデーションにする。
+  var solidColors = found.map(function(type){ return colors[type].solid; });
+  var softColors = found.map(function(type){ return colors[type].soft; });
+
+  return {
+    accent:colors[found[0]].solid,
+    background:'linear-gradient(135deg, ' + solidColors.join(', ') + ')',
+    softBackground:'linear-gradient(135deg, ' + softColors.join(', ') + ')'
+  };
+}
+
+function closeCharacterDetails(){
+  var modal = document.getElementById('zkModal');
+  if(!modal || !modal.classList.contains('op')) return;
+  modal.classList.remove('op');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('zk-modal-open');
+  zkCurrentIndex = -1;
+}
+
+function isTouchDevice(){
+  return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+}
+
+function formatSkillText_(text) {
+  var escaped = escapeHtml(text);
+
+  var attributeClass = {
+    '火': 'skill-attribute-fire',
+    '水': 'skill-attribute-water',
+    '風': 'skill-attribute-wind',
+    '全': 'skill-attribute-all'
+  };
+
+  return escaped.replace(
+    /(\d+(?:\.\d+)?%?)|([火水風全])/g,
+    function(match, number, attribute) {
+      if (number !== undefined) {
+        return (
+          '<span class="skill-number">' +
+          number +
+          '</span>'
+        );
+      }
+
+      return (
+        '<span class="skill-attribute ' +
+        attributeClass[attribute] +
+        '">' +
+        attribute +
+        '</span>'
+      );
+    }
+  );
+}
+
+function escapeHtml(value){
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function tgl(button){
+  button.classList.toggle('op');
+  button.nextElementSibling.classList.toggle('op');
+}
+
+function toggleAll(){
+  var buttons = document.querySelectorAll('.zk-b1,.zk-b2,.zk-b3');
+  var anyOpen = Array.prototype.some.call(buttons, function(button){
+    return button.classList.contains('op');
+  });
+
+  Array.prototype.forEach.call(buttons, function(button){
+    button.classList.toggle('op', !anyOpen);
+    button.nextElementSibling.classList.toggle('op', !anyOpen);
+  });
+}
+
+
+/* === 意見箱 === */
+var OPINION_URL = 'https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';
+
+function submitOpinion(){
+  var text = document.getElementById('opinionText').value.trim();
+  var message = document.getElementById('opinionMsg');
+  var button = document.getElementById('opinionSubmit');
+
+  if(!text){
+    message.textContent = '内容を入力してください。';
+    message.className = 'opinion-msg opinion-error';
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = '送信中...';
+  message.className = 'opinion-msg';
+
+  fetch(OPINION_URL + '?api=opinion&text=' + encodeURIComponent(text))
+    .then(function(response){
+      if(!response.ok) throw new Error('HTTP ' + response.status);
+      document.getElementById('opinionText').value = '';
+      message.textContent = '送信しました。';
+      message.className = 'opinion-msg opinion-success';
+    })
+    .catch(function(error){
+      console.error(error);
+      message.textContent = '送信に失敗しました。';
+      message.className = 'opinion-msg opinion-error';
+    })
+    .finally(function(){
+      button.disabled = false;
+    });
+}
+(()=>{
+  let lastDirection=1; // 初期は「後」
+  const isDetailOpen=()=>{const d=document.getElementById('detail');return d&&!d.hidden&&getComputedStyle(d).display!=='none'};
+  const move=direction=>{
+    lastDirection=direction<0?-1:1;
+    if(typeof window.nav==='function'){window.nav(lastDirection);return;}
+    const id=lastDirection<0?'detailPrev':'detailNext';
+    const button=document.getElementById(id);
+    if(button) button.click();
+  };
+  const prev=document.getElementById('detailPrev'),next=document.getElementById('detailNext');
+  if(prev) prev.addEventListener('click',()=>{lastDirection=-1},true);
+  if(next) next.addEventListener('click',()=>{lastDirection=1},true);
+  document.addEventListener('keydown',event=>{
+    if(!isDetailOpen()) return;
+    const tag=document.activeElement?.tagName||'';
+    if(['INPUT','TEXTAREA','SELECT'].includes(tag)) return;
+    const key=event.key.toLowerCase();
+    if(key==='a'||key==='j'||event.key==='ArrowLeft'){event.preventDefault();move(-1);return;}
+    if(key==='d'||key==='k'||event.key==='ArrowRight'){event.preventDefault();move(1);return;}
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();move(lastDirection);}
+  },true);
+})();
+
+/* 20260821-06: class/theme compatibility for calculator UI */
+(function(){
+  function paintLargeHeaders(root){
+    (root||document).querySelectorAll('.zk-b1').forEach(function(button){
+      var text=(button.textContent||'').trim();
+      button.classList.toggle('large-special',text.indexOf('特殊ゆる')>=0);
+      button.classList.toggle('large-normal',text.indexOf('通常ゆる')>=0);
+    });
+  }
+  function syncDetailTheme(){
+    var old=document.getElementById('zkModalPanel');
+    var panel=document.getElementById('detailPanel');
+    if(!panel)return;
+    if(old){
+      ['--zk-accent','--zk-theme','--zk-theme-soft'].forEach(function(name){var value=old.style.getPropertyValue(name);if(value)panel.style.setProperty(name,value)});
+    }
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    paintLargeHeaders(document);
+    var targets=[document.getElementById('zkBox'),document.getElementById('pickerBox')].filter(Boolean);
+    targets.forEach(function(target){new MutationObserver(function(){paintLargeHeaders(target)}).observe(target,{childList:true,subtree:true})});
+    var detail=document.getElementById('detail');if(detail)new MutationObserver(syncDetailTheme).observe(detail,{attributes:true,subtree:true,attributeFilter:['hidden','style','class']});
+  });
+})();
