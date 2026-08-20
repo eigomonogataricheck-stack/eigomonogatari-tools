@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T19:33:48.646Z",
+  "generatedAt": "2026-08-20T20:04:01.257Z",
   "characters": [
     {
       "id": 1189,
@@ -131,7 +131,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -198,7 +199,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "5ターンの間、火属性の敵に対する味方全員の攻撃力を23%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -299,7 +301,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -599,7 +602,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を5000%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -765,7 +769,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -1129,7 +1134,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "4ターンの間、火属性の味方全員の攻撃力を120%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -1195,7 +1201,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを77%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -1227,7 +1234,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを22%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -1260,7 +1268,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を120%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -1293,7 +1302,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -1394,7 +1404,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を1234%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -1628,7 +1639,9 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -1762,7 +1775,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する味方全員の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -1829,7 +1843,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を600%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2029,7 +2044,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2062,7 +2078,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "5ターンの間、水属性の敵に対する味方全員の攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2195,7 +2212,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する自身の攻撃力を111%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2261,7 +2279,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "8ターンの間、味方全員の攻撃力を18%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2427,7 +2446,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を220%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2730,7 +2750,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "2ターンの間、水属性の味方全員の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2831,7 +2852,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を25%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -2864,7 +2886,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "3ターンの間、火属性の味方全員の攻撃力を130%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -3031,7 +3054,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する味方全員の攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -3132,7 +3156,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "2ターンの間、水属性の味方全員の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -3232,7 +3257,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "5ターンの間、風属性の敵に対する味方全員の攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -3972,7 +3998,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "5ターンの間、火属性の敵に対する自身の攻撃力を65%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -3988,7 +4015,7 @@
       "details": {
         "id": 2083,
         "name": "呵々Doの閑雅・ルー",
-        "attribute": "水風",
+        "attribute": "火水",
         "cost": 85,
         "hp": 5800,
         "power": 2800,
@@ -4039,7 +4066,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する火属性の味方全員の攻撃力を893%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4071,7 +4099,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "4ターンの間、味方全員の属性を4属性に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -4171,7 +4201,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4237,7 +4268,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を452%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4303,7 +4335,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4336,7 +4369,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を39%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4403,7 +4437,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4671,7 +4706,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -4738,7 +4774,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -4973,7 +5010,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を222%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5006,7 +5044,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "4ターンの間、火属性の味方全員の攻撃力を45%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5073,7 +5112,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5106,7 +5146,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "3ターンの間、風属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5170,7 +5211,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを120%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -5202,7 +5244,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを56%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -5235,7 +5278,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5369,7 +5413,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを85%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -5402,7 +5447,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5469,7 +5515,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を160%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5502,7 +5549,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を55%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5535,7 +5583,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "3ターンの間、水属性の味方全員の攻撃力を220%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -5669,7 +5718,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを150%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -5802,7 +5852,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する水属性の味方全員の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6070,7 +6121,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6103,7 +6155,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を240%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6305,7 +6358,8 @@
             "duration": 4,
             "applier": "リーダー",
             "sourceText": "4ターンの間、リーダーの攻撃力を140%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6372,7 +6426,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6405,7 +6460,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を115000%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6504,7 +6560,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを200%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -6537,7 +6594,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6570,7 +6628,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を170%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6738,7 +6797,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を355%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -6803,7 +6863,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -6868,7 +6929,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -7067,7 +7129,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを42%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -7134,7 +7197,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "10ターンの間、自身の攻撃力を35%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -7500,7 +7564,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを90%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -7701,7 +7766,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "5ターンの間、火属性の敵に対する味方全員の攻撃力を30%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -7834,7 +7900,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -8070,7 +8137,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を10%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -8204,7 +8272,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を25%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -8304,7 +8373,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -8437,7 +8507,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -8806,7 +8877,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを170%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -8905,7 +8977,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -9006,7 +9079,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -9207,7 +9281,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "5ターンの間、水属性の敵に対する味方全員の攻撃力を25%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -9376,7 +9451,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -9509,7 +9585,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -9609,7 +9686,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "3ターンの間、水属性の敵に対する自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -9641,7 +9719,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを111%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -9674,7 +9753,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を130%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -10010,7 +10090,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を39%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -10043,7 +10124,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "4ターンの間、水属性の敵に対する自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -10277,7 +10359,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを20%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -10511,7 +10594,9 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -10747,7 +10832,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "6ターンの間、自身の攻撃力を65%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -10812,7 +10898,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -10844,7 +10931,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -10978,7 +11066,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを200%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -11246,7 +11335,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -11446,7 +11536,8 @@
             "value": 1.1,
             "applier": "リーダー",
             "sourceText": "リーダーのHPを110%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -11511,7 +11602,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを130%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -11645,7 +11737,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を220%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -11779,7 +11872,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -11846,7 +11940,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "3ターンの間、水属性の味方全員の攻撃力を120%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -11979,7 +12074,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する自身の攻撃力を111%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -12158,7 +12254,7 @@
       "details": {
         "id": 2083,
         "name": "呵々Doの閑雅・ルー",
-        "attribute": "水風",
+        "attribute": "火水",
         "cost": 85,
         "hp": 5800,
         "power": 2800,
@@ -12208,7 +12304,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -12305,7 +12402,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを56%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -12337,7 +12435,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を55%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -12369,7 +12468,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を64617%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -12661,7 +12761,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "5ターンの間、風属性の敵に対する味方全員の攻撃力を25%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -12824,7 +12925,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを250%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -13020,7 +13122,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13085,7 +13188,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する味方全員の攻撃力を135%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13181,7 +13285,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を99999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13213,7 +13318,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を381%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13376,7 +13482,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13473,7 +13580,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を1000%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13505,7 +13613,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "4ターンの間、味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13536,7 +13645,8 @@
             "duration": 3,
             "applier": "リーダー",
             "sourceText": "3ターンの間、リーダーの攻撃力を600%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13568,7 +13678,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "3ターンの間、火属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13633,7 +13744,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "3ターンの間、風属性の敵に対する味方全員の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13697,7 +13809,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "4ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13729,7 +13842,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の攻撃力を210%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13761,7 +13875,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13793,7 +13908,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13825,7 +13941,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する味方全員の攻撃力を222%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13857,7 +13974,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -13888,7 +14006,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -13984,7 +14103,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを300%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -14048,7 +14168,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -14145,7 +14267,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を120%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -14534,7 +14657,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "8ターンの間、火属性の敵に対する火属性の味方全員の攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -14566,7 +14690,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を88%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -14662,7 +14787,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを30%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -14694,7 +14820,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -14726,7 +14853,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "4ターンの間、水属性の敵に対する自身の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -14758,7 +14886,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を15%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -14954,7 +15083,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を99%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -15051,7 +15181,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを200%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -15116,7 +15247,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "2ターンの間、火属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -15343,7 +15475,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを300%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -15474,7 +15607,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する水属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -15670,7 +15804,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを200%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -15767,7 +15902,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "4ターンの間、自身の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -15799,7 +15935,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -15830,7 +15967,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -16289,7 +16427,8 @@
             "duration": 4,
             "applier": "リーダー",
             "sourceText": "4ターンの間、リーダーの攻撃力を555%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16452,7 +16591,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する味方全員の攻撃力を170%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16516,7 +16656,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を170%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16579,7 +16720,8 @@
             "duration": 2,
             "applier": "リーダー",
             "sourceText": "2ターンの間、リーダーの攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16611,7 +16753,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "3ターンの間、火属性の敵に対する自身の攻撃力を600%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16642,7 +16785,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを150%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -16770,7 +16914,8 @@
             "duration": 3,
             "applier": "リーダー",
             "sourceText": "3ターンの間、リーダーの攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16801,7 +16946,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを175%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -16832,7 +16978,8 @@
             "duration": 5,
             "applier": "リーダー",
             "sourceText": "5ターンの間、リーダーの攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -16864,7 +17011,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17122,7 +17270,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "6ターンの間、火属性の敵に対する自身の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17154,7 +17303,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を1513%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17348,7 +17498,8 @@
             "duration": 5,
             "applier": "リーダー",
             "sourceText": "5ターンの間、リーダーの攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17380,7 +17531,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "4ターンの間、火属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17543,7 +17695,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを120%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -17575,7 +17728,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17607,7 +17761,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17672,7 +17827,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を181%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17736,7 +17892,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを300%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -17768,7 +17925,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "4ターンの間、自身の攻撃力を95%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17899,7 +18057,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を99999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17964,7 +18123,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を99999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -17995,7 +18155,8 @@
             "duration": 3,
             "applier": "リーダー",
             "sourceText": "3ターンの間、リーダーの攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -18060,7 +18221,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を450%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -18419,7 +18581,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を30%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -18451,7 +18614,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を350%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -18580,7 +18744,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "3ターンの間、風属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -18645,7 +18810,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "2ターンの間、水属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -18742,7 +18908,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19001,7 +19168,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19163,7 +19331,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員のHPを75%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19195,7 +19364,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員のHPを75%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19292,7 +19462,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19322,7 +19493,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを25%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19384,7 +19556,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19541,7 +19714,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19572,7 +19746,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19602,7 +19777,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを70%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19633,7 +19809,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19789,7 +19966,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19851,7 +20029,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "3ターンの間、味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -19882,7 +20061,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "3ターンの間、水属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -19944,7 +20124,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20037,7 +20218,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -20067,7 +20249,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -20129,7 +20312,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -20160,7 +20344,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20223,7 +20408,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する自身の攻撃力を800%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20443,7 +20629,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20474,7 +20661,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20505,7 +20693,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を800%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20599,7 +20788,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を40%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20725,7 +20915,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20756,7 +20947,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20786,7 +20978,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを70%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -20847,7 +21040,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "3ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20878,7 +21072,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -20972,7 +21167,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21003,7 +21199,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21034,7 +21231,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21064,7 +21262,8 @@
             "duration": 2,
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する自信の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21127,7 +21326,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を120%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21157,7 +21357,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "3ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -21312,7 +21514,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21342,7 +21545,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを25%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -21404,7 +21608,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "2ターンの間、水属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21561,7 +21766,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを150%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -21592,7 +21798,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21622,7 +21829,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを70%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -21653,7 +21861,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21809,7 +22018,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "2ターンの間、水属性の味方全員の攻撃力を130%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21870,7 +22080,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを111%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -21901,7 +22112,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "3ターンの間、水属性の味方全員の攻撃力を222%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -21963,7 +22175,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22056,7 +22269,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを120%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -22086,7 +22300,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを90%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -22148,7 +22363,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -22179,7 +22395,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員の攻撃力を160%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22242,7 +22459,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を1780%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22462,7 +22680,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を333%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22493,7 +22712,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "3ターンの間、味方全員の攻撃力を125%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22524,7 +22744,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を800%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22618,7 +22839,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を40%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22744,7 +22966,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22775,7 +22998,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22805,7 +23029,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを170%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -22866,7 +23091,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "4ターンの間、水属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22897,7 +23123,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "3ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -22960,7 +23187,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23022,7 +23250,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23115,7 +23344,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -23146,7 +23377,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23368,7 +23600,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23430,7 +23663,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23713,7 +23947,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを170%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -23743,7 +23978,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを180%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -23773,7 +24009,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを190%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -23803,7 +24040,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを260%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -23834,7 +24072,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "4ターンの間、水属性の敵に対する水属性の味方全員の攻撃力を23%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23865,7 +24104,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "5ターンの間、水属性の敵に対する水属性の味方全員の攻撃力を23%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23896,7 +24136,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "8ターンの間、水属性の敵に対する水属性の味方全員の攻撃力を23%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -23927,7 +24168,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "6ターンの間、水属性の味方全員の攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24086,7 +24328,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を70%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24117,7 +24360,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を85%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24148,7 +24392,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24179,7 +24424,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24333,7 +24579,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを80%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -24363,7 +24610,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを90%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -24393,7 +24641,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -24423,7 +24672,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -24706,7 +24956,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を35%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24737,7 +24988,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を40%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24768,7 +25020,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を45%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24799,7 +25052,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "8ターンの間、自身の攻撃力を45%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24922,7 +25176,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -24953,7 +25208,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を130%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -25151,7 +25407,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを111%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -25181,7 +25438,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを200%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -25694,7 +25952,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を78%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27116,7 +27375,9 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "4ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -27147,7 +27408,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を333%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27178,7 +27440,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を444%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27209,7 +27472,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を555%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27240,7 +27504,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を666%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27271,7 +27536,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "4ターンの間、風属性の敵に対する自身の攻撃力を40%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27302,7 +27568,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "5ターンの間、風属性の敵に対する自身の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27333,7 +27600,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "6ターンの間、風属性の敵に対する自身の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -27364,7 +27632,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "8ターンの間、風属性の敵に対する自身の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -28019,7 +28288,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する自身の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -28050,7 +28320,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する自身の攻撃力を70%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -28081,7 +28352,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する自身の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -28137,7 +28409,9 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -28167,7 +28441,9 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -28197,7 +28473,9 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -28824,7 +29102,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を753%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -28854,7 +29133,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを120%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -28949,7 +29229,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "3ターンの間、水属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29107,7 +29388,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "3ターンの間、水属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29137,7 +29419,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -29168,7 +29451,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を120%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29263,7 +29547,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "3ターンの間、風属性の敵に対する自身の攻撃力を133%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29293,7 +29578,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを180%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -29356,7 +29642,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を70%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29450,7 +29737,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する自身の攻撃力を1780%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29513,7 +29801,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29543,7 +29832,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -29701,7 +29991,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を800%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29828,7 +30119,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する味方全員の攻撃力を333%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -29953,7 +30245,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -29983,7 +30277,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを210%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -30014,7 +30309,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の攻撃力を66%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -30045,7 +30341,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -30075,7 +30372,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを166%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -30199,7 +30497,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを25%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -30453,7 +30752,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -30483,7 +30783,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -30610,7 +30911,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "6ターンの間、風属性の敵に対する自身の攻撃力を24%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -30891,7 +31193,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを270%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -31017,7 +31320,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員の攻撃力を88%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31048,7 +31352,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "3ターンの間、風属性の味方全員の攻撃力を70%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31137,7 +31442,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を110%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31294,7 +31600,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を55%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31325,7 +31632,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を155%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31356,7 +31664,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を255%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31449,7 +31758,8 @@
             "applier": "自身",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -31479,7 +31789,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを70%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -31509,7 +31820,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを80%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -31571,7 +31883,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -31601,7 +31914,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを45%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -31759,7 +32073,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -31789,7 +32105,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -31851,7 +32169,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "2ターンの間、水属性の味方全員の攻撃力を233%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32415,7 +32734,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "5ターンの間、自身の攻撃力を12%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32446,7 +32766,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "7ターンの間、自身の攻撃力を16%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32603,7 +32924,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を15%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32634,7 +32956,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を20%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32783,7 +33106,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32814,7 +33138,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を75%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -32844,7 +33169,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを220%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -33458,7 +33784,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを18%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -33613,7 +33940,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "3ターンの間、水属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -33707,7 +34035,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -33737,7 +34066,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -33768,7 +34098,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -33799,7 +34130,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -33987,7 +34319,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員の攻撃力を30%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -34269,7 +34602,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -34427,7 +34761,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "2ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -34488,7 +34823,8 @@
             "duration": 2,
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自信の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -34675,7 +35011,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -34861,7 +35198,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "3ターンの間、風属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -34892,7 +35230,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "3ターンの間、火属性の味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35173,7 +35512,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "2ターンの間、風属性の味方全員の攻撃力を314%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35235,7 +35575,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを80%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -35266,7 +35607,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35329,7 +35671,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を1000%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35360,7 +35703,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "5ターンの間、風属性の敵に対する味方全員の攻撃力を15%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35517,7 +35861,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "自身のHPを80%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -35611,7 +35956,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を230%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35768,7 +36114,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -35829,7 +36176,8 @@
             "duration": 2,
             "applier": "リーダー",
             "sourceText": "2ターンの間、リーダーの攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -35891,7 +36239,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36074,7 +36423,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36136,7 +36486,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "火属性の味方全員のHPを80%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36322,7 +36673,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36352,7 +36704,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36382,7 +36735,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36415,7 +36769,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36444,7 +36799,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを30%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36473,7 +36829,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36502,7 +36859,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36535,7 +36893,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "2ターンの間、味方全員のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36565,7 +36924,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36595,7 +36955,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36625,7 +36986,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36658,7 +37020,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -36810,7 +37173,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36839,7 +37203,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを60%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36868,7 +37233,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを90%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -36900,7 +37266,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを90%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37180,7 +37547,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37210,7 +37578,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37240,7 +37609,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37273,7 +37643,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37302,7 +37673,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを5%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37331,7 +37703,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを10%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37360,7 +37733,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを10%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37392,7 +37766,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを15%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37422,7 +37797,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37452,7 +37828,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37482,7 +37859,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37515,7 +37893,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37671,7 +38050,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37700,7 +38080,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37729,7 +38110,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37761,7 +38143,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -37791,7 +38174,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37821,7 +38205,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37851,7 +38236,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37884,7 +38270,8 @@
             "applier": "味方全員",
             "target": "火属性属性",
             "sourceText": "1ターンの間、火属性の味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37914,7 +38301,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を40%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37944,7 +38332,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -37974,7 +38363,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38007,7 +38397,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38037,7 +38428,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38067,7 +38459,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38097,7 +38490,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を600%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38130,7 +38524,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を1000%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38529,7 +38924,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38559,7 +38955,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38589,7 +38986,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38622,7 +39020,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38651,7 +39050,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38680,7 +39080,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38709,7 +39110,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38741,7 +39143,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -38770,7 +39173,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを30%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -38799,7 +39203,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを50%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -38828,7 +39233,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを70%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -38860,7 +39266,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -39012,7 +39419,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを10%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -39041,7 +39449,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを20%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -39070,7 +39479,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを30%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -39102,7 +39512,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "風属性の味方全員のHPを30%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -39259,7 +39670,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を30%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39289,7 +39701,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を40%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39319,7 +39732,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39352,7 +39766,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "1ターンの間、水属性の味方全員の攻撃力を70%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39508,7 +39923,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39537,7 +39953,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39566,7 +39983,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39598,7 +40016,8 @@
             "duration": 1,
             "applier": "リーダー",
             "sourceText": "1ターンの間、リーダーの攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39628,7 +40047,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39658,7 +40078,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39688,7 +40109,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -39721,7 +40143,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40386,7 +40809,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40416,7 +40840,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40446,7 +40871,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40479,7 +40905,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40636,7 +41063,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40666,7 +41094,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を60%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40696,7 +41125,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を80%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40729,7 +41159,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "4ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40831,7 +41262,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40861,7 +41293,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40891,7 +41324,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -40924,7 +41358,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "2ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41051,7 +41486,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を50%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41081,7 +41517,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する味方全員の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41111,7 +41548,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41144,7 +41582,8 @@
             "applier": "味方全員",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41204,7 +41643,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "1ターンの間、火属性の敵に対する味方全員の攻撃力を230%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41499,7 +41939,8 @@
             "applier": "味方全員",
             "target": "火属性の敵",
             "sourceText": "2ターンの間、火属性の敵に対する味方全員の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41595,7 +42036,8 @@
             "applier": "自身",
             "target": "風属性の敵",
             "sourceText": "2ターンの間、風属性の敵に対する自身の攻撃力を500%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -41849,7 +42291,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を1234%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -42197,7 +42640,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -43322,7 +43766,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -44127,7 +44572,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -44427,7 +44873,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "2ターンの間、水属性の敵に対する自身の攻撃力を999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -47731,7 +48178,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を250%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -48515,7 +48963,8 @@
             "applier": "味方全員",
             "target": "風属性属性",
             "sourceText": "1ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -50274,7 +50723,8 @@
             "applier": "自身",
             "target": "水属性の敵",
             "sourceText": "5ターンの間、水属性の敵に対する自身の攻撃力を65%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -50394,7 +50844,8 @@
             "applier": "味方全員",
             "target": "水属性の敵",
             "sourceText": "3ターンの間、水属性の敵に対する味方全員の攻撃力を90%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -50518,7 +50969,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -50546,7 +50998,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -50574,7 +51027,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -50602,7 +51056,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -51214,7 +51669,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -51585,7 +52042,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "味方全員のHPを1%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -51616,7 +52074,8 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "5ターンの間、味方全員の攻撃力を9999%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -51826,7 +52285,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -51962,7 +52423,8 @@
             "applier": "味方全員",
             "target": "水属性属性",
             "sourceText": "水属性の味方全員のHPを100%回復する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "回復"
           }
         ]
       }
@@ -52007,7 +52469,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "1ターンの間、自身の攻撃力を77777%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
@@ -52037,7 +52500,9 @@
             "applier": "味方全員",
             "target": "味方全員",
             "sourceText": "55ターンの間、味方全員の属性を全属性(３色混合)に変更する。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "属性変更",
+            "value": "全属性"
           }
         ]
       }
@@ -52214,7 +52679,8 @@
             "applier": "自身",
             "target": "自身",
             "sourceText": "3ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": true
+            "needsReview": true,
+            "effect": "攻撃力アップ"
           }
         ]
       }
