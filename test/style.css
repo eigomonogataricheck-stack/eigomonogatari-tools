@@ -8,3 +8,7 @@
 
 /* build 20260821-11 */
 .opinion p{margin:0 0 10px;color:#5f6368}.opinion textarea{display:block;width:100%;min-height:150px;resize:vertical}.opinion .primary{margin-top:10px}.opinion-link{margin-top:14px!important}.opinion-link a{color:#0b57d0;font-weight:700;text-decoration:none}.opinion-link a:hover{text-decoration:underline}
+
+/* build 20260821-13: explicit accordion arrows */
+.zk-b1 .zk-arrow,.zk-b2 .zk-arrow,.zk-b3 .zk-arrow{display:inline-block;flex:0 0 auto;margin-left:10px;transform:none!important;transition:none!important;font-family:system-ui,sans-serif;font-size:.9em;line-height:1}
+.zk-b1::after,.zk-b2::after,.zk-b3::after{content:none!important}
