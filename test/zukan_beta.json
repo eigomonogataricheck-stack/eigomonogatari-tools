@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T18:16:56.754Z",
+  "generatedAt": "2026-08-20T19:33:48.646Z",
   "characters": [
     {
       "id": 1189,
@@ -2178,7 +2178,7 @@
       "details": {
         "id": 1892,
         "name": "オルカアタッカー虎子",
-        "attribute": "水・風",
+        "attribute": "水風",
         "cost": 70,
         "hp": 5400,
         "power": 3600,
@@ -11962,7 +11962,7 @@
       "details": {
         "id": 1892,
         "name": "オルカアタッカー虎子",
-        "attribute": "水・風",
+        "attribute": "水風",
         "cost": 70,
         "hp": 5400,
         "power": 3600,
