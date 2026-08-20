@@ -338,7 +338,7 @@ function openCharacterDetails(index){
 
   var skillBlock = document.getElementById('zkModalSkillBlock');
   if(details.skill){
-    document.getElementById('zkModalSkill').textContent = details.skill;
+    document.getElementById('zkModalSkill').innerHTML = formatSkillText_(details.skill);
     document.getElementById('zkModalSkillTurn').textContent =
       details.skillTurn !== null && details.skillTurn !== undefined
         ? '必要ターン ' + details.skillTurn
@@ -435,6 +435,38 @@ function closeCharacterDetails(){
 
 function isTouchDevice(){
   return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+}
+
+function formatSkillText_(text) {
+  var escaped = escapeHtml(text);
+
+  var attributeClass = {
+    '火': 'skill-attribute-fire',
+    '水': 'skill-attribute-water',
+    '風': 'skill-attribute-wind',
+    '全': 'skill-attribute-all'
+  };
+
+  return escaped.replace(
+    /(\d+(?:\.\d+)?%?)|([火水風全])/g,
+    function(match, number, attribute) {
+      if (number !== undefined) {
+        return (
+          '<span class="skill-number">' +
+          number +
+          '</span>'
+        );
+      }
+
+      return (
+        '<span class="skill-attribute ' +
+        attributeClass[attribute] +
+        '">' +
+        attribute +
+        '</span>'
+      );
+    }
+  );
 }
 
 function escapeHtml(value){
