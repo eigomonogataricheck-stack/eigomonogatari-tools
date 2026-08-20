@@ -70,6 +70,7 @@ var zkTimer = null;
 var zkPressTimer = null;
 var zkPressStart = null;
 var zkSuppressClick = false;
+var zkCurrentIndex = -1;
 var L1C = {'通常ゆる':'#198754','特殊ゆる':'#dc3545'};
 
 function loadZukan(){
@@ -273,20 +274,27 @@ function openCharacterDetails(index){
   var character = zkData[index];
   if(!character || !character.details) return;
 
+  zkCurrentIndex = index;
   var details = character.details;
+  var theme = getAttributeTheme_(details.attribute);
+  var panel = document.getElementById('zkModalPanel');
+  panel.style.setProperty('--zk-accent', theme.accent);
+  panel.style.setProperty('--zk-soft', theme.soft);
+  panel.style.setProperty('--zk-theme', theme.background);
+
   document.getElementById('zkModalImage').src = character.imageUrl || '';
   document.getElementById('zkModalImage').alt = character.name || '';
   document.getElementById('zkModalName').textContent = character.name || details.name || '';
   document.getElementById('zkModalMeta').textContent = [details.rare, details.attribute].filter(Boolean).join(' / ');
 
+  // 左上から右、次に左下から右の順番
   var stats = [
     ['Cost', details.cost],
+    ['最大突破数', details.limitBreak],
     ['HP', details.hp],
     ['Power', details.power],
-    ['限界突破数', details.limitBreak],
-    ['限界HP', details.limitHp],
-    ['限界Power', details.limitPower],
-    ['必要ターン数', details.skillTurn]
+    ['最大HP', details.limitHp],
+    ['最大Power', details.limitPower]
   ];
 
   document.getElementById('zkModalStats').innerHTML = stats
@@ -298,6 +306,10 @@ function openCharacterDetails(index){
   var skillBlock = document.getElementById('zkModalSkillBlock');
   if(details.skill){
     document.getElementById('zkModalSkill').textContent = details.skill;
+    document.getElementById('zkModalSkillTurn').textContent =
+      details.skillTurn !== null && details.skillTurn !== undefined
+        ? '必要ターン ' + details.skillTurn
+        : '';
     skillBlock.style.display = '';
   }else{
     skillBlock.style.display = 'none';
@@ -310,12 +322,55 @@ function openCharacterDetails(index){
   document.getElementById('zkModalClose').focus();
 }
 
+function switchCharacterDetails(direction){
+  if(!zkData || zkCurrentIndex < 0) return;
+
+  var index = zkCurrentIndex;
+  for(var count = 0; count < zkData.length; count++){
+    index = (index + direction + zkData.length) % zkData.length;
+    if(zkData[index] && zkData[index].details){
+      openCharacterDetails(index);
+      return;
+    }
+  }
+}
+
+function getAttributeTheme_(attribute){
+  var colors = {
+    '火': {solid:'#dc3545', soft:'#fff0f1'},
+    '水': {solid:'#0d6efd', soft:'#eef5ff'},
+    '風': {solid:'#7fbd27', soft:'#f4fae9'}
+  };
+  var text = String(attribute || '');
+  var found = ['火','水','風'].filter(function(type){ return text.indexOf(type) >= 0; });
+
+  if(found.length === 0){
+    return {accent:'#6c757d', soft:'#f1f3f5', background:'#6c757d'};
+  }
+  if(found.length === 1){
+    return {accent:colors[found[0]].solid, soft:colors[found[0]].soft, background:colors[found[0]].solid};
+  }
+
+  var stops = found.map(function(type, i){
+    var start = Math.round(i * 100 / found.length);
+    var end = Math.round((i + 1) * 100 / found.length);
+    return colors[type].solid + ' ' + start + '%, ' + colors[type].solid + ' ' + end + '%';
+  }).join(', ');
+
+  return {
+    accent: colors[found[0]].solid,
+    soft: 'linear-gradient(135deg,' + found.map(function(type){ return colors[type].soft; }).join(',') + ')',
+    background: 'linear-gradient(135deg,' + stops + ')'
+  };
+}
+
 function closeCharacterDetails(){
   var modal = document.getElementById('zkModal');
   if(!modal || !modal.classList.contains('op')) return;
   modal.classList.remove('op');
   modal.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('zk-modal-open');
+  zkCurrentIndex = -1;
 }
 
 function isTouchDevice(){

@@ -55,7 +55,8 @@
   </footer>
 </div>
   <div id="zkModal" class="zk-modal" role="dialog" aria-modal="true" aria-labelledby="zkModalName" aria-hidden="true">
-    <div class="zk-modal-panel">
+    <button class="zk-modal-nav zk-modal-prev" type="button" onclick="switchCharacterDetails(-1)" aria-label="前のキャラ">&#10094;</button>
+    <div id="zkModalPanel" class="zk-modal-panel">
       <button id="zkModalClose" class="zk-modal-close" type="button" onclick="closeCharacterDetails()" aria-label="閉じる">&times;</button>
       <div class="zk-modal-hero">
         <img id="zkModalImage" class="zk-modal-image" src="" alt="">
@@ -66,10 +67,14 @@
       </div>
       <div id="zkModalStats" class="zk-modal-stats"></div>
       <div id="zkModalSkillBlock" class="zk-modal-skill-block">
-        <div class="zk-modal-label">ゆるスキル</div>
+        <div class="zk-modal-skill-head">
+          <div class="zk-modal-label">ゆるスキル</div>
+          <div id="zkModalSkillTurn" class="zk-modal-turn"></div>
+        </div>
         <p id="zkModalSkill" class="zk-modal-skill"></p>
       </div>
     </div>
+    <button class="zk-modal-nav zk-modal-next" type="button" onclick="switchCharacterDetails(1)" aria-label="次のキャラ">&#10095;</button>
   </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="app.js"></script>
