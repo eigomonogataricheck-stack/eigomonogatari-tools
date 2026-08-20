@@ -321,10 +321,10 @@ function openCharacterDetails(index){
   var stats = [
     ['Cost', details.cost],
     ['最大突破数', details.limitBreak],
-    ['無凸のHP', details.hp],
-    ['無凸のPower', details.power],
-    ['完凸のHP', details.limitHp],
-    ['完凸のPower', details.limitPower]
+    ['無凸HP', details.hp],
+    ['無凸Power', details.power],
+    ['完凸HP', details.limitHp],
+    ['完凸Power', details.limitPower]
   ];
 
   document.getElementById('zkModalStats').innerHTML = stats
@@ -385,9 +385,9 @@ function switchCharacterDetails(direction){
 
 function getAttributeTheme_(attribute){
   var colors = {
-    '火': {solid:'#dc3545', soft:'#fff0f1'},
-    '水': {solid:'#0d6efd', soft:'#eef5ff'},
-    '風': {solid:'#7fbd27', soft:'#f4fae9'}
+    '火': {solid:'#e53935', soft:'#ffe7e5'},
+    '水': {solid:'#1976d2', soft:'#e3f0ff'},
+    '風': {solid:'#7cbf19', soft:'#edf8d8'}
   };
   var text = String(attribute || '');
   var found = ['火','水','風'].filter(function(type){
@@ -458,4 +458,40 @@ function toggleAll(){
     button.classList.toggle('op', !anyOpen);
     button.nextElementSibling.classList.toggle('op', !anyOpen);
   });
+}
+
+
+/* === 意見箱 === */
+var OPINION_URL = 'https://script.google.com/macros/s/AKfycbzb1SZylMA0l61jgM628eMbXeUt7M4tVx-BrrOIK3KpvAWZ_WzJR_cSPsdOMA5EETt8/exec';
+
+function submitOpinion(){
+  var text = document.getElementById('opinionText').value.trim();
+  var message = document.getElementById('opinionMsg');
+  var button = document.getElementById('opinionSubmit');
+
+  if(!text){
+    message.textContent = '内容を入力してください。';
+    message.className = 'opinion-msg opinion-error';
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = '送信中...';
+  message.className = 'opinion-msg';
+
+  fetch(OPINION_URL + '?api=opinion&text=' + encodeURIComponent(text))
+    .then(function(response){
+      if(!response.ok) throw new Error('HTTP ' + response.status);
+      document.getElementById('opinionText').value = '';
+      message.textContent = '送信しました。';
+      message.className = 'opinion-msg opinion-success';
+    })
+    .catch(function(error){
+      console.error(error);
+      message.textContent = '送信に失敗しました。';
+      message.className = 'opinion-msg opinion-error';
+    })
+    .finally(function(){
+      button.disabled = false;
+    });
 }

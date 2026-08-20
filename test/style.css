@@ -102,3 +102,16 @@ body.zk-modal-open{overflow:hidden}
 .zk-stat{border:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);box-shadow:inset 5px 0 0 var(--zk-accent)}
 .zk-modal-skill-block{border-top:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-right:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff);border-bottom:2px solid color-mix(in srgb,var(--zk-accent) 58%,#fff)}
 .zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:saturate(1.55)}
+
+
+/* ステータス枠は元の形に戻し、色選定だけを調整 */
+.zk-stat{border:0;box-shadow:none;background:var(--zk-theme-soft)}
+.zk-modal-skill-block{border-top:0;border-right:0;border-bottom:0;border-left:4px solid var(--zk-accent)}
+.zk-modal-meta,.zk-stat strong,.zk-modal-label{filter:none}
+
+/* 意見箱 */
+.opinion-box{padding:18px;border:1px solid #dee2e6;border-radius:12px;background:#fff}
+.opinion-title{margin:0 0 8px;color:#555;font-size:14px}
+.opinion-msg{min-height:20px;margin:8px 0 0;font-size:13px;color:#888}
+.opinion-success{color:#198754}
+.opinion-error{color:#dc3545}
