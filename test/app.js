@@ -284,9 +284,12 @@ function bindZukanDetails(){
   // 図鑑はPC・スマホとも通常タップで開く。
 
 
-  document.getElementById('zkModal').addEventListener('click', function(event){
-    if(event.target === this) closeCharacterDetails();
-  });
+  var modal = document.getElementById('zkModal');
+  if(modal){
+    modal.addEventListener('click', function(event){
+      if(event.target === this) closeCharacterDetails();
+    });
+  }
 
   document.addEventListener('keydown', function(event){
     if(event.key === 'Escape') closeCharacterDetails();

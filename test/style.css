@@ -115,3 +115,9 @@ body.zk-modal-open{overflow:hidden}
 .opinion-msg{min-height:20px;margin:8px 0 0;font-size:13px;color:#888}
 .opinion-success{color:#198754}
 .opinion-error{color:#dc3545}
+
+
+/* 今回の視認性調整: 詳細表示は控えめ、ステータス枠は通常形 */
+.zk-has-details::after{background:#e8f5ee;color:#157347;font-size:.46rem;padding:1px 4px;box-shadow:none}
+.zk-stat{border:0!important;box-shadow:none!important;background:var(--zk-theme-soft)}
+.zk-modal-skill-block{border-top:0!important;border-right:0!important;border-bottom:0!important;border-left:4px solid var(--zk-accent)!important}
