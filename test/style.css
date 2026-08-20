@@ -6,6 +6,5 @@
 #picker .picker-modal>h2{margin-top:4px!important}
 #detail .detail-head>img{padding:0!important;background:transparent!important;border:3px solid var(--accent)!important;box-shadow:none!important}
 
-/* build 20260821-10 */
-#picker .close{position:sticky!important;top:8px!important;float:right!important;z-index:100!important;width:52px!important;height:52px!important;margin:-4px -4px 4px 12px!important;display:grid!important;place-items:center!important;background:#f1f3f5!important;box-shadow:0 2px 10px rgba(0,0,0,.18)!important;font-size:1.9rem!important;touch-action:manipulation!important}
-#detail .detail-head>img{padding:0!important;background:transparent!important;border:3px solid var(--accent)!important;box-shadow:none!important}
+/* build 20260821-11 */
+.opinion p{margin:0 0 10px;color:#5f6368}.opinion textarea{display:block;width:100%;min-height:150px;resize:vertical}.opinion .primary{margin-top:10px}.opinion-link{margin-top:14px!important}.opinion-link a{color:#0b57d0;font-weight:700;text-decoration:none}.opinion-link a:hover{text-decoration:underline}
