@@ -75,6 +75,9 @@ var zkPressStart = null;
 var zkSuppressClick = false;
 var zkCurrentIndex = -1;
 var zkDisplayedDetailOrder = [];
+
+// 1 = 次、-1 = 前
+var zkLastDirection = 1;
 var zkDetailsBound = false;
 var tierDisplayedIds = [];
 var zkDataPromise = null;
@@ -291,9 +294,69 @@ function bindZukanDetails(){
     });
   }
 
-  document.addEventListener('keydown', function(event){
-    if(event.key === 'Escape') closeCharacterDetails();
-  });
+  document.addEventListener(
+  'keydown',
+  function(event) {
+    // Escは入力中でも詳細を閉じられる
+    if (event.key === 'Escape') {
+      closeCharacterDetails();
+      return;
+    }
+
+    // 詳細画面が開いていない場合は無効
+    var modal =
+      document.getElementById('zkModal');
+
+    if (
+      !modal ||
+      !modal.classList.contains('op')
+    ) {
+      return;
+    }
+
+    // 検索欄、意見箱、選択欄などへの入力中は無効
+    if (isShortcutInputActive_()) {
+      return;
+    }
+
+    var key =
+      String(event.key || '').toLowerCase();
+
+    // A、J、←: 前
+    if (
+      key === 'a' ||
+      key === 'j' ||
+      event.key === 'ArrowLeft'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(-1);
+      return;
+    }
+
+    // D、K、→: 次
+    if (
+      key === 'd' ||
+      key === 'k' ||
+      event.key === 'ArrowRight'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(1);
+      return;
+    }
+
+    // Space、Enter:
+    // 最後に操作した方向を繰り返す
+    if (
+      event.code === 'Space' ||
+      event.key === 'Enter'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(
+        zkLastDirection
+      );
+    }
+  }
+);
 }
 
 function cancelZukanPress(){
@@ -338,7 +401,7 @@ function openCharacterDetails(index){
 
   var skillBlock = document.getElementById('zkModalSkillBlock');
   if(details.skill){
-    document.getElementById('zkModalSkill').textContent = details.skill;
+    document.getElementById('zkModalSkill').innerHTML = formatSkillText_(details.skill);
     document.getElementById('zkModalSkillTurn').textContent =
       details.skillTurn !== null && details.skillTurn !== undefined
         ? '必要ターン ' + details.skillTurn
@@ -372,18 +435,52 @@ function openTierCharacterDetails(characterId){
     .catch(function(error){ console.error('キャラ詳細の読み込みに失敗しました。',error); });
 }
 
-function switchCharacterDetails(direction){
-  if(!zkData || zkCurrentIndex < 0 || zkDisplayedDetailOrder.length === 0) return;
+function switchCharacterDetails(direction) {
+  if (
+    !zkData ||
+    zkCurrentIndex < 0 ||
+    zkDisplayedDetailOrder.length === 0
+  ) {
+    return;
+  }
 
-  // JSON配列順ではなく、現在画面に並んでいる順番で移動する。
-  var position = zkDisplayedDetailOrder.indexOf(zkCurrentIndex);
-  if(position === -1) position = 0;
+  // キーボード・画面ボタンの両方で方向を記憶
+  zkLastDirection = direction < 0 ? -1 : 1;
+
+  var position =
+    zkDisplayedDetailOrder.indexOf(zkCurrentIndex);
+
+  if (position === -1) {
+    position = 0;
+  }
 
   var nextPosition = (
-    position + direction + zkDisplayedDetailOrder.length
+    position +
+    zkLastDirection +
+    zkDisplayedDetailOrder.length
   ) % zkDisplayedDetailOrder.length;
 
-  openCharacterDetails(zkDisplayedDetailOrder[nextPosition]);
+  openCharacterDetails(
+    zkDisplayedDetailOrder[nextPosition]
+  );
+}
+
+function isShortcutInputActive_() {
+  var element = document.activeElement;
+
+  if (!element) {
+    return false;
+  }
+
+  var tagName =
+    String(element.tagName || '').toLowerCase();
+
+  return (
+    tagName === 'input' ||
+    tagName === 'textarea' ||
+    tagName === 'select' ||
+    element.isContentEditable
+  );
 }
 
 function getAttributeTheme_(attribute){
@@ -435,6 +532,38 @@ function closeCharacterDetails(){
 
 function isTouchDevice(){
   return window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+}
+
+function formatSkillText_(text) {
+  var escaped = escapeHtml(text);
+
+  var attributeClass = {
+    '火': 'skill-attribute-fire',
+    '水': 'skill-attribute-water',
+    '風': 'skill-attribute-wind',
+    '全': 'skill-attribute-all'
+  };
+
+  return escaped.replace(
+    /(\d+(?:\.\d+)?%?)|([火水風全])/g,
+    function(match, number, attribute) {
+      if (number !== undefined) {
+        return (
+          '<span class="skill-number">' +
+          number +
+          '</span>'
+        );
+      }
+
+      return (
+        '<span class="skill-attribute ' +
+        attributeClass[attribute] +
+        '">' +
+        attribute +
+        '</span>'
+      );
+    }
+  );
 }
 
 function escapeHtml(value){
@@ -498,3 +627,18 @@ function submitOpinion(){
       button.disabled = false;
     });
 }
+
+
+var battle={attacker:null,defender:null},skillOn={attacker:false,defender:false};
+document.addEventListener('DOMContentLoaded',function(){
+ var menu=document.getElementById('appMenu');document.getElementById('menuToggle').onclick=function(){menu.classList.toggle('open')};document.querySelectorAll('#appMenu button').forEach(function(b){b.onclick=function(){var calc=b.dataset.page==='calc';document.getElementById('calcPage').style.display=calc?'block':'none';document.getElementById('tierPage').style.display=calc?'none':'block';menu.classList.remove('open')}});
+ document.getElementById('selectAsAttacker').onclick=function(){pick('attacker')};document.getElementById('selectAsDefender').onclick=function(){pick('defender')};document.getElementById('attackerSkillButton').onclick=function(){toggleSkill2('attacker')};document.getElementById('defenderSkillButton').onclick=function(){toggleSkill2('defender')};document.getElementById('swapCharacters').onclick=swap2;document.querySelectorAll('#calcPage input,#calcPage select').forEach(function(x){x.oninput=calculate2;x.onchange=calculate2});calculate2();
+});
+function pick(role){if(!zkData||zkCurrentIndex<0)return;var c=zkData[zkCurrentIndex];if(!c.details)return;battle[role]={name:c.name,imageUrl:c.imageUrl,details:c.details};setCharacter2(role,battle[role]);closeCharacterDetails();document.getElementById('calcPage').style.display='block';document.getElementById('tierPage').style.display='none'}
+function setCharacter2(role,c){skillOn[role]=false;var d=c.details,box=document.getElementById(role+'Character');box.querySelector('img').src=c.imageUrl||'';box.querySelector('b').textContent=c.name||'';box.querySelector('small').textContent=[d.rare,d.attribute].filter(Boolean).join(' / ');document.getElementById(role+(role==='attacker'?'Power':'HP')).value=Number(role==='attacker'?(d.limitPower||d.power||0):(d.limitHp||d.hp||0));document.getElementById(role+'Attribute').value=['火','水','風'].find(function(x){return String(d.attribute).includes(x)})||'全';document.getElementById(role+'SkillText').textContent=d.skill||'なし';document.getElementById(role+'SkillButton').disabled=!d.skill;syncSkill2(role);calculate2()}
+function toggleSkill2(role){skillOn[role]=!skillOn[role];syncSkill2(role);calculate2()}
+function syncSkill2(role){var b=document.getElementById(role+'SkillButton'),n=document.getElementById(role+'SkillApplied');b.textContent=skillOn[role]?'解除する':'使用する';n.hidden=!skillOn[role];if(skillOn[role]){var e=parseSkill2(battle[role].details.skill,role);n.textContent=e.summary||'自動判定対象外'}}
+function swap2(){var a=battle.attacker,d=battle.defender,ao=skillOn.attacker,do_=skillOn.defender;if(d)setCharacter2('attacker',d);if(a)setCharacter2('defender',a);battle.attacker=d;battle.defender=a;skillOn.attacker=!!d&&do_;skillOn.defender=!!a&&ao;syncSkill2('attacker');syncSkill2('defender');calculate2()}
+function parseSkill2(text,role){var s=String(text||''),r={power:1,cut:0,heal:0,summary:''},p=[],nums=Array.from(s.matchAll(/(\d+(?:\.\d+)?)\s*%/g)).map(function(m){return +m[1]});if(role==='attacker'&&/(Power|攻撃)/i.test(s)&&nums.length){r.power=1+Math.max.apply(null,nums)/100;p.push('攻撃 ×'+r.power.toFixed(2))}if(role==='defender'&&/(カット|軽減|減少)/.test(s)&&nums.length){r.cut=Math.max.apply(null,nums)/100;p.push('カット '+Math.round(r.cut*100)+'%')}if(/回復/.test(s)&&nums.length){r.heal=Math.max.apply(null,nums)/200;p.push('回復 '+(r.heal*100)+'%（半減後）')}r.summary=p.join(' / ');return r}
+function attrMul2(a,d){if(a==='全'||d==='全'||a===d)return 1;return(a==='火'&&d==='風')||(a==='風'&&d==='水')||(a==='水'&&d==='火')?1.5:.67}
+function calculate2(){var power=+document.getElementById('attackerPower').value||0,hp=+document.getElementById('defenderHP').value||0,ae=skillOn.attacker&&battle.attacker?parseSkill2(battle.attacker.details.skill,'attacker'):{power:1,heal:0},de=skillOn.defender&&battle.defender?parseSkill2(battle.defender.details.skill,'defender'):{cut:0,heal:0},cut=1-(1-Math.min(.99,(+document.getElementById('manualCutRate').value||0)/100))*(1-de.cut),mul=['attackMultiplier','questionMultiplier','soloMultiplier','speedMultiplier'].reduce(function(v,id){return v*(+document.getElementById(id).value||0)},1),damage=Math.floor(power*mul*ae.power*attrMul2(document.getElementById('attackerAttribute').value,document.getElementById('defenderAttribute').value)*(1-cut)),pct=hp?Math.min(100,damage/hp*100):0,heal=Math.floor(hp*((ae.heal||0)+(de.heal||0)));document.getElementById('damageResult').textContent=damage.toLocaleString();document.getElementById('damagePercentResult').textContent=pct.toFixed(1).replace(/\.0$/,'')+'%';document.getElementById('remainingHpResult').textContent=Math.max(0,hp-damage).toLocaleString();document.getElementById('healResult').textContent=heal.toLocaleString();document.getElementById('defeatResult').textContent=power&&hp?(damage>=hp?'撃破可能':'敵HPを '+pct.toFixed(1).replace(/\.0$/,'')+'% 削れます'):'数値を入力してください'}

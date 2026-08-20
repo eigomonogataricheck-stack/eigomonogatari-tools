@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body><header class="app-header"><b>英語物語 対戦ツール</b><button id="menuToggle" class="menu-toggle" aria-label="メニュー"><span></span><span></span><span></span></button></header><nav id="appMenu" class="app-menu"><button data-page="calc">計算機</button><button data-page="tier">Tier表・図鑑</button></nav><section id="calcPage" class="tool-page"><main class="calc-shell"><div class="calc-head"><h2>ダメージ計算機</h2><button id="swapCharacters" class="btn btn-outline-primary">⇄ 攻守を入れ替え</button></div><div class="battle-grid"><article class="battle-side attack"><h3>攻撃キャラ</h3><div id="attackerCharacter" class="selected-character"><img alt=""><div><b>未選択</b><small>詳細画面から選択</small></div></div><div class="calc-fields"><label>Power<input id="attackerPower" type="number" min="0" value="0" class="form-control"></label><label>属性<select id="attackerAttribute" class="form-select"><option>火</option><option>水</option><option>風</option><option>全</option></select></label><label>攻撃倍率<input id="attackMultiplier" type="number" value="1" step=".01" class="form-control"></label><label>問題<select id="questionMultiplier" class="form-select"><option value="1.8">超難関</option><option value="1" selected>通常</option></select></label><label>自力<select id="soloMultiplier" class="form-select"><option value="1.2">自力</option><option value="1">他力</option></select></label><label>速度<select id="speedMultiplier" class="form-select"><option value="1.2">excellent</option><option value="1">correct</option></select></label></div><div class="skill-card"><div><b>攻撃キャラのスキル</b><p id="attackerSkillText">キャラ未選択</p></div><button id="attackerSkillButton" class="btn btn-sm btn-outline-primary" disabled>使用する</button></div><div id="attackerSkillApplied" class="skill-applied" hidden></div></article><article class="battle-side defense"><h3>敵キャラ</h3><div id="defenderCharacter" class="selected-character"><img alt=""><div><b>未選択</b><small>詳細画面から選択</small></div></div><div class="calc-fields"><label>HP<input id="defenderHP" type="number" min="0" value="0" class="form-control"></label><label>属性<select id="defenderAttribute" class="form-select"><option>火</option><option>水</option><option>風</option><option>全</option></select></label><label>カット率 (%)<input id="manualCutRate" type="number" value="0" min="0" max="99" class="form-control"></label></div><div class="skill-card"><div><b>敵キャラのスキル</b><p id="defenderSkillText">キャラ未選択</p></div><button id="defenderSkillButton" class="btn btn-sm btn-outline-primary" disabled>使用する</button></div><div id="defenderSkillApplied" class="skill-applied" hidden></div></article></div><div class="results"><div>ダメージ<strong id="damageResult">0</strong></div><div>削れるHP<strong id="damagePercentResult">0%</strong></div><div>残りHP<strong id="remainingHpResult">0</strong></div><div>回復量<strong id="healResult">0</strong><small>効果量50%</small></div><p id="defeatResult">数値を入力してください</p></div></main></section><section id="tierPage" class="tool-page" hidden>
 <div class="container py-4">
   <div class="row g-4 align-items-start">
 
@@ -78,7 +78,7 @@
   <footer class="text-center mt-5 text-muted small">
     <p>英語物語 非公式ツール</p>
   </footer>
-</div>
+</div></section>
 
 
 <div id="zkModal" class="zk-modal" role="dialog" aria-modal="true" aria-labelledby="zkModalName" aria-hidden="true">
@@ -91,6 +91,7 @@
     </div>
     <div id="zkModalStats" class="zk-modal-stats"></div>
     <div id="zkModalSkillBlock" class="zk-modal-skill-block"><div class="zk-modal-skill-head"><div class="zk-modal-label">ゆるスキル</div><div id="zkModalSkillTurn" class="zk-modal-turn"></div></div><p id="zkModalSkill" class="zk-modal-skill"></p></div>
+    <div class="calculator-select-actions"><button id="selectAsAttacker" class="btn btn-danger">攻撃キャラに使う</button><button id="selectAsDefender" class="btn btn-primary">敵キャラに使う</button></div>
   </div>
   <button class="zk-modal-nav zk-modal-next" type="button" onclick="switchCharacterDetails(1)" aria-label="次のキャラ">&#10095;</button>
 </div>
