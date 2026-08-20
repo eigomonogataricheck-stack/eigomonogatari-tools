@@ -75,6 +75,9 @@ var zkPressStart = null;
 var zkSuppressClick = false;
 var zkCurrentIndex = -1;
 var zkDisplayedDetailOrder = [];
+
+// 1 = 次、-1 = 前
+var zkLastDirection = 1;
 var zkDetailsBound = false;
 var tierDisplayedIds = [];
 var zkDataPromise = null;
@@ -291,9 +294,69 @@ function bindZukanDetails(){
     });
   }
 
-  document.addEventListener('keydown', function(event){
-    if(event.key === 'Escape') closeCharacterDetails();
-  });
+  document.addEventListener(
+  'keydown',
+  function(event) {
+    // Escは入力中でも詳細を閉じられる
+    if (event.key === 'Escape') {
+      closeCharacterDetails();
+      return;
+    }
+
+    // 詳細画面が開いていない場合は無効
+    var modal =
+      document.getElementById('zkModal');
+
+    if (
+      !modal ||
+      !modal.classList.contains('op')
+    ) {
+      return;
+    }
+
+    // 検索欄、意見箱、選択欄などへの入力中は無効
+    if (isShortcutInputActive_()) {
+      return;
+    }
+
+    var key =
+      String(event.key || '').toLowerCase();
+
+    // A、J、←: 前
+    if (
+      key === 'a' ||
+      key === 'j' ||
+      event.key === 'ArrowLeft'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(-1);
+      return;
+    }
+
+    // D、K、→: 次
+    if (
+      key === 'd' ||
+      key === 'k' ||
+      event.key === 'ArrowRight'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(1);
+      return;
+    }
+
+    // Space、Enter:
+    // 最後に操作した方向を繰り返す
+    if (
+      event.code === 'Space' ||
+      event.key === 'Enter'
+    ) {
+      event.preventDefault();
+      switchCharacterDetails(
+        zkLastDirection
+      );
+    }
+  }
+);
 }
 
 function cancelZukanPress(){
@@ -372,18 +435,52 @@ function openTierCharacterDetails(characterId){
     .catch(function(error){ console.error('キャラ詳細の読み込みに失敗しました。',error); });
 }
 
-function switchCharacterDetails(direction){
-  if(!zkData || zkCurrentIndex < 0 || zkDisplayedDetailOrder.length === 0) return;
+function switchCharacterDetails(direction) {
+  if (
+    !zkData ||
+    zkCurrentIndex < 0 ||
+    zkDisplayedDetailOrder.length === 0
+  ) {
+    return;
+  }
 
-  // JSON配列順ではなく、現在画面に並んでいる順番で移動する。
-  var position = zkDisplayedDetailOrder.indexOf(zkCurrentIndex);
-  if(position === -1) position = 0;
+  // キーボード・画面ボタンの両方で方向を記憶
+  zkLastDirection = direction < 0 ? -1 : 1;
+
+  var position =
+    zkDisplayedDetailOrder.indexOf(zkCurrentIndex);
+
+  if (position === -1) {
+    position = 0;
+  }
 
   var nextPosition = (
-    position + direction + zkDisplayedDetailOrder.length
+    position +
+    zkLastDirection +
+    zkDisplayedDetailOrder.length
   ) % zkDisplayedDetailOrder.length;
 
-  openCharacterDetails(zkDisplayedDetailOrder[nextPosition]);
+  openCharacterDetails(
+    zkDisplayedDetailOrder[nextPosition]
+  );
+}
+
+function isShortcutInputActive_() {
+  var element = document.activeElement;
+
+  if (!element) {
+    return false;
+  }
+
+  var tagName =
+    String(element.tagName || '').toLowerCase();
+
+  return (
+    tagName === 'input' ||
+    tagName === 'textarea' ||
+    tagName === 'select' ||
+    element.isContentEditable
+  );
 }
 
 function getAttributeTheme_(attribute){
