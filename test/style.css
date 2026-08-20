@@ -163,33 +163,4 @@ label,.fields label{font-size:.76rem!important}input,select,textarea,button{font
 .detail-nav{position:relative!important;inset:auto!important;transform:none!important;width:58px!important;height:82px!important;flex:0 0 58px!important;font-size:2.8rem!important}.detail-hero{gap:18px!important;margin-bottom:18px!important}.detail-image-frame{width:126px!important;height:126px!important}.detail-hero h2{font-size:1.42rem!important}.detail-hero p{font-size:.98rem!important}.detail-stat{padding:11px 13px!important;font-size:.88rem!important}.detail-skill{margin-top:18px!important;padding:15px 17px!important}.detail-skill p{font-size:.92rem!important;line-height:1.6!important}.detail-actions button{font-size:.82rem!important;padding:8px 10px!important}
 .damage-range{font-size:1.65rem!important}.damage-meta,.kill-result,.ghost{font-size:.86rem!important}
 @media(max-width:800px){html,body{font-size:13px!important}.content{padding:9px!important}.panel{padding:12px!important}.picker-panel{width:96vw!important;padding:16px!important}.detail-panel,#detail .modalpanel{width:calc(100vw - 82px)!important;padding:18px 14px!important;max-height:92vh!important}.detail-nav{width:34px!important;height:54px!important;flex-basis:34px!important;font-size:1.8rem!important}.detail-image-frame{width:84px!important;height:84px!important}.detail-hero h2{font-size:1.1rem!important}}
-/* 20260821-06: picker / detail / tier restoration */
-html,body{overflow-x:hidden!important;font-size:14px!important}
-/* キャラ選択は図鑑ページと同じ全幅階層 */
-#picker.overlay{display:flex!important;align-items:center!important;justify-content:center!important;padding:18px!important;overflow:hidden!important}
-#picker.overlay[hidden]{display:none!important}
-#picker .picker-modal{position:relative!important;width:min(1180px,94vw)!important;height:92vh!important;max-width:none!important;max-height:92vh!important;margin:0!important;padding:20px 24px!important;overflow-y:auto!important;overflow-x:hidden!important;border-radius:16px!important;background:#fff!important}
-#pickerBox{display:block!important;width:100%!important;max-width:100%!important}
-#pickerBox>.zk-l1{display:block!important;width:100%!important;max-width:100%!important;margin:8px 0!important}
-#pickerBox .zk-b1,#pickerBox .zk-b2,#pickerBox .zk-b3{display:flex!important;width:100%!important;max-width:100%!important;min-width:0!important}
-#pickerBox .zk-bd,#pickerBox .zk-body{width:100%!important;max-width:100%!important}
-#pickerBox .zk-grid{display:flex!important;flex-wrap:wrap!important;width:100%!important;gap:4px!important}
-#pickerBox .zk-card{width:64px!important;flex:0 0 64px!important}
-/* 大分類色: 通常ゆる=緑、特殊ゆる=赤 */
-.zk-b1.large-normal{background:#198754!important}.zk-b1.large-special{background:#dc3545!important}
-/* 詳細画面を従来カードデザインへ戻し中央固定 */
-#detail.detail-overlay{display:flex!important;align-items:center!important;justify-content:center!important;gap:12px!important;padding:18px!important;overflow:hidden!important}
-#detail.detail-overlay[hidden]{display:none!important}
-#detail .detail-modal{--zk-accent:#6c757d;--zk-theme:#6c757d;--zk-theme-soft:#f1f3f5;position:relative!important;inset:auto!important;transform:none!important;width:min(646px,calc(100vw - 150px))!important;max-width:646px!important;max-height:88vh!important;margin:0!important;padding:30px!important;overflow-y:auto!important;overflow-x:hidden!important;border-radius:24px!important;background:#fff!important;box-shadow:0 18px 55px rgba(0,0,0,.28)!important}
-#detail .detail-modal:before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:var(--zk-theme)}
-#detail .detail-head{display:flex!important;align-items:center!important;gap:22px!important;padding-right:45px!important;margin-bottom:20px!important}
-#detail .detail-image-frame{width:146px;height:146px;flex:none;padding:4px;border-radius:18px;background:var(--zk-theme)}
-#detail .detail-image-frame img{display:block;width:100%;height:100%;border:0;border-radius:14px;object-fit:cover;background:#eee}
-#detail .detail-head h2{margin:0 0 7px;font-size:1.55rem!important}#detail .detail-head p{margin:0;color:var(--zk-accent);font-size:1rem;font-weight:800}
-#detail .stats{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important}
-#detail .stats>div{display:flex!important;justify-content:space-between!important;padding:13px 15px!important;border-radius:11px!important;background:var(--zk-theme-soft)!important;font-size:.92rem!important}#detail .stats strong,#detail .stats b{color:var(--zk-accent)!important}
-#detail .skill-detail{margin-top:20px!important;padding:17px 19px!important;border-left:5px solid var(--zk-accent)!important;border-radius:13px!important;background:var(--zk-theme-soft)!important}
-#detail .skill-detail-head{display:flex;align-items:center;justify-content:space-between;color:var(--zk-accent);font-size:.94rem}#detail .skill-detail-head span{padding:4px 9px;border-radius:999px;background:var(--zk-theme);color:#fff;font-weight:700}#detail .skill-detail p{margin:10px 0 0;font-size:.98rem!important;line-height:1.65!important}
-#detail .actions{display:flex;gap:9px;margin-top:16px}#detail .actions button{flex:1;padding:10px;font-size:.84rem}
-#detail .detail-nav{position:relative!important;inset:auto!important;transform:none!important;flex:0 0 52px!important;width:52px!important;height:76px!important;border-radius:13px!important;font-size:2.4rem!important}
-@media(max-width:700px){html,body{font-size:13px!important}#picker .picker-modal{width:96vw!important;padding:16px!important}#detail{gap:4px!important;padding:6px 2px!important}#detail .detail-modal{width:calc(100vw - 78px)!important;padding:20px 14px!important}#detail .detail-nav{flex-basis:33px!important;width:33px!important;height:52px!important;font-size:1.8rem!important}#detail .detail-image-frame{width:92px;height:92px}#detail .detail-head{gap:13px}#detail .detail-head h2{font-size:1.15rem!important}}
+.zk-b1>span,.zk-b2>span,.zk-b3>span{flex:none;margin-left:8px}
