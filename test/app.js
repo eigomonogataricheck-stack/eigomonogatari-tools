@@ -44,6 +44,7 @@ function effectList(role){
 function rawEffectName(effect){return String(effect?.effect??'').trim()}
 function effectName(effect){
   const name=rawEffectName(effect);
+  if(['色変','属性変更','属性変化'].includes(name))return'色変';
   if(['シールド','被ダメージ減少','ダメージ軽減','軽減'].includes(name))return'シールド';
   if(['攻撃力アップ','攻撃力増加','攻撃力上昇'].includes(name))return'攻撃力アップ';
   return name;

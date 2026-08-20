@@ -8,7 +8,7 @@
 
 /* build 20260821-11 */
 .opinion p{margin:0 0 10px;color:#5f6368}.opinion textarea{display:block;width:100%;min-height:150px;resize:vertical}.opinion .primary{margin-top:10px}.opinion-link{margin-top:14px!important}.opinion-link a{color:#0b57d0;font-weight:700;text-decoration:none}.opinion-link a:hover{text-decoration:underline}
-</style><meta name="eigo-ui-build" content="20260821-17"></head><body>
+</style><meta name="eigo-ui-build" content="20260821-18"></head><body>
 <header class="topbar"><button id="menuToggle" class="hamburger" aria-label="メニュー開閉"><i></i><i></i><i></i></button><b>英語物語 対戦ツール</b></header>
 <div class="shell"><aside id="sidebar" class="sidebar open"><button data-page="calculator" class="active">計算機</button><button data-page="zukan">図鑑</button><button data-page="tier">Tier表</button><button data-page="opinion">意見箱</button></aside><main>
 <section id="page-calculator" class="page active"><div class="panel"><h1>ダメージ計算機</h1><div class="battle">
@@ -66,6 +66,7 @@ function effectList(role){
 function rawEffectName(effect){return String(effect?.effect??'').trim()}
 function effectName(effect){
   const name=rawEffectName(effect);
+  if(['色変','属性変更','属性変化'].includes(name))return'色変';
   if(['シールド','被ダメージ減少','ダメージ軽減','軽減'].includes(name))return'シールド';
   if(['攻撃力アップ','攻撃力増加','攻撃力上昇'].includes(name))return'攻撃力アップ';
   return name;
