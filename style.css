@@ -8,3 +8,13 @@
 
 /* build 20260821-11 */
 
+
+/* build 20260821-22: search */
+#pickerBox[data-empty="true"]::before{content:"該当するキャラはいません";display:block;padding:18px;text-align:center;color:#6b7280}
+
+/* build 20260821-23: calculator field layout */
+.attacker-fields,.defender-fields{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.attack-buff-field{grid-column:1 / -1}
+.cut-rates-field{grid-column:1 / -1;grid-row:2 / span 2}
+.cut-rates-field textarea{min-height:92px;resize:vertical}
+@media(max-width:800px){.attacker-fields,.defender-fields{grid-template-columns:1fr!important}.attack-buff-field,.cut-rates-field{grid-column:1;grid-row:auto}.cut-rates-field textarea{min-height:88px}}
