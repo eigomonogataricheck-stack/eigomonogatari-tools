@@ -35,7 +35,8 @@ function syncSkill(r){let b=$(r+'SkillBtn');b.textContent=skillEnabled[r]?'ス�
 function pick(o,keys){for(const k of keys)if(o&&o[k]!=null&&o[k]!=='')return o[k];return ''}
 function numberOf(v){let m=String(v??'').match(/-?\d+(?:\.\d+)?/);return m?Number(m[0]):0}
 function structuredEffects(c){let d=c?.details||{};let raw=d.skillEffects||c?.skillEffects||d.skills||c?.skills||[];if(!Array.isArray(raw))return[];return raw.map(normalizeEffect).filter(Boolean)}
-function normalizeEffect(e){if(!e||typeof e!=='object')return null;let type=String(pick(e,['スキル効果','effect','type','name'])).trim();if(!type)return null;const aliases={'属性変更':'色変','属性変化':'色変','攻撃力増加':'攻撃力アップ','連続攻撃':'連撃','ダメージ軽減':'シールド','攻撃集中':'集中'};type=aliases[type]||type;return{type,value:pick(e,['効果量','value','amount','rate']),applier:String(pick(e,['適用者','applier','source'])).trim(),target:String(pick(e,['対象者','target','recipient'])).trim(),raw:e}}
+function normalizeParty(v){v=String(v??'').trim().replace(/属性/g,'');const aliases={'自分':'自身','味方全員':'全員','味方':'全員','敵':'敵全員'};return canon(aliases[v]||v)}
+function normalizeEffect(e){if(!e||typeof e!=='object')return null;let type=String(pick(e,['スキル効果','effect','type','name'])).trim();if(!type)return null;const aliases={'属性変更':'色変','属性変化':'色変','攻撃力増加':'攻撃力アップ','連続攻撃':'連撃','ダメージ軽減':'シールド','被ダメージ減少':'シールド','被ダメージ軽減':'シールド','攻撃集中':'集中'};type=aliases[type]||type;return{type,value:pick(e,['効果量','value','amount','rate']),applier:normalizeParty(pick(e,['適用者','applier','source'])),target:normalizeParty(pick(e,['対象者','target','recipient'])),raw:e,source:'structured'}}
 function parseSkillText(c){let text=String(c?.details?.skill||c?.skill||''),out=[],m;
   if((m=text.match(/(?:自身|味方全員|リーダー)の属性を(火水|水風|風火|火風|火|水|風|全)属性に変更/)))out.push({type:'色変',value:canon(m[1]),applier:text.includes('リーダー')?'リーダー':text.includes('味方全員')?'全員':'自身',target:''});
   if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の)?(?:味方全員|自身|リーダー)の攻撃力を(\d+(?:\.\d+)?)%増加/)))out.push({type:'攻撃力アップ',value:Number(m[2]),applier:m[1]?canon(m[1]):text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:''});
@@ -46,7 +47,17 @@ function parseSkillText(c){let text=String(c?.details?.skill||c?.skill||''),out=
   if((m=text.match(/(?:(火水|水風|風火|火風|火|水|風|全)属性の)?(?:味方全員|自身|リーダー)の攻撃が(\d+)回連続攻撃/)))out.push({type:'連撃',value:Number(m[2]),applier:m[1]?canon(m[1]):text.includes('リーダー')?'リーダー':text.includes('自身')?'自身':'全員',target:''});
   return out;
 }
-function effectsOf(c){const structured=structuredEffects(c).filter(e=>IGNORED_EFFECTS.includes(e.type)||e.type==='色変'?Boolean(canon(e.value)):numberOf(e.value)!==0);const parsed=parseSkillText(c);const all=[...structured,...parsed],seen=new Set();return all.filter(e=>{const key=[e.type,canon(e.value),e.applier,e.target].join('|');if(seen.has(key))return false;seen.add(key);return true})}
+function effectUsable(e){return IGNORED_EFFECTS.includes(e.type)||(e.type==='色変'?ATTRS.includes(canon(e.value)):numberOf(e.value)!==0)}
+function semanticEffectKey(e){return [e.type,canon(e.value),normalizeParty(e.applier),normalizeParty(e.target)].join('|')}
+function effectsOf(c){
+  const structured=structuredEffects(c).filter(effectUsable);
+  const parsed=parseSkillText(c).map(e=>({...e,applier:normalizeParty(e.applier),target:normalizeParty(e.target),source:'parsed'})).filter(effectUsable);
+  if(!structured.length)return parsed;
+  const structuredTypes=new Set(structured.map(e=>e.type));
+  const merged=[...structured,...parsed.filter(e=>!structuredTypes.has(e.type))];
+  const seen=new Set();
+  return merged.filter(e=>{const key=semanticEffectKey(e);if(seen.has(key))return false;seen.add(key);return true});
+}
 function containsAttribute(current,condition){let cur=canon(current),cond=canon(condition);if(!cond)return true;if(ALWAYS_APPLIERS.includes(condition)||ALWAYS_TARGETS.includes(condition))return true;if(cond==='全員'||cond==='敵全員')return true;if(cond==='全')return true;if(['火水','水風','風火'].includes(cond))return cur===cond;return cur.includes(cond)}
 function applicable(effect,applierAttr,targetAttr){let applierOK=!effect.applier||ALWAYS_APPLIERS.includes(effect.applier)||containsAttribute(applierAttr,effect.applier);let targetOK=!effect.target||ALWAYS_TARGETS.includes(effect.target)||containsAttribute(targetAttr,effect.target);return applierOK&&targetOK}
 function effectValue(e){return numberOf(e.value)}
