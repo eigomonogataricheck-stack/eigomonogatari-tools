@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-20T17:50:19.310Z",
+  "generatedAt": "2026-08-20T18:16:56.754Z",
   "characters": [
     {
       "id": 1189,
@@ -32862,6 +32862,7 @@
         "cost": 16,
         "hp": 1060,
         "power": 1160,
+        "limitBreak": 7,
         "limitHp": 1806,
         "limitPower": 1976,
         "skillTurn": 5,
@@ -32887,6 +32888,7 @@
         "cost": 26,
         "hp": 1960,
         "power": 2060,
+        "limitBreak": 7,
         "limitHp": 3340,
         "limitPower": 3510,
         "skillTurn": 6,
@@ -32944,6 +32946,7 @@
         "cost": 14,
         "hp": 810,
         "power": 1570,
+        "limitBreak": 7,
         "limitHp": 1380,
         "limitPower": 2675,
         "skillTurn": 4,
@@ -32969,6 +32972,7 @@
         "cost": 43,
         "hp": 3140,
         "power": 1592,
+        "limitBreak": 7,
         "limitHp": 5350,
         "limitPower": 2712,
         "skillTurn": 3,
@@ -32994,6 +32998,7 @@
         "cost": 53,
         "hp": 1081,
         "power": 3800,
+        "limitBreak": 7,
         "limitHp": 1842,
         "limitPower": 6475,
         "skillTurn": 2,
@@ -33011,105 +33016,390 @@
       "name": "どろたにょん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2218.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2218,
+        "name": "どろたにょん",
+        "attribute": "水風",
+        "cost": 22,
+        "hp": 1800,
+        "power": 900,
+        "limitBreak": 7,
+        "limitHp": 3067,
+        "limitPower": 1533,
+        "skillTurn": 1,
+        "skill": "3ターンの間、風属性の敵に対する味方全員の攻撃力を25%増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2219,
       "name": "どろんにょ先輩",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2219.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2219,
+        "name": "どろんにょ先輩",
+        "attribute": "水風",
+        "cost": 44,
+        "hp": 2800,
+        "power": 1400,
+        "limitBreak": 7,
+        "limitHp": 4771,
+        "limitPower": 2385,
+        "skillTurn": 1,
+        "skill": "3ターンの間、風属性の敵に対する味方全員の攻撃力を33%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2220,
       "name": "女天下！どろーニャ",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2220.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2220,
+        "name": "女天下！どろーニャ",
+        "attribute": "風火",
+        "cost": 42,
+        "hp": 3800,
+        "power": 1800,
+        "limitBreak": 7,
+        "limitHp": 6475,
+        "limitPower": 3067,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身の攻撃力を500%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2221,
       "name": "ぴんおんぱんちゃん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2221.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2221,
+        "name": "ぴんおんぱんちゃん",
+        "attribute": "火",
+        "cost": 17,
+        "hp": 1660,
+        "power": 1450,
+        "limitBreak": 7,
+        "limitHp": 2828,
+        "limitPower": 2470,
+        "skillTurn": 3,
+        "skill": "風属性の味方全員のスキルカウントを2減少させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2222,
       "name": "饅頭祭ぴよ子",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2222.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2222,
+        "name": "饅頭祭ぴよ子",
+        "attribute": "火",
+        "cost": 39,
+        "hp": 2890,
+        "power": 2590,
+        "limitBreak": 7,
+        "limitHp": 4924,
+        "limitPower": 4413,
+        "skillTurn": 4,
+        "skill": "風属性の味方全員のスキルカウントを3減少させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2223,
       "name": "ぴんおんぱん娘。",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2223.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2223,
+        "name": "ぴんおんぱん娘。",
+        "attribute": "火水",
+        "cost": 58,
+        "hp": 2448,
+        "power": 2780,
+        "limitBreak": 7,
+        "limitHp": 4171,
+        "limitPower": 4737,
+        "skillTurn": 1,
+        "skill": "1ターンの間、味方全員に火属性の敵からのダメージを40%軽減するシールドを与える。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2244,
       "name": "マンジェリこん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2244.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2244,
+        "name": "マンジェリこん",
+        "attribute": "風",
+        "cost": 23,
+        "hp": 1350,
+        "power": 1350,
+        "limitBreak": 7,
+        "limitHp": 2300,
+        "limitPower": 2300,
+        "skillTurn": 1,
+        "skill": "1ターンの間、味方全員に水属性の敵からのダメージを54%軽減するシールドを与える。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2245,
       "name": "イワシ祭りのジェリ子",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2245.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2245,
+        "name": "イワシ祭りのジェリ子",
+        "attribute": "風",
+        "cost": 55,
+        "hp": 3400,
+        "power": 2100,
+        "limitBreak": 7,
+        "limitHp": 5793,
+        "limitPower": 3578,
+        "skillTurn": 1,
+        "skill": "1ターンの間、風属性の味方全員に水属性の敵からのダメージを58%軽減するシールドを与える。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2246,
       "name": "鰯売り恋のマンジェリ子",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2246.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2246,
+        "name": "鰯売り恋のマンジェリ子",
+        "attribute": "風",
+        "cost": 42,
+        "hp": 2100,
+        "power": 3400,
+        "limitBreak": 7,
+        "limitHp": 3578,
+        "limitPower": 5793,
+        "skillTurn": 2,
+        "skill": "3ターンの間、自身の属性を火属性に変更する。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2247,
       "name": "ほおずきおこしん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2247.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2247,
+        "name": "ほおずきおこしん",
+        "attribute": "風火",
+        "cost": 19,
+        "hp": 1460,
+        "power": 1260,
+        "limitBreak": 7,
+        "limitHp": 2487,
+        "limitPower": 2147,
+        "skillTurn": 2,
+        "skill": "1ターンの間、味方全員の属性を火属性に変更する。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2248,
       "name": "鬼灯ズキ子",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2248.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2248,
+        "name": "鬼灯ズキ子",
+        "attribute": "風火",
+        "cost": 30,
+        "hp": 2700,
+        "power": 1790,
+        "limitBreak": 7,
+        "limitHp": 4601,
+        "limitPower": 3050,
+        "skillTurn": 2,
+        "skill": "1ターンの間、味方全員の属性を火属性に変更する。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2249,
       "name": "ほおずき市の浅子さん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2249.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2249,
+        "name": "ほおずき市の浅子さん",
+        "attribute": "火",
+        "cost": 46,
+        "hp": 800,
+        "power": 4600,
+        "limitBreak": 7,
+        "limitHp": 1363,
+        "limitPower": 7838,
+        "skillTurn": 1,
+        "skill": "1ターンの間、自身の攻撃力を80%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2250,
       "name": "悩める織女",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2250.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2250,
+        "name": "悩める織女",
+        "attribute": "火",
+        "cost": 16,
+        "hp": 1200,
+        "power": 2000,
+        "limitBreak": 7,
+        "limitHp": 2044,
+        "limitPower": 3408,
+        "skillTurn": 4,
+        "skill": "味方全員のスキルカウントを1減少させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2251,
       "name": "恋する牛郎",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2251.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2251,
+        "name": "恋する牛郎",
+        "attribute": "火",
+        "cost": 50,
+        "hp": 1900,
+        "power": 3600,
+        "limitBreak": 7,
+        "limitHp": 3237,
+        "limitPower": 6134,
+        "skillTurn": 4,
+        "skill": "味方全員のスキルカウントを2減少させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 2252,
       "name": "超おり姫！",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2252.png",
       "largeCategory": "特殊ゆる",
-      "middleCategory": "限定"
+      "middleCategory": "限定",
+      "details": {
+        "id": 2252,
+        "name": "超おり姫！",
+        "attribute": "水風",
+        "cost": 54,
+        "hp": 3360,
+        "power": 2030,
+        "limitBreak": 7,
+        "limitHp": 5725,
+        "limitPower": 3459,
+        "skillTurn": 1,
+        "skill": "5ターンの間、水属性の敵に対する味方全員の攻撃力を20%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "needsReview": true
+          }
+        ]
+      }
     },
     {
       "id": 1219,
@@ -44825,7 +45115,31 @@
       "largeCategory": "通常ゆる",
       "middleCategory": "国内",
       "smallCategory": "東北",
-      "heading": "宮城"
+      "heading": "宮城",
+      "details": {
+        "id": 624,
+        "name": "独眼竜！梵天。",
+        "attribute": "水",
+        "cost": 23,
+        "hp": 1400,
+        "power": 1600,
+        "limitBreak": 6,
+        "limitHp": 2254,
+        "limitPower": 2576,
+        "skillTurn": 5,
+        "skill": "2ターンの間、味方全員の攻撃が全体攻撃になる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 2,
+            "applier": "味方全員",
+            "target": "味方全員",
+            "sourceText": "2ターンの間、味方全員の攻撃が全体攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 636,
