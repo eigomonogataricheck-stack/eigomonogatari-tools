@@ -121,3 +121,13 @@ body.zk-modal-open{overflow:hidden}
 .zk-has-details::after{background:#e8f5ee;color:#157347;font-size:.46rem;padding:1px 4px;box-shadow:none}
 .zk-stat{border:0!important;box-shadow:none!important;background:var(--zk-theme-soft)}
 .zk-modal-skill-block{border-top:0!important;border-right:0!important;border-bottom:0!important;border-left:4px solid var(--zk-accent)!important}
+
+
+/* 画面幅を広く使用 */
+.container{width:calc(100vw - 32px);max-width:1600px!important;margin:0 auto;padding:28px 32px}
+@media (max-width:767px){body{padding:8px}.container{width:100%;max-width:none!important;padding:16px}}
+
+/* 詳細画像の属性枠。複合属性では --zk-theme がグラデーションになる */
+.zk-modal-image-frame{flex:0 0 auto;width:98px;height:98px;padding:3px;border-radius:15px;background:var(--zk-theme);box-shadow:0 5px 16px color-mix(in srgb,var(--zk-accent) 24%,transparent)}
+.zk-modal-image-frame .zk-modal-image{display:block;width:100%;height:100%;border:0!important;border-radius:12px;box-shadow:none;object-fit:cover;background:#f0f0f0}
+@media (max-width:480px){.zk-modal-image-frame{width:88px;height:88px}}

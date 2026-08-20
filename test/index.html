@@ -85,7 +85,10 @@
   <button class="zk-modal-nav zk-modal-prev" type="button" onclick="switchCharacterDetails(-1)" aria-label="前のキャラ">&#10094;</button>
   <div id="zkModalPanel" class="zk-modal-panel">
     <button id="zkModalClose" class="zk-modal-close" type="button" onclick="closeCharacterDetails()" aria-label="閉じる">&times;</button>
-    <div class="zk-modal-hero"><img id="zkModalImage" class="zk-modal-image" src="" alt=""><div><h5 id="zkModalName" class="zk-modal-name"></h5><div id="zkModalMeta" class="zk-modal-meta"></div></div></div>
+    <div class="zk-modal-hero">
+      <div id="zkModalImageFrame" class="zk-modal-image-frame"><img id="zkModalImage" class="zk-modal-image" src="" alt=""></div>
+      <div><h5 id="zkModalName" class="zk-modal-name"></h5><div id="zkModalMeta" class="zk-modal-meta"></div></div>
+    </div>
     <div id="zkModalStats" class="zk-modal-stats"></div>
     <div id="zkModalSkillBlock" class="zk-modal-skill-block"><div class="zk-modal-skill-head"><div class="zk-modal-label">ゆるスキル</div><div id="zkModalSkillTurn" class="zk-modal-turn"></div></div><p id="zkModalSkill" class="zk-modal-skill"></p></div>
   </div>
