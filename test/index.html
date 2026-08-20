@@ -1,15 +1,71 @@
-<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>英語物語 対戦ツール</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"><link rel="stylesheet" href="style.css"></head><body>
-<header class="site-header"><button id="menuToggle" class="menu-toggle" aria-label="メニューを開閉"><span></span><span></span><span></span></button><strong>英語物語 対戦ツール</strong></header>
-<div class="site-layout"><aside id="sideMenu" class="side-menu is-open"><button data-page="calculator" class="menu-link active">ダメージ計算機</button><button data-page="zukan" class="menu-link">キャラ図鑑</button><button data-page="tier" class="menu-link">Tier表</button><button id="opinionOpen" class="menu-link">意見箱</button></aside><main class="page-area">
-<section id="page-calculator" class="page active"><div class="container"><div class="panel calculator-panel"><h4 class="text-center mb-4">ダメージ計算機</h4><div class="battle-grid">
-<div class="battle-column attack-column"><h5>攻撃キャラ</h5><button id="attackerSelect" class="character-slot" type="button"><span class="slot-image"></span><span><b>未選択</b><small>タップして図鑑から選択</small></span></button><label>Power</label><input id="attackerPower" class="form-control" type="number" min="0" value="0"><label>属性</label><select id="attackerAttribute" class="form-select"></select><div class="skill-box"><div><b>ゆるスキル</b><p id="attackerSkillText">キャラ未選択</p></div><button id="attackerSkillButton" class="btn btn-outline-danger btn-sm" disabled>スキル使用</button></div><div id="attackerSkillState" class="skill-state"></div></div>
-<div class="battle-column defense-column"><h5>攻撃対象キャラ</h5><button id="defenderSelect" class="character-slot" type="button"><span class="slot-image"></span><span><b>未選択</b><small>タップして図鑑から選択</small></span></button><label>HP</label><input id="defenderHp" class="form-control" type="number" min="0" value="0"><label>属性</label><select id="defenderAttribute" class="form-select"></select><div class="skill-box"><div><b>ゆるスキル</b><p id="defenderSkillText">キャラ未選択</p></div><button id="defenderSkillButton" class="btn btn-outline-primary btn-sm" disabled>スキル使用</button></div><div id="defenderSkillState" class="skill-state"></div></div></div>
-<button id="swapCharacters" class="btn btn-outline-secondary swap-button">⇄ 攻守を入れ替え</button>
-<div class="damage-card"><div class="damage-label">予想ダメージ</div><div class="damage-range"><span id="damageMin">0</span> ～ <span id="damageMax">0</span></div><div class="damage-base">（基準値 <span id="damageBase">0</span>）</div><div class="damage-percent">敵HPの <span id="damagePercentMin">0.0</span>% ～ <span id="damagePercentMax">0.0</span>%</div><div class="damage-percent-base">（基準値 <span id="damagePercentBase">0.0</span>%）</div><div class="attribute-line">属性：× <span id="attributeFraction">2/3</span></div></div>
-<div class="damage-card ghost-card"><div class="damage-label">幽霊攻撃への耐久</div><div class="ghost-range"><span id="ghostHits">0発</span></div><div class="damage-base">（基準値 <span id="ghostHitsBase">0発</span>）</div><div class="damage-percent">1発あたりHPの <span id="ghostPercentMin">0.0</span>% ～ <span id="ghostPercentMax">0.0</span>%</div><div class="damage-percent-base">（基準値 <span id="ghostPercentBase">0.0</span>%）</div></div></div></div></section>
-<section id="page-zukan" class="page"><div class="container"><div class="panel"><h4 class="text-center mb-3">キャラ図鑑</h4><button class="btn btn-outline-success w-100 py-2 fw-bold" id="zkBtn">キャラ図鑑を表示</button><div id="zkLoader" class="text-center mt-3" hidden><div class="spinner-border text-success me-2"></div>読み込み中...</div><div id="zkControls" class="mt-3" hidden><input id="zkSearch" class="form-control mb-2" placeholder="キャラ名で検索..."><div class="d-flex justify-content-between"><span id="zkCount" class="text-muted small"></span><button id="toggleAll" class="btn btn-sm btn-outline-secondary">全て開く/閉じる</button></div></div><div id="zkBox" class="mt-2"></div></div></div></section>
-<section id="page-tier" class="page"><div class="container"><div class="panel"><h4 class="text-center mb-4">Tier表生成</h4><div class="mb-3"><label>モード</label><select id="mode" class="form-select"><option>ランクアップ率</option><option>使用者数</option></select></div><div class="row mb-3"><div class="col-6"><label>属性縛り</label><select id="attribute" class="form-select"><option value="">指定なし</option></select></div><div class="col-6"><label>コスト帯縛り</label><select id="cost" class="form-select"><option value="">指定なし</option><option>低</option><option>中</option><option>高</option><option>超高</option></select></div></div><div class="row mb-3"><div class="col-4"><label>枠</label><select id="waku" class="form-select"><option value="">指定なし</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div class="col-4"><label>補正</label><select id="hosei" class="form-select"><option value="0">含まない</option><option value="">含む</option><option value="1">補正のみ</option></select></div><div class="col-4"><label>信頼度</label><select id="minCount" class="form-select"><option value="5">低</option><option value="10" selected>中</option><option value="20">高</option></select></div></div><button class="btn btn-primary w-100 py-3 fw-bold" id="tierButton">Tierを生成・表示</button><div id="tier-result" class="mt-4"></div></div></div></section>
-</main></div>
-<div id="characterPicker" class="picker-modal" hidden><div class="picker-panel"><button class="modal-close" data-close="characterPicker">×</button><h5 id="pickerTitle">キャラを選択</h5><input id="pickerSearch" class="form-control mb-3" placeholder="キャラ名で検索..."><div id="pickerBox" class="picker-grid"></div></div></div>
-<div id="zkModal" class="zk-modal" aria-hidden="true"><button class="zk-modal-nav" id="prevCharacter">‹</button><div id="zkModalPanel" class="zk-modal-panel"><button id="zkModalClose" class="zk-modal-close">×</button><div class="zk-modal-hero"><div class="zk-modal-image-frame"><img id="zkModalImage" class="zk-modal-image"></div><div><h5 id="zkModalName"></h5><div id="zkModalMeta" class="zk-modal-meta"></div></div></div><div id="zkModalStats" class="zk-modal-stats"></div><div id="zkModalSkillBlock" class="zk-modal-skill-block"><div class="zk-modal-skill-head"><b>ゆるスキル</b><span id="zkModalSkillTurn"></span></div><p id="zkModalSkill"></p></div><div id="detailActions" class="detail-actions"><button data-select="attacker" class="btn btn-outline-danger">攻撃キャラに設定</button><button data-select="defender" class="btn btn-outline-primary">攻撃対象に設定</button><button data-select="picker" class="btn btn-success">選択する</button></div></div><button class="zk-modal-nav" id="nextCharacter">›</button></div>
-<div id="opinionModal" class="picker-modal" hidden><div class="picker-panel opinion-panel"><button class="modal-close" data-close="opinionModal">×</button><h5>意見箱</h5><p class="opinion-title">匿名で送信されます</p><textarea id="opinionText" rows="5" class="form-control mb-2" placeholder="要望・不具合・感想など"></textarea><button id="opinionSubmit" class="btn btn-primary">送信</button><p id="opinionMsg" class="opinion-msg"></p></div></div><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>英語物語 対戦ツール</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <b>英語物語 対戦ツール</b>
+  <button id="menuToggle" class="hamburger" aria-label="メニューを開閉" aria-expanded="true"><span></span><span></span><span></span></button>
+</header>
+<div class="layout">
+  <aside id="sidebar" class="sidebar open">
+    <nav>
+      <button data-page="calculator" class="navitem active"><span>①</span>計算機</button>
+      <button data-page="zukan" class="navitem"><span>②</span>図鑑</button>
+      <button data-page="tier" class="navitem"><span>③</span>Tier表</button>
+      <button data-page="opinion" class="navitem"><span>✉</span>意見箱</button>
+    </nav>
+  </aside>
+  <main class="content">
+    <section id="page-calculator" class="page active">
+      <div class="panel calc-panel">
+        <h1>ダメージ計算機</h1>
+        <div class="battle-grid">
+          <article class="side attack">
+            <h2>攻撃キャラ</h2>
+            <button id="attackerPicker" class="character-pick"><span class="character-image"></span><span><strong>未選択</strong><small>タップして図鑑から選択</small></span></button>
+            <div class="fields">
+              <label>Power<input id="attackerPower" type="number" min="0" value="0"></label>
+              <label>属性<select id="attackerAttribute"></select></label>
+              <label>解答速度<select id="answerSpeed"><option value="1.2">Excellent（×1.2）</option><option value="1">Correct（×1.0）</option></select></label>
+              <label>自力モード<select id="selfMode"><option value="1.2">あり（×1.2）</option><option value="1">なし（×1.0）</option></select></label>
+              <label>イベント補正<select id="eventCorrection"><option value="1">なし（×1.0）</option><option value="1.5">あり（×1.5）</option></select></label>
+              <label>問題レベル<select id="questionLevel"><option value="1.45">小学生（×1.45）</option><option value="1.5">中1（×1.5）</option><option value="1.55">中2（×1.55）</option><option value="1.6">中3（×1.6）</option><option value="1.65">高1（×1.65）</option><option value="1.7">高2（×1.7）</option><option value="1.75">高3（×1.75）</option><option value="1.8" selected>難関（×1.8）</option></select></label>
+              <div class="attack-skills-field"><span>追加の攻撃補正</span><div id="attackSkillRows"></div><button id="addAttackSkill" class="skill-add" type="button">＋</button></div>
+            </div>
+            <div class="skill"><div><b>ゆるスキル</b><p id="attackerSkill">キャラ未選択</p><small id="attackerSkillEffect"></small></div><button id="attackerSkillBtn" disabled>スキル使用</button></div>
+          </article>
+          <article class="side defend">
+            <h2>攻撃対象キャラ</h2>
+            <button id="defenderPicker" class="character-pick"><span class="character-image"></span><span><strong>未選択</strong><small>タップして図鑑から選択</small></span></button>
+            <div class="fields">
+              <label>HP<input id="defenderHp" type="number" min="0" value="0"></label>
+              <label>属性<select id="defenderAttribute"></select></label>
+              <label class="full">追加の軽減率（%、カンマ区切り）<input id="cutRates" type="text" placeholder="例: 30,20"></label>
+            </div>
+            <div class="skill"><div><b>ゆるスキル</b><p id="defenderSkill">キャラ未選択</p><small id="defenderSkillEffect"></small></div><button id="defenderSkillBtn" disabled>スキル使用</button></div>
+          </article>
+        </div>
+        <button id="swap" class="swap">⇄ 攻守を入れ替え</button>
+        <section class="damage-card">
+          <p class="eyebrow">予想ダメージ</p>
+          <div id="damageRange" class="damage-range">0 ～ 0 ダメージ <span>（基準 0）</span></div>
+          <div class="calc-details"><span>属性相性 <b id="attributeRate">1</b></span><span>1発で削るHP <b id="damagePercent">0%～0%（基準0%）</b></span></div>
+          <div id="killResult" class="kill-result">数値を入力してください</div>
+        </section>
+        <section class="ghost"><h2>幽霊攻撃への耐久</h2><p class="ghost-note">幽霊Power 1000、補正1.944、属性相性2/3で計算</p><div id="ghostResult">攻撃対象のHPを入力してください</div></section>
+      </div>
+    </section>
+    <section id="page-zukan" class="page"><div class="panel"><h1>キャラ図鑑</h1><input id="zkSearch" class="search" placeholder="キャラ名で検索"><div id="zkStatus">読み込み中...</div><div id="zkBox" class="zukan-grid"></div></div></section>
+    <section id="page-tier" class="page"><div class="panel"><h1>Tier表</h1><div class="tier-controls"><label>モード<select id="mode"><option>ランクアップ率</option><option>使用者数</option></select></label><label>属性縛り<select id="attribute"><option value="">指定なし</option></select></label><label>コスト帯<select id="cost"><option value="">指定なし</option><option>低</option><option>中</option><option>高</option><option>超高</option></select></label><label>枠<select id="waku"><option value="">指定なし</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label><label>補正<select id="hosei"><option value="0">含まない</option><option value="">含む</option><option value="1">補正のみ</option></select></label><label>信頼度<select id="minCount"><option value="5">低</option><option value="10" selected>中</option><option value="20">高</option></select></label></div><button id="tierBtn" class="primary">Tierを生成・表示</button><div id="tierResult"></div></div></section>
+    <section id="page-opinion" class="page"><div class="panel opinion-page"><h1>意見箱</h1><p>匿名で送信されます</p><textarea id="opinionPageText" rows="7" placeholder="要望・不具合・感想など"></textarea><button id="opinionPageSubmit" class="primary">送信</button><p id="opinionPageMsg"></p><p><a href="https://docs.google.com/spreadsheets/d/1yFWnuUMKZ0XmICZgC1U2FMQGyr0d9pMOy3MxXvpXW_o/edit?gid=1973467694#gid=1973467694" target="_blank" rel="noopener">意見箱スプレッドシートを開く</a></p></div></section>
+  </main>
+</div>
+<div id="picker" class="modalx" hidden><div class="modalpanel pickerpanel"><button class="close" data-close="picker">×</button><h2 id="pickerTitle">キャラを選択</h2><input id="pickerSearch" class="search" placeholder="キャラ名で検索"><div id="pickerGrid" class="picker-tree"></div></div></div>
+<div id="detail" class="modalx" hidden><div class="modalpanel"><button class="close" data-close="detail">×</button><div class="detail-head"><img id="detailImage" alt=""><div><h2 id="detailName"></h2><p id="detailMeta"></p></div></div><div id="detailStats" class="detail-stats"></div><div id="detailLeader" class="detail-skill"></div><div id="detailSkill" class="detail-skill"></div><div id="detailActions" class="detail-actions"><button data-role="attacker">攻撃キャラに設定</button><button data-role="defender">攻撃対象に設定</button><button data-role="picker">選択する</button></div></div></div>
+<script src="app.js"></script>
+</body></html>
