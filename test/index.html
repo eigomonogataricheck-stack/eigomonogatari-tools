@@ -18,7 +18,7 @@ addEventListener('DOMContentLoaded',()=>{
   const oldAttack5=$('attackBuffRate5');if(oldAttack5)oldAttack5.parentElement.remove();
   makeFields('extraHitFields','extraHit','追加連撃',3);
   document.querySelectorAll('#extraHitFields label').forEach((label,index)=>{
-    label.firstChild.nodeValue=`追加連撃${index+1}（回）`;
+    label.firstChild.nodeValue=`追加連撃効果${index+1}（回）`;
     const input=label.querySelector('input');
     input.placeholder=index===0?'例: 5':'';
   });
