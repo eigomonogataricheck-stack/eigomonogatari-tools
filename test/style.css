@@ -2,11 +2,5 @@
 
 .inline-progressive{display:contents}.detail-modal{--accent:#6c757d;--bar:#6c757d;--soft:#f1f3f5}.detail-modal::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;border-radius:24px 24px 0 0;background:var(--bar)}.detail-head p,.stats>div b,.skill-detail>b{color:var(--accent)}.stats>div,.skill-detail{background:var(--soft)}.skill-detail{border-left-color:var(--accent)}.skill-detail>span{float:right;padding:4px 9px;border-radius:999px;background:var(--bar);color:#fff;font-weight:700}
 
-/* build 20260821-28 */
-.detail-head img{padding:4px;border:0!important;background:var(--bar);box-shadow:none}
-.detail-modal>.close{position:absolute;top:14px;right:14px;z-index:5;width:46px;height:46px;display:grid;place-items:center}
-.preview-modal{width:min(1180px,94vw);max-height:92vh;padding:24px;border-radius:18px;overflow:auto;text-align:center}
-.preview-modal h2{margin:4px 56px 18px}
-.preview-close{position:absolute;top:12px;right:12px;width:48px;height:48px;display:grid;place-items:center}
-.preview-modal>img{display:block;width:100%;height:auto;border:1px solid #ddd;border-radius:12px;background:#fff}
-.preview-modal>.download{width:auto;min-width:220px}
+/* build 20260821-30 */
+.calculator-title,.fighter-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.calculator-title{margin-bottom:18px}.calculator-title h1,.fighter-title h2{margin:0}.fighter-actions{display:flex;gap:6px}.reset-btn,.mini-reset{padding:6px 9px;border:1px solid #a9adb2;border-radius:7px;background:#fff;font-weight:700;font-size:.74rem}.mini-reset.danger{color:#b42318;border-color:#e1aaa5}.detail-close{position:absolute!important;top:12px!important;right:12px!important;z-index:20!important}.detail-head img{padding:4px!important;border:0!important;background:var(--bar)!important}.preview-modal{width:min(1320px,96vw);max-height:94vh;padding:20px;border-radius:16px;overflow:auto;text-align:center}.preview-modal>img{display:block;width:100%;height:auto;margin:12px auto;border:1px solid #ddd;background:#fff}.preview-actions{position:sticky;bottom:0;display:flex;gap:10px;justify-content:center;padding:12px;background:#fff}.preview-actions button{min-width:190px;padding:10px;border:1px solid #999;border-radius:8px;background:#fff;font-weight:700}@media(max-width:800px){.calculator-title,.fighter-title{align-items:flex-start}.fighter-actions{flex-direction:column}.reset-btn,.mini-reset{font-size:.66rem;padding:5px}.preview-actions{flex-direction:column}.preview-actions button{width:100%}}
