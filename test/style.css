@@ -167,3 +167,54 @@
   }
 }
 
+/* build 20260822-71: wider mobile character detail with bottom navigation */
+@media (max-width: 800px) {
+  #detail.detail-overlay {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, auto) 48px;
+    gap: 10px 12px !important;
+    align-content: center;
+    align-items: center;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) !important;
+  }
+  #detail.detail-overlay[hidden] { display: none !important; }
+  #detail .detail-modal {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: min(100%, 540px) !important;
+    max-height: calc(100dvh - 94px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    justify-self: center;
+    padding: 18px 14px !important;
+    border-radius: 18px !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  #detail #detailPrev { grid-column: 1; grid-row: 2; }
+  #detail #detailNext { grid-column: 2; grid-row: 2; }
+  #detail .detail-nav {
+    width: 100%;
+    max-width: 264px;
+    height: 48px;
+    justify-self: center;
+    border-radius: 12px;
+    font-size: 2rem;
+    line-height: 1;
+    box-shadow: 0 2px 10px #0002;
+  }
+  #detail .detail-head {
+    min-width: 0;
+    gap: 14px;
+    padding-right: 40px;
+  }
+  #detail .detail-head > div { min-width: 0; }
+  #detail #detailName {
+    margin: 0 0 6px;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
+  }
+  #detail .detail-close {
+    top: 10px !important;
+    right: 10px !important;
+  }
+}
