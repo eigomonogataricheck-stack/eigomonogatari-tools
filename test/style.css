@@ -149,12 +149,12 @@
 }
 @media (max-width: 360px) { .zk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-/* build 20260822-69: slightly smaller mobile item text */
+/* build 20260822-70: smaller mobile item text */
 @media (max-width: 800px) {
   .fields label,
   .progressive-fields label,
   .tier-controls label {
-    font-size: .6rem !important;
+    font-size: .56rem !important;
   }
 
   .fields input,
@@ -163,7 +163,7 @@
   .tier-controls select,
   .toolbar input,
   .picker-modal > input {
-    font-size: 10px !important;
+    font-size: 9px !important;
   }
 }
 
