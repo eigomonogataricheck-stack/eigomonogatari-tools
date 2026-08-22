@@ -71,3 +71,55 @@
     font-size: 20px !important;
   }
 }
+
+
+/* build 20260822-65: mobile character picker polish */
+@media (max-width: 800px) {
+  #picker.overlay {
+    align-items: center !important;
+    padding: max(18px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom)) !important;
+    overscroll-behavior: contain;
+  }
+
+  #picker .picker-modal {
+    width: min(100%, 520px) !important;
+    height: min(80dvh, 720px) !important;
+    max-height: calc(100dvh - max(36px, env(safe-area-inset-top) + env(safe-area-inset-bottom))) !important;
+    padding: 14px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 14px 40px #0003;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #picker .picker-modal > h2 {
+    min-height: 40px;
+    margin: 0 44px 10px 0 !important;
+    display: flex;
+    align-items: center;
+  }
+
+  #picker .picker-modal > input {
+    height: 44px !important;
+    margin-bottom: 8px;
+  }
+
+  #picker .picker-modal > .close-button {
+    top: 8px !important;
+    right: 8px !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 20px !important;
+  }
+
+  #pickerBox {
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 800px) and (orientation: landscape) {
+  #picker .picker-modal {
+    height: calc(100dvh - 20px) !important;
+    max-height: calc(100dvh - 20px) !important;
+  }
+}
