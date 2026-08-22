@@ -149,7 +149,7 @@
 }
 @media (max-width: 360px) { .zk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-/* build 20260822-68: slightly smaller mobile item text */
+/* build 20260822-69: slightly smaller mobile item text */
 @media (max-width: 800px) {
   .fields label,
   .progressive-fields label,
@@ -166,3 +166,4 @@
     font-size: 10px !important;
   }
 }
+
