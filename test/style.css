@@ -148,3 +148,21 @@
   .zk-card small { height: 32px; margin-top: 3px; font-size: .58rem; line-height: 1.12; -webkit-line-clamp: 2; }
 }
 @media (max-width: 360px) { .zk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* build 20260822-68: slightly smaller mobile item text */
+@media (max-width: 800px) {
+  .fields label,
+  .progressive-fields label,
+  .tier-controls label {
+    font-size: .6rem !important;
+  }
+
+  .fields input,
+  .fields select,
+  .progressive-fields input,
+  .tier-controls select,
+  .toolbar input,
+  .picker-modal > input {
+    font-size: 10px !important;
+  }
+}
