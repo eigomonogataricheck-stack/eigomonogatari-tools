@@ -123,3 +123,93 @@
     max-height: calc(100dvh - 20px) !important;
   }
 }
+
+
+/* build 20260822-66: compact mobile fields, picker and catalog */
+@media (max-width: 800px) {
+  /* 各入力枠内の文字を少し小さくする */
+  .fields input,
+  .fields select,
+  .progressive-fields input,
+  .tier-controls select,
+  .toolbar input,
+  .picker-modal > input {
+    font-size: 14px !important;
+  }
+
+  /* キャラ選択と図鑑の階層をコンパクトにする */
+  #picker .picker-modal {
+    height: min(86dvh, 760px) !important;
+    padding: 12px !important;
+  }
+
+  #picker .picker-modal > h2 {
+    min-height: 36px;
+    margin: 0 42px 8px 0 !important;
+    font-size: 1rem;
+  }
+
+  #picker .picker-modal > input {
+    height: 40px !important;
+    margin-bottom: 6px;
+  }
+
+  .zk-l1 {
+    margin: 4px 0;
+  }
+
+  .zk-b1,
+  .zk-b2,
+  .zk-b3 {
+    min-height: 38px;
+    padding: 7px 9px;
+    font-size: .86rem;
+  }
+
+  .zk-b2,
+  .zk-b3 {
+    margin-top: 3px;
+  }
+
+  .zk-body {
+    padding: 3px 2px;
+  }
+
+  .zk-head {
+    margin: 4px 0 3px;
+    padding: 3px 6px;
+    font-size: .8rem;
+  }
+
+  /* ブラウザ拡大率に左右されにくい高密度なカード配置 */
+  .zk-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px 4px;
+  }
+
+  .zk-card {
+    width: 100%;
+    height: 94px;
+    padding: 2px;
+    grid-template-rows: 56px 32px;
+  }
+
+  .zk-card img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .zk-card small {
+    height: 32px;
+    margin-top: 3px;
+    font-size: .58rem;
+    line-height: 1.12;
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (max-width: 360px) {
+  .zk-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
