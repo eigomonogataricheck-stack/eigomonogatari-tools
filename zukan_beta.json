@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-27T05:58:20.368Z",
+  "generatedAt": "2026-08-27T06:02:04.270Z",
   "characters": [
     {
       "id": 1189,
@@ -29381,7 +29381,7 @@
       "details": {
         "id": 2296,
         "name": "ﾄﾞﾚｽｱｯﾌﾟなデメ子さん",
-        "attribute": "水風",
+        "attribute": "水",
         "cost": 60,
         "hp": 3200,
         "power": 3600,
