@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-27T05:50:41.372Z",
+  "generatedAt": "2026-08-27T05:58:20.368Z",
   "characters": [
     {
       "id": 1189,
@@ -1635,10 +1635,12 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 3,
             "applier": "自身",
             "sourceText": "3ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -5871,7 +5873,32 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "対戦",
       "smallCategory": "国外",
-      "heading": "中国"
+      "heading": "中国",
+      "details": {
+        "id": 2280,
+        "name": "酒血肉☆凛",
+        "attribute": "火",
+        "cost": 70,
+        "hp": 5900,
+        "power": 2900,
+        "limitBreak": 7,
+        "limitHp": 10054,
+        "limitPower": 4941,
+        "skillTurn": 2,
+        "skill": "2ターンの間、火属性の味方全員のHPを50%回復する。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.5,
+            "duration": 2,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "2ターンの間、火属性の味方全員のHPを50%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2104,
@@ -10673,10 +10700,12 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 2,
             "applier": "自身",
             "sourceText": "2ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -12534,7 +12563,32 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2280.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "伝",
-      "smallCategory": "対戦"
+      "smallCategory": "対戦",
+      "details": {
+        "id": 2280,
+        "name": "酒血肉☆凛",
+        "attribute": "火",
+        "cost": 70,
+        "hp": 5900,
+        "power": 2900,
+        "limitBreak": 7,
+        "limitHp": 10054,
+        "limitPower": 4941,
+        "skillTurn": 2,
+        "skill": "2ターンの間、火属性の味方全員のHPを50%回復する。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.5,
+            "duration": 2,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "2ターンの間、火属性の味方全員のHPを50%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1936,
@@ -13294,7 +13348,32 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2295.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "伝",
-      "smallCategory": "協力"
+      "smallCategory": "協力",
+      "details": {
+        "id": 2295,
+        "name": "秋ｱﾆﾒ「伝説のぱいにゃ」",
+        "attribute": "風火",
+        "cost": 70,
+        "hp": 5300,
+        "power": 2750,
+        "limitBreak": 7,
+        "limitHp": 9031,
+        "limitPower": 4686,
+        "skillTurn": 3,
+        "skill": "1ターンの間、味方全員の攻撃力を250%増加させる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 2.5,
+            "duration": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "1ターンの間、味方全員の攻撃力を250%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1917,
@@ -13882,7 +13961,31 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2281.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "伝",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2281,
+        "name": "四悪妖★がしゃどくろ",
+        "attribute": "全",
+        "cost": 88,
+        "hp": 6970,
+        "power": 2060,
+        "limitBreak": 7,
+        "limitHp": 11877,
+        "limitPower": 3510,
+        "skillTurn": 6,
+        "skill": "死亡している水属性の味方全員を140%のHPで蘇らせる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 1.4,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "死亡している水属性の味方全員を140%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1381,
@@ -14282,11 +14385,13 @@
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -15607,7 +15712,31 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "虫"
+      "heading": "虫",
+      "details": {
+        "id": 2284,
+        "name": "ナミテントウ",
+        "attribute": "風",
+        "cost": 40,
+        "hp": 2960,
+        "power": 1320,
+        "limitBreak": 7,
+        "limitHp": 5044,
+        "limitPower": 2249,
+        "skillTurn": 3,
+        "skill": "敵全員の攻撃カウントを1増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 1,
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "敵全員の攻撃カウントを1増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2285,
@@ -15616,7 +15745,31 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "虫"
+      "heading": "虫",
+      "details": {
+        "id": 2285,
+        "name": "コマユバチ",
+        "attribute": "風",
+        "cost": 40,
+        "hp": 2010,
+        "power": 1000,
+        "limitBreak": 7,
+        "limitHp": 3425,
+        "limitPower": 1704,
+        "skillTurn": 2,
+        "skill": "死亡している火属性の味方全員を1%のHPで蘇らせる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.01,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "死亡している火属性の味方全員を1%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1819,
@@ -16561,7 +16714,34 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？"
+      "heading": "UMA？",
+      "details": {
+        "id": 2282,
+        "name": "再起動!S-MAN",
+        "attribute": "風",
+        "cost": 48,
+        "hp": 1200,
+        "power": 3636,
+        "limitBreak": 7,
+        "limitHp": 2044,
+        "limitPower": 6196,
+        "skillTurn": 2,
+        "skill": "1ターンの間、風属性の敵に対する味方全員の攻撃力を125%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1.25,
+            "duration": 1,
+            "applier": "全員",
+            "target": "風",
+            "applierAttribute": "全",
+            "targetAttribute": "風",
+            "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を125%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2283,
@@ -16570,7 +16750,31 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？"
+      "heading": "UMA？",
+      "details": {
+        "id": 2283,
+        "name": "代父の42神ニキ",
+        "attribute": "火",
+        "cost": 42,
+        "hp": 2489,
+        "power": 2489,
+        "limitBreak": 7,
+        "limitHp": 4242,
+        "limitPower": 4242,
+        "skillTurn": 4,
+        "skill": "死亡している味方全員を4%のHPで蘇らせる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.04,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "死亡している味方全員を4%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1917,
@@ -21739,11 +21943,13 @@
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 3,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "3ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -23782,11 +23988,13 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -27989,10 +28197,12 @@
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 4,
             "applier": "自身",
             "sourceText": "4ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -29087,10 +29297,12 @@
         "rare": "CR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "自身",
             "sourceText": "1ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -29117,10 +29329,12 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "自身",
             "sourceText": "1ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -29147,10 +29361,12 @@
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "自身",
             "sourceText": "1ターンの間、自身の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -29161,7 +29377,31 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2296.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "ゆる狩り",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2296,
+        "name": "ﾄﾞﾚｽｱｯﾌﾟなデメ子さん",
+        "attribute": "水風",
+        "cost": 60,
+        "hp": 3200,
+        "power": 3600,
+        "limitBreak": 7,
+        "limitHp": 5453,
+        "limitPower": 6134,
+        "skillTurn": 0,
+        "skill": "1ターンの間、自身の属性を全属性(３色混合)に変更する。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "全",
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の属性を全属性(３色混合)に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2206,
@@ -31073,11 +31313,13 @@
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 3,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "3ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -32960,11 +33202,13 @@
         "rare": "CR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -32991,11 +33235,13 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -34812,7 +35058,32 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2286.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2286,
+        "name": "せとっくん",
+        "attribute": "水風",
+        "cost": 19,
+        "hp": 1400,
+        "power": 1600,
+        "limitBreak": 7,
+        "limitHp": 2385,
+        "limitPower": 2726,
+        "skillTurn": 8,
+        "skill": "1ターンの間、味方全員にダメージを100%軽減するシールドを与える。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 1,
+            "duration": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "1ターンの間、味方全員にダメージを100%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2287,
@@ -34820,7 +35091,32 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2287.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2287,
+        "name": "瀬戸際先生",
+        "attribute": "水風",
+        "cost": 35,
+        "hp": 3050,
+        "power": 950,
+        "limitBreak": 7,
+        "limitHp": 5197,
+        "limitPower": 1618,
+        "skillTurn": 7,
+        "skill": "2ターンの間、味方全員にダメージを93%軽減するシールドを与える。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.93,
+            "duration": 2,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "2ターンの間、味方全員にダメージを93%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2288,
@@ -34828,7 +35124,32 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2288.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2288,
+        "name": "あんたが瀬戸大将",
+        "attribute": "火水",
+        "cost": 70,
+        "hp": 3000,
+        "power": 3000,
+        "limitBreak": 7,
+        "limitHp": 5112,
+        "limitPower": 5112,
+        "skillTurn": 7,
+        "skill": "3ターンの間、味方全員のHPを150%回復する。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 1.5,
+            "duration": 3,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "3ターンの間、味方全員のHPを150%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2289,
@@ -34836,7 +35157,30 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2289.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2289,
+        "name": "わらしちゃん（絵コンテ）",
+        "attribute": "水風",
+        "cost": 16,
+        "hp": 1900,
+        "power": 1200,
+        "limitBreak": 7,
+        "limitHp": 3237,
+        "limitPower": 2044,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身にダメージを70%軽減するシールドを与える。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.7,
+            "duration": 1,
+            "sourceText": "1ターンの間、自身にダメージを70%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2290,
@@ -34844,7 +35188,30 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2290.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2290,
+        "name": "わらしちゃん（原画）",
+        "attribute": "水風",
+        "cost": 32,
+        "hp": 2600,
+        "power": 1600,
+        "limitBreak": 7,
+        "limitHp": 4430,
+        "limitPower": 2726,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身にダメージを80%軽減するシールドを与える。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.8,
+            "duration": 1,
+            "sourceText": "1ターンの間、自身にダメージを80%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2291,
@@ -34852,7 +35219,31 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2291.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2291,
+        "name": "ぱいにゃ（演出）CV:わらし",
+        "attribute": "風",
+        "cost": 49,
+        "hp": 1900,
+        "power": 3450,
+        "limitBreak": 7,
+        "limitHp": 3237,
+        "limitPower": 5879,
+        "skillTurn": 4,
+        "skill": "火属性の敵全員の攻撃カウントを2増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 2,
+            "target": "火",
+            "targetAttribute": "火",
+            "sourceText": "火属性の敵全員の攻撃カウントを2増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2292,
@@ -34860,7 +35251,34 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2292.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2292,
+        "name": "カラベラ・ユカたん",
+        "attribute": "風",
+        "cost": 18,
+        "hp": 977,
+        "power": 1600,
+        "limitBreak": 7,
+        "limitHp": 1665,
+        "limitPower": 2726,
+        "skillTurn": 0,
+        "skill": "1ターンの間、味方全員に火属性の敵からのダメージを20%軽減するシールドを与える。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.2,
+            "duration": 1,
+            "applier": "全員",
+            "target": "火",
+            "applierAttribute": "全",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、味方全員に火属性の敵からのダメージを20%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2293,
@@ -34868,7 +35286,34 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2293.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2293,
+        "name": "死者の日☆パレンケ",
+        "attribute": "風",
+        "cost": 39,
+        "hp": 2100,
+        "power": 1987,
+        "limitBreak": 7,
+        "limitHp": 3578,
+        "limitPower": 3386,
+        "skillTurn": 0,
+        "skill": "1ターンの間、味方全員に火属性の敵からのダメージを25%軽減するシールドを与える。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.25,
+            "duration": 1,
+            "applier": "全員",
+            "target": "火",
+            "applierAttribute": "全",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、味方全員に火属性の敵からのダメージを25%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2294,
@@ -34876,7 +35321,31 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2294.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "限定",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2294,
+        "name": "パレンケリーナ（姉）",
+        "attribute": "風火",
+        "cost": 49,
+        "hp": 3300,
+        "power": 2487,
+        "limitBreak": 7,
+        "limitHp": 5623,
+        "limitPower": 4238,
+        "skillTurn": 5,
+        "skill": "死亡している火属性の味方全員を100%のHPで蘇らせる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 1,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "死亡している火属性の味方全員を100%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1219,
@@ -53075,11 +53544,13 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -53729,11 +54200,13 @@
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
@@ -53954,11 +54427,13 @@
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "全",
             "duration": 55,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "55ターンの間、味方全員の属性を全属性(３色混合)に変更する。",
-            "needsReview": true
+            "needsReview": false
           }
         ]
       }
