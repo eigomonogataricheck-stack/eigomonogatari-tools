@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-22T14:19:57.497Z",
+  "generatedAt": "2026-08-27T05:50:41.372Z",
   "characters": [
     {
       "id": 1189,
@@ -5863,6 +5863,15 @@
           }
         ]
       }
+    },
+    {
+      "id": 2280,
+      "name": "酒血肉☆凛",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2280.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "中国"
     },
     {
       "id": 2104,
@@ -12520,6 +12529,14 @@
       }
     },
     {
+      "id": 2280,
+      "name": "酒血肉☆凛",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2280.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "伝",
+      "smallCategory": "対戦"
+    },
+    {
       "id": 1936,
       "name": "ルナのたまご",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1936.png",
@@ -13272,6 +13289,14 @@
       }
     },
     {
+      "id": 2295,
+      "name": "秋ｱﾆﾒ「伝説のぱいにゃ」",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2295.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "伝",
+      "smallCategory": "協力"
+    },
+    {
       "id": 1917,
       "name": "ウサウサ八幡",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1917.png",
@@ -13850,6 +13875,14 @@
           }
         ]
       }
+    },
+    {
+      "id": 2281,
+      "name": "四悪妖★がしゃどくろ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2281.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "伝",
+      "smallCategory": "その他"
     },
     {
       "id": 1381,
@@ -15568,6 +15601,24 @@
       }
     },
     {
+      "id": 2284,
+      "name": "ナミテントウ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2284.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "虫"
+    },
+    {
+      "id": 2285,
+      "name": "コマユバチ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2285.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "虫"
+    },
+    {
       "id": 1819,
       "name": "チュパカブ先輩",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1819.png",
@@ -16504,6 +16555,57 @@
       }
     },
     {
+      "id": 2282,
+      "name": "再起動!S-MAN",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2282.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "UMA？"
+    },
+    {
+      "id": 2283,
+      "name": "代父の42神ニキ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2283.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "UMA？"
+    },
+    {
+      "id": 1917,
+      "name": "ウサウサ八幡",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1917.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "福引",
+      "smallCategory": "その他",
+      "heading": "S1",
+      "details": {
+        "id": 1917,
+        "name": "ウサウサ八幡",
+        "attribute": "水風",
+        "cost": 88,
+        "hp": 6380,
+        "power": 3500,
+        "limitBreak": 7,
+        "limitHp": 10872,
+        "limitPower": 5964,
+        "skillTurn": 2,
+        "skill": "火属性の味方全員のスキルカウントを2減少させる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "短縮",
+            "value": 2,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "火属性の味方全員のスキルカウントを2減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 696,
       "name": "まさか殿(微マジ)",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon696.png",
@@ -16801,39 +16903,6 @@
             "applierAttribute": "全",
             "targetAttribute": "風",
             "sourceText": "1ターンの間、風属性の敵に対する味方全員の攻撃力を170%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1917,
-      "name": "ウサウサ八幡",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1917.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "福引",
-      "smallCategory": "その他",
-      "heading": "S1",
-      "details": {
-        "id": 1917,
-        "name": "ウサウサ八幡",
-        "attribute": "水風",
-        "cost": 88,
-        "hp": 6380,
-        "power": 3500,
-        "limitBreak": 7,
-        "limitHp": 10872,
-        "limitPower": 5964,
-        "skillTurn": 2,
-        "skill": "火属性の味方全員のスキルカウントを2減少させる。",
-        "rare": "伝",
-        "skillEffects": [
-          {
-            "effect": "短縮",
-            "value": 2,
-            "applier": "火",
-            "applierAttribute": "火",
-            "sourceText": "火属性の味方全員のスキルカウントを2減少させる。",
             "needsReview": false
           }
         ]
@@ -17237,6 +17306,39 @@
       }
     },
     {
+      "id": 2007,
+      "name": "外道丸☆酒呑童子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2007.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "福引",
+      "smallCategory": "その他",
+      "heading": "S2",
+      "details": {
+        "id": 2007,
+        "name": "外道丸☆酒呑童子",
+        "attribute": "風",
+        "cost": 88,
+        "hp": 4800,
+        "power": 4500,
+        "limitBreak": 7,
+        "limitHp": 8179,
+        "limitPower": 7668,
+        "skillTurn": 4,
+        "skill": "死亡している味方全員を1%のHPで蘇らせる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.01,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "死亡している味方全員を1%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1371,
       "name": "スクナクナクナクス",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1371.png",
@@ -17532,39 +17634,6 @@
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "2ターンの間、味方全員の攻撃が2回連続攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 2007,
-      "name": "外道丸☆酒呑童子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2007.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "福引",
-      "smallCategory": "その他",
-      "heading": "S2",
-      "details": {
-        "id": 2007,
-        "name": "外道丸☆酒呑童子",
-        "attribute": "風",
-        "cost": 88,
-        "hp": 4800,
-        "power": 4500,
-        "limitBreak": 7,
-        "limitHp": 8179,
-        "limitPower": 7668,
-        "skillTurn": 4,
-        "skill": "死亡している味方全員を1%のHPで蘇らせる。",
-        "rare": "伝",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.01,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "死亡している味方全員を1%のHPで蘇らせる。",
             "needsReview": false
           }
         ]
@@ -17975,6 +18044,39 @@
       }
     },
     {
+      "id": 2131,
+      "name": "発音王・S・サイアン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2131.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "福引",
+      "smallCategory": "その他",
+      "heading": "S3",
+      "details": {
+        "id": 2131,
+        "name": "発音王・S・サイアン",
+        "attribute": "火水",
+        "cost": 88,
+        "hp": 6250,
+        "power": 3850,
+        "limitBreak": 7,
+        "limitHp": 10650,
+        "limitPower": 6560,
+        "skillTurn": 8,
+        "skill": "1ターンの間、自身の攻撃力を99999%増加させる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 999.99,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を99999%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1571,
       "name": "ゲラー･ｻﾞ･ｸﾞﾗﾃﾞｨｴｲﾀｰ",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1571.png",
@@ -18276,39 +18378,6 @@
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員にダメージを60%軽減するシールドを与える。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 2131,
-      "name": "発音王・S・サイアン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2131.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "福引",
-      "smallCategory": "その他",
-      "heading": "S3",
-      "details": {
-        "id": 2131,
-        "name": "発音王・S・サイアン",
-        "attribute": "火水",
-        "cost": 88,
-        "hp": 6250,
-        "power": 3850,
-        "limitBreak": 7,
-        "limitHp": 10650,
-        "limitPower": 6560,
-        "skillTurn": 8,
-        "skill": "1ターンの間、自身の攻撃力を99999%増加させる。",
-        "rare": "伝",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 999.99,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を99999%増加させる。",
             "needsReview": false
           }
         ]
@@ -18720,6 +18789,39 @@
             "target": "火",
             "targetAttribute": "火",
             "sourceText": "2ターンの間、火属性の攻撃を自身に集中させる(50%カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2264,
+      "name": "解放!鬼神カブキ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2264.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "福引",
+      "smallCategory": "その他",
+      "heading": "S4",
+      "details": {
+        "id": 2264,
+        "name": "解放!鬼神カブキ",
+        "attribute": "全",
+        "cost": 88,
+        "hp": 5200,
+        "power": 4400,
+        "limitBreak": 7,
+        "limitHp": 8861,
+        "limitPower": 7497,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身の攻撃力を381%増加させる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 3.81,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を381%増加させる。",
             "needsReview": false
           }
         ]
@@ -29054,6 +29156,14 @@
       }
     },
     {
+      "id": 2296,
+      "name": "ﾄﾞﾚｽｱｯﾌﾟなデメ子さん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2296.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "ゆる狩り",
+      "smallCategory": "その他"
+    },
+    {
       "id": 2206,
       "name": "ミツクリ・永恵",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2206.png",
@@ -34695,6 +34805,78 @@
           }
         ]
       }
+    },
+    {
+      "id": 2286,
+      "name": "せとっくん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2286.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2287,
+      "name": "瀬戸際先生",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2287.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2288,
+      "name": "あんたが瀬戸大将",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2288.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2289,
+      "name": "わらしちゃん（絵コンテ）",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2289.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2290,
+      "name": "わらしちゃん（原画）",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2290.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2291,
+      "name": "ぱいにゃ（演出）CV:わらし",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2291.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2292,
+      "name": "カラベラ・ユカたん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2292.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2293,
+      "name": "死者の日☆パレンケ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2293.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 2294,
+      "name": "パレンケリーナ（姉）",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2294.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "限定",
+      "smallCategory": "その他"
     },
     {
       "id": 1219,
