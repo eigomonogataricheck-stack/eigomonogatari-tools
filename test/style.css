@@ -229,3 +229,11 @@
 .durability #durabilityResult{display:grid;grid-template-columns:1fr;gap:8px}
 .durability #durabilityResult>div{padding:8px;border-radius:7px;background:#f3f7fc;text-align:center}
 .durability #durabilityValue{font-size:1.25rem}
+
+/* build 20260831-76: detail mode and healing rule */
+.title-actions{display:flex;align-items:center;justify-content:center;gap:8px}
+.detail-mode{padding:8px 11px;border:1px solid #999;border-radius:7px;background:#fff;font-weight:700;white-space:nowrap}
+.detail-mode[aria-pressed="true"]{border-color:#0b57d0;background:#eaf2ff;color:#0b57d0}
+.advanced-field{display:none!important}
+body.detail-mode-on .advanced-field{display:grid!important}
+@media(max-width:800px){.title-actions{gap:4px}.detail-mode,.title-actions .swap{padding:6px;font-size:.66rem}.calculator-title{grid-template-columns:minmax(0,1fr) auto auto!important}.title-actions{grid-column:2;grid-row:1}.calculator-title .reset-btn{grid-column:3;grid-row:1}}
