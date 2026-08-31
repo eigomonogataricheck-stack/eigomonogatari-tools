@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-27T06:02:04.270Z",
+  "generatedAt": "2026-08-31T04:38:37.133Z",
   "characters": [
     {
       "id": 1189,
@@ -4110,15 +4110,17 @@
         "limitHp": 4175,
         "limitPower": 4771,
         "skillTurn": 2,
-        "skill": "4ターンの間、味方全員の属性を4属性に変更する。",
+        "skill": "4ターンの間、味方全員の属性を水属性に変更する。",
         "rare": "ZR",
         "skillEffects": [
           {
+            "effect": "色変",
+            "value": "水",
             "duration": 4,
             "applier": "全員",
             "applierAttribute": "全",
-            "sourceText": "4ターンの間、味方全員の属性を4属性に変更する。",
-            "needsReview": true
+            "sourceText": "4ターンの間、味方全員の属性を水属性に変更する。",
+            "needsReview": false
           }
         ]
       }
@@ -14385,13 +14387,11 @@
         "rare": "MZR",
         "skillEffects": [
           {
-            "effect": "色変",
-            "value": "全",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の属性を全属性に変更する。",
-            "needsReview": false
+            "needsReview": true
           }
         ]
       }
