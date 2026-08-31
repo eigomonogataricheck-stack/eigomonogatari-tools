@@ -237,3 +237,15 @@
 .advanced-field{display:none!important}
 body.detail-mode-on .advanced-field{display:grid!important}
 @media(max-width:800px){.title-actions{gap:4px}.detail-mode,.title-actions .swap{padding:6px;font-size:.66rem}.calculator-title{grid-template-columns:minmax(0,1fr) auto auto!important}.title-actions{grid-column:2;grid-row:1}.calculator-title .reset-btn{grid-column:3;grid-row:1}}
+
+/* build 20260831-77: stable field alignment and detail-only ghost durability */
+.fields,.progressive-fields{align-items:start}
+.fields>label,.progressive-fields>label{grid-template-rows:minmax(2.6em,auto) 44px;align-content:start}
+.fields>label>input,.fields>label>select,.progressive-fields>label>input{align-self:end}
+body.detail-mode-on .ghost-durability{display:block!important}
+#ghostResult{min-width:0}
+#ghostResult:not(:has(>div)){white-space:nowrap;font-size:.78rem}
+@media(max-width:800px){
+  .fields>label,.progressive-fields>label{grid-template-rows:minmax(3.2em,auto) 42px}
+  #ghostResult:not(:has(>div)){font-size:.72rem;letter-spacing:-.02em}
+}
