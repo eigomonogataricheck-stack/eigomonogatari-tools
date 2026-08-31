@@ -221,3 +221,6 @@
 
 /* build 20260822-72: conditional all-attack and multi-hit result */
 .multi-hit-result{margin:6px 0;color:#3f4b59;font-weight:700;font-size:1rem;line-height:1.35}.multi-hit-result:empty{display:none}.multi-hit-result small{display:block;margin-top:3px;color:#66717f;font-size:.82rem;font-weight:600}.calculation-warning{margin:8px auto 0;color:#89929e;font-size:.76rem;line-height:1.35}.calculation-warning:empty{display:none}
+
+/* build 20260831-73: remaining HP and applied durability */
+.remaining-hp{margin-top:5px;color:#46566f;font-size:.95rem;font-weight:700}.remaining-hp:empty{display:none}.durability{border-color:#d9d2ff;background:#fcfbff}.durability #durabilityResult{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.durability #durabilityResult>div{padding:8px;border-radius:7px;background:#f5f2ff;text-align:center}@media(max-width:800px){.durability #durabilityResult{grid-template-columns:1fr}}
