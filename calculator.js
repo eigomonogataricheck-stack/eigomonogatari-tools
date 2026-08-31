@@ -10,7 +10,7 @@ function toggleSkill(r){skillEnabled[r]=!skillEnabled[r];syncSkill(r);calculate(
 function syncSkill(r){let b=$(r+'SkillBtn');b.textContent=skillEnabled[r]?'スキル解除':'スキル使用';b.classList.toggle('active',skillEnabled[r])}
 function raw(v){let n=parseFloat(String(v??'').replace('%',''));return Number.isFinite(n)?n:NaN}
 function en(e){let n=String(e?.effect??e?.['スキル効果']??'').trim();if(['被ダメージ減少','ダメージカット','シールド'].includes(n))return'シールド';if(['攻撃集中','集中','かばう'].includes(n))return'集中';if(n==='かわす')return'かわす';if(['攻撃力アップ','攻撃力増加','攻撃力上昇'].includes(n))return'攻撃力アップ';if(['属性変更','属性変化','色変'].includes(n))return'色変';if(['連続攻撃','連撃'].includes(n))return'連撃';return n}
-function amt(e){let n=raw(e?.value??e?.amount??e?.['効果量']);return ['シールド','集中','攻撃力アップ','回復'].includes(en(e))&&Number.isFinite(n)&&Math.abs(n)<=10?n*100:n}
+function amt(e){let n=raw(e?.value??e?.amount??e?.['効果量']);return ['シールド','集中','かわす','攻撃力アップ','回復'].includes(en(e))&&Number.isFinite(n)&&Math.abs(n)<=10?n*100:n}
 function effects(r){let a=selected[r]?.details?.skillEffects;return skillEnabled[r]&&Array.isArray(a)?a:[]}
 function conditionAttribute(value){let s=canon(value);if(!s||['自身','全員','味方全員','リーダー','敵全員','すべて'].includes(s))return null;return ATTRS.filter(a=>a!=='全').sort((a,b)=>b.length-a.length).find(a=>s.includes(a))||null}
 function matches(cur,req){req=conditionAttribute(req);if(!req)return true;cur=canon(cur);if(cur==='全')return true;return ['火水','水風','風火'].includes(req)?cur===req:cur.includes(req)}
