@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-08-31T11:30:25.743Z",
+  "generatedAt": "2026-09-01T08:17:42.360Z",
   "characters": [
     {
       "id": 1189,
@@ -13781,7 +13781,7 @@
       "details": {
         "id": 2084,
         "name": "生足魅惑の☆ハクさん",
-        "attribute": "火",
+        "attribute": "風",
         "cost": 80,
         "hp": 6600,
         "power": 3000,
