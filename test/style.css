@@ -237,3 +237,12 @@
 
 /* build 20260903-81: new requirements */
 .temp-item{grid-template-columns:auto minmax(0,1fr) auto}.temp-open{display:flex;align-items:center;gap:8px;min-width:0;padding:0;border:0;background:#fff;text-align:left}.temp-open img{width:44px;height:44px;flex:none}.temp-open span{overflow-wrap:anywhere}.temp-delete{white-space:nowrap}.borrowed-buttons{display:flex;gap:8px;margin-top:8px}.borrowed-buttons button{padding:6px 9px;border:1px solid #a9adb2;border-radius:7px;background:#fff;font-weight:700;font-size:.74rem}.borrowed-buttons button:first-child{flex:1}.borrowed-buttons button.active{background:#e8f5ee;color:#157347}.borrowed-actions[hidden]{display:none}.borrowed-actions .mini-reset{flex:0 1 auto}.picker-tools .filter-section{margin-bottom:0}.picker-tools .skill-filter{grid-column:1/-1}.picker-tools h2{margin:0 0 12px}@media(max-width:800px){.temp-delete{font-size:.64rem!important}.borrowed-actions{justify-content:flex-end}.picker-tools .filter-section{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* build 20260903-82: per-character borrowed skills and filter layout repair */
+.filter-section>button{height:42px;align-self:end;padding:7px;border:1px solid #9aa2ab;border-radius:7px;background:#fff;font-weight:700}
+.borrowed-item{display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center}
+.borrowed-item>span{min-width:0;overflow-wrap:anywhere}
+.borrowed-use{white-space:nowrap;font-size:.7rem!important}
+.borrowed-use.active{background:#e8f5ee;color:#157347;border-color:#9bc8aa}
+.borrowed-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}
+@media(max-width:800px){.borrowed-item{grid-template-columns:20px minmax(0,1fr) auto}.borrowed-actions{justify-content:flex-start}.filter-section>button{font-size:16px}}
