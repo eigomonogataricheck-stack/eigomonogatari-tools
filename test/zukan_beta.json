@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-08-31T08:28:39.740Z",
+  "generatedAt": "2026-09-01T08:17:42.360Z",
   "characters": [
     {
       "id": 1189,
@@ -13781,7 +13781,7 @@
       "details": {
         "id": 2084,
         "name": "生足魅惑の☆ハクさん",
-        "attribute": "火",
+        "attribute": "風",
         "cost": 80,
         "hp": 6600,
         "power": 3000,
@@ -19837,13 +19837,18 @@
         "limitHp": 1874,
         "limitPower": 3237,
         "skillTurn": 1,
-        "skill": "1ターンの間、攻撃を地震に集中させる（87%カット）。",
+        "skill": "1ターンの間、攻撃を自身に集中させる（87%カット）。",
         "rare": "MZR",
         "skillEffects": [
           {
+            "effect": "かばう",
+            "value": 0.87,
             "duration": 1,
-            "sourceText": "1ターンの間、攻撃を地震に集中させる（87%カット）。",
-            "needsReview": true
+            "applier": "自身",
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "1ターンの間、攻撃を自身に集中させる（87%カット）。",
+            "needsReview": false
           }
         ]
       }
