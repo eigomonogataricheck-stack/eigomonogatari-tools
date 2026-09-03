@@ -246,3 +246,13 @@
 .borrowed-use.active{background:#e8f5ee;color:#157347;border-color:#9bc8aa}
 .borrowed-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}
 @media(max-width:800px){.borrowed-item{grid-template-columns:20px minmax(0,1fr) auto}.borrowed-actions{justify-content:flex-start}.filter-section>button{font-size:16px}}
+
+/* build 20260903-83: picker mirrors catalog with direct selection */
+#picker .picker-temporary{margin:7px 0;padding:0;border:0;background:transparent}
+#picker .zk-b1.temporary{background:#64748b;color:#fff}
+#picker .picker-tools{margin-top:26px}
+#picker .picker-filter-results{margin-top:14px;padding-top:14px;border-top:1px solid #d9dee5}
+#picker .picker-filter-results>.zk-grid{grid-template-columns:repeat(auto-fill,78px)}
+#picker .zk-card{cursor:pointer}
+@media(max-width:800px){#picker .picker-tools{margin-top:20px}#picker .picker-filter-results>.zk-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:360px){#picker .picker-filter-results>.zk-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
