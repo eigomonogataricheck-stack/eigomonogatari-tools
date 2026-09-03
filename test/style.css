@@ -256,3 +256,11 @@
 #picker .zk-card{cursor:pointer}
 @media(max-width:800px){#picker .picker-tools{margin-top:20px}#picker .picker-filter-results>.zk-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:360px){#picker .picker-filter-results>.zk-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* build 20260903-84: borrowed controls, sticky picker header */
+#picker .picker-sticky{position:sticky;top:-20px;z-index:25;display:flex;align-items:center;justify-content:space-between;min-height:52px;margin:-20px -24px 12px;padding:10px 24px;background:#fff;border-bottom:1px solid #e2e6eb}
+#picker .picker-sticky h2{margin:0;min-width:0;overflow-wrap:anywhere}
+#picker .picker-sticky .close-button{position:static!important;flex:none}
+.borrowed-item{grid-template-columns:minmax(0,1fr) auto auto}
+.borrowed-delete{color:#b42318!important;border-color:#e1aaa5!important;white-space:nowrap;font-size:.7rem!important}
+@media(max-width:800px){#picker .picker-sticky{top:-12px;margin:-12px -12px 10px;padding:8px 12px;min-height:48px}.borrowed-item{grid-template-columns:minmax(0,1fr) auto auto;gap:5px}.borrowed-use,.borrowed-delete{min-height:36px!important;padding:5px!important;font-size:.64rem!important}.borrowed-actions .mini-reset{min-height:36px!important}}
