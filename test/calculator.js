@@ -15,7 +15,7 @@ function effectEntries(r){let out=[],own=selected[r]?.details?.skillEffects;if(s
 function effectScope(e){return canon(e?.applier??e?.['適用者']??'')}
 function conditionAttribute(value){let s=canon(value);if(!s||['自身','自分','全員','味方全員','リーダー','敵全員','すべて','全'].includes(s))return null;return ATTRS.filter(a=>a!=='全').sort((a,b)=>b.length-a.length).find(a=>s.includes(a))||null}
 function matches(cur,req){req=conditionAttribute(req);if(!req)return true;cur=canon(cur);if(cur==='全')return true;return ['火水','水風','風火'].includes(req)?cur===req:cur.includes(req)}
-function applierMatches(e,own,borrowed){let scope=effectScope(e);if(borrowed&&['自身','自分'].includes(scope))return false;if(['自身','自分','リーダー','全員','味方全員','すべて','全',''].includes(scope))return true;return matches(own,e?.applierAttribute??e?.['適用者属性']??scope)}
+function applierMatches(e,own,borrowed){let scope=effectScope(e);if(borrowed&&['自身','自分'].includes(scope)&&!['集中','かわす'].includes(en(e)))return false;if(['自身','自分','リーダー','全員','味方全員','すべて','全',''].includes(scope))return true;return matches(own,e?.applierAttribute??e?.['適用者属性']??scope)}
 function targetMatches(e,opponent){let target=e?.targetAttribute??e?.['対象者属性']??e?.target??e?.['対象者'];return matches(opponent,target)}
 function appliesEntry(entry,own,opponent){return applierMatches(entry.effect,own,entry.borrowed)&&targetMatches(entry.effect,opponent)}
 function applies(e,own,opponent){return appliesEntry({effect:e,borrowed:false},own,opponent)}
