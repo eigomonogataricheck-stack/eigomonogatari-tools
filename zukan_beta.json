@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-01T08:17:42.360Z",
+  "generatedAt": "2026-09-10T09:52:35.886Z",
   "characters": [
     {
       "id": 1189,
@@ -9553,18 +9553,17 @@
         "limitHp": 7668,
         "limitPower": 3919,
         "skillTurn": 0,
-        "skill": "1ターンの間、水属性の敵に対する味方全員の攻撃力を50%増加させる。",
+        "skill": "1ターンの間、水属性の敵に対する自身の攻撃力を50%増加させる。",
         "rare": "MZR",
         "skillEffects": [
           {
             "effect": "攻撃力アップ",
             "value": 0.5,
             "duration": 1,
-            "applier": "全員",
+            "applier": "自身",
             "target": "水",
-            "applierAttribute": "全",
             "targetAttribute": "水",
-            "sourceText": "1ターンの間、水属性の敵に対する味方全員の攻撃力を50%増加させる。",
+            "sourceText": "1ターンの間、水属性の敵に対する自身の攻撃力を50%増加させる。",
             "needsReview": false
           }
         ]
