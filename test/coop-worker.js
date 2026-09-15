@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20260915-129 */
+/* Cooperative proposal worker build 20260915-130 */
 let stopped=false;
 self.onmessage=e=>{
   const m=e.data||{};
@@ -11,6 +11,8 @@ self.onmessage=e=>{
     self.COOP_LAYER_MULTIPLIERS=m.constants.layerMultipliers;self.COOP_DAMAGE_BASE=m.constants.damageBase;
     self.COOP_SLOTS=5;self.COOP_MAX_ROWS=5;self.coopProposalOrderCache=new Map();
     (0,eval)(m.engineSource);
+    for(const name of ['coopProposalWorks','coopProposalOverkillRate','coopCharacterKey'])if(typeof self[name]!=='function')throw new Error('Worker関数の読込失敗: '+name);
+    postMessage({type:'ready'});
     const pools=m.pools,first=m.first,confirmed=[];
     let checked=0,lastReport=performance.now();
     for(let ai=m.aiStart;ai<m.aiEnd&&!stopped;ai++)for(let bi=0;bi<pools[2].length&&!stopped;bi++)for(let ci=0;ci<pools[3].length&&!stopped;ci++)for(let di=0;di<pools[4].length&&!stopped;di++){
