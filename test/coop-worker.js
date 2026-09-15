@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20260915-130 */
+/* Cooperative proposal worker build 20260915-131 */
 let stopped=false;
 self.onmessage=e=>{
   const m=e.data||{};
@@ -14,8 +14,10 @@ self.onmessage=e=>{
     for(const name of ['coopProposalWorks','coopProposalOverkillRate','coopCharacterKey'])if(typeof self[name]!=='function')throw new Error('Worker関数の読込失敗: '+name);
     postMessage({type:'ready'});
     const pools=m.pools,first=m.first,confirmed=[];
+    const n2=pools[2].length,n3=pools[3].length,n4=pools[4].length,rawTotal=pools[1].length*n2*n3*n4;
     let checked=0,lastReport=performance.now();
-    for(let ai=m.aiStart;ai<m.aiEnd&&!stopped;ai++)for(let bi=0;bi<pools[2].length&&!stopped;bi++)for(let ci=0;ci<pools[3].length&&!stopped;ci++)for(let di=0;di<pools[4].length&&!stopped;di++){
+    for(let flat=m.workerIndex;flat<rawTotal&&!stopped;flat+=m.workerCount){
+      let rest=flat,di=rest%n4;rest=Math.floor(rest/n4);let ci=rest%n3;rest=Math.floor(rest/n3);let bi=rest%n2;let ai=Math.floor(rest/n2);
       const deck=[first,pools[1][ai],pools[2][bi],pools[3][ci],pools[4][di]],keys=deck.map(coopCharacterKey).filter(Boolean);
       if(new Set(keys).size!==keys.length)continue;
       const repeats=coopProposalWorks(deck,3)?3:(coopProposalWorks(deck,4)?4:0);checked++;
