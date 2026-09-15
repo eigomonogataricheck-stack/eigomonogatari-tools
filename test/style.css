@@ -284,3 +284,7 @@
 /* build 20260915-115: deck image left, skill button right; mobile button below */
 .coop-slot-main{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px}.coop-deck-slot .coop-character-image-only{display:flex;align-items:center;justify-content:center;width:auto;min-width:58px;padding:3px;border:0;background:#fff}.coop-deck-slot .coop-character-image-only .coop-portrait{grid-row:auto}.coop-deck-slot .coop-skill-check{flex:0 0 auto;position:static;z-index:auto}.coop-deck-slot .coop-skill-detail{width:100%}
 @media(max-width:800px){.coop-slot-main{flex-direction:column;gap:6px}.coop-deck-slot .coop-skill-check{width:100%;min-height:34px}.coop-deck-slot .coop-character-image-only{width:100%;padding:2px}}
+
+/* build 20260915-116: cooperative deck proposal and delete controls */
+.coop-deck-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}.coop-deck-actions .mini-reset{flex:0 0 auto}.coop-propose{border-color:#7aa0d8!important;color:#174f91}.coop-delete{white-space:nowrap}
+@media(max-width:800px){.coop-deck-head{align-items:flex-start}.coop-deck-actions{max-width:72%;gap:4px}.coop-deck-actions .mini-reset{min-height:34px!important;padding:5px!important;font-size:.62rem!important}}
