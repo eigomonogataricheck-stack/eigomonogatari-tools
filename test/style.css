@@ -287,3 +287,6 @@
 
 /* build 20260915-116: cooperative proposal and delete */
 .coop-deck-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}.coop-deck-actions .mini-reset{flex:0 0 auto}.coop-propose{border-color:#7aa0d8!important;color:#174f91}.coop-delete{white-space:nowrap}@media(max-width:800px){.coop-deck-actions{max-width:74%;gap:4px}.coop-deck-actions .mini-reset{min-height:34px!important;padding:5px!important;font-size:.62rem!important}}
+
+/* build 20260915-117: proposal beside deck reset */
+.coop-section-actions{display:flex;gap:8px;align-items:center}.coop-section-actions .reset-btn{white-space:nowrap}@media(max-width:800px){.coop-section-title{align-items:flex-start}.coop-section-actions{flex-direction:column;gap:5px}.coop-section-actions .reset-btn{width:100%}}
