@@ -281,3 +281,6 @@
 .coop-enemies-toggle{display:flex;justify-content:space-between;width:100%;padding:11px 13px;border:1px solid #b9c6d8;border-radius:10px;background:#eaf2ff;color:#24476b;font-weight:800}.coop-enemies-body{display:grid;gap:10px}.coop-enemies-body.closed{display:none}.coop-random-reason{margin-top:10px;padding:9px;border:1px solid #e7c778;border-radius:8px;background:#fff9e8;text-align:left}.coop-random-reason summary{cursor:pointer;font-weight:800}.coop-row-result:empty{display:none}
 /* build 20260915-113: compact cooperative deck card header */
 .coop-deck-slot .coop-slot-head{min-height:28px;justify-content:flex-end}.coop-deck-slot .coop-character{margin-top:-28px;padding-top:28px}.coop-deck-slot .coop-skill-check{position:relative;z-index:2;flex:0 0 auto}
+
+/* build 20260915-114: cooperative deck image-only cards */
+.coop-deck-slot .coop-character-image-only{display:flex;align-items:center;justify-content:center;min-height:58px}.coop-deck-slot .coop-character-image-only .coop-portrait{grid-row:auto}.coop-deck-slot .coop-character-image-only+ .coop-skill-detail{margin-top:8px}
