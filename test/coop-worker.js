@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20260915-141 */
+/* Cooperative proposal worker build 20260915-142 */
 let stopped=false;
 self.onmessage=e=>{
   const m=e.data||{};
@@ -6,7 +6,7 @@ self.onmessage=e=>{
   if(m.type!=='start')return;
   stopped=false;
   try{
-    self.chars=m.chars;self.coopEnemies=m.enemies;self.coopDecks=m.decks;self.coopVisibleRows=m.visibleRows;
+    self.chars=m.chars;self.coopEnemies=m.enemies;self.coopDecks=m.decks;self.coopVisibleRows=m.visibleRows;self.coopDetailMode=!!m.detailMode;self.coopProposalTargetDecks=m.targetDecks;
     self.ATTRS=m.constants.ATTRS;self.MATCH=m.constants.MATCH;
     self.COOP_LAYER_MULTIPLIERS=m.constants.layerMultipliers;self.COOP_DAMAGE_BASE=m.constants.damageBase;
     self.COOP_SLOTS=5;self.COOP_MAX_ROWS=5;self.coopProposalOrderCache=new Map();
@@ -20,7 +20,7 @@ self.onmessage=e=>{
       let rest=flat,di=rest%n4;rest=Math.floor(rest/n4);let ci=rest%n3;rest=Math.floor(rest/n3);let bi=rest%n2;let ai=Math.floor(rest/n2);
       const deck=[first,pools[1][ai],pools[2][bi],pools[3][ci],pools[4][di]],keys=deck.map(coopCharacterKey).filter(Boolean);
       if(new Set(keys).size!==keys.length)continue;
-      const repeats=coopProposalWorks(deck,3)?3:0;checked++;
+      const repeats=coopProposalWorks(deck,self.coopProposalTargetDecks)?self.coopProposalTargetDecks:0;checked++;
       if(repeats)confirmed.push({ids:coopProposalDeckIds(deck),repeats,overkillRate:coopProposalOverkillRate(deck)});
       const now=performance.now();
       if(checked%500===0||now-lastReport>=250){postMessage({type:'progress',checked,confirmed:confirmed.length});lastReport=now}
