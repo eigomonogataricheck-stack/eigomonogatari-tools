@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20260915-142 */
+/* Cooperative proposal worker build 20260915-143 */
 let stopped=false;
 self.onmessage=e=>{
   const m=e.data||{};
@@ -18,7 +18,7 @@ self.onmessage=e=>{
     let checked=0,lastReport=performance.now();
     for(let flat=m.workerIndex;flat<rawTotal&&!stopped;flat+=m.workerCount){
       let rest=flat,di=rest%n4;rest=Math.floor(rest/n4);let ci=rest%n3;rest=Math.floor(rest/n3);let bi=rest%n2;let ai=Math.floor(rest/n2);
-      const deck=[first,pools[1][ai],pools[2][bi],pools[3][ci],pools[4][di]],keys=deck.map(coopCharacterKey).filter(Boolean);
+      const deck=coopProposalCandidateDeck(first,pools[1][ai],pools[2][bi],pools[3][ci],pools[4][di]),keys=deck.map(coopCharacterKey).filter(Boolean);
       if(new Set(keys).size!==keys.length)continue;
       const repeats=coopProposalWorks(deck,self.coopProposalTargetDecks)?self.coopProposalTargetDecks:0;checked++;
       if(repeats)confirmed.push({ids:coopProposalDeckIds(deck),repeats,overkillRate:coopProposalOverkillRate(deck)});
