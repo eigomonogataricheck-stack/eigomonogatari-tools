@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20260915-136 */
+/* Cooperative proposal worker build 20260915-137 */
 let stopped=false;
 self.onmessage=e=>{
   const m=e.data||{};
