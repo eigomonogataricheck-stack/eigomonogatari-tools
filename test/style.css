@@ -368,7 +368,10 @@
 @media(min-width:1000px){.coop-enemies-toggle{display:none!important}.coop-enemies-body{display:grid!important}.coop-section-title{display:flex!important;align-items:center!important;grid-template-columns:none!important;gap:10px!important}.coop-section-actions{order:initial!important;justify-content:flex-end!important;padding:0!important;border:0!important;background:transparent!important}.coop-section-title>div:first-child{order:initial!important}.coop-input-layout>.coop-decks{padding-top:5px}}
 @media(max-width:999px){.coop-proposal-history{width:100%;min-width:0}.coop-slot-actions{width:100%}.coop-character-delete{min-height:28px!important}.coop-history-enemy img,.coop-history-enemy span{width:42px!important;height:42px!important}.coop-history-layer{grid-template-columns:38px repeat(3,42px)!important;gap:6px!important}}
 
-/* build 20260917-223: special/limited bars fixed inside picker scroll */
-#picker .picker-sticky-special{position:sticky!important;top:32px!important;z-index:28!important;box-shadow:0 1px 0 rgba(0,0,0,.18)}
-#picker .picker-sticky-limited{position:sticky!important;top:70px!important;z-index:27!important;box-shadow:0 1px 0 rgba(0,0,0,.18)}
-@media(max-width:800px){#picker .picker-sticky-special{top:36px!important}#picker .picker-sticky-limited{top:74px!important}}
+
+/* build 20260917-224: pinned category mirrors inside the already-sticky picker header */
+#picker .picker-sticky{display:block}
+#picker .picker-sticky-main{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#picker .picker-pinned-tags{display:grid;gap:4px;margin-top:8px}
+#picker .picker-pinned-tags[hidden]{display:none}
+#picker .picker-pinned-tags button{width:100%;margin:0;text-align:left}
