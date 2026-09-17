@@ -375,3 +375,6 @@
 #picker .picker-pinned-tags{display:grid;gap:4px;margin-top:8px}
 #picker .picker-pinned-tags[hidden]{display:none}
 #picker .picker-pinned-tags button{width:100%;margin:0;text-align:left}
+
+/* build 20260917-225: active top-level and second-level picker tags are mirrored in the fixed header */
+#picker .picker-pinned-tags .zk-b1,#picker .picker-pinned-tags .zk-b2{position:static!important;display:flex;align-items:center;justify-content:space-between}
