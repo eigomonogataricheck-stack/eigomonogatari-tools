@@ -358,3 +358,12 @@
 }
 @media(max-width:999px){.coop-input-layout{display:block}.coop-history-proposals{grid-template-columns:1fr!important}.picker-modal .zk-l1>.zk-b1{top:54px}}
 
+/* build 20260917-217: compact navigation, per-slot deletion, stored history drawers */
+.topbar{height:42px;gap:9px;padding:0 12px;font-size:.82rem}.topbar>b{font-size:.88rem}.hamburger{width:32px;height:32px}.hamburger i{width:18px}.temp-toggle{padding:4px 8px;font-size:.68rem}.sidebar{top:42px;width:184px;padding:7px}.sidebar button{padding:8px 10px;font-size:.76rem}main{padding-top:54px}
+#page-coop .coop-title h1{font-size:1.05rem;margin-bottom:8px}.coop-lead{margin:5px 0 8px;font-size:.72rem}
+.coop-slot-actions{display:flex;flex-direction:column;gap:4px}.coop-character-delete[hidden]{display:none}.coop-character-delete{font-size:.58rem!important;padding:3px 5px!important}
+.coop-history-entry-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;padding:8px 9px;border:0;border-radius:7px;background:#edf2f7;color:#26384c;text-align:left;cursor:pointer}.coop-history-entry-body[hidden]{display:none!important}.coop-history-entry-body{padding:9px}
+.coop-proposal-history{width:33.333%;min-width:300px;margin-right:auto}.coop-history-item{padding:5px!important;margin-top:7px!important}.coop-history-enemy{display:block!important;padding:2px!important;border:0!important;background:transparent!important}.coop-history-enemy img,.coop-history-enemy span{width:30px!important;height:30px!important;margin:auto}.coop-history-layer{grid-template-columns:38px repeat(3,30px)!important;justify-content:start;gap:5px!important}.coop-history-proposals{grid-template-columns:1fr!important}.coop-history-proposals .coop-proposal-card{width:100%}
+@media(min-width:1000px){.coop-enemies-toggle{display:none!important}.coop-enemies-body{display:grid!important}.coop-section-title{display:grid;grid-template-columns:1fr;gap:7px}.coop-section-actions{order:-1;justify-content:flex-start;padding:7px;border:1px solid #d9dee5;border-radius:8px;background:#f7f9fc}.coop-section-title>div:first-child{order:2}.coop-input-layout>.coop-decks{padding-top:5px}}
+@media(max-width:999px){.coop-proposal-history{width:100%;min-width:0}.coop-slot-actions{width:100%}.coop-character-delete{min-height:28px!important}}
+
