@@ -367,7 +367,8 @@
 .coop-proposal-intro-panel{max-width:560px!important}.coop-proposal-intro-panel p{font-size:.92rem!important;line-height:1.75!important;text-align:left!important}
 @media(min-width:1000px){.coop-enemies-toggle{display:none!important}.coop-enemies-body{display:grid!important}.coop-section-title{display:flex!important;align-items:center!important;grid-template-columns:none!important;gap:10px!important}.coop-section-actions{order:initial!important;justify-content:flex-end!important;padding:0!important;border:0!important;background:transparent!important}.coop-section-title>div:first-child{order:initial!important}.coop-input-layout>.coop-decks{padding-top:5px}}
 @media(max-width:999px){.coop-proposal-history{width:100%;min-width:0}.coop-slot-actions{width:100%}.coop-character-delete{min-height:28px!important}.coop-history-enemy img,.coop-history-enemy span{width:42px!important;height:42px!important}.coop-history-layer{grid-template-columns:38px repeat(3,42px)!important;gap:6px!important}}
-/* build 20260917-221: picker hierarchy sticky bars */
-#picker .picker-sticky-special-folder>.zk-b1{position:sticky;top:52px;z-index:24}
-#picker .picker-sticky-limited-folder>.zk-b2{position:sticky;top:104px;z-index:23;box-shadow:0 1px 0 rgba(0,0,0,.14)}
-@media(max-width:800px){#picker .picker-sticky-special-folder>.zk-b1{top:52px}#picker .picker-sticky-limited-folder>.zk-b2{top:104px}}
+
+/* build 20260917-222: sticky special/limited bars on the actual buttons */
+#picker .picker-sticky-special{position:sticky;top:32px;z-index:24;box-shadow:0 1px 0 rgba(0,0,0,.14)}
+#picker .picker-sticky-limited{position:sticky;top:70px;z-index:23;box-shadow:0 1px 0 rgba(0,0,0,.14)}
+@media(max-width:800px){#picker .picker-sticky-special{top:36px}#picker .picker-sticky-limited{top:74px}}
