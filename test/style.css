@@ -344,7 +344,7 @@
 
 /* build 20260917-216: PC enemy/ally 3:5 split, sticky picker tags, history proposals 3 columns */
 .coop-history-proposals{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
-.picker-modal .zk-l1>.zk-b1{position:sticky;top:58px;z-index:8;box-shadow:0 1px 0 rgba(0,0,0,.12)}
+
 @media(min-width:1000px){
  #page-coop>.panel{max-width:1500px;margin-inline:auto;padding:12px}
  .coop-input-layout{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr);gap:12px;align-items:start}
@@ -356,7 +356,7 @@
  .coop-deck-row{margin-top:6px;padding:6px}.coop-deck-head{gap:5px}.coop-deck-head h3{margin:0;font-size:.78rem}.coop-deck-slots{gap:4px}.coop-deck-slot{padding:4px}.coop-deck-slot .coop-portrait{width:40px;height:40px}.coop-deck-slot .coop-skill-check{min-height:28px;padding:3px;font-size:.54rem}
  .coop-section-title h2{font-size:1rem}.coop-section-title small,.coop-section-actions{font-size:.65rem}.coop-section-actions button,.coop-section-actions select{min-height:30px;padding:4px 6px;font-size:.66rem}
 }
-@media(max-width:999px){.coop-input-layout{display:block}.coop-history-proposals{grid-template-columns:1fr!important}.picker-modal .zk-l1>.zk-b1{top:54px}}
+@media(max-width:999px){.coop-input-layout{display:block}.coop-history-proposals{grid-template-columns:1fr!important}}
 
 /* build 20260917-219: restore cumulative cooperative UI requirements */
 .topbar{height:42px;gap:9px;padding:0 12px;font-size:.82rem}.topbar>b{font-size:.88rem}.hamburger{width:32px;height:32px}.hamburger i{width:18px}.temp-toggle{padding:4px 8px;font-size:.68rem}.sidebar{top:42px;width:184px;padding:7px}.sidebar button{padding:8px 10px;font-size:.76rem}main{padding-top:54px}
@@ -368,7 +368,7 @@
 @media(min-width:1000px){.coop-enemies-toggle{display:none!important}.coop-enemies-body{display:grid!important}.coop-section-title{display:flex!important;align-items:center!important;grid-template-columns:none!important;gap:10px!important}.coop-section-actions{order:initial!important;justify-content:flex-end!important;padding:0!important;border:0!important;background:transparent!important}.coop-section-title>div:first-child{order:initial!important}.coop-input-layout>.coop-decks{padding-top:5px}}
 @media(max-width:999px){.coop-proposal-history{width:100%;min-width:0}.coop-slot-actions{width:100%}.coop-character-delete{min-height:28px!important}.coop-history-enemy img,.coop-history-enemy span{width:42px!important;height:42px!important}.coop-history-layer{grid-template-columns:38px repeat(3,42px)!important;gap:6px!important}}
 
-/* build 20260917-222: sticky special/limited bars on the actual buttons */
-#picker .picker-sticky-special{position:sticky;top:32px;z-index:24;box-shadow:0 1px 0 rgba(0,0,0,.14)}
-#picker .picker-sticky-limited{position:sticky;top:70px;z-index:23;box-shadow:0 1px 0 rgba(0,0,0,.14)}
-@media(max-width:800px){#picker .picker-sticky-special{top:36px}#picker .picker-sticky-limited{top:74px}}
+/* build 20260917-223: special/limited bars fixed inside picker scroll */
+#picker .picker-sticky-special{position:sticky!important;top:32px!important;z-index:28!important;box-shadow:0 1px 0 rgba(0,0,0,.18)}
+#picker .picker-sticky-limited{position:sticky!important;top:70px!important;z-index:27!important;box-shadow:0 1px 0 rgba(0,0,0,.18)}
+@media(max-width:800px){#picker .picker-sticky-special{top:36px!important}#picker .picker-sticky-limited{top:74px!important}}
