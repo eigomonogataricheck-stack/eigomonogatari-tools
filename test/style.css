@@ -321,3 +321,11 @@
 .coop-proposal-image-cell img{cursor:pointer}
 @media(max-width:800px){.coop-proposal-grid{grid-template-columns:1fr!important}.coop-layer-body{grid-template-columns:repeat(3,minmax(0,1fr))!important}.coop-deck-slots{grid-template-columns:repeat(5,minmax(0,1fr))!important}.coop-proposal-images{grid-template-columns:repeat(5,minmax(0,1fr))!important;overflow:visible!important}.coop-proposal-image-cell{min-width:0!important}.coop-history-layer{grid-template-columns:40px repeat(3,minmax(0,1fr));gap:2px}.coop-history-enemy{grid-template-columns:26px minmax(0,1fr)}.coop-history-enemy img,.coop-history-enemy span{width:26px!important;height:26px!important}}
 
+/* build 20260917-214: collapsible history and explicit recording */
+.coop-history-toggle{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;width:100%;padding:10px 12px;border:0;border-radius:8px;background:#e8eef8;color:#243954;text-align:left;cursor:pointer}
+.coop-history-toggle>span:first-child{font-size:1.05rem;font-weight:800}.coop-history-toggle small{color:#68778c}.coop-history-arrow{font-size:1.1rem;font-weight:900}
+#coopHistoryBody[hidden]{display:none!important}
+#coopRecordManual,#coopRecordProposal{white-space:nowrap}
+.coop-history-head b{overflow-wrap:anywhere}
+@media(max-width:800px){.coop-history-toggle{grid-template-columns:auto 1fr auto;padding:8px}.coop-history-toggle>span:first-child{font-size:.92rem}.coop-history-toggle small{font-size:.58rem}#coopRecordManual,#coopRecordProposal{font-size:.64rem;padding:6px 8px}}
+
