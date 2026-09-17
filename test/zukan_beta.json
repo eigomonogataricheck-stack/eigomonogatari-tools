@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-10T09:52:35.886Z",
+  "generatedAt": "2026-09-17T05:44:47.469Z",
   "characters": [
     {
       "id": 1189,
@@ -14508,6 +14508,71 @@
       }
     },
     {
+      "id": 2054,
+      "name": "再びニートだ浅ちゃん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2054.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "レアな奴ら",
+      "details": {
+        "id": 2054,
+        "name": "再びニートだ浅ちゃん",
+        "attribute": "火",
+        "cost": 40,
+        "hp": 1200,
+        "power": 4000,
+        "limitBreak": 7,
+        "limitHp": 2044,
+        "limitPower": 6816,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身の攻撃力を300%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 3,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2055,
+      "name": "あっついさん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2055.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "レアな奴ら",
+      "details": {
+        "id": 2055,
+        "name": "あっついさん",
+        "attribute": "水",
+        "cost": 40,
+        "hp": 3600,
+        "power": 1600,
+        "limitBreak": 7,
+        "limitHp": 6134,
+        "limitPower": 2726,
+        "skillTurn": 0,
+        "skill": "自身のHPを60%回復する。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.6,
+            "applier": "自身",
+            "sourceText": "自身のHPを60%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 2257,
       "name": "リア充大天使",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2257.png",
@@ -16251,78 +16316,13 @@
       }
     },
     {
-      "id": 2054,
-      "name": "再びニートだ浅ちゃん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2054.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "EXTRA",
-      "smallCategory": "その他",
-      "heading": "UMA？",
-      "details": {
-        "id": 2054,
-        "name": "再びニートだ浅ちゃん",
-        "attribute": "火",
-        "cost": 40,
-        "hp": 1200,
-        "power": 4000,
-        "limitBreak": 7,
-        "limitHp": 2044,
-        "limitPower": 6816,
-        "skillTurn": 2,
-        "skill": "1ターンの間、自身の攻撃力を300%増加させる。",
-        "rare": "MZR",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 3,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を300%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 2055,
-      "name": "あっついさん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2055.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "EXTRA",
-      "smallCategory": "その他",
-      "heading": "UMA？",
-      "details": {
-        "id": 2055,
-        "name": "あっついさん",
-        "attribute": "水",
-        "cost": 40,
-        "hp": 3600,
-        "power": 1600,
-        "limitBreak": 7,
-        "limitHp": 6134,
-        "limitPower": 2726,
-        "skillTurn": 0,
-        "skill": "自身のHPを60%回復する。",
-        "rare": "MZR",
-        "skillEffects": [
-          {
-            "effect": "回復",
-            "value": 0.6,
-            "applier": "自身",
-            "sourceText": "自身のHPを60%回復する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
       "id": 2085,
       "name": "怪童の金たろす",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2085.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2085,
         "name": "怪童の金たろす",
@@ -16354,7 +16354,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2086,
         "name": "古の灰かぶりロドピス",
@@ -16388,7 +16388,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2114,
         "name": "ルナプリ☆かぐや様",
@@ -16420,7 +16420,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2115,
         "name": "ケロッとる☆キング",
@@ -16453,7 +16453,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2148,
         "name": "レジェンド・八郎ニキ",
@@ -16486,7 +16486,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2149,
         "name": "2人はフェレナント君",
@@ -16519,7 +16519,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2177,
         "name": "Mt.CACHI×2",
@@ -16553,7 +16553,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2178,
         "name": "長靴履いたなろう猫",
@@ -16587,7 +16587,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2211,
         "name": "俊敏源氏！牛若。",
@@ -16622,7 +16622,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2212,
         "name": "ソルジャーL.RED",
@@ -16655,7 +16655,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2240,
         "name": "にょろにょろ女房",
@@ -16688,7 +16688,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2241,
         "name": "トリック⭐︎アナンシ君",
@@ -16724,7 +16724,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2282,
         "name": "再起動!S-MAN",
@@ -16760,7 +16760,7 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "EXTRA",
       "smallCategory": "その他",
-      "heading": "UMA？",
+      "heading": "民話",
       "details": {
         "id": 2283,
         "name": "代父の42神ニキ",
@@ -23649,16 +23649,16 @@
         "limitHp": 4430,
         "limitPower": 4260,
         "skillTurn": 3,
-        "skill": "2ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
+        "skill": "2ターンの間、水属性の味方全員の攻撃力を150%増加させる。",
         "rare": "MZR",
         "skillEffects": [
           {
             "effect": "攻撃力アップ",
             "value": 1.5,
             "duration": 2,
-            "applier": "風",
-            "applierAttribute": "風",
-            "sourceText": "2ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "2ターンの間、水属性の味方全員の攻撃力を150%増加させる。",
             "needsReview": false
           }
         ]
