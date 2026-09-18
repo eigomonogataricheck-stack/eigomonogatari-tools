@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260918-252 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260918-253 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=1.6119,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_MAX_DAMAGE_SCALE=1.2,COOP_PROPOSAL_MIN_DAMAGE_SCALE=0.001,COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12,coopProposalScaleStats=[];
@@ -193,7 +193,7 @@ async function proposeCoopDecks(){
   const merge=(base,items)=>{let map=new Map(base);for(let item of items||[]){let key=coopProposalDeckKey(item.ids||coopProposalDeckIds(coopProposalItemDeck(item)));if(key&&!map.has(key))map.set(key,item)}return map};
   const fmt=scale=>scale.toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
   const show=(scale,map,newCount,phase)=>{let items=coopProposalCumulativeItems(map),coverage=coopProposalSlotCoverage(items);coopProposalProgressScale=scale;coopProposalProgressCoverage=coverage.slice();coopProposalProgressSlot=0;let text=coverage.map((count,slot)=>coopProposalSlotNeedsCandidate(slot)?`${slot+1}枠:${Math.min(count,coopProposalResultTarget)}/${coopProposalResultTarget}`:null).filter(Boolean).join(' / ');renderCoopProposalDecks(coopProposalCurate(items));$('coopDamageResult').textContent=`${phase} ${fmt(scale)}倍 / 新規確定撃破${newCount.toLocaleString()}件 / 対象累積${items.length.toLocaleString()}件 / ${text}`;return coverage};
-  async function run(scale,baseMap,onlyKeys=null){coopProposalProgressScale=scale;coopProposalProgressCoverage=Array(COOP_SLOTS).fill(0);coopProposalProgressSlot=0;coopProposalProgressCharacterDone=0;coopProposalProgressCharacterTotal=0;coopProposalDamageScale=scale;coopProposalStageLabel=`係数${fmt(scale)}倍・${targetDecks}デッキ総当たり`;coopProposalOrderCache.clear();coopProposalManualCertainCache.clear();let started=performance.now(),inputCount=onlyKeys?.size??null;await coopProposalAttempt(targetDecks,false,new Set(baseMap.keys()),onlyKeys);coopProposalScaleStats.push({scale,inputCount,newConfirmed:coopProposalLastConfirmed.length,elapsedMs:Math.round(performance.now()-started)});return merge(baseMap,coopProposalLastConfirmed)}
+  async function run(scale,baseMap,onlyKeys=null){coopProposalProgressScale=scale;coopProposalProgressCoverage=Array(COOP_SLOTS).fill(0);coopProposalProgressSlot=0;coopProposalProgressCharacterDone=0;coopProposalProgressCharacterTotal=0;coopProposalDamageScale=scale;coopProposalStageLabel=`係数${fmt(scale)}倍・既確定${baseMap.size.toLocaleString()}件を除外して追加探索`;coopProposalOrderCache.clear();coopProposalManualCertainCache.clear();let started=performance.now(),inputCount=onlyKeys?.size??null;await coopProposalAttempt(targetDecks,false,new Set(baseMap.keys()),onlyKeys);coopProposalScaleStats.push({scale,inputCount,newConfirmed:coopProposalLastConfirmed.length,elapsedMs:Math.round(performance.now()-started)});return merge(baseMap,coopProposalLastConfirmed)}
   try{
     let first=await run(.5,new Map());show(.5,first,coopProposalLastConfirmed.length,'基準探索');
     if(complete(first)){
@@ -206,20 +206,20 @@ async function proposeCoopDecks(){
       lowScale=.5;lowMap=first;
       for(let step=6;step<=12;step++){let scale=step/10,next=await run(scale,lowMap);show(scale,next,coopProposalLastConfirmed.length,'上昇探索');if(complete(next)){highScale=scale;highMap=next;break}lowScale=scale;lowMap=next}
     }
-    if(highMap==null){let coverage=show(1.2,lowMap,0,'上限到達'),values=coverage.filter((_,slot)=>coopProposalSlotNeedsCandidate(slot));$('coopClearResult').textContent=lowMap.size?'候補不足':'提案不可';return values.length?Math.min(...values):0}
+    if(highMap==null){let maxItems=coopProposalCumulativeItems(lowMap),maxCoverage=coopProposalSlotCoverage(maxItems),eligibleSlots=maxCoverage.map((count,slot)=>coopProposalSlotNeedsCandidate(slot)&&count>=coopProposalResultTarget),refined=eligibleSlots.some(Boolean)?await coopProposalExhaustiveOvershoot(maxItems,1.2):[];if(refined.length)lowMap=new Map(refined.map(item=>[coopProposalDeckKey(item.ids),item]));let coverage=show(1.2,lowMap,0,refined.length?'上限1.2倍・提示数到達枠を総当たり完了':'上限1.2倍・途中候補採用'),values=coverage.filter((_,slot)=>coopProposalSlotNeedsCandidate(slot));$('coopClearResult').textContent=lowMap.size?'候補不足枠あり・到達枠は選定完了':'提案不可';return values.length?Math.min(...values):0}
     for(let step=0;step<14&&highScale-lowScale>.0001;step++){let mid=Math.round((lowScale+highScale)/2*1e6)/1e6,upperOnly=new Set([...highMap.keys()].filter(key=>!lowMap.has(key))),midMap=await run(mid,lowMap,upperOnly);show(mid,midMap,coopProposalLastConfirmed.length,'境界絞込');if(complete(midMap)){highScale=mid;highMap=midMap}else{lowScale=mid;lowMap=midMap}}
     let chosenScale=highScale,chosenMap=highMap,counts=coopProposalSlotCoverage(coopProposalCumulativeItems(highMap)).filter((_,slot)=>coopProposalSlotNeedsCandidate(slot));
     const state=values=>values.some(v=>v<coopProposalResultTarget)?'under':values.some(v=>v>COOP_PROPOSAL_OVERSHOOT_LIMIT)?'over':'ready';
     if(state(counts)==='over'){
-      let trimLow=lowScale,trimHigh=highScale,readyMap=null,readyScale=null;
+      let trimLow=lowScale,trimHigh=highScale,trimLowMap=lowMap,trimHighMap=highMap,readyMap=null,readyScale=null;
       for(let step=0;step<18&&trimHigh-trimLow>.000001;step++){
-        let mid=Math.round((trimLow+trimHigh)/2*1e6)/1e6,trial=await run(mid,new Map()),trialCounts=show(mid,trial,coopProposalLastConfirmed.length,'提示数～30体へ倍率調整').filter((_,slot)=>coopProposalSlotNeedsCandidate(slot)),trialState=state(trialCounts);
-        if(trialState==='ready'){readyScale=mid;readyMap=trial;trimHigh=mid}
-        else if(trialState==='under')trimLow=mid;
-        else trimHigh=mid;
+        let mid=Math.round((trimLow+trimHigh)/2*1e6)/1e6,upperOnly=new Set([...trimHighMap.keys()].filter(key=>!trimLowMap.has(key))),trial=await run(mid,trimLowMap,upperOnly),trialCounts=show(mid,trial,coopProposalLastConfirmed.length,'提示数～30体へ倍率調整').filter((_,slot)=>coopProposalSlotNeedsCandidate(slot)),trialState=state(trialCounts);
+        if(trialState==='ready'){readyScale=mid;readyMap=trial;trimHigh=mid;trimHighMap=trial}
+        else if(trialState==='under'){trimLow=mid;trimLowMap=trial}
+        else {trimHigh=mid;trimHighMap=trial}
       }
       if(readyMap){chosenScale=readyScale;chosenMap=readyMap}
-      else {chosenScale=trimHigh;chosenMap=await run(trimHigh,new Map());show(chosenScale,chosenMap,coopProposalLastConfirmed.length,'30体以内の境界確認')}
+      else {chosenScale=trimHigh;chosenMap=trimHighMap;show(chosenScale,chosenMap,0,'30体以内の境界確認')}
     }
     let chosenItems=coopProposalCumulativeItems(chosenMap),chosenCounts=coopProposalSlotCoverage(chosenItems).filter((_,slot)=>coopProposalSlotNeedsCandidate(slot)),refined=[];
     if(chosenCounts.length&&chosenCounts.every(v=>v>=coopProposalResultTarget&&v<=COOP_PROPOSAL_OVERSHOOT_LIMIT)&&chosenCounts.some(v=>v>coopProposalResultTarget))refined=await coopProposalExhaustiveOvershoot(chosenItems,chosenScale);
