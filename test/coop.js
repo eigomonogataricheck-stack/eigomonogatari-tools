@@ -1,10 +1,9 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260918-254 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260918-255 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=1.6119,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_MAX_DAMAGE_SCALE=1.2,COOP_PROPOSAL_MIN_DAMAGE_SCALE=0.001,COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12,coopProposalScaleStats=[];
 let coopProposalProgressScale=null,coopProposalProgressCoverage=Array(COOP_SLOTS).fill(0),coopProposalProgressSlot=0,coopProposalProgressCharacterDone=0,coopProposalProgressCharacterTotal=0,coopProposalExcludedSlotIds=Array.from({length:COOP_SLOTS},()=>new Set());
 let coopProposalDamageScale=1,coopProposalLastFoundCount=0,coopProposalLastConfirmed=[];
-function coopProposalStageCharacterLimit(totalDecks=coopProposalTargetDecks){return Math.max(coopProposalResultTarget,totalDecks===3?20:totalDecks===4?15:12)}
 let coopEnemies=Array.from({length:15},()=>({character:null,hp:0,attribute:'火'})),coopDecks=Array.from({length:COOP_MAX_ROWS},()=>Array(COOP_SLOTS).fill(null)),coopVisibleRows=1,coopClipboard=null,coopPickerTarget=null,coopDetailMode=false,coopStoredState=null,coopProposalAll=[],coopProposalDisplayLimit=10,coopProposalTargetDecks=4,coopProposalEnemySecondFixed=false,coopProposalStageLabel='',coopProposalLastBeam=[],coopProposalLiveLockedSlots=Array.from({length:5},()=>[]);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initCoop,{once:true});else initCoop();
 let coopProposalButtonBound=false;
@@ -157,15 +156,14 @@ async function coopProposalBuildPrefixes(firstCandidates,pools,totalDecks,source
     let clearRanking=passed.length?coopProposalSlotCharacterRanking(passed,slot,Infinity):[];
     await coopProposalShowStageDialog(slot,'clear',clearRanking.map(x=>x.bestItem),true);
     if(!passed.length){await coopProposalShowStageDialog(slot,'after',[],true);prefixes=[];coopSetProposalProgress(`${slot+1}枠目で確定撃破可能構成なし`,true,stageTotal,stageTotal,0,1);break}
-    let stageLimit=coopProposalStageCharacterLimit(totalDecks),stageRanking=coopProposalSlotCharacterRanking(passed,slot,stageLimit),stageIds=new Set(stageRanking.map(x=>coopCharacterKey(x.character)));
-    passed=passed.filter(item=>stageIds.has(coopCharacterKey(item.deck[slot])));
-    coopProposalLiveLockedSlots[slot]=stageRanking.slice(0,coopProposalResultTarget).map(x=>x.character);coopProposalProgressCoverage[slot]=stageRanking.length;coopProposalProgressCharacterDone=coopProposalProgressCharacterTotal;coopSetProposalProgress(`${slot+1}枠目完了・確定撃破候補${stageRanking.length}キャラ`,true,stageTotal,stageTotal,passed.length,1);
+    let stageRanking=coopProposalSlotCharacterRanking(passed,slot,Infinity);
+    coopProposalLiveLockedSlots[slot]=stageRanking.slice(0,coopProposalResultTarget).map(x=>x.character);coopProposalProgressCoverage[slot]=stageRanking.length;coopProposalProgressCharacterDone=coopProposalProgressCharacterTotal;coopSetProposalProgress(`${slot+1}枠目完了・確定撃破候補${stageRanking.length}キャラ（全候補を次枠へ継続）`,true,stageTotal,stageTotal,passed.length,1);
     await coopProposalShowStageDialog(slot,'after',stageRanking.map(x=>x.bestItem),true);
     if(slot===2||slot===3){let fixedSlot=slot-2,fixedNeedsCandidate=coopProposalSlotNeedsCandidate(fixedSlot),fixedRanking=fixedNeedsCandidate?coopProposalSlotCharacterRanking(passed,fixedSlot,coopProposalResultTarget):[];if(fixedNeedsCandidate){let fixedIds=new Set(fixedRanking.map(x=>coopCharacterKey(x.character)));passed=passed.filter(item=>fixedIds.has(coopCharacterKey(item.deck[fixedSlot])));coopProposalLiveLockedSlots[fixedSlot]=fixedRanking.map(x=>x.character);await coopProposalShowStageDialog(fixedSlot,'after',fixedRanking.map(x=>x.bestItem),true)}}
     prefixes=passed.map(x=>x.deck);
     coopProposalRenderLiveRanking(stageRanking.slice(0,coopProposalResultTarget).map(x=>x.bestItem),slot);
     let fixedText=slot===2?' / 1枠目上位${coopProposalResultTarget}を確定':slot===3?' / 2枠目上位${coopProposalResultTarget}を確定':'';
-    coopSetProposalProgress(`${slot+1}枠目計算完了・現在枠上位${stageLimit}キャラへ限定${fixedText} / 次段階${prefixes.length.toLocaleString()}構成`,true,stageTotal,stageTotal,passed.length,1);
+    coopSetProposalProgress(`${slot+1}枠目計算完了・確定撃破した全候補を維持${fixedText} / 次段階${prefixes.length.toLocaleString()}構成`,true,stageTotal,stageTotal,passed.length,1);
     await coopYield();
   }
   return prefixes;
