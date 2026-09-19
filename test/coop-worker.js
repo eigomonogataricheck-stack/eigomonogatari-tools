@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20260919-305 */
+/* Cooperative proposal worker build 20260919-306 */
 let stopped=false;
 self.onmessage=e=>{const m=e.data||{};if(m.type==='cancel'){stopped=true;return}if(!['start','stage'].includes(m.type))return;stopped=false;try{
 self.chars=m.chars;self.coopEnemies=m.enemies;self.coopDecks=m.decks;self.coopVisibleRows=m.visibleRows;self.coopDetailMode=!!m.detailMode;self.coopProposalTargetDecks=m.targetDecks;self.coopProposalEnemySecondFixed=!!m.enemySecondFixed;self.ATTRS=m.constants.ATTRS;self.MATCH=m.constants.MATCH;self.COOP_LAYER_MULTIPLIERS=m.constants.layerMultipliers;self.COOP_DAMAGE_BASE=m.constants.damageBase;self.coopProposalDamageScale=Number(m.constants.damageScale??1);self.COOP_SLOTS=5;self.COOP_MAX_ROWS=5;self.coopProposalOrderCache=new Map();self.coopProposalManualCertainCache=new Map();
