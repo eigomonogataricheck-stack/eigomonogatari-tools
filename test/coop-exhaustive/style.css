@@ -418,3 +418,14 @@
 #coopScaleHistoryList{min-height:0!important}
 @media(max-width:1000px){#coopScaleHistoryBody{max-height:60vh!important}}
 @media(max-width:700px){.coop-count-control{width:auto!important}.coop-proposal-controls .coop-count-control,.coop-all-decks-toggle{width:auto!important}}
+
+/* build 20260920-350 */
+.coop-usage-slot>summary:not(.coop-usage-slot-summary){display:none!important}
+.coop-usage-slot-summary{width:100%!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr) 24px!important;align-items:center!important;list-style:none!important}
+.coop-usage-slot-summary::-webkit-details-marker{display:none!important}.coop-usage-slot-summary::marker{content:""!important}
+.coop-usage-slot-summary strong{min-width:0!important}.coop-usage-slot-arrow{display:block!important;width:24px!important;text-align:right!important;justify-self:end!important;margin-left:auto!important}
+.coop-proposal-usage{padding:0!important;background:transparent!important;border:0!important}
+#coopProposalUsageBody{padding:12px!important}
+.coop-decks .coop-section-title{top:0!important;margin:0!important;padding-top:0!important;background:#fff!important;box-shadow:0 -14px 0 14px #fff!important}
+#coopDeckRows{margin-top:0!important;padding-top:0!important}.coop-deck-row:first-child{margin-top:0!important}
+#coopScaleHistoryBody{overscroll-behavior:auto!important}
