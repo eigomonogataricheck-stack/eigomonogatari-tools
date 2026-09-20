@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-15T16:25:43.476Z",
+  "generatedAt": "2026-09-17T05:44:47.469Z",
   "characters": [
     {
       "id": 1189,
@@ -23649,16 +23649,16 @@
         "limitHp": 4430,
         "limitPower": 4260,
         "skillTurn": 3,
-        "skill": "2ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
+        "skill": "2ターンの間、水属性の味方全員の攻撃力を150%増加させる。",
         "rare": "MZR",
         "skillEffects": [
           {
             "effect": "攻撃力アップ",
             "value": 1.5,
             "duration": 2,
-            "applier": "風",
-            "applierAttribute": "風",
-            "sourceText": "2ターンの間、風属性の味方全員の攻撃力を150%増加させる。",
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "2ターンの間、水属性の味方全員の攻撃力を150%増加させる。",
             "needsReview": false
           }
         ]
