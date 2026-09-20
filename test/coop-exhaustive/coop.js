@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260920-326 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260920-327 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=1.6119,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_MAX_DAMAGE_SCALE=1.2,COOP_PROPOSAL_MIN_DAMAGE_SCALE=0.001,COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12,coopProposalScaleStats=[];
@@ -121,14 +121,15 @@ function coopFirstDamageProfile(c){let damages=[0,1,2].map(pos=>{let hp=Math.max
 function coopCompareFirstDamage(a,b){let ap=coopFirstDamageProfile(a),bp=coopFirstDamageProfile(b);return bp.minimum-ap.minimum||bp.total-ap.total||bp.maximum-ap.maximum||coopPower(b)-coopPower(a)||Number(a.details?.id??a.id)-Number(b.details?.id??b.id)}
 function coopProposalFirstAttribute(c){return canon(c?.details?.attribute??'')||'不明'}
 function coopProposalFirstActiveEffects(c){if(Number(c?.details?.skillTurn??Infinity)!==0)return[];return skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','色変'].includes(en(e)))}
+function coopProposalFirstSelfAttackAllowed(c){let effects=coopProposalFirstActiveEffects(c),hasSelfAttack=effects.some(e=>en(e)==='攻撃力アップ'&&coopScopeIsSelf(e));if(!hasSelfAttack)return true;return effects.some(e=>en(e)==='連撃'&&Math.max(1,Math.floor(raw(e?.value??e?.amount)))===3)}
 function coopProposalFirstCandidatesAll(all){
-  let base=all.filter(c=>c?.details?.rare!=='N'&&coopPower(c)>0);
+  let base=all.filter(c=>c?.details?.rare!=='N'&&coopPower(c)>0&&coopProposalFirstSelfAttackAllowed(c));
   return base.sort((a,b)=>{let aActive=coopProposalFirstActiveEffects(a).length>0,bActive=coopProposalFirstActiveEffects(b).length>0;if(!aActive&&!bActive)return coopPower(b)-coopPower(a)||Number(a.details?.id??a.id)-Number(b.details?.id??b.id);return coopCompareFirstDamage(a,b)})
 }
 function coopProposalLimitFirstPassed(items){
   let noSkillMinimum=new Map();
   for(let item of items||[]){let c=coopProposalItemDeck(item)[0];if(!c||coopProposalFirstActiveEffects(c).length)continue;let attr=coopProposalFirstAttribute(c),current=noSkillMinimum.get(attr);if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))noSkillMinimum.set(attr,c)}
-  return (items||[]).filter(item=>{let c=coopProposalItemDeck(item)[0];if(!c)return false;let effects=coopProposalFirstActiveEffects(c),minimum=noSkillMinimum.get(coopProposalFirstAttribute(c));if(!effects.length)return minimum===c;let duration=Math.max(...effects.map(effectDuration));if(duration>=2)return true;return !!minimum&&coopPower(c)<coopPower(minimum)})
+  return (items||[]).filter(item=>{let c=coopProposalItemDeck(item)[0];if(!c||!coopProposalFirstSelfAttackAllowed(c))return false;let effects=coopProposalFirstActiveEffects(c),minimum=noSkillMinimum.get(coopProposalFirstAttribute(c));if(!effects.length)return minimum===c;let duration=Math.max(...effects.map(effectDuration));if(duration>=2)return true;return !!minimum&&coopPower(c)<coopPower(minimum)})
 }
 function coopProposalFirstCandidates(all){return coopProposalFirstCandidatesAll(all)}
 function coopProposalLayerPowerPossible(plan){if(!plan?.initial?.some(Boolean))return false;let required=plan.initial.reduce((sum,hp)=>sum+Math.max(0,Number(hp)||0),0),available=0;for(let row=0;row<plan.hitDamages.length;row++){let hits=Math.max(0,Number(plan.hits[row])||0),best=Math.max(0,...(plan.hitDamages[row]||[]).map(v=>Number(v)||0));available+=best*hits}return available>=required}
