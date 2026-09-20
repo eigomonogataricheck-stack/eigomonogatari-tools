@@ -429,3 +429,17 @@
 .coop-decks .coop-section-title{top:0!important;margin:0!important;padding-top:0!important;background:#fff!important;box-shadow:0 -14px 0 14px #fff!important}
 #coopDeckRows{margin-top:0!important;padding-top:0!important}.coop-deck-row:first-child{margin-top:0!important}
 #coopScaleHistoryBody{overscroll-behavior:auto!important}
+
+/* build 20260920-351 */
+/* Plain, right-aligned usage count control without an extra surrounding card. */
+.coop-usage-slot-toolbar{display:flex!important;justify-content:flex-end!important;align-items:center!important;margin:0 0 10px!important}
+.coop-usage-limit{border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;margin:0!important;border-radius:0!important}
+/* Proposal count control uses exactly the same compact dimensions. */
+#coopProposalDisplayControl{display:flex!important;align-items:center!important;gap:6px!important;min-height:0!important;height:32px!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;font-size:.78rem!important}
+#coopProposalDisplayControl select,.coop-usage-limit select{min-width:86px!important;width:86px!important;height:32px!important;padding:0 26px 0 9px!important;font-size:.82rem!important;border:1px solid #cbd5e1!important;border-radius:7px!important;background:#fff!important}
+/* Give the ally-deck heading and its action group breathing room. */
+.coop-decks .coop-section-title{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;column-gap:28px!important;row-gap:12px!important;padding-bottom:12px!important}
+.coop-decks .coop-section-title>div:first-child{flex:1 1 auto;min-width:150px}
+.coop-decks .coop-section-actions{flex:0 1 auto;margin-left:auto!important}
+/* Internal panes hand wheel control back to the page at either edge. */
+.coop-input-layout>.coop-enemies,.coop-input-layout>.coop-decks{overscroll-behavior:auto!important}
