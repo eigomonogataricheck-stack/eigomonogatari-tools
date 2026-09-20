@@ -401,3 +401,20 @@
 .coop-scale-history-row{padding:9px 11px;border-radius:10px;background:#f4f7fb;font-variant-numeric:tabular-nums}
 .coop-scale-history-row b,.coop-scale-history-row span{display:block}.coop-scale-history-row span{color:#43536a;overflow-wrap:anywhere}
 @media(max-width:1000px){.coop-history-columns{grid-template-columns:1fr}.coop-history-columns>.coop-scale-history-panel{position:static;max-height:none}}
+
+/* build 20260920-349 */
+.coop-usage-slot{min-height:0!important;margin:0!important;overflow:hidden!important;border:1px solid #d8e1ec!important;border-radius:12px!important;background:#fff!important}
+.coop-usage-slot-summary{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;min-height:48px!important;padding:10px 14px!important;background:#f7f9fc!important;cursor:pointer!important;list-style:none!important}
+.coop-usage-slot-summary::-webkit-details-marker{display:none!important}.coop-usage-slot-summary::marker{content:""!important}
+.coop-usage-slot-summary strong{font-size:.96rem!important}.coop-usage-slot-summary span{font-size:.84rem!important}.coop-usage-slot-arrow{justify-self:end!important;font-size:1rem!important}
+.coop-usage-slot-content{padding:10px 12px 12px!important}.coop-usage-slot-toolbar{margin:0 0 10px!important}
+.coop-count-control{display:flex!important;align-items:center!important;gap:6px!important;min-height:0!important;padding:5px 7px!important;border-radius:8px!important;font-size:.78rem!important;box-shadow:none!important}
+.coop-count-control span{font-size:.78rem!important}.coop-count-control select{min-width:86px!important;width:auto!important;height:32px!important;padding:0 28px 0 9px!important;border-radius:7px!important;font-size:.82rem!important}
+.coop-all-decks-toggle{display:flex!important;align-items:center!important;gap:6px!important;min-height:32px!important;height:32px!important;padding:4px 8px!important;border-radius:8px!important;font-size:.78rem!important;box-shadow:none!important}
+.coop-all-decks-toggle b{min-width:34px!important;padding:3px 6px!important;font-size:.7rem!important}
+.coop-proposal-controls{gap:7px!important}.coop-proposal-heading{align-items:center!important}
+.coop-history-columns>.coop-scale-history-panel{overflow:hidden!important;max-height:none!important}
+#coopScaleHistoryBody{max-height:calc(100vh - 170px)!important;overflow-y:auto!important;overscroll-behavior:contain;padding:12px!important;scrollbar-gutter:stable}
+#coopScaleHistoryList{min-height:0!important}
+@media(max-width:1000px){#coopScaleHistoryBody{max-height:60vh!important}}
+@media(max-width:700px){.coop-count-control{width:auto!important}.coop-proposal-controls .coop-count-control,.coop-all-decks-toggle{width:auto!important}}
