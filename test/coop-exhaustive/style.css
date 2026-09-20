@@ -388,23 +388,18 @@
 .coop-usage-grid{padding:0 16px 16px!important;gap:12px!important}
 @media(max-width:800px){.coop-proposal-usage{gap:18px!important;padding:14px!important}.coop-usage-slot{min-height:54px!important}.coop-usage-slot-header{min-height:54px;padding:10px 12px!important}}
 
-/* build 20260920-346: usage slot structure and history columns */
-#coopProposalUsageBody{padding-top:12px!important}
-.coop-proposal-usage{gap:14px!important;padding:14px!important}
-.coop-usage-slot{min-height:0!important;overflow:hidden}
-.coop-usage-slot-summary{display:grid!important;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px;min-height:52px;padding:12px 16px!important;background:#f7f9fc;cursor:pointer;list-style-position:inside}
-.coop-usage-slot-summary::marker{color:#24476b}
-.coop-usage-slot-summary strong{font-size:1rem;color:#213752}
-.coop-usage-slot-summary span{color:#52647c;font-size:.86rem;font-weight:700}
-.coop-usage-slot-content{padding:12px 14px 14px;border-top:1px solid #e1e8f0}
-.coop-usage-slot-toolbar{display:flex;justify-content:flex-end;margin:0 0 12px}
-.coop-usage-grid{padding:0!important}
-.coop-usage-slot:not([open]) .coop-usage-slot-content{display:none}
-.coop-history-layout{width:100%!important;min-width:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(360px,430px)!important;grid-template-areas:"toggle scale" "body scale";gap:16px 20px!important;align-items:start}
-.coop-history-layout>#coopHistoryToggle{grid-area:toggle;margin:0!important}
-.coop-history-layout>#coopHistoryBody{grid-area:body;min-width:0}
-.coop-history-layout>#coopScaleHistoryPanel{grid-area:scale;position:sticky;top:58px;max-height:calc(100vh - 76px);overflow:auto}
-.coop-history-layout #coopProposalHistory{display:grid;gap:12px}
-.coop-history-layout .coop-history-item{width:100%;margin:0!important}
-@media(max-width:1000px){.coop-history-layout{grid-template-columns:1fr!important;grid-template-areas:"toggle" "body" "scale"!important}.coop-history-layout>#coopScaleHistoryPanel{position:static;max-height:none}}
-@media(max-width:700px){.coop-usage-slot-summary{padding:11px 12px!important}.coop-usage-slot-content{padding:10px}.coop-usage-slot-toolbar .coop-count-control{width:100%}}
+/* build 20260920-347 */
+.coop-proposal-usage-results{padding:0!important;border:1px solid #cfe0ff;border-radius:14px;background:#fbfdff;overflow:hidden}
+.coop-proposal-usage-results>.coop-proposal-toggle{border:0!important;border-radius:0!important}
+#coopProposalUsageBody{padding:14px!important;border-top:1px solid #dbe5f2}
+.coop-proposal-usage{margin:0!important;padding:0!important;border:0!important;background:transparent!important;gap:12px!important}
+.coop-usage-slot{min-height:0!important;margin:0!important;overflow:hidden}
+.coop-usage-slot-summary{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;min-height:58px;padding:12px 16px!important;background:#f7f9fc;cursor:pointer;list-style:none!important}
+.coop-usage-slot-summary::-webkit-details-marker{display:none}.coop-usage-slot-summary::marker{content:""}
+.coop-usage-slot-summary strong{font-size:1rem;color:#17324f}.coop-usage-slot-summary span{color:#52647c;font-weight:700}.coop-usage-slot-arrow{justify-self:end;color:#173b62;font-size:1.05rem}
+.coop-usage-slot-content{padding:12px 14px 14px;border-top:1px solid #e1e8f0}.coop-usage-slot-toolbar{display:flex;justify-content:flex-end;margin-bottom:12px}.coop-usage-grid{padding:0!important}
+.coop-history-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start;margin-top:16px}
+.coop-history-columns>.coop-proposal-history,.coop-history-columns>.coop-scale-history-panel{width:100%!important;min-width:0!important;margin:0!important;border:1px solid #d5deea!important;border-radius:14px!important;background:#fff!important}
+.coop-history-columns>.coop-proposal-history{padding:14px!important}.coop-history-columns>.coop-scale-history-panel{position:sticky;top:58px;padding:14px!important;max-height:calc(100vh - 76px);overflow:auto}
+.coop-history-columns .coop-history-toggle{margin:0!important}.coop-history-columns #coopHistoryBody{padding-top:12px}.coop-history-columns #coopProposalHistory{display:grid;gap:12px}.coop-history-columns .coop-history-item{margin:0!important;width:100%}
+@media(max-width:1000px){.coop-history-columns{grid-template-columns:1fr}.coop-history-columns>.coop-scale-history-panel{position:static;max-height:none}}
