@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260920-323 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260920-325 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=1.6119,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_MAX_DAMAGE_SCALE=1.2,COOP_PROPOSAL_MIN_DAMAGE_SCALE=0.001,COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12,coopProposalScaleStats=[];
@@ -119,7 +119,15 @@ function coopFirstUsableEffects(c){if(Number(c?.details?.skillTurn??0)!==0)retur
 function coopFirstHasSkill(c){return Number(c?.details?.skillTurn??0)===0&&coopFirstUsableEffects(c).some(e=>['攻撃力アップ','連撃'].includes(en(e)))}
 function coopFirstDamageProfile(c){let damages=[0,1,2].map(pos=>{let hp=Math.max(1,coopScaledHp(pos)),damage=coopOpeningDamage(c,coopEnemies[pos]);return{damage,hp,ratio:damage/hp}}),minimum=Math.min(...damages.map(x=>x.damage)),total=damages.reduce((sum,x)=>sum+x.damage,0),maximum=Math.max(...damages.map(x=>x.damage));return{damages,minimum,total,maximum}}
 function coopCompareFirstDamage(a,b){let ap=coopFirstDamageProfile(a),bp=coopFirstDamageProfile(b);return bp.minimum-ap.minimum||bp.total-ap.total||bp.maximum-ap.maximum||coopPower(b)-coopPower(a)||Number(a.details?.id??a.id)-Number(b.details?.id??b.id)}
-function coopProposalFirstCandidatesAll(all){let base=all.filter(c=>c?.details?.rare!=='N'&&coopPower(c)>0),powerTop=base.slice().sort((a,b)=>coopPower(b)-coopPower(a)||Number(a.details?.id??a.id)-Number(b.details?.id??b.id)).slice(0,120),zeroTurn=base.filter(c=>Number(c?.details?.skillTurn??Infinity)===0&&skillEffectsOf(c).filter(coopStructuredEffectValid).some(e=>['攻撃力アップ','連撃','色変'].includes(en(e)))),seen=new Set(),eligible=[...powerTop,...zeroTurn].filter(c=>{let id=coopCharacterKey(c);if(!id||seen.has(id))return false;seen.add(id);return true});return eligible.sort(coopCompareFirstDamage)}
+function coopProposalFirstAttribute(c){return canon(c?.details?.attribute??'')||'不明'}
+function coopProposalFirstActiveEffects(c){if(Number(c?.details?.skillTurn??Infinity)!==0)return[];return skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','色変'].includes(en(e)))}
+function coopProposalFirstCandidatesAll(all){
+  let base=all.filter(c=>c?.details?.rare!=='N'&&coopPower(c)>0),noSkillMinimum=new Map();
+  for(let c of base){if(coopProposalFirstActiveEffects(c).length)continue;let attr=coopProposalFirstAttribute(c),current=noSkillMinimum.get(attr);if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))noSkillMinimum.set(attr,c)}
+  let eligible=[];
+  for(let c of base){let effects=coopProposalFirstActiveEffects(c);if(!effects.length){if(noSkillMinimum.get(coopProposalFirstAttribute(c))===c)eligible.push(c);continue}let duration=Math.max(...effects.map(effectDuration));if(duration>=2){eligible.push(c);continue}let minimum=noSkillMinimum.get(coopProposalFirstAttribute(c));if(minimum&&coopPower(c)<coopPower(minimum))eligible.push(c)}
+  return eligible.sort(coopCompareFirstDamage)
+}
 function coopProposalFirstCandidates(all){return coopProposalFirstCandidatesAll(all)}
 function coopProposalLayerPowerPossible(plan){if(!plan?.initial?.some(Boolean))return false;let required=plan.initial.reduce((sum,hp)=>sum+Math.max(0,Number(hp)||0),0),available=0;for(let row=0;row<plan.hitDamages.length;row++){let hits=Math.max(0,Number(plan.hits[row])||0),best=Math.max(0,...(plan.hitDamages[row]||[]).map(v=>Number(v)||0));available+=best*hits}return available>=required}
 function coopProposalAllOrdersCertain(plan){if(!plan?.orders?.length)return false;for(let order of plan.orders)if(!coopProposalLayerCertain(order,plan))return false;return true}
@@ -148,17 +156,15 @@ function coopProposalShowExhaustiveProgressDialog(currentSlot,phase,source){
 function coopProposalShowExhaustiveDialog(items){if($('coopProposalProgressPopup')&&!$('coopProposalProgressPopup').checked)return Promise.resolve();let dialog=coopProposalEnsureStageDialog(),title=dialog.querySelector('#coopStageDialogTitle'),text=dialog.querySelector('#coopStageDialogText'),box=dialog.querySelector('#coopStageDialogCharacters'),ok=dialog.querySelector('#coopStageDialogOk'),pools=coopProposalOvershootPools(items);title.textContent='最終総当たり';text.textContent='0.5倍から確定撃破デッキを探索し、全キャラが異なる3～6デッキを選定します。';box.innerHTML='';for(let slot=0;slot<COOP_SLOTS;slot++){let group=document.createElement('section');group.style.gridColumn='1 / -1';let heading=document.createElement('h3');heading.textContent=`${slot+1}枠目（${pools[slot].filter(Boolean).length}キャラ）`;group.append(heading);let grid=document.createElement('div');grid.className='coop-stage-dialog-characters';for(let c of pools[slot]){if(!c)continue;let cell=document.createElement('div');cell.className='coop-stage-dialog-character';if(c.imageUrl){let img=document.createElement('img');img.src=c.imageUrl;img.alt=c.name||'';img.loading='lazy';img.decoding='async';cell.append(img)}else cell.append(document.createElement('span'));let name=document.createElement('b');name.textContent=c.name||`ID ${c.details?.id??c.id??''}`;cell.append(name);grid.append(cell)}group.append(grid);box.append(group)}dialog.hidden=false;ok.focus();return new Promise(resolve=>{ok.onclick=()=>{dialog.hidden=true;ok.onclick=null;resolve()}})}
 const COOP_PROPOSAL_STAGE_RETAIN_LIMIT=12000;function coopProposalRetainStageItems(target,items){if(items?.length)target.push(...items);if(target.length>COOP_PROPOSAL_STAGE_RETAIN_LIMIT*2){target.sort((a,b)=>Number(b.score??0)-Number(a.score??0)||coopProposalDeckKey(a.ids||coopProposalDeckIds(a.deck)).localeCompare(coopProposalDeckKey(b.ids||coopProposalDeckIds(b.deck)),'ja',{numeric:true}));target.length=COOP_PROPOSAL_STAGE_RETAIN_LIMIT}return target}
 async function coopProposalParallelStage(prefixes,pool,slot,totalDecks,label){
-  let total=prefixes.length*pool.length,liveCandidateIdsBySlot=Array.from({length:COOP_SLOTS},()=>new Set());
-  const addLiveItem=item=>{let ids=item?.ids||coopProposalDeckIds(item?.deck||[]);for(let refreshSlot=0;refreshSlot<=slot;refreshSlot++){let id=String(ids?.[refreshSlot]??'');if(id)liveCandidateIdsBySlot[refreshSlot].add(id)}};
-  const syncLiveCoverage=()=>{for(let refreshSlot=0;refreshSlot<=slot;refreshSlot++)coopProposalProgressCoverage[refreshSlot]=liveCandidateIdsBySlot[refreshSlot].size};
-  const rebuildLiveCandidates=collections=>{liveCandidateIdsBySlot=Array.from({length:COOP_SLOTS},()=>new Set());for(let items of collections||[])for(let item of items||[])addLiveItem(item);syncLiveCoverage()};
+  let total=prefixes.length*pool.length;
+  const rebuildLiveCandidates=collections=>{let idsBySlot=Array.from({length:COOP_SLOTS},()=>new Set());for(let items of collections||[])for(let item of items||[]){let ids=item?.ids||coopProposalDeckIds(item?.deck||[]);for(let refreshSlot=0;refreshSlot<=slot;refreshSlot++){let id=String(ids?.[refreshSlot]??'');if(id)idsBySlot[refreshSlot].add(id)}}for(let refreshSlot=0;refreshSlot<=slot;refreshSlot++)coopProposalProgressCoverage[refreshSlot]=Math.min(Number(coopProposalProgressCoverage[refreshSlot])||idsBySlot[refreshSlot].size,idsBySlot[refreshSlot].size)};
   if(!total)return[];
   if(typeof Worker==='undefined'||total<32){
     let passed=[],checked=0,lastPaint=performance.now();
     for(let prefix of prefixes)for(let candidate of pool){
       let deck=prefix.slice();deck[slot]=candidate;
       let item=coopProposalPrefixLayerEvaluation(deck,slot,totalDecks);checked++;
-      if(item){passed.push(item);addLiveItem(item);syncLiveCoverage()}
+      if(item)passed.push(item)
       if(checked===total||checked%1000===0||performance.now()-lastPaint>=80){
         coopProposalProgressCharacterDone=Math.min(coopProposalProgressCharacterTotal,Math.ceil(checked/Math.max(1,prefixes.length)));
         coopSetProposalProgress(label,true,checked,total,passed.length,1);await coopYield();lastPaint=performance.now()
@@ -175,7 +181,7 @@ async function coopProposalParallelStage(prefixes,pool,slot,totalDecks,label){
       jobs.push(new Promise((resolve,reject)=>{
         worker.onmessage=e=>{let m=e.data||{};
           if(m.type==='ready')readyBy[i]=true;
-          else if(m.type==='stageItems'){coopProposalRetainStageItems(itemsByWorker[i],m.items);rebuildLiveCandidates(itemsByWorker);passedBy[i]=m.passed;let checked=checkedBy.reduce((a,b)=>a+b,0);coopSetProposalProgress(label,true,checked,total,passedBy.reduce((a,b)=>a+b,0),readyBy.filter(Boolean).length)}
+          else if(m.type==='stageItems'){coopProposalRetainStageItems(itemsByWorker[i],m.items);passedBy[i]=m.passed;let checked=checkedBy.reduce((a,b)=>a+b,0);coopSetProposalProgress(label,true,checked,total,passedBy.reduce((a,b)=>a+b,0),readyBy.filter(Boolean).length)}
           else if(m.type==='progress'){
             checkedBy[i]=m.checked;passedBy[i]=m.passed;
             let checked=checkedBy.reduce((a,b)=>a+b,0);
@@ -183,7 +189,7 @@ async function coopProposalParallelStage(prefixes,pool,slot,totalDecks,label){
             coopSetProposalProgress(label,true,checked,total,passedBy.reduce((a,b)=>a+b,0),readyBy.filter(Boolean).length)
           }else if(m.type==='stageDone'){
             checkedBy[i]=m.checked;passedBy[i]=m.passed;
-            if(m.items?.length){coopProposalRetainStageItems(itemsByWorker[i],m.items);rebuildLiveCandidates(itemsByWorker);}
+            if(m.items?.length){coopProposalRetainStageItems(itemsByWorker[i],m.items);}
             resolve()
           }else if(m.type==='error')reject(new Error(m.message))
         };
@@ -277,7 +283,7 @@ function coopProposalScaleIncreaseFromCharacterGrowth(x){x=Math.max(0,Number(x)|
 function coopProposalAdjustedSlotScales(common,previous,counts,previousCounts){let scales=Array(COOP_SLOTS).fill(common),slot=-1,count=-1;for(let i=0;i<COOP_SLOTS;i++)if(coopProposalSlotNeedsCandidate(i)&&(Number(counts?.[i])||0)>count){slot=i;count=Number(counts[i])||0}if(slot<0||count<=6||!Number.isFinite(previous))return{scales,slot:-1,x:0};let x=Math.max(0,count-(Number(previousCounts?.[slot])||0));if(x<=0)return{scales,slot:-1,x};let y=coopProposalScaleIncreaseFromCharacterGrowth(x),adjusted=previous+y;if(!(adjusted>=previous&&adjusted<common))return{scales,slot:-1,x};scales[slot]=adjusted;return{scales,slot,x}}
 async function coopProposalExhaustiveOvershoot(items,scale){let pools=coopProposalOvershootPools(items);if(pools.some((pool,slot)=>coopProposalSlotNeedsCandidate(slot)&&!pool.length))return[];let total=pools.reduce((n,p)=>n*Math.max(1,p.length),1),checked=0,confirmed=[],deck=Array(COOP_SLOTS).fill(null),last=performance.now();coopProposalProgressScale=scale;coopProposalProgressCoverage=pools.map((p,i)=>coopProposalSlotNeedsCandidate(i)?p.length:6);async function walk(slot){if(slot===COOP_SLOTS){checked++;let ids=deck.map(coopCharacterKey);if(ids.every(Boolean)&&new Set(ids).size===ids.length&&coopProposalWorks(deck,coopProposalTargetDecks))confirmed.push({ids:ids.slice(),deck:deck.slice(),repeats:coopProposalTargetDecks,overkillRate:coopProposalOverkillRate(deck)});if(checked===total||checked%250===0||performance.now()-last>=32){coopSetProposalProgress('候補デッキを確定撃破判定中',true,checked,total,confirmed.length,1);await coopYield();last=performance.now()}return}for(let c of pools[slot]){deck[slot]=c;await walk(slot+1)}}await walk(0);confirmed.sort((a,b)=>Number(b.overkillRate??0)-Number(a.overkillRate??0)||coopProposalDeckKey(a.ids).localeCompare(coopProposalDeckKey(b.ids),'ja',{numeric:true}));return confirmed}
 async function coopProposalBruteforceAtMaximumScale(totalDecks){
-  coopProposalDamageScale=1.2;coopProposalProgressScale=1.2;let prefixes=[Array(COOP_SLOTS).fill(null)],sourcePools=Array.from({length:COOP_SLOTS},(_,slot)=>coopProposalSlotNeedsCandidate(slot)?(slot===0?coopProposalFirstCandidatesAll(chars):coopProposalPoolAll(slot)):[null]);
+  coopProposalDamageScale=1.2;coopProposalProgressScale=1.2;let prefixes=[Array(COOP_SLOTS).fill(null)],sourcePools=Array.from({length:COOP_SLOTS},(_,slot)=>coopProposalSlotNeedsCandidate(slot)?(slot===0?coopProposalFirstCandidatesAll(chars):coopProposalPoolAll(slot)):[null]);coopProposalProgressCoverage=sourcePools.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool.length:0);
   for(let slot=0;slot<COOP_SLOTS;slot++){
     let pool=(sourcePools[slot]||[]).slice(),label=`総当たり・${slot+1}枠目・倍率1.2・初回計算対象${pool.length.toLocaleString()}体・${prefixes.length.toLocaleString()}構成`;
     await coopProposalShowExhaustiveProgressDialog(slot,'before',pool);
