@@ -378,3 +378,12 @@
 
 /* build 20260917-225: active top-level and second-level picker tags are mirrored in the fixed header */
 #picker .picker-pinned-tags .zk-b1,#picker .picker-pinned-tags .zk-b2{position:static!important;display:flex;align-items:center;justify-content:space-between}
+
+/* build 20260920-345: roomier usage details */
+.coop-proposal-usage{gap:24px!important;padding:20px!important}
+.coop-usage-slot{min-height:58px!important;border-radius:14px!important}
+.coop-usage-slot-header{min-height:58px;padding:12px 16px!important;gap:16px!important}
+.coop-usage-slot-header summary{min-height:34px;display:flex;align-items:center;font-size:1rem;line-height:1.35}
+.coop-usage-slot[open] .coop-usage-slot-header{margin-bottom:16px}
+.coop-usage-grid{padding:0 16px 16px!important;gap:12px!important}
+@media(max-width:800px){.coop-proposal-usage{gap:18px!important;padding:14px!important}.coop-usage-slot{min-height:54px!important}.coop-usage-slot-header{min-height:54px;padding:10px 12px!important}}
