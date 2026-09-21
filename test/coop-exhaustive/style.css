@@ -688,3 +688,70 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     max-width:100%!important;
   }
 }
+/* build 20260922-372: restore actual mobile image size; keep action button out of layout height */
+@media(max-width:999px){
+  #page-coop .coop-proposal-card,
+  #page-coop .coop-history-proposals .coop-proposal-card{
+    position:relative!important;
+    grid-template-columns:26px minmax(0,1fr)!important;
+    gap:4px!important;
+    padding:6px 5px 38px!important;
+    overflow:hidden!important;
+  }
+  #page-coop .coop-proposal-card>b,
+  #page-coop .coop-history-proposals .coop-proposal-card>b{
+    font-size:1rem!important;
+  }
+  #page-coop .coop-proposal-images,
+  #page-coop .coop-history-proposals .coop-proposal-images{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(88px,1fr))!important;
+    gap:5px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 0 4px!important;
+    scrollbar-width:auto!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  #page-coop .coop-proposal-image-cell,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    width:auto!important;
+    min-width:88px!important;
+    max-width:none!important;
+    overflow:visible!important;
+  }
+  #page-coop .coop-proposal-image-cell img,
+  #page-coop .coop-proposal-image-cell span,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+    display:block!important;
+    width:88px!important;
+    min-width:88px!important;
+    max-width:88px!important;
+    height:88px!important;
+    aspect-ratio:auto!important;
+    object-fit:cover!important;
+  }
+  #page-coop .coop-proposal-copy,
+  #page-coop .coop-history-proposals .coop-proposal-copy{
+    position:absolute!important;
+    right:5px!important;
+    bottom:5px!important;
+    grid-column:auto!important;
+    justify-self:auto!important;
+    width:auto!important;
+    max-width:calc(100% - 36px)!important;
+    min-height:27px!important;
+    height:27px!important;
+    margin:0!important;
+    padding:3px 7px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
