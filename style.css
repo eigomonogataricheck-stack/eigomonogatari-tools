@@ -512,15 +512,329 @@
 .coop-proposal-heading{display:block!important;margin:0 0 16px!important;padding:0 0 12px!important;border-bottom:1px solid #e2e8f0!important}.coop-proposal-controls{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,.88fr) minmax(0,1.05fr)!important;gap:5px!important;width:100%!important}.coop-proposal-controls>*{min-width:0!important;width:100%!important;margin:0!important}.coop-all-decks-toggle,#coopProposalDisplayControl,#coopRecordProposal{min-width:0!important;width:100%!important;height:36px!important;padding:3px!important;font-size:.54rem!important;line-height:1.05!important;white-space:normal!important;overflow-wrap:anywhere!important}.coop-all-decks-toggle{grid-template-columns:minmax(0,1fr) auto!important;gap:3px!important}.coop-all-decks-toggle b{min-width:28px!important;padding:3px 4px!important;font-size:.56rem!important}#coopProposalDisplayControl{display:grid!important;grid-template-columns:auto minmax(40px,1fr)!important;gap:2px!important}#coopProposalDisplayControl span{font-size:.54rem!important;white-space:nowrap!important}#coopProposalDisplayControl .coop-styled-select{min-width:40px!important;width:100%!important}#coopProposalDisplayControl .coop-styled-select-button{min-width:40px!important;width:100%!important;height:28px!important;padding:0 3px!important;font-size:.58rem!important}
 .coop-proposal-card{grid-template-columns:18px minmax(0,1fr)!important;gap:2px!important;width:100%!important;min-width:0!important;padding:4px 3px 31px!important;overflow:hidden!important}.coop-proposal-card>b{font-size:.72rem!important}.coop-proposal-images{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:2px!important;width:100%!important;min-width:0!important;overflow:hidden!important}.coop-proposal-image-cell{min-width:0!important;width:100%!important}.coop-proposal-image-cell img,.coop-proposal-image-cell span{width:100%!important;min-width:0!important;aspect-ratio:1!important}.coop-proposal-copy{right:4px!important;bottom:4px!important;max-width:calc(100% - 25px)!important;height:22px!important;padding:2px 5px!important;font-size:.52rem!important}.coop-history-proposals{grid-template-columns:1fr!important;gap:8px!important;width:100%!important;overflow:hidden!important}.coop-history-proposals .coop-proposal-card{width:100%!important;min-width:0!important}.coop-history-proposals .coop-proposal-images{overflow:hidden!important}
 }
-/* build 20260920-361: correct mobile sizing and ally control alignment */
+/* build 20260920-362: desktop proposal controls above cards */
+@media(min-width:1000px){#coopProposalBody .coop-proposal-heading{display:block!important;width:100%!important;margin:0!important;padding:0!important}#coopProposalBody .coop-proposal-controls{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-end!important;align-items:center!important;gap:7px!important;width:100%!important;margin:0 0 16px!important;padding:0 0 12px!important;border-bottom:1px solid #e2e8f0!important}#coopProposalBody #coopProposalGrid{width:100%!important;margin:0!important}}
+/* build 20260920-365: persistent pausable calculation dialog */
+.coop-calculation-dialog-panel{width:min(680px,calc(100vw - 28px))!important;text-align:left!important}
+.coop-calculation-dialog-body{display:grid;gap:12px;margin:12px 0 18px;padding:14px;border:1px solid #dbe5f2;border-radius:12px;background:#f8fbff;font-variant-numeric:tabular-nums}
+.coop-calculation-status{font-weight:800;color:#1d4ed8}.coop-calculation-sub{color:#52647c;font-weight:700}
+.coop-calculation-dialog-actions{display:flex;justify-content:center;gap:10px}.coop-calculation-dialog-actions button{min-width:120px}.coop-calculation-dialog-actions .danger{background:#b42318;color:#fff}.coop-calculation-dialog-actions button[hidden]{display:none!important}
+/* build 20260922-366: mobile proposal and history deck sizing */
 @media(max-width:999px){
-.coop-decks .coop-section-title{display:flex!important;justify-content:flex-end!important;align-items:flex-start!important;padding:5px 0 11px!important}
-.coop-decks .coop-section-actions{display:grid!important;grid-template-columns:max-content max-content max-content!important;grid-template-areas:'count propose progress' 'record record reset'!important;justify-content:end!important;justify-items:end!important;align-items:center!important;gap:6px!important;width:auto!important;max-width:100%!important;margin-left:auto!important;white-space:nowrap!important}
-.coop-proposal-deck-count{grid-area:count!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;min-width:0!important;width:auto!important;padding:0!important;font-size:.56rem!important;line-height:1!important;writing-mode:horizontal-tb!important;white-space:nowrap!important}
-.coop-proposal-deck-count>.coop-styled-select{width:50px!important;min-width:50px!important;margin:0!important;transform:translateY(2px)!important}.coop-proposal-deck-count .coop-styled-select-button{width:50px!important;min-width:50px!important;height:29px!important;padding:0 5px!important}
-#coopPropose{grid-area:propose!important;width:auto!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:3px 7px!important;font-size:.56rem!important}.coop-proposal-progress-toggle{grid-area:progress!important;width:auto!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:2px 4px!important;font-size:.52rem!important}
-#coopRecordManual{grid-area:record!important;width:auto!important;min-width:116px!important}#coopDeckReset{grid-area:reset!important;width:auto!important;min-width:105px!important}#coopRecordManual,#coopDeckReset{justify-self:end!important;min-height:36px!important;height:36px!important;padding:5px 8px!important;font-size:.58rem!important}
-#page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions{grid-template-columns:max-content max-content!important;grid-template-areas:'record reset'!important;justify-content:end!important}
-#coopProposalGrid,.coop-history-proposals{width:100%!important;min-width:0!important;overflow:visible!important}.coop-proposal-card,.coop-history-proposals .coop-proposal-card{box-sizing:border-box!important;grid-template-columns:16px minmax(0,1fr)!important;width:100%!important;min-width:0!important;max-width:100%!important;gap:2px!important;padding:4px 3px 30px!important;overflow:visible!important}
-.coop-proposal-images,.coop-history-proposals .coop-proposal-images{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;width:100%!important;min-width:0!important;max-width:100%!important;gap:2px!important;overflow:visible!important}.coop-proposal-image-cell,.coop-history-proposals .coop-proposal-image-cell{width:auto!important;min-width:0!important;max-width:100%!important;overflow:hidden!important}.coop-proposal-image-cell img,.coop-proposal-image-cell span,.coop-history-proposals .coop-proposal-image-cell img,.coop-history-proposals .coop-proposal-image-cell span{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:cover!important}
+html body #page-coop #coopProposalBody .coop-proposal-heading{margin-bottom:22px!important;padding-bottom:16px!important}
+html body #page-coop #coopProposalGrid{width:100%!important;min-width:0!important;margin-top:14px!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-card,html body #page-coop .coop-history-proposals .coop-proposal-card{box-sizing:border-box!important;grid-template-columns:18px minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-images,html body #page-coop .coop-history-proposals .coop-proposal-images{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-image-cell,html body #page-coop .coop-history-proposals .coop-proposal-image-cell{width:100%!important;min-width:0!important;max-width:none!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-image-cell img,html body #page-coop .coop-proposal-image-cell span{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:cover!important}
+html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history-proposals{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+}
+/* build 20260922-370: keep desktop proposal images at original size */
+@media(min-width:1000px){
+  #page-coop .coop-proposal-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  #page-coop .coop-proposal-card,
+  #page-coop .coop-history-proposals .coop-proposal-card{
+    position:relative!important;
+    grid-template-columns:28px minmax(0,1fr)!important;
+    gap:6px!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:8px 8px 38px!important;
+    overflow:hidden!important;
+  }
+  #page-coop .coop-proposal-images,
+  #page-coop .coop-history-proposals .coop-proposal-images{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:4px!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow:visible!important;
+  }
+  #page-coop .coop-proposal-image-cell{
+    width:100%!important;
+    min-width:0!important;
+  }
+  #page-coop .coop-proposal-image-cell img,
+  #page-coop .coop-proposal-image-cell span{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:1!important;
+    object-fit:cover!important;
+  }
+  #page-coop .coop-proposal-copy{
+    position:absolute!important;
+    right:8px!important;
+    bottom:7px!important;
+    width:auto!important;
+    max-width:calc(100% - 36px)!important;
+    min-height:25px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:3px 7px!important;
+    font-size:.62rem!important;
+    white-space:normal!important;
+  }
+}
+@media(max-width:999px){
+  html body #page-coop .coop-decks .coop-section-actions{
+    display:grid!important;
+    grid-template-columns:max-content max-content max-content!important;
+    grid-template-areas:'count propose progress' 'record record reset'!important;
+    justify-content:end!important;
+    justify-items:end!important;
+    align-items:center!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:auto!important;
+    gap:5px!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+  }
+  html body #page-coop .coop-proposal-deck-count{
+    grid-area:count!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:4px!important;
+    width:auto!important;
+    min-width:0!important;
+    padding:0!important;
+    writing-mode:horizontal-tb!important;
+    white-space:nowrap!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+  }
+  html body #page-coop .coop-proposal-deck-count>.coop-styled-select{width:48px!important;min-width:48px!important;margin:0!important}
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select-button{width:48px!important;min-width:48px!important;height:30px!important;padding:0 5px!important}
+  html body #page-coop #coopPropose{grid-area:propose!important;width:auto!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:3px 7px!important;font-size:.55rem!important}
+  html body #page-coop .coop-proposal-progress-toggle{grid-area:progress!important;width:auto!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:2px 4px!important;font-size:.51rem!important}
+  html body #page-coop #coopRecordManual{grid-area:record!important}
+  html body #page-coop #coopDeckReset{grid-area:reset!important}
+  html body #page-coop #coopRecordManual,html body #page-coop #coopDeckReset{justify-self:end!important;min-height:36px!important;height:auto!important;padding:5px 7px!important;font-size:.57rem!important}
+  html body #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions{grid-template-columns:max-content max-content!important;grid-template-areas:'record reset'!important;justify-content:end!important}
+  /* Only mobile moves the apply button below the image row. */
+  html body #page-coop .coop-proposal-card,
+  html body #page-coop .coop-history-proposals .coop-proposal-card{
+    grid-template-columns:18px minmax(0,1fr)!important;
+    padding:4px 3px 7px!important;
+    overflow:visible!important;
+  }
+  html body #page-coop .coop-proposal-copy{
+    position:static!important;
+    grid-column:2!important;
+    justify-self:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:30px!important;
+    height:auto!important;
+    margin:5px 0 0!important;
+    padding:5px 7px!important;
+    font-size:.56rem!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+  }
+}
+/* build 20260922-371: restore proposal image size on mobile too */
+@media(max-width:999px){
+  #page-coop .coop-proposal-card,
+  #page-coop .coop-history-proposals .coop-proposal-card{
+    grid-template-columns:18px minmax(0,1fr)!important;
+    padding:5px 4px 7px!important;
+    overflow:visible!important;
+  }
+  #page-coop .coop-proposal-images,
+  #page-coop .coop-history-proposals .coop-proposal-images{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(74px,1fr))!important;
+    gap:4px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:auto!important;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:3px!important;
+  }
+  #page-coop .coop-proposal-image-cell,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    width:auto!important;
+    min-width:74px!important;
+    max-width:none!important;
+    overflow:visible!important;
+  }
+  #page-coop .coop-proposal-image-cell img,
+  #page-coop .coop-proposal-image-cell span,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+    display:block!important;
+    width:100%!important;
+    min-width:74px!important;
+    max-width:none!important;
+    height:auto!important;
+    aspect-ratio:1!important;
+    object-fit:cover!important;
+  }
+  #page-coop .coop-proposal-copy{
+    position:static!important;
+    grid-column:2!important;
+    justify-self:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
+/* build 20260922-373: override high-specificity mobile rules correctly */
+@media(max-width:999px){
+  html body #page-coop .coop-proposal-card,
+  html body #page-coop .coop-history-proposals .coop-proposal-card{
+    position:relative!important;
+    grid-template-columns:26px minmax(0,1fr)!important;
+    gap:4px!important;
+    padding:6px 5px 38px!important;
+    overflow:hidden!important;
+  }
+  html body #page-coop .coop-proposal-card>b,
+  html body #page-coop .coop-history-proposals .coop-proposal-card>b{
+    font-size:1rem!important;
+  }
+  html body #page-coop .coop-proposal-images,
+  html body #page-coop .coop-history-proposals .coop-proposal-images{
+    display:grid!important;
+    grid-template-columns:repeat(5,88px)!important;
+    grid-auto-columns:88px!important;
+    gap:5px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 0 4px!important;
+    scrollbar-width:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  html body #page-coop .coop-proposal-image-cell,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    width:88px!important;
+    min-width:88px!important;
+    max-width:88px!important;
+    overflow:visible!important;
+  }
+  html body #page-coop .coop-proposal-image-cell img,
+  html body #page-coop .coop-proposal-image-cell span,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+    display:block!important;
+    width:88px!important;
+    min-width:88px!important;
+    max-width:88px!important;
+    height:88px!important;
+    aspect-ratio:1/1!important;
+    object-fit:cover!important;
+  }
+  html body #page-coop .coop-proposal-copy,
+  html body #page-coop .coop-history-proposals .coop-proposal-copy{
+    position:absolute!important;
+    right:5px!important;
+    bottom:5px!important;
+    grid-column:auto!important;
+    justify-self:auto!important;
+    width:auto!important;
+    max-width:calc(100% - 36px)!important;
+    min-height:27px!important;
+    height:27px!important;
+    margin:0!important;
+    padding:3px 7px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+/* build 20260922-374: five mobile deck images fit without horizontal scrolling */
+@media(max-width:999px){
+  html body #page-coop .coop-proposal-card,
+  html body #page-coop .coop-history-proposals .coop-proposal-card{
+    box-sizing:border-box!important;
+    position:relative!important;
+    display:grid!important;
+    grid-template-columns:22px minmax(0,1fr)!important;
+    align-items:start!important;
+    gap:4px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:6px 5px 38px!important;
+    overflow:hidden!important;
+  }
+  html body #page-coop .coop-proposal-card>b,
+  html body #page-coop .coop-history-proposals .coop-proposal-card>b{
+    width:22px!important;
+    min-width:22px!important;
+    font-size:.82rem!important;
+    line-height:1.2!important;
+  }
+  html body #page-coop .coop-proposal-images,
+  html body #page-coop .coop-history-proposals .coop-proposal-images{
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    grid-auto-columns:minmax(0,1fr)!important;
+    gap:3px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    scrollbar-width:none!important;
+  }
+  html body #page-coop .coop-proposal-images::-webkit-scrollbar,
+  html body #page-coop .coop-history-proposals .coop-proposal-images::-webkit-scrollbar{
+    display:none!important;
+  }
+  html body #page-coop .coop-proposal-image-cell,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  html body #page-coop .coop-proposal-image-cell img,
+  html body #page-coop .coop-proposal-image-cell span,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+    box-sizing:border-box!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    aspect-ratio:1/1!important;
+    object-fit:cover!important;
+  }
+  html body #page-coop .coop-proposal-copy,
+  html body #page-coop .coop-history-proposals .coop-proposal-copy{
+    position:absolute!important;
+    right:5px!important;
+    bottom:5px!important;
+    grid-column:auto!important;
+    justify-self:auto!important;
+    width:auto!important;
+    max-width:calc(100% - 32px)!important;
+    min-height:27px!important;
+    height:27px!important;
+    margin:0!important;
+    padding:3px 7px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
 }
