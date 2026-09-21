@@ -639,3 +639,52 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     white-space:normal!important;
   }
 }
+/* build 20260922-371: restore proposal image size on mobile too */
+@media(max-width:999px){
+  #page-coop .coop-proposal-card,
+  #page-coop .coop-history-proposals .coop-proposal-card{
+    grid-template-columns:18px minmax(0,1fr)!important;
+    padding:5px 4px 7px!important;
+    overflow:visible!important;
+  }
+  #page-coop .coop-proposal-images,
+  #page-coop .coop-history-proposals .coop-proposal-images{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(74px,1fr))!important;
+    gap:4px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:auto!important;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:3px!important;
+  }
+  #page-coop .coop-proposal-image-cell,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    width:auto!important;
+    min-width:74px!important;
+    max-width:none!important;
+    overflow:visible!important;
+  }
+  #page-coop .coop-proposal-image-cell img,
+  #page-coop .coop-proposal-image-cell span,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+    display:block!important;
+    width:100%!important;
+    min-width:74px!important;
+    max-width:none!important;
+    height:auto!important;
+    aspect-ratio:1!important;
+    object-fit:cover!important;
+  }
+  #page-coop .coop-proposal-copy{
+    position:static!important;
+    grid-column:2!important;
+    justify-self:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
