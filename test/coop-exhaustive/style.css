@@ -444,24 +444,26 @@
 /* Internal panes hand wheel control back to the page at either edge. */
 .coop-input-layout>.coop-enemies,.coop-input-layout>.coop-decks{overscroll-behavior:auto!important}
 
-/* build 20260920-352 */
-/* Keep every ally-deck header control on one compact row. */
-.coop-decks .coop-section-title{align-items:center!important}
-.coop-decks .coop-section-actions{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:5px!important;white-space:nowrap!important}
+/* build 20260920-353 */
+.coop-proposal-progress-toggle{display:none!important;align-items:center!important;gap:5px!important;height:30px!important;padding:0 4px!important;line-height:1!important}
+.coop-detail-on .coop-proposal-progress-toggle{display:inline-flex!important}
+.coop-proposal-progress-toggle input{display:block!important;width:17px!important;height:17px!important;margin:0!important;flex:0 0 auto!important}
+.coop-decks .coop-section-actions{display:flex!important;flex-flow:row nowrap!important;align-items:center!important;gap:5px!important;white-space:nowrap!important}
 .coop-decks .coop-section-actions>*{flex:0 0 auto!important;margin:0!important}
-.coop-decks .coop-section-actions .reset-btn,.coop-decks .coop-section-actions label{min-height:30px!important;padding:4px 6px!important;font-size:.62rem!important}
-.coop-decks .coop-section-actions select{height:30px!important;font-size:.68rem!important}
-#coopDeckReset{font-size:.6rem!important}
-/* Rounded custom UI for display-count choices. Native select remains as hidden state. */
-.coop-limit-picker{position:relative;display:inline-flex;align-items:center;min-width:126px}
-.coop-limit-picker>select{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-.coop-limit-picker-button{display:flex;align-items:center;justify-content:space-between;width:126px;height:32px;padding:0 12px;border:1px solid #b8c6d8;border-radius:999px;background:#fff;color:#172033;font-size:.82rem;font-weight:700;line-height:1;cursor:pointer}
-.coop-limit-picker-button::after{content:'▾';margin-left:8px;color:#52647c;font-size:.75rem}
-.coop-limit-picker-button[aria-expanded='true']{border-color:#5b8def;box-shadow:0 0 0 2px #dce9ff}
-.coop-limit-picker-menu{position:absolute;z-index:80;top:calc(100% + 5px);right:0;width:max-content;min-width:126px;padding:5px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.18)}
-.coop-limit-picker-menu[hidden]{display:none!important}
-.coop-limit-picker-option{display:block;width:100%;min-width:116px;padding:8px 12px;border:0;border-radius:8px;background:#fff;color:#172033;text-align:left;white-space:nowrap;font-size:.82rem;font-weight:700;line-height:1.2;cursor:pointer}
-.coop-limit-picker-option:hover,.coop-limit-picker-option[aria-selected='true']{background:#eaf2ff;color:#0b57d0}
-#coopProposalDisplayControl,.coop-usage-limit{overflow:visible!important}
-#coopProposalDisplayControl .coop-limit-picker,.coop-usage-limit .coop-limit-picker{min-width:126px}
-@media(max-width:999px){.coop-decks .coop-section-actions{overflow-x:auto!important;max-width:100%!important;padding-bottom:3px!important}.coop-limit-picker-menu{position:fixed;top:auto;right:16px}}
+.coop-styled-select{position:relative;display:inline-flex;align-items:center;min-width:96px;vertical-align:middle}
+.coop-styled-select>select{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.coop-styled-select-button{display:flex;align-items:center;justify-content:space-between;width:100%;min-width:96px;max-width:220px;height:32px;padding:0 11px;border:1px solid #b8c6d8;border-radius:999px;background:#fff;color:#172033;font-size:.78rem;font-weight:700;line-height:1;cursor:pointer}
+.coop-styled-select-button::after{content:'▼';display:grid;place-items:center;width:18px;height:18px;margin-left:10px;color:#173b62;font-size:1rem;line-height:1}
+.coop-styled-select-button[aria-expanded='true']{border-color:#5b8def;box-shadow:0 0 0 2px #dce9ff}
+.coop-styled-select-menu{position:absolute;z-index:100;top:calc(100% + 5px);right:0;width:max-content;min-width:100%;max-height:min(320px,60vh);overflow-y:auto;padding:5px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;box-shadow:0 10px 26px rgba(15,23,42,.18)}
+.coop-styled-select-menu[hidden]{display:none!important}
+.coop-styled-select-option{display:block;width:100%;min-width:96px;padding:8px 12px;border:0;border-radius:8px;background:#fff;color:#172033;text-align:left;white-space:nowrap;font-size:.78rem;font-weight:700;line-height:1.2;cursor:pointer}
+.coop-styled-select-option:hover,.coop-styled-select-option[aria-selected='true']{background:#eaf2ff;color:#0b57d0}
+.coop-enemy-manual .coop-styled-select{width:100%;min-width:0}.coop-enemy-manual .coop-styled-select-button{width:100%;min-width:0;max-width:none;height:31px;padding:0 8px;font-size:.68rem}
+.coop-proposal-deck-count .coop-styled-select{min-width:70px}.coop-proposal-deck-count .coop-styled-select-button{min-width:70px;width:70px}
+.coop-usage-slot-toolbar{display:flex!important;justify-content:flex-end!important}.coop-usage-limit{border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important}
+.coop-history-item{padding:0!important;margin:0 0 10px!important;overflow:hidden!important;border:1px solid #d8e1ec!important;border-radius:12px!important;background:#fff!important;box-shadow:none!important}
+.coop-history-entry-toggle{display:grid!important;grid-template-columns:minmax(0,1fr) 24px!important;align-items:center!important;min-height:48px!important;width:100%!important;padding:10px 14px!important;border:0!important;border-radius:0!important;background:#f7f9fc!important}
+.coop-history-entry-toggle span{justify-self:end!important;width:24px!important;text-align:right!important;font-size:1rem!important}.coop-history-entry-body{padding:12px!important;border-top:1px solid #e1e8f0!important;background:#fff!important}
+#page-coop:not(.coop-detail-on) #coopProposalResults,#page-coop:not(.coop-detail-on) #coopProposalUsageResults,#page-coop:not(.coop-detail-on) #coopScaleHistoryPanel{display:none!important}
+@media(max-width:999px){.coop-decks .coop-section-actions{overflow-x:auto!important;max-width:100%!important}}
