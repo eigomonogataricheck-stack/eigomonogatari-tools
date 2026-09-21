@@ -529,3 +529,59 @@ html body #page-coop .coop-proposal-image-cell,html body #page-coop .coop-histor
 html body #page-coop .coop-proposal-image-cell img,html body #page-coop .coop-proposal-image-cell span{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:cover!important}
 html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history-proposals{min-width:0!important;max-width:100%!important;overflow:hidden!important}
 }
+/* build 20260922-367: mobile ally controls and visible proposal copy actions */
+/* The action is part of card layout instead of being clipped at the right/bottom edge. */
+#page-coop .coop-proposal-card{overflow:visible!important}
+#page-coop .coop-proposal-copy{position:static!important;grid-column:2!important;justify-self:end!important;width:auto!important;max-width:100%!important;min-height:30px!important;height:auto!important;margin-top:6px!important;padding:5px 9px!important;white-space:normal!important;line-height:1.15!important}
+#page-coop .coop-history-proposals .coop-proposal-copy{display:inline-flex!important;align-items:center!important;justify-content:center!important}
+@media(max-width:999px){
+  /* Detail controls stay on one right-aligned row. */
+  html body #page-coop .coop-decks .coop-section-actions{
+    display:grid!important;
+    grid-template-columns:max-content max-content max-content!important;
+    grid-template-areas:'count propose progress' 'record record reset'!important;
+    justify-content:end!important;
+    justify-items:end!important;
+    align-items:center!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin-left:auto!important;
+    gap:5px!important;
+  }
+  html body #page-coop .coop-proposal-deck-count{
+    grid-area:count!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    width:auto!important;
+    min-width:0!important;
+    gap:4px!important;
+    padding:0!important;
+    white-space:nowrap!important;
+    writing-mode:horizontal-tb!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+  }
+  html body #page-coop .coop-proposal-deck-count>.coop-styled-select{
+    flex:0 0 48px!important;
+    width:48px!important;
+    min-width:48px!important;
+    margin:0!important;
+  }
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select-button{
+    width:48px!important;
+    min-width:48px!important;
+    height:30px!important;
+    padding:0 5px!important;
+  }
+  html body #page-coop #coopPropose{grid-area:propose!important;width:auto!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:3px 7px!important;font-size:.55rem!important}
+  html body #page-coop .coop-proposal-progress-toggle{grid-area:progress!important;width:auto!important;min-width:0!important;height:30px!important;min-height:30px!important;padding:2px 4px!important;font-size:.51rem!important}
+  html body #page-coop #coopRecordManual{grid-area:record!important}
+  html body #page-coop #coopDeckReset{grid-area:reset!important}
+  html body #page-coop #coopRecordManual,html body #page-coop #coopDeckReset{justify-self:end!important;min-height:36px!important;height:auto!important;padding:5px 7px!important;font-size:.57rem!important}
+  html body #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions{grid-template-columns:max-content max-content!important;grid-template-areas:'record reset'!important;justify-content:end!important}
+  /* Reserve an actual row for the copy action on proposal and history cards. */
+  html body #page-coop .coop-proposal-card,html body #page-coop .coop-history-proposals .coop-proposal-card{padding-bottom:7px!important}
+  html body #page-coop .coop-proposal-copy{grid-column:2!important;justify-self:stretch!important;width:100%!important;margin-top:5px!important;font-size:.56rem!important}
+}
