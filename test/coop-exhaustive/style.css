@@ -519,3 +519,13 @@
 .coop-calculation-dialog-body{display:grid;gap:12px;margin:12px 0 18px;padding:14px;border:1px solid #dbe5f2;border-radius:12px;background:#f8fbff;font-variant-numeric:tabular-nums}
 .coop-calculation-status{font-weight:800;color:#1d4ed8}.coop-calculation-sub{color:#52647c;font-weight:700}
 .coop-calculation-dialog-actions{display:flex;justify-content:center;gap:10px}.coop-calculation-dialog-actions button{min-width:120px}.coop-calculation-dialog-actions .danger{background:#b42318;color:#fff}.coop-calculation-dialog-actions button[hidden]{display:none!important}
+/* build 20260922-366: mobile proposal and history deck sizing */
+@media(max-width:999px){
+html body #page-coop #coopProposalBody .coop-proposal-heading{margin-bottom:22px!important;padding-bottom:16px!important}
+html body #page-coop #coopProposalGrid{width:100%!important;min-width:0!important;margin-top:14px!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-card,html body #page-coop .coop-history-proposals .coop-proposal-card{box-sizing:border-box!important;grid-template-columns:18px minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-images,html body #page-coop .coop-history-proposals .coop-proposal-images{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-image-cell,html body #page-coop .coop-history-proposals .coop-proposal-image-cell{width:100%!important;min-width:0!important;max-width:none!important;overflow:hidden!important}
+html body #page-coop .coop-proposal-image-cell img,html body #page-coop .coop-proposal-image-cell span{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:cover!important}
+html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history-proposals{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+}
