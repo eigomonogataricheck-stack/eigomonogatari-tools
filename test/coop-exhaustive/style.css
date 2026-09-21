@@ -756,3 +756,85 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     text-overflow:ellipsis!important;
   }
 }
+/* build 20260922-374: five mobile deck images fit without horizontal scrolling */
+@media(max-width:999px){
+  html body #page-coop .coop-proposal-card,
+  html body #page-coop .coop-history-proposals .coop-proposal-card{
+    box-sizing:border-box!important;
+    position:relative!important;
+    display:grid!important;
+    grid-template-columns:22px minmax(0,1fr)!important;
+    align-items:start!important;
+    gap:4px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:6px 5px 38px!important;
+    overflow:hidden!important;
+  }
+  html body #page-coop .coop-proposal-card>b,
+  html body #page-coop .coop-history-proposals .coop-proposal-card>b{
+    width:22px!important;
+    min-width:22px!important;
+    font-size:.82rem!important;
+    line-height:1.2!important;
+  }
+  html body #page-coop .coop-proposal-images,
+  html body #page-coop .coop-history-proposals .coop-proposal-images{
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    grid-auto-columns:minmax(0,1fr)!important;
+    gap:3px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    scrollbar-width:none!important;
+  }
+  html body #page-coop .coop-proposal-images::-webkit-scrollbar,
+  html body #page-coop .coop-history-proposals .coop-proposal-images::-webkit-scrollbar{
+    display:none!important;
+  }
+  html body #page-coop .coop-proposal-image-cell,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  html body #page-coop .coop-proposal-image-cell img,
+  html body #page-coop .coop-proposal-image-cell span,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+    box-sizing:border-box!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    aspect-ratio:1/1!important;
+    object-fit:cover!important;
+  }
+  html body #page-coop .coop-proposal-copy,
+  html body #page-coop .coop-history-proposals .coop-proposal-copy{
+    position:absolute!important;
+    right:5px!important;
+    bottom:5px!important;
+    grid-column:auto!important;
+    justify-self:auto!important;
+    width:auto!important;
+    max-width:calc(100% - 32px)!important;
+    min-height:27px!important;
+    height:27px!important;
+    margin:0!important;
+    padding:3px 7px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
