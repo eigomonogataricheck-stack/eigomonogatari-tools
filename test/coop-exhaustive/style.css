@@ -485,3 +485,8 @@
 .coop-styled-select-button::after{content:'▼'!important;width:14px!important;height:14px!important;margin-left:7px!important;font-size:.8rem!important;line-height:1!important}
 .coop-styled-select-menu{width:96px!important;min-width:96px!important;max-width:220px!important}
 .coop-styled-select-option{min-width:0!important;width:100%!important;padding:8px 10px!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
+/* build 20260920-357 */
+.coop-proposal-card{grid-template-columns:28px minmax(0,1fr)!important;position:relative;padding-bottom:38px!important}
+.coop-proposal-copy{position:absolute;right:8px;bottom:7px;min-height:25px!important;padding:3px 7px!important;font-size:.62rem!important;color:#174f91;border-color:#9ab8dd}
+@media(max-width:800px){.coop-proposal-copy{right:5px;bottom:5px}}
