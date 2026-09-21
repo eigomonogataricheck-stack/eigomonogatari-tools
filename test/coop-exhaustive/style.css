@@ -688,24 +688,25 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     max-width:100%!important;
   }
 }
-/* build 20260922-372: restore actual mobile image size; keep action button out of layout height */
+/* build 20260922-373: override high-specificity mobile rules correctly */
 @media(max-width:999px){
-  #page-coop .coop-proposal-card,
-  #page-coop .coop-history-proposals .coop-proposal-card{
+  html body #page-coop .coop-proposal-card,
+  html body #page-coop .coop-history-proposals .coop-proposal-card{
     position:relative!important;
     grid-template-columns:26px minmax(0,1fr)!important;
     gap:4px!important;
     padding:6px 5px 38px!important;
     overflow:hidden!important;
   }
-  #page-coop .coop-proposal-card>b,
-  #page-coop .coop-history-proposals .coop-proposal-card>b{
+  html body #page-coop .coop-proposal-card>b,
+  html body #page-coop .coop-history-proposals .coop-proposal-card>b{
     font-size:1rem!important;
   }
-  #page-coop .coop-proposal-images,
-  #page-coop .coop-history-proposals .coop-proposal-images{
+  html body #page-coop .coop-proposal-images,
+  html body #page-coop .coop-history-proposals .coop-proposal-images{
     display:grid!important;
-    grid-template-columns:repeat(5,minmax(88px,1fr))!important;
+    grid-template-columns:repeat(5,88px)!important;
+    grid-auto-columns:88px!important;
     gap:5px!important;
     width:100%!important;
     min-width:0!important;
@@ -714,29 +715,29 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     overflow-y:hidden!important;
     padding:0 0 4px!important;
     scrollbar-width:auto!important;
-    -webkit-overflow-scrolling:touch;
+    -webkit-overflow-scrolling:touch!important;
   }
-  #page-coop .coop-proposal-image-cell,
-  #page-coop .coop-history-proposals .coop-proposal-image-cell{
-    width:auto!important;
+  html body #page-coop .coop-proposal-image-cell,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell{
+    width:88px!important;
     min-width:88px!important;
-    max-width:none!important;
+    max-width:88px!important;
     overflow:visible!important;
   }
-  #page-coop .coop-proposal-image-cell img,
-  #page-coop .coop-proposal-image-cell span,
-  #page-coop .coop-history-proposals .coop-proposal-image-cell img,
-  #page-coop .coop-history-proposals .coop-proposal-image-cell span{
+  html body #page-coop .coop-proposal-image-cell img,
+  html body #page-coop .coop-proposal-image-cell span,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell img,
+  html body #page-coop .coop-history-proposals .coop-proposal-image-cell span{
     display:block!important;
     width:88px!important;
     min-width:88px!important;
     max-width:88px!important;
     height:88px!important;
-    aspect-ratio:auto!important;
+    aspect-ratio:1/1!important;
     object-fit:cover!important;
   }
-  #page-coop .coop-proposal-copy,
-  #page-coop .coop-history-proposals .coop-proposal-copy{
+  html body #page-coop .coop-proposal-copy,
+  html body #page-coop .coop-history-proposals .coop-proposal-copy{
     position:absolute!important;
     right:5px!important;
     bottom:5px!important;
