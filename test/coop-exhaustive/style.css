@@ -514,6 +514,3 @@
 }
 /* build 20260920-362: desktop proposal controls above cards */
 @media(min-width:1000px){#coopProposalBody .coop-proposal-heading{display:block!important;width:100%!important;margin:0!important;padding:0!important}#coopProposalBody .coop-proposal-controls{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-end!important;align-items:center!important;gap:7px!important;width:100%!important;margin:0 0 16px!important;padding:0 0 12px!important;border-bottom:1px solid #e2e8f0!important}#coopProposalBody #coopProposalGrid{width:100%!important;margin:0!important}}
-
-/* build 20260920-364: pausable proposal dialog */
-.coop-calculation-dialog-panel{width:min(680px,calc(100vw - 28px))!important;text-align:left!important}.coop-calculation-dialog-body{display:grid;gap:12px;margin:12px 0 18px;padding:14px;border:1px solid #dbe5f2;border-radius:12px;background:#f8fbff;font-variant-numeric:tabular-nums}.coop-calculation-status{font-weight:800;color:#1d4ed8}.coop-calculation-sub{color:#52647c;font-weight:700}.coop-calculation-dialog-actions{display:flex;justify-content:center;gap:10px}.coop-calculation-dialog-actions button{min-width:120px}.coop-calculation-dialog-actions .danger{background:#b42318;color:#fff}.coop-calculation-dialog-actions button[hidden]{display:none!important}
