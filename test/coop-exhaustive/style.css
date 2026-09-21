@@ -467,3 +467,15 @@
 .coop-history-entry-toggle span{justify-self:end!important;width:24px!important;text-align:right!important;font-size:1rem!important}.coop-history-entry-body{padding:12px!important;border-top:1px solid #e1e8f0!important;background:#fff!important}
 #page-coop:not(.coop-detail-on) #coopProposalResults,#page-coop:not(.coop-detail-on) #coopProposalUsageResults,#page-coop:not(.coop-detail-on) #coopScaleHistoryPanel{display:none!important}
 @media(max-width:999px){.coop-decks .coop-section-actions{overflow-x:auto!important;max-width:100%!important}}
+
+/* build 20260920-354 */
+.coop-styled-select-button::after{content:'▾'!important;width:12px!important;height:12px!important;margin-left:6px!important;font-size:.68rem!important;line-height:1!important}
+.coop-styled-select-menu{position:fixed!important;right:auto!important;bottom:auto!important;z-index:1000!important;max-height:min(320px,60vh)!important;overflow-y:auto!important}
+.coop-decks .coop-section-title{align-items:flex-start!important;column-gap:18px!important}
+.coop-decks .coop-section-actions{display:flex!important;flex-flow:row wrap!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;overflow:visible!important;max-width:76%!important;padding:0!important}
+.coop-decks .coop-section-actions>*{flex:0 0 auto!important}
+.coop-decks .coop-section-actions .reset-btn,.coop-decks .coop-section-actions label{min-height:28px!important;padding:3px 5px!important;font-size:.58rem!important}
+.coop-decks .coop-section-actions .coop-styled-select-button{height:28px!important;min-width:62px!important;padding:0 7px!important;font-size:.64rem!important}
+.coop-proposal-progress-toggle{height:28px!important;font-size:.58rem!important}
+.coop-proposal-progress-toggle input{width:15px!important;height:15px!important}
+@media(max-width:999px){.coop-decks .coop-section-actions{max-width:100%!important;overflow:visible!important}.coop-decks .coop-section-title{flex-wrap:wrap!important}.coop-decks .coop-section-title>div:first-child{width:100%!important}}
