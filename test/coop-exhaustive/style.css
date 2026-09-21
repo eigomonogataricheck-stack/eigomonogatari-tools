@@ -504,49 +504,11 @@
 .coop-history-columns{gap:12px!important}.coop-history-columns>.coop-proposal-history,.coop-history-columns>.coop-scale-history-panel{border:1px solid #cfe0ff!important;border-radius:14px!important;overflow:hidden!important;background:#fff!important}.coop-history-toggle,#coopScaleHistoryToggle{display:grid!important;grid-template-columns:auto minmax(0,1fr) 24px!important;align-items:center!important;min-height:50px!important;padding:10px 12px!important;border:0!important;border-radius:0!important;background:#f7f9fc!important}.coop-history-toggle small,#coopScaleHistoryToggle small{text-align:right!important;font-size:.57rem!important}.coop-history-arrow,.coop-scale-history-arrow{justify-self:end!important;width:24px!important;text-align:right!important;font-size:.9rem!important}
 }
 
-/* build 20260920-359: mobile cooperative UI refinement */
+/* build 20260920-360 */
 .coop-deck-skill-detail{grid-column:1/-1;width:100%;margin:8px 0 0!important}
 @media(max-width:999px){
-  /* Prevent the old sticky white backing from covering the ally tag. */
-  .coop-decks .coop-section-title{position:static!important;top:auto!important;z-index:auto!important;box-shadow:none!important;margin:0!important;padding:8px 0!important;background:#fff!important}
-  .coop-decks-toggle{position:relative!important;z-index:3!important}
-
-  /* Detail-only controls on the first row, persistent controls below them. */
-  .coop-decks .coop-section-actions{display:grid!important;grid-template-columns:minmax(0,.78fr) minmax(0,1.12fr) minmax(0,1.35fr)!important;grid-template-areas:
-    'count propose progress'
-    'record record reset'!important;gap:6px!important;align-items:stretch!important;width:100%!important;white-space:normal!important}
-  .coop-proposal-deck-count{grid-area:count!important}
-  #coopPropose{grid-area:propose!important}
-  .coop-proposal-progress-toggle{grid-area:progress!important}
-  #coopRecordManual{grid-area:record!important}
-  #coopDeckReset{grid-area:reset!important}
-  .coop-decks .coop-section-actions .reset-btn,.coop-decks .coop-section-actions label{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;min-height:42px!important;height:auto!important;padding:6px 5px!important;font-size:clamp(.55rem,2.35vw,.72rem)!important;line-height:1.18!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important}
-  .coop-decks .coop-section-actions .coop-styled-select{min-width:48px!important;width:48px!important;margin-left:3px!important}
-  .coop-decks .coop-section-actions .coop-styled-select-button{min-width:48px!important;width:48px!important;height:30px!important;padding:0 5px!important}
-  .coop-proposal-progress-toggle input{flex:0 0 auto!important}
-  #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions{grid-template-columns:1fr 1fr!important;grid-template-areas:'record reset'!important}
-
-  /* Shared detail uses the full five-card row. */
-  .coop-deck-skill-detail{padding:10px!important;font-size:.68rem!important;line-height:1.45!important;overflow-wrap:anywhere!important}
-  .coop-deck-skill-detail>section>small{display:block;margin-top:3px}
-  .coop-deck-skill-detail .coop-applied-skill{font-size:.66rem!important}
-
-  /* Proposal controls stay in one line and the cards require no horizontal scroll. */
-  .coop-proposal-heading{display:block!important;margin-bottom:10px!important}
-  .coop-proposal-controls{display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr) minmax(0,1.15fr)!important;gap:5px!important;width:100%!important;align-items:stretch!important}
-  .coop-proposal-controls>*{min-width:0!important;width:100%!important;margin:0!important}
-  .coop-all-decks-toggle,#coopProposalDisplayControl,#coopRecordProposal{min-width:0!important;width:100%!important;min-height:38px!important;height:auto!important;padding:4px!important;font-size:clamp(.53rem,2.2vw,.68rem)!important;white-space:normal!important}
-  #coopProposalDisplayControl{display:grid!important;grid-template-columns:auto minmax(42px,1fr)!important;gap:3px!important}
-  #coopProposalDisplayControl .coop-styled-select{min-width:42px!important;width:100%!important}
-  #coopProposalDisplayControl .coop-styled-select-button{min-width:42px!important;width:100%!important;height:30px!important;padding:0 4px!important}
-  .coop-proposal-card{grid-template-columns:20px minmax(0,1fr)!important;gap:3px!important;padding:5px 4px 34px!important;overflow:hidden!important}
-  .coop-proposal-card>b{font-size:.78rem!important}
-  .coop-proposal-images{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;width:100%!important;overflow:visible!important}
-  .coop-proposal-image-cell{min-width:0!important;width:100%!important}
-  .coop-proposal-copy{right:5px!important;bottom:5px!important;max-width:calc(100% - 30px)!important;min-height:24px!important;font-size:.55rem!important}
-
-  /* Past-data proposal rows also fit all five images without horizontal scroll. */
-  .coop-history-proposals{grid-template-columns:1fr!important;gap:7px!important}
-  .coop-history-proposals .coop-proposal-card{width:100%!important}
-  .coop-history-proposals .coop-proposal-images{overflow:visible!important}
+.coop-decks .coop-section-title{position:static!important;top:auto!important;z-index:auto!important;box-shadow:none!important;margin:0!important;padding:8px 0 12px!important;background:#fff!important}.coop-decks-toggle{position:relative!important;z-index:3!important}
+.coop-decks .coop-section-actions{display:grid!important;grid-template-columns:64px minmax(0,.82fr) minmax(0,1.18fr)!important;grid-template-areas:'count propose progress' 'record record reset'!important;gap:6px!important;width:100%!important;max-width:none!important;white-space:normal!important}.coop-proposal-deck-count{grid-area:count!important;display:grid!important;grid-template-rows:auto 30px!important;justify-items:stretch!important;gap:3px!important;min-width:0!important;font-size:.56rem!important;line-height:1.05!important;text-align:center!important;white-space:nowrap!important}.coop-proposal-deck-count>.coop-styled-select{width:100%!important;min-width:0!important;margin:0!important}.coop-proposal-deck-count .coop-styled-select-button{width:100%!important;min-width:0!important;height:30px!important;padding:0 6px!important;font-size:.62rem!important}#coopPropose{grid-area:propose!important;min-height:34px!important;height:34px!important;padding:4px!important;font-size:.58rem!important}.coop-proposal-progress-toggle{grid-area:progress!important;min-height:34px!important;height:34px!important;padding:3px 4px!important;font-size:.54rem!important;white-space:normal!important}#coopRecordManual{grid-area:record!important}#coopDeckReset{grid-area:reset!important}#coopRecordManual,#coopDeckReset{min-width:0!important;min-height:40px!important;padding:6px 5px!important;font-size:.61rem!important;line-height:1.15!important;white-space:normal!important;overflow-wrap:anywhere!important}#page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions{grid-template-columns:1fr 1fr!important;grid-template-areas:'record reset'!important}
+.coop-proposal-heading{display:block!important;margin:0 0 16px!important;padding:0 0 12px!important;border-bottom:1px solid #e2e8f0!important}.coop-proposal-controls{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,.88fr) minmax(0,1.05fr)!important;gap:5px!important;width:100%!important}.coop-proposal-controls>*{min-width:0!important;width:100%!important;margin:0!important}.coop-all-decks-toggle,#coopProposalDisplayControl,#coopRecordProposal{min-width:0!important;width:100%!important;height:36px!important;padding:3px!important;font-size:.54rem!important;line-height:1.05!important;white-space:normal!important;overflow-wrap:anywhere!important}.coop-all-decks-toggle{grid-template-columns:minmax(0,1fr) auto!important;gap:3px!important}.coop-all-decks-toggle b{min-width:28px!important;padding:3px 4px!important;font-size:.56rem!important}#coopProposalDisplayControl{display:grid!important;grid-template-columns:auto minmax(40px,1fr)!important;gap:2px!important}#coopProposalDisplayControl span{font-size:.54rem!important;white-space:nowrap!important}#coopProposalDisplayControl .coop-styled-select{min-width:40px!important;width:100%!important}#coopProposalDisplayControl .coop-styled-select-button{min-width:40px!important;width:100%!important;height:28px!important;padding:0 3px!important;font-size:.58rem!important}
+.coop-proposal-card{grid-template-columns:18px minmax(0,1fr)!important;gap:2px!important;width:100%!important;min-width:0!important;padding:4px 3px 31px!important;overflow:hidden!important}.coop-proposal-card>b{font-size:.72rem!important}.coop-proposal-images{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:2px!important;width:100%!important;min-width:0!important;overflow:hidden!important}.coop-proposal-image-cell{min-width:0!important;width:100%!important}.coop-proposal-image-cell img,.coop-proposal-image-cell span{width:100%!important;min-width:0!important;aspect-ratio:1!important}.coop-proposal-copy{right:4px!important;bottom:4px!important;max-width:calc(100% - 25px)!important;height:22px!important;padding:2px 5px!important;font-size:.52rem!important}.coop-history-proposals{grid-template-columns:1fr!important;gap:8px!important;width:100%!important;overflow:hidden!important}.coop-history-proposals .coop-proposal-card{width:100%!important;min-width:0!important}.coop-history-proposals .coop-proposal-images{overflow:hidden!important}
 }
