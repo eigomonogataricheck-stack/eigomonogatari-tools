@@ -479,3 +479,9 @@
 .coop-proposal-progress-toggle{height:28px!important;font-size:.58rem!important}
 .coop-proposal-progress-toggle input{width:15px!important;height:15px!important}
 @media(max-width:999px){.coop-decks .coop-section-actions{max-width:100%!important;overflow:visible!important}.coop-decks .coop-section-title{flex-wrap:wrap!important}.coop-decks .coop-section-title>div:first-child{width:100%!important}}
+
+/* build 20260920-355 */
+/* Compact menu width and middle-sized arrow. */
+.coop-styled-select-button::after{content:'▼'!important;width:14px!important;height:14px!important;margin-left:7px!important;font-size:.8rem!important;line-height:1!important}
+.coop-styled-select-menu{width:96px!important;min-width:96px!important;max-width:220px!important}
+.coop-styled-select-option{min-width:0!important;width:100%!important;padding:8px 10px!important;overflow:hidden!important;text-overflow:ellipsis!important}
