@@ -908,3 +908,16 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 #page-calculator .calculator-styled-select-menu{min-width:min(220px,calc(100vw - 16px))!important;width:max-content!important;max-width:min(280px,calc(100vw - 16px))!important;overflow-x:hidden!important}
 #page-calculator .calculator-styled-select-menu .coop-styled-select-option{display:block!important;width:100%!important;min-width:max-content!important;max-width:none!important;padding:9px 12px!important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important;text-align:left!important}
 @media(max-width:800px){#page-calculator .calculator-styled-select-button{grid-template-columns:minmax(0,1fr) 14px!important;gap:3px!important;padding:0 5px 0 7px!important;font-size:11px!important}#page-calculator .calculator-styled-select-menu{min-width:min(190px,calc(100vw - 16px))!important;max-width:calc(100vw - 16px)!important}#page-calculator .calculator-styled-select-menu .coop-styled-select-option{font-size:12px!important;padding:9px 10px!important}}
+
+/* build 20260922-397: hide proposal-only controls in mobile non-detail mode */
+@media(max-width:999px){
+  html body #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions>.coop-proposal-deck-count,
+  html body #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions>#coopPropose,
+  html body #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions>.coop-proposal-progress-toggle{
+    display:none!important;
+  }
+  html body #page-coop:not(.coop-detail-on) .coop-decks .coop-section-actions{
+    grid-template-columns:max-content max-content!important;
+    grid-template-areas:'multiplier multiplier' 'record reset'!important;
+  }
+}
