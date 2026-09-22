@@ -921,3 +921,11 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     grid-template-areas:'multiplier multiplier' 'record reset'!important;
   }
 }
+
+/* build 20260922-398: picker mode visibility and mobile select viewport polish */
+#picker .picker-category-bars[hidden]{display:none!important}
+#page-calculator .calculator-styled-select-button{color:#334155!important;font-size:.72rem!important;font-weight:600!important;letter-spacing:.01em!important}
+#page-calculator .calculator-styled-select-menu{box-sizing:border-box!important;overflow-x:hidden!important;overscroll-behavior:contain!important}
+#page-calculator .calculator-styled-select-menu .coop-styled-select-option{box-sizing:border-box!important;color:#334155!important;font-size:.74rem!important;font-weight:600!important;letter-spacing:.01em!important;line-height:1.25!important}
+#page-calculator .calculator-styled-select-menu .coop-styled-select-option[aria-selected='true']{color:#0b57d0!important;font-weight:650!important}
+@media(max-width:800px){#page-calculator .calculator-styled-select-button{font-size:12px!important;font-weight:600!important}#page-calculator .calculator-styled-select-menu{max-height:min(280px,calc(100dvh - 16px))!important}#page-calculator .calculator-styled-select-menu .coop-styled-select-option{font-size:13px!important;font-weight:600!important;padding:10px 12px!important}}
