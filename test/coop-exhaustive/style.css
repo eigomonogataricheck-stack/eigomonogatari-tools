@@ -970,3 +970,8 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
     font-weight:500!important;
   }
 }
+
+/* build 20260922-400: fully hide picker category path outside category mode */
+#picker .picker-category-bars[hidden],
+#picker .picker-current[hidden],
+#picker #pickerBox[hidden]{display:none!important}
