@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260922-379 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260922-380 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=0.81,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_MAX_DAMAGE_SCALE=1.2,COOP_PROPOSAL_MIN_DAMAGE_SCALE=0.001,COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12,coopProposalScaleStats=[];
@@ -12,7 +12,7 @@ let coopProposalButtonBound=false,coopProposalLastWasExhaustive=false,coopPropos
 function coopSelfMultiplier(){return $('coopSelfMode')?.checked?1.2:1}
 function coopQuestionMultiplier(){let value=Number($('coopQuestionLevel')?.value);return Number.isFinite(value)&&value>0?value:1.99}
 function coopFixedDamageMultiplier(){return COOP_DAMAGE_BASE*coopSelfMultiplier()*coopQuestionMultiplier()}
-function coopSyncFixedMultiplierControls(){let self=$('coopSelfMode'),level=$('coopQuestionLevel'),output=$('coopFixedMultiplier');if(self){let text=self.parentElement?.querySelector('span');if(text)text.textContent=self.checked?'自力 ON':'自力 OFF（×5/6）'}if(output)output.textContent=`現在倍率 ${coopFixedDamageMultiplier().toFixed(5).replace(/0+$/,'').replace(/\.$/,'')}`}
+function coopSyncFixedMultiplierControls(){let self=$('coopSelfMode'),level=$('coopQuestionLevel'),output=$('coopFixedMultiplier');if(self){let text=self.parentElement?.querySelector('span');if(text)text.textContent=self.checked?'自力 ON':'自力 OFF'}if(output)output.textContent=`現在倍率 ${coopFixedDamageMultiplier().toFixed(5).replace(/0+$/,'').replace(/\.$/,'')}`}
 
 function coopShowProposalStartNative(){let button=$('coopPropose'),result=$('coopClearResult'),damage=$('coopDamageResult'),details=$('coopResultDetails'),section=coopProposalResultSection();if(button){button.disabled=true;button.textContent='デッキキャラ提案';button.classList.remove('danger');button.setAttribute('aria-busy','true')}if(result)result.textContent='';if(damage)damage.textContent='';if(details)details.textContent='';if(section)section.hidden=true;coopProposalShowCalculationDialog('running',{text:'候補を準備しています'})}
 async function coopProposalFetchNetworkTime(){let perfStart=performance.now(),url=new URL(location.href);url.searchParams.set('_coopTime',String(Math.trunc(perfStart)));try{let response=await fetch(url.href,{method:'HEAD',cache:'no-store',credentials:'same-origin'}),perfEnd=performance.now(),header=response.headers.get('Date'),server=Date.parse(header||'');if(response.ok&&Number.isFinite(server))return{now:server+(perfEnd-perfStart)/2,perf:perfEnd,source:'通信時刻'};throw new Error('Date header unavailable')}catch(error){console.warn('通信時刻を取得できないため端末時刻を使用します',error);return{now:Date.now(),perf:performance.now(),source:'端末時刻（通信取得失敗）'}}}
