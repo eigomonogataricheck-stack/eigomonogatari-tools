@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260922-378 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260922-379 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=0.81,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_MAX_DAMAGE_SCALE=1.2,COOP_PROPOSAL_MIN_DAMAGE_SCALE=0.001,COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12,coopProposalScaleStats=[];
