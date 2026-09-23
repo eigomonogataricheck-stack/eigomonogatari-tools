@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260922-406 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260922-407 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=0.81,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12;
@@ -314,7 +314,7 @@ async function coopProposalBruteforceAtMaximumScale(totalDecks){
   for(let slot=0;slot<COOP_SLOTS;slot++){
     let pool=(sourcePools[slot]||[]).slice(),totalCombinations=prefixes.length*pool.length,label=`総当たり・${slot+1}枠目・初回計算対象${pool.length.toLocaleString()}体・${prefixes.length.toLocaleString()}構成`;if(coopProposalCancelRequested)throw new Error('計算を停止しました');if(!await coopProposalConfirmMillion(totalCombinations,slot))throw new Error('計算を停止しました');
     await coopProposalShowExhaustiveProgressDialog(slot,'before',pool);
-    let passed=await coopProposalParallelStage(prefixes,pool,slot,totalDecks,label);if(slot===0)passed=coopProposalLimitFirstPassed(passed);else if(slot===1||slot===2)passed=coopProposalLimitPassedForNextSlot(passed,slot);prefixes=passed.map(item=>item.deck);passed.length=0;
+    let passed=await coopProposalParallelStage(prefixes,pool,slot,totalDecks,label),ranking=coopProposalSlotCharacterRanking(passed,slot,10),allowedIds=new Set(ranking.map(entry=>coopCharacterKey(entry.character)));passed=passed.filter(item=>allowedIds.has(coopCharacterKey(coopProposalItemDeck(item)[slot])));if(slot===0)passed=coopProposalLimitFirstPassed(passed);else if(slot===1||slot===2)passed=coopProposalLimitPassedForNextSlot(passed,slot);prefixes=passed.map(item=>item.deck);passed.length=0;
     for(let refreshSlot=0;refreshSlot<=slot;refreshSlot++)coopProposalProgressCoverage[refreshSlot]=Math.min(Number(coopProposalProgressCoverage[refreshSlot])||Infinity,coopProposalDialogCharacterList(prefixes,refreshSlot,true,Infinity).length);
     await coopProposalShowExhaustiveProgressDialog(slot,'clear',prefixes);
     if(!prefixes.length)break;await coopYield()
