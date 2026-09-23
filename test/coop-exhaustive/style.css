@@ -975,3 +975,20 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 #picker .picker-category-bars[hidden],
 #picker .picker-current[hidden],
 #picker #pickerBox[hidden]{display:none!important}
+
+/* build 20260923-410: inline manual cooperative deck verdict */
+.coop-manual-judge{margin:12px 0 0!important;padding:12px 14px!important;border-width:1px!important;text-align:left!important;background:#f8fafc!important;transition:border-color .15s ease,background-color .15s ease}
+.coop-manual-judge-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:7px}
+.coop-manual-judge-title h2{margin:0!important;font-size:.88rem!important;color:#334155}
+.coop-manual-judge-title small{color:#64748b;font-size:.65rem;font-weight:700}
+.coop-manual-judge>strong{display:block;margin:0!important;font-size:1.28rem!important;line-height:1.2;color:#475569}
+.coop-manual-judge #coopDamageResult{margin-top:4px;font-weight:800;color:#475569}
+.coop-manual-judge #coopResultDetails{margin-top:6px;color:#64748b;font-size:.68rem}
+.coop-manual-judge[data-status="certain"]{border-color:#91d5ad!important;background:#f2fbf6!important}
+.coop-manual-judge[data-status="certain"]>strong{color:#128047}
+.coop-manual-judge[data-status="random"]{border-color:#efc36a!important;background:#fff9e9!important}
+.coop-manual-judge[data-status="random"]>strong{color:#a96300}
+.coop-manual-judge[data-status="failed"]{border-color:#efa6a0!important;background:#fff5f4!important}
+.coop-manual-judge[data-status="failed"]>strong{color:#b42318}
+.coop-manual-judge .coop-random-reason{margin:7px 0 0;padding:7px 8px;background:#fff}
+@media(max-width:999px){.coop-manual-judge{margin-top:10px!important;padding:10px!important}.coop-manual-judge-title{display:grid;gap:2px}.coop-manual-judge>strong{font-size:1.12rem!important}.coop-manual-judge #coopResultDetails{font-size:.62rem}}
