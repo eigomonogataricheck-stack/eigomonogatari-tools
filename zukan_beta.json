@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-24T04:03:54.559Z",
+  "generatedAt": "2026-09-24T04:29:27.830Z",
   "characters": [
     {
       "id": 1189,
@@ -11619,7 +11619,7 @@
         "limitPower": 2397,
         "skillTurn": 4,
         "skill": "3ターンの間、自身の攻撃が3回連続攻撃になる。",
-        "rare": "CR",
+        "rare": "N",
         "skillEffects": [
           {
             "effect": "連撃",
