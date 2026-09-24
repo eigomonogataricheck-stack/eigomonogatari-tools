@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-24T08:07:31.188Z",
+  "generatedAt": "2026-09-24T08:08:59.132Z",
   "characters": [
     {
       "id": 1189,
@@ -7536,7 +7536,8 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2297.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "対戦",
-      "smallCategory": "国内"
+      "smallCategory": "国内",
+      "heading": "大阪"
     },
     {
       "id": 2298,
@@ -7544,7 +7545,8 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2298.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "対戦",
-      "smallCategory": "国内"
+      "smallCategory": "国内",
+      "heading": "大阪"
     },
     {
       "id": 1583,
