@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20260923-418 */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260924-419 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=0.81,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12;
@@ -85,7 +85,7 @@ function layerOutcome(order,layer,stopOnFailure=false){let initial=[0,1,2].map(p
 function coopFailureText(layer,x){if(!x?.fail)return'';let order=x.fail.order.map(r=>`D${r+1}`).join('→'),targets=x.fail.targets.map(p=>p==null?'攻撃なし':['左','真ん中','右'][p]).join('→'),remaining=x.fail.remaining.map((hp,i)=>`${['左','真ん中','右'][i]}:${Math.ceil(hp).toLocaleString()}`).join('、');return `${layer+1}層: デッキ順 ${order} / 攻撃先 ${targets} / 最終残HP ${remaining}`}
 function calculateCoop(){if(!$('coopClearResult'))return;let activeRows=Array.from({length:coopVisibleRows},(_,r)=>r).filter(r=>coopDecks[r].some(Boolean));document.querySelectorAll('.coop-row-result').forEach(q=>q.textContent='');let resultBox=$('coopManualJudge');if(!activeRows.length){$('coopClearResult').textContent='味方デッキを入力してください';$('coopDamageResult').textContent='';$('coopResultDetails').textContent='';if(resultBox)resultBox.dataset.status='empty';return}let orders=permutations(activeRows),layerAll=Array(5).fill(true),layerSome=Array(5).fill(false),configured=Array(5).fill(false),witnesses=Array(5).fill(null);for(let order of orders)for(let layer=0;layer<5;layer++){let x=layerOutcome(order,layer);if(!x.configured)continue;configured[layer]=true;layerAll[layer]=layerAll[layer]&&x.all;layerSome[layer]=layerSome[layer]||x.some;if(x.fail&&!witnesses[layer])witnesses[layer]=x}let bad=[],random=[];for(let i=0;i<5;i++)if(configured[i]){if(!layerSome[i])bad.push(i+1);else if(!layerAll[i])random.push(i+1)}let status=!configured.some(Boolean)?'敵を入力してください':bad.length?'撃破不可':random.length?'ランダム撃破':'確定撃破';$('coopClearResult').textContent=status;$('coopDamageResult').textContent=bad.length?`${bad.join('・')}枠目で撃破不可`:random.length?`${random.join('・')}枠目で結果が変動`:'1～5枠目すべて確定撃破';if(resultBox)resultBox.dataset.status=bad.length?'failed':random.length?'random':configured.some(Boolean)?'certain':'empty';let problemLayers=(bad.length?bad:random).map(n=>n-1),reasons=problemLayers.map(layer=>coopFailureText(layer,witnesses[layer])).filter(Boolean);$('coopResultDetails').innerHTML=`<div>判定対象: ${activeRows.length}デッキ / デッキ順 ${orders.length}通り / 各枠の攻撃対象3通り</div>${reasons.length?`<details class="coop-random-reason"><summary>${bad.length?'撃破不可':'ランダム撃破'}となる組合せ例</summary>${reasons.map(esc).join('<br>')}</details>`:''}`}
 function recommendCoopDecks(){for(let slot=0;slot<5;slot++)coopDecks[0][slot]=coopEnemies[slot*3+1].character;syncCoopVisibleRows();renderCoopDecks();saveCoopState()}
-function deleteCoopDeck(row){if(row<0||row>=coopVisibleRows)return;coopDecks.splice(row,1);coopDecks.push(Array(COOP_SLOTS).fill(null));coopVisibleRows=Math.max(1,coopVisibleRows-1);if(coopClipboard===row)coopClipboard=null;else if(coopClipboard>row)coopClipboard--;renderCoopDecks();saveCoopState()}
+function deleteCoopDeck(row){if(row<0||row>=COOP_MAX_ROWS)return;coopDecks[row]=Array(COOP_SLOTS).fill(null);if(coopClipboard===row)coopClipboard=null;syncCoopVisibleRows();renderCoopDecks();saveCoopState()}
 function coopPower(c){return Number(c?.details?.limitPower??c?.details?.power??0)||0}
 function coopTurnZeroSkill(c){let turn=Number(c?.details?.skillTurn??0);if(turn!==0)return{active:[],shorten:0};let active=skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','色変','全体攻撃'].includes(en(e))).map(e=>({effect:e,owner:c,source:0,duration:effectDuration(e),remaining:effectDuration(e),deckRow:0,recipientRow:0,recipientSlot:0}));return{active,shorten:0}}
 function coopOpeningDamage(c,e){return coopDamage(c,{...e,hp:coopScaledHp(coopEnemies.indexOf(e))},coopTurnZeroSkill(c))}
@@ -283,7 +283,8 @@ async function coopProposalExpandEquivalentNonContinuous(items){
   let source=items||[],out=[],seen=new Set(),checked=0,generated=0,total=source.length;
   function add(item,deck){
     let ids=coopProposalDeckIds(deck),key=coopProposalDeckKey(ids);
-    if(!key||seen.has(key)||ids.some(id=>!id)||new Set(ids).size!==ids.length)return;
+    let requiredMissing=ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&!id),usedIds=ids.filter(Boolean);
+    if(!key||seen.has(key)||requiredMissing||new Set(usedIds).size!==usedIds.length)return;
     let legendary=deck.filter(c=>String(c?.details?.rare??c?.rare??'')==='伝').length;
     if(legendary>1)return;
     seen.add(key);
