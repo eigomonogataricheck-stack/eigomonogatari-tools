@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-24T08:08:59.132Z",
+  "generatedAt": "2026-09-24T08:14:15.910Z",
   "characters": [
     {
       "id": 1189,
@@ -7537,7 +7537,34 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "対戦",
       "smallCategory": "国内",
-      "heading": "大阪"
+      "heading": "大阪",
+      "details": {
+        "id": 2297,
+        "name": "全宇宙世界師匠",
+        "attribute": "風",
+        "cost": 28,
+        "hp": 1200,
+        "power": 3200,
+        "limitBreak": 7,
+        "limitHp": 2044,
+        "limitPower": 5453,
+        "skillTurn": 3,
+        "skill": "2ターンの間、火属性の敵に対する味方全員の攻撃力を210%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 2.1,
+            "duration": 2,
+            "applier": "全員",
+            "target": "火",
+            "applierAttribute": "全",
+            "targetAttribute": "火",
+            "sourceText": "2ターンの間、火属性の敵に対する味方全員の攻撃力を210%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2298,
@@ -7546,7 +7573,32 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "対戦",
       "smallCategory": "国内",
-      "heading": "大阪"
+      "heading": "大阪",
+      "details": {
+        "id": 2298,
+        "name": "枚方のエルフ",
+        "attribute": "水風",
+        "cost": 52,
+        "hp": 3300,
+        "power": 1910,
+        "limitBreak": 7,
+        "limitHp": 5623,
+        "limitPower": 3254,
+        "skillTurn": 1,
+        "skill": "3ターンの間、風属性の味方全員のHPを23%回復する。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.23,
+            "duration": 3,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "3ターンの間、風属性の味方全員のHPを23%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1583,
