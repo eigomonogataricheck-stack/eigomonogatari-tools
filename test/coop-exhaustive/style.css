@@ -992,15 +992,24 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 .coop-manual-judge[data-status="failed"]>strong{color:#b42318}
 .coop-manual-judge .coop-random-reason{margin:7px 0 0;padding:7px 8px;background:#fff}
 @media(max-width:999px){.coop-manual-judge{margin-top:10px!important;padding:10px!important}.coop-manual-judge-title{display:grid;gap:2px}.coop-manual-judge>strong{font-size:1.12rem!important}.coop-manual-judge #coopResultDetails{font-size:.62rem}}
-/* build 20260924-420: catalog quick filter access and picker-aligned list */
-#page-zukan .zukan-fixed{position:sticky;top:42px;z-index:18;margin:-20px -20px 10px;padding:14px 20px 10px;border-bottom:1px solid #e1e6ec;background:#fff}
-#page-zukan .zukan-fixed h1{margin:0 0 10px}
-.zukan-mode-tabs{display:inline-flex;margin-top:8px;padding:2px;gap:2px;border-radius:9px;background:#eef2f6}
-.zukan-mode-tabs button{min-height:29px;padding:4px 13px;border:0;border-radius:7px;background:transparent;color:#5f6b7a;font-size:.72rem;font-weight:800}
-.zukan-mode-tabs button.active{background:#fff;color:#172033;box-shadow:0 1px 4px #0f172a1f}
-#zukanCategoryView[hidden],#zkFilter[hidden]{display:none!important}
+/* build 20260924-421: catalog UI equals character-picker UI */
+#page-zukan .zukan-picker-panel{position:relative;padding-top:0}
+#page-zukan .zukan-picker-fixed{position:sticky;top:42px;z-index:18;margin:0 -20px 10px;padding:10px 20px 8px;border-bottom:1px solid #e5e9ef;background:#fff}
+#page-zukan .zukan-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:30px}
+#page-zukan .zukan-title-row h1{margin:0;font-size:1rem}
+#page-zukan .zukan-title-row #zkCount{color:#64748b;font-size:.72rem;font-weight:800}
+#page-zukan #zkSearch{width:100%;height:34px;margin-top:6px;padding:5px 10px;border:1px solid #d7dee7;border-radius:9px;background:#f7f9fb;font-size:.82rem}
+#page-zukan .zukan-mode-tabs{display:inline-flex;margin-top:6px;padding:2px;gap:1px;border-radius:9px;background:#eef2f6}
+#page-zukan .zukan-mode-tabs button{min-width:88px;min-height:25px;padding:3px 10px;border:0;border-radius:7px;background:transparent;color:#5f6b7a;font-size:.68rem;font-weight:750}
+#page-zukan .zukan-mode-tabs button.active{background:#fff;color:#172033;box-shadow:0 1px 4px #0f172a1f}
+#page-zukan .zukan-category-view[hidden],#page-zukan #zukanCategoryContent[hidden],#page-zukan #zkFilter[hidden]{display:none!important}
+#page-zukan .zukan-category-view{margin-top:6px}
+#page-zukan .zukan-category-bars{margin:0;padding:0;border:0;background:transparent}
+#page-zukan .zukan-current{top:154px;margin:8px 0;padding:7px 10px;font-size:.74rem}
+#page-zukan #zkBox,#page-zukan #zkFilteredBox{display:grid;grid-template-columns:repeat(auto-fill,78px);gap:10px;align-items:start}
+#page-zukan #zkBox>.zukan-item-heading{grid-column:1/-1;width:100%}
+#page-zukan #zkBox>.zukan-category-grid{display:contents}
 #page-zukan #zkFilter{margin-top:10px}
 #page-zukan #zkFilterResults{margin-top:14px}
-#page-zukan .zukan-category-grid,#page-zukan #zkFilteredBox{grid-template-columns:repeat(auto-fill,78px);gap:10px}
-@media(max-width:800px){#page-zukan .zukan-fixed{top:42px;margin:-12px -12px 8px;padding:8px 12px 7px}#page-zukan .zukan-fixed h1{margin:0 0 6px;font-size:1rem}.zukan-mode-tabs{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-top:5px}.zukan-mode-tabs button{width:100%;min-height:28px;font-size:.68rem}#page-zukan .zukan-category-grid,#page-zukan #zkFilteredBox{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 4px}}
-@media(max-width:360px){#page-zukan .zukan-category-grid,#page-zukan #zkFilteredBox{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){#page-zukan .zukan-picker-fixed{top:42px;margin:0 -12px 8px;padding:6px 8px}#page-zukan .zukan-title-row{min-height:27px}#page-zukan .zukan-title-row h1{font-size:.82rem}#page-zukan #zkSearch{height:32px;margin-top:4px;padding:4px 8px;font-size:12px!important}#page-zukan .zukan-mode-tabs{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-top:4px}#page-zukan .zukan-mode-tabs button{width:100%;min-width:0;min-height:27px;padding:3px 2px;font-size:.61rem}#page-zukan .zukan-current{top:177px;margin:6px 0;padding:6px;font-size:.66rem}#page-zukan #zkBox,#page-zukan #zkFilteredBox{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 4px}}
+@media(max-width:360px){#page-zukan #zkBox,#page-zukan #zkFilteredBox{grid-template-columns:repeat(3,minmax(0,1fr))}}
