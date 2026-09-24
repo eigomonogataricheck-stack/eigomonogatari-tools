@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-17T05:44:47.469Z",
+  "generatedAt": "2026-09-24T04:03:54.559Z",
   "characters": [
     {
       "id": 1189,
@@ -10303,7 +10303,7 @@
         "limitPower": 2811,
         "skillTurn": 6,
         "skill": "死亡している火属性の味方全員を150%のHPで蘇らせる。",
-        "rare": "MZR",
+        "rare": "ZR",
         "skillEffects": [
           {
             "effect": "蘇生",
