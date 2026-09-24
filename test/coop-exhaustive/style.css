@@ -992,3 +992,15 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 .coop-manual-judge[data-status="failed"]>strong{color:#b42318}
 .coop-manual-judge .coop-random-reason{margin:7px 0 0;padding:7px 8px;background:#fff}
 @media(max-width:999px){.coop-manual-judge{margin-top:10px!important;padding:10px!important}.coop-manual-judge-title{display:grid;gap:2px}.coop-manual-judge>strong{font-size:1.12rem!important}.coop-manual-judge #coopResultDetails{font-size:.62rem}}
+/* build 20260924-420: catalog quick filter access and picker-aligned list */
+#page-zukan .zukan-fixed{position:sticky;top:42px;z-index:18;margin:-20px -20px 10px;padding:14px 20px 10px;border-bottom:1px solid #e1e6ec;background:#fff}
+#page-zukan .zukan-fixed h1{margin:0 0 10px}
+.zukan-mode-tabs{display:inline-flex;margin-top:8px;padding:2px;gap:2px;border-radius:9px;background:#eef2f6}
+.zukan-mode-tabs button{min-height:29px;padding:4px 13px;border:0;border-radius:7px;background:transparent;color:#5f6b7a;font-size:.72rem;font-weight:800}
+.zukan-mode-tabs button.active{background:#fff;color:#172033;box-shadow:0 1px 4px #0f172a1f}
+#zukanCategoryView[hidden],#zkFilter[hidden]{display:none!important}
+#page-zukan #zkFilter{margin-top:10px}
+#page-zukan #zkFilterResults{margin-top:14px}
+#page-zukan .zukan-category-grid,#page-zukan #zkFilteredBox{grid-template-columns:repeat(auto-fill,78px);gap:10px}
+@media(max-width:800px){#page-zukan .zukan-fixed{top:42px;margin:-12px -12px 8px;padding:8px 12px 7px}#page-zukan .zukan-fixed h1{margin:0 0 6px;font-size:1rem}.zukan-mode-tabs{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-top:5px}.zukan-mode-tabs button{width:100%;min-height:28px;font-size:.68rem}#page-zukan .zukan-category-grid,#page-zukan #zkFilteredBox{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 4px}}
+@media(max-width:360px){#page-zukan .zukan-category-grid,#page-zukan #zkFilteredBox{grid-template-columns:repeat(3,minmax(0,1fr))}}
