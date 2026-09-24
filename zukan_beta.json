@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-24T08:14:15.910Z",
+  "generatedAt": "2026-09-24T08:46:52.859Z",
   "characters": [
     {
       "id": 1189,
@@ -12043,7 +12043,34 @@
       "largeCategory": "特殊ゆる",
       "middleCategory": "対戦",
       "smallCategory": "国外",
-      "heading": "ベトナム"
+      "heading": "ベトナム",
+      "details": {
+        "id": 2299,
+        "name": "ホイアンさん",
+        "attribute": "全",
+        "cost": 42,
+        "hp": 2300,
+        "power": 2600,
+        "limitBreak": 7,
+        "limitHp": 3919,
+        "limitPower": 4430,
+        "skillTurn": 4,
+        "skill": "2ターンの間、水属性の敵に対する火属性の味方全員の攻撃力を500%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 5,
+            "duration": 2,
+            "applier": "火",
+            "target": "水",
+            "applierAttribute": "火",
+            "targetAttribute": "水",
+            "sourceText": "2ターンの間、水属性の敵に対する火属性の味方全員の攻撃力を500%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2265,
@@ -29915,7 +29942,34 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2300.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "ゆる狩り",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2300,
+        "name": "オジサンさん",
+        "attribute": "水風",
+        "cost": 19,
+        "hp": 1500,
+        "power": 1700,
+        "limitBreak": 7,
+        "limitHp": 2556,
+        "limitPower": 2896,
+        "skillTurn": 3,
+        "skill": "1ターンの間、風属性の味方全員に火属性の敵からのダメージを80%軽減するシールドを与える。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.8,
+            "duration": 1,
+            "applier": "風",
+            "target": "火",
+            "applierAttribute": "風",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、風属性の味方全員に火属性の敵からのダメージを80%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2301,
@@ -29923,7 +29977,34 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2301.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "ゆる狩り",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2301,
+        "name": "暴走☆オジサンさん",
+        "attribute": "水風",
+        "cost": 34,
+        "hp": 2000,
+        "power": 2300,
+        "limitBreak": 7,
+        "limitHp": 3408,
+        "limitPower": 3919,
+        "skillTurn": 3,
+        "skill": "1ターンの間、風属性の味方全員に火属性の敵からのダメージを85%軽減するシールドを与える。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.85,
+            "duration": 1,
+            "applier": "風",
+            "target": "火",
+            "applierAttribute": "風",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、風属性の味方全員に火属性の敵からのダメージを85%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 2302,
@@ -29931,7 +30012,34 @@
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2302.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "ゆる狩り",
-      "smallCategory": "その他"
+      "smallCategory": "その他",
+      "details": {
+        "id": 2302,
+        "name": "オジサンはﾉﾝﾍﾞﾝﾀﾞﾗﾘ",
+        "attribute": "水風",
+        "cost": 47,
+        "hp": 2400,
+        "power": 2600,
+        "limitBreak": 7,
+        "limitHp": 4089,
+        "limitPower": 4430,
+        "skillTurn": 3,
+        "skill": "2ターンの間、風属性の味方全員に火属性の敵からのダメージを85%軽減するシールドを与える。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.85,
+            "duration": 2,
+            "applier": "風",
+            "target": "火",
+            "applierAttribute": "風",
+            "targetAttribute": "火",
+            "sourceText": "2ターンの間、風属性の味方全員に火属性の敵からのダメージを85%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
     },
     {
       "id": 1660,
