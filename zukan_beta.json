@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-24T08:46:52.859Z",
+  "generatedAt": "2026-09-27T11:06:13.624Z",
   "characters": [
     {
       "id": 1189,
@@ -7578,7 +7578,7 @@
         "id": 2298,
         "name": "枚方のエルフ",
         "attribute": "水風",
-        "cost": 52,
+        "cost": 45,
         "hp": 3300,
         "power": 1910,
         "limitBreak": 7,
