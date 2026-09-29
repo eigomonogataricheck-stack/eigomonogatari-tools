@@ -315,7 +315,7 @@ async function coopProposalBruteforceAtMaximumScale(totalDecks){
   for(let slot=0;slot<COOP_SLOTS;slot++){
     let pool=(sourcePools[slot]||[]).slice(),totalCombinations=prefixes.length*pool.length,label=`総当たり・${slot+1}枠目・初回計算対象${pool.length.toLocaleString()}体・${prefixes.length.toLocaleString()}構成`;if(coopProposalCancelRequested)throw new Error('計算を停止しました');if(!await coopProposalConfirmMillion(totalCombinations,slot))throw new Error('計算を停止しました');
     await coopProposalShowExhaustiveProgressDialog(slot,'before',pool);
-    let passed=await coopProposalParallelStage(prefixes,pool,slot,totalDecks,label);if(slot===0)passed=coopProposalLimitFirstPassed(passed);else if(slot===1||slot===2)passed=coopProposalLimitPassedForNextSlot(passed,slot);prefixes=passed.map(item=>item.deck);passed.length=0;
+    let passed=await coopProposalParallelStage(prefixes,pool,slot,totalDecks,label);if(coopProposalSlotNeedsCandidate(slot)){if(slot===0)passed=coopProposalLimitFirstPassed(passed);else if(slot===1||slot===2)passed=coopProposalLimitPassedForNextSlot(passed,slot)}prefixes=passed.map(item=>item.deck);passed.length=0;
     for(let refreshSlot=0;refreshSlot<=slot;refreshSlot++)coopProposalProgressCoverage[refreshSlot]=Math.min(Number(coopProposalProgressCoverage[refreshSlot])||Infinity,coopProposalDialogCharacterList(prefixes,refreshSlot,true,Infinity).length);
     await coopProposalShowExhaustiveProgressDialog(slot,'clear',prefixes);
     if(!prefixes.length)break;await coopYield()
