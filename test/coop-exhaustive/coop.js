@@ -216,6 +216,7 @@ function coopProposalLimitFirstPassed(items){
   let passed=items||[],nonContinuous=[],continuous=[],noSkill=[];
   for(let item of passed){let c=coopProposalItemDeck(item)[0];if(!c)continue;let effects=coopProposalFirstActiveEffects(c),isContinuous=effects.some(e=>effectDuration(e)>=2);if(isContinuous)continuous.push(item);else{nonContinuous.push(item);if(!effects.length)noSkill.push(item)}}
   let representative=null;for(let item of noSkill){let c=coopProposalItemDeck(item)[0],current=representative?coopProposalItemDeck(representative)[0]:null;if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))representative=item}
+  if(!representative)for(let item of nonContinuous){let c=coopProposalItemDeck(item)[0],current=representative?coopProposalItemDeck(representative)[0]:null;if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))representative=item}
   let characters=[],seen=new Set();for(let item of nonContinuous){let c=coopProposalItemDeck(item)[0],id=coopCharacterKey(c);if(c&&id&&!seen.has(id)){seen.add(id);characters.push(c)}}
   coopProposalEquivalentNonContinuous[0]={representativeId:representative?coopCharacterKey(coopProposalItemDeck(representative)[0]):'',characters};coopProposalDeferredFirstCandidates=[];
   return representative?continuous.concat(representative):continuous
@@ -331,14 +332,34 @@ function coopProposalSelectDisjointDecks(ranked,limit){
 }
 function coopProposalConfirmedIdsBySlot(items){let sets=Array.from({length:COOP_SLOTS},()=>new Set());for(let item of items||[]){let ids=item.ids||coopProposalDeckIds(coopProposalItemDeck(item));for(let slot=0;slot<COOP_SLOTS;slot++)if(ids?.[slot])sets[slot].add(String(ids[slot]))}return sets}
 async function coopProposalExhaustiveOvershoot(items,scale){let pools=coopProposalOvershootPools(items);if(pools.some((pool,slot)=>coopProposalSlotNeedsCandidate(slot)&&!pool.length))return[];let total=pools.reduce((n,p)=>n*Math.max(1,p.length),1),checked=0,confirmed=[],deck=Array(COOP_SLOTS).fill(null),last=performance.now();coopProposalProgressCoverage=pools.map((p,i)=>coopProposalSlotNeedsCandidate(i)?p.length:6);async function walk(slot){if(slot===COOP_SLOTS){checked++;let ids=deck.map(coopCharacterKey);if(ids.every(Boolean)&&new Set(ids).size===ids.length&&coopProposalWorks(deck,coopProposalTargetDecks))confirmed.push({ids:ids.slice(),deck:deck.slice(),repeats:coopProposalTargetDecks,overkillRate:0});if(checked===total||checked%250===0||performance.now()-last>=32){coopSetProposalProgress('候補デッキを確定撃破判定中',true,checked,total,confirmed.length,1);await coopYield();last=performance.now()}return}for(let c of pools[slot]){deck[slot]=c;await walk(slot+1)}}await walk(0);confirmed.sort((a,b)=>coopProposalDeckKey(a.ids).localeCompare(coopProposalDeckKey(b.ids),'ja',{numeric:true}));return confirmed}
+function coopProposalEquivalentPrefixKey(deck,slot){
+  return coopProposalDeckKey(deck.slice(0,slot).map(coopCharacterKey));
+}
 function coopProposalLimitPassedForNextSlot(items,slot){
   if(slot!==1&&slot!==2)return items||[];
-  let passed=items||[],nonContinuous=[];
-  for(let item of passed){let c=coopProposalItemDeck(item)[slot];if(!c)continue;let effects=skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','全体攻撃'].includes(en(e)));if(!effects.some(e=>effectDuration(e)>=2))nonContinuous.push(item)}
-  let keep=null;for(let item of nonContinuous){let c=coopProposalItemDeck(item)[slot],current=keep?coopProposalItemDeck(keep)[slot]:null,cost=Number(c?.details?.cost??0),keepCost=Number(current?.details?.cost??-Infinity);if(!current||cost>keepCost||cost===keepCost&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))keep=item}
-  let characters=[],seen=new Set();for(let item of nonContinuous){let c=coopProposalItemDeck(item)[slot],id=coopCharacterKey(c);if(c&&id&&!seen.has(id)){seen.add(id);characters.push(c)}}let keepId=keep?coopCharacterKey(coopProposalItemDeck(keep)[slot]):'';coopProposalEquivalentNonContinuous[slot]={representativeId:keepId,characters};
-  if(!keep)return passed.filter(item=>{let c=coopProposalItemDeck(item)[slot],effects=skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','全体攻撃'].includes(en(e)));return effects.some(e=>effectDuration(e)>=2)});
-  return passed.filter(item=>{let c=coopProposalItemDeck(item)[slot];if(!c)return false;let effects=skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','全体攻撃'].includes(en(e)));return effects.some(e=>effectDuration(e)>=2)||coopCharacterKey(c)===keepId})
+  // Do not combine characters which passed with different earlier-slot prefixes.
+  let groups=new Map(),continuous=[];
+  for(let item of items||[]){
+    let deck=coopProposalItemDeck(item),c=deck[slot];if(!c)continue;
+    let effects=skillEffectsOf(c).filter(e=>coopStructuredEffectValid(e)&&['攻撃力アップ','連撃','全体攻撃'].includes(en(e)));
+    if(effects.some(e=>effectDuration(e)>=2)){continuous.push(item);continue}
+    let key=coopProposalEquivalentPrefixKey(deck,slot),group=groups.get(key);
+    if(!group){group={representative:null,characters:[],ids:new Set(),items:[]};groups.set(key,group)}
+    group.items.push(item);
+    let id=coopCharacterKey(c);
+    if(id&&!group.ids.has(id)){group.ids.add(id);group.characters.push(c)}
+    let current=group.representative?coopProposalItemDeck(group.representative)[slot]:null;
+    if(!current||coopCharacterCost(c)>coopCharacterCost(current)||coopCharacterCost(c)===coopCharacterCost(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))group.representative=item;
+  }
+  let byPrefix=new Map(),kept=continuous.slice();
+  for(let [key,group] of groups){
+    let representativeId=coopCharacterKey(coopProposalItemDeck(group.representative)[slot]);
+    byPrefix.set(key,{representativeId,characters:group.characters});
+    // Keep the representative only for this exact earlier-slot combination.
+    kept.push(...group.items.filter(item=>coopCharacterKey(coopProposalItemDeck(item)[slot])===representativeId));
+  }
+  coopProposalEquivalentNonContinuous[slot]={byPrefix};
+  return kept;
 }
 async function coopProposalExpandEquivalentNonContinuous(items){
   let source=items||[],out=[],seen=new Set(),checked=0,generated=0,total=source.length;
@@ -347,7 +368,7 @@ async function coopProposalExpandEquivalentNonContinuous(items){
     let requiredMissing=ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&!id);
     if(!key||seen.has(key)||requiredMissing||coopProposalHasDuplicateInCompletedDeck(deck))return;
     seen.add(key);
-    out.push({...item,ids:ids.slice(),deck:deck.slice(),provisionalSlots:Array(COOP_SLOTS).fill(false),equivalentNonContinuous:true})
+    out.push({...item,ids:ids.slice(),deck:deck.slice(),provisionalSlots:Array(COOP_SLOTS).fill(false),equivalentNonContinuous:true});
   }
   for(let item of source){
     if(coopProposalCancelRequested)throw new Error('計算を停止しました');
@@ -355,10 +376,12 @@ async function coopProposalExpandEquivalentNonContinuous(items){
     if(base.length!==COOP_SLOTS)continue;
     let choices=[];
     for(let slot=0;slot<3;slot++){
-      let eq=coopProposalEquivalentNonContinuous[slot]||{},baseId=coopCharacterKey(base[slot]),members=[],memberIds=new Set();
-      for(let c of eq.characters||[]){let id=coopCharacterKey(c);if(c&&id&&!memberIds.has(id)){memberIds.add(id);members.push(c)}}
-      let isEquivalentBranch=!!baseId&&(baseId===String(eq.representativeId||'')||memberIds.has(baseId));
-      choices[slot]=isEquivalentBranch&&members.length?members:[base[slot]]
+      let stored=coopProposalEquivalentNonContinuous[slot]||{};
+      let eq=slot===0?stored:stored.byPrefix?.get(coopProposalEquivalentPrefixKey(base,slot));
+      let baseId=coopCharacterKey(base[slot]),members=[],memberIds=new Set();
+      for(let c of eq?.characters||[]){let id=coopCharacterKey(c);if(c&&id&&!memberIds.has(id)){memberIds.add(id);members.push(c)}}
+      let isEquivalentBranch=!!baseId&&(baseId===String(eq?.representativeId||'')||memberIds.has(baseId));
+      choices[slot]=isEquivalentBranch&&members.length?members:[base[slot]];
     }
     for(let first of choices[0])for(let second of choices[1])for(let third of choices[2]){
       let deck=base.slice();deck[0]=first;deck[1]=second;deck[2]=third;generated++;add(item,deck);
@@ -367,7 +390,7 @@ async function coopProposalExpandEquivalentNonContinuous(items){
     checked++;
     if(checked%100===0||checked===total){coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${checked.toLocaleString()} / ${total.toLocaleString()}件・展開${generated.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,checked,total,out.length,1);await coopYield()}
   }
-  return out
+  return out;
 }
 async function coopProposalBruteforceAtMaximumScale(totalDecks){
   let prefixes=[Array(COOP_SLOTS).fill(null)],sourcePools=Array.from({length:COOP_SLOTS},(_,slot)=>coopProposalSlotNeedsCandidate(slot)?(slot===0?coopProposalFirstCandidatesAll(chars):coopProposalPoolAll(slot)):[null]);coopProposalProgressCoverage=sourcePools.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool.length:0);
