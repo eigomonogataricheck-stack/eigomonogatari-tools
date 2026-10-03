@@ -1031,3 +1031,6 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 #page-calculator .calculator-history-actions .calculator-history-delete{color:#ad4050;border-color:#e8c9cf}
 #page-calculator .calculator-history-empty{margin:4px 0;color:#738096}
 @media(max-width:600px){#page-calculator .calculator-result-actions .download{flex:1 1 140px;white-space:normal}#page-calculator .calculator-history-list{padding:10px}}
+
+@media(min-width:801px){#page-calculator .calculator-result-rail{position:sticky;top:70px;min-width:0}#page-calculator .calculator-result-rail .result{position:static;top:auto}}
+@media(max-width:800px){#page-calculator .calculator-result-rail{min-width:0}}
