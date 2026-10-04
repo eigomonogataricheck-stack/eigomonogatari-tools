@@ -49,20 +49,20 @@ function renderNameSearchGroups(items,box,inPicker){
  const tree=pickerTree(items),seen=new Set(),fragment=document.createDocumentFragment();let total=0;
  for(const [large,middles] of Object.entries(tree)){
   const largeSection=document.createElement('section');largeSection.className='name-search-large zk-l1';
-  const largeTitle=document.createElement('div');largeTitle.className='zk-b1 '+(large==='特殊ゆる'?'special':'normal');largeTitle.textContent=large;largeSection.append(largeTitle);
+  const largeTitle=document.createElement('div');largeTitle.className='name-search-large-label';largeTitle.textContent=large;largeSection.append(largeTitle);
   const largeBody=document.createElement('div');largeBody.className='zk-body open';
   for(const [middle,smalls] of Object.entries(middles)){
    const middleSection=document.createElement('section');middleSection.className='name-search-middle zk-l1';
-   const middleTitle=document.createElement('div');middleTitle.className='zk-b2';middleTitle.textContent=middle;middleSection.append(middleTitle);
+   const middleTitle=document.createElement('div');middleTitle.className='name-search-middle-label';middleTitle.textContent=middle;middleSection.append(middleTitle);
    const middleBody=document.createElement('div');middleBody.className='zk-body open';
    for(const [small,headings] of Object.entries(smalls)){
     const group=document.createElement('section');group.className='name-search-group';
-    if(small!=='__all__'&&small!=='その他'){const title=document.createElement('div');title.className=middle==='伝'?'zk-head':'zk-b3';title.textContent=small;group.append(title)}
+    if(small!=='__all__'&&small!=='その他'){const title=document.createElement('div');title.className=middle==='伝'?'name-search-heading':'name-search-small-label';title.textContent=small;group.append(title)}
     for(const [heading,list] of Object.entries(headings)){
      const grid=document.createElement('div');grid.className='zk-grid';
      for(const x of list){const key=characterKey(x.c)||String(x.i);if(seen.has(key))continue;seen.add(key);grid.append(card(x.c,x.i,inPicker,null,inPicker));total++}
      if(!grid.childElementCount)continue;
-     if(heading&&heading!=='その他'&&heading!==small){const title=document.createElement('div');title.className='zk-head';title.textContent=heading;group.append(title)}group.append(grid);
+     if(heading&&heading!=='その他'&&heading!==small){const title=document.createElement('div');title.className='name-search-heading';title.textContent=heading;group.append(title)}group.append(grid);
     }
     if(group.querySelector('.zk-grid'))middleBody.append(group);
    }
