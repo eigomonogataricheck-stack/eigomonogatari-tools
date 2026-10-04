@@ -71,23 +71,18 @@ function fitResultScreenshot(){
   const overlay=$('resultScreenshot'),panel=overlay?.querySelector('.result-shot-panel');
   if(!panel||overlay.hidden)return;
   const viewport=window.visualViewport,availableWidth=Math.max(1,(viewport?.width||innerWidth)-16),availableHeight=Math.max(1,(viewport?.height||innerHeight)-16);
-  // Measure actual rendered content at full size. Long skills and optional rows increase height.
-  panel.style.zoom='1';panel.style.width=(availableWidth<650?680:760)+'px';
+  panel.style.zoom='1';
+  panel.style.width=(matchMedia('(max-width:700px)').matches?360:760)+'px';
   const naturalWidth=panel.offsetWidth,naturalHeight=panel.scrollHeight;
   const scale=Math.min(1,availableWidth/naturalWidth,availableHeight/naturalHeight);
-  // Never crop or hide fields: exceptionally long content remains scrollable.
-  panel.style.zoom=String(Math.max(.45,scale));
+  // Preserve legibility for exceptionally long skills: overflow can scroll.
+  panel.style.zoom=String(Math.max(.55,scale));
 }
 function downloadResult(){
   calculate();let overlay=$('resultScreenshot');if(!overlay){overlay=document.createElement('div');overlay.id='resultScreenshot';overlay.className='overlay result-shot-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','スクショ用画面');document.body.append(overlay)}
   overlay.replaceChildren();const panel=document.createElement('div');panel.className='result-shot-panel';const bar=document.createElement('div');bar.className='result-shot-toolbar';const hint=document.createElement('span');hint.textContent='この画面を端末のスクリーンショット機能で保存してください';const close=document.createElement('button');close.type='button';close.textContent='閉じる';close.onclick=()=>{overlay.hidden=true;document.removeEventListener('keydown',onKey)};bar.append(hint,close);
   const sheet=document.createElement('article');sheet.className='result-shot-sheet';const heading=document.createElement('h2');heading.textContent='ダメージ計算結果';sheet.append(heading);const sides=document.createElement('div');sides.className='result-shot-sides';sides.append(resultScreenshotSide('attacker'),resultScreenshotSide('defender'));sheet.append(sides);
-  const result=document.createElement('section');result.className='result-shot-verdict';const status=document.createElement('strong');status.textContent=lastResult.st;result.append(status);for(const value of [lastResult.killLabel,lastResult.spareLabel,`${lastResult.mn.toLocaleString()}～${lastResult.mx.toLocaleString()}（${lastResult.mp}%～${lastResult.xp}%）`,lastResult.remaining])if(value){const line=document.createElement('p');line.textContent=value;result.append(line)}sheet.append(result);panel.append(bar,sheet);overlay.append(panel);overlay.hidden=false;
-  requestAnimationFrame(fitResultScreenshot);
-  window.removeEventListener('resize',fitResultScreenshot);
-  window.visualViewport?.removeEventListener('resize',fitResultScreenshot);
-  window.addEventListener('resize',fitResultScreenshot);
-  window.visualViewport?.addEventListener('resize',fitResultScreenshot);
+  const result=document.createElement('section');result.className='result-shot-verdict';const status=document.createElement('strong');status.textContent=lastResult.st;result.append(status);for(const value of [lastResult.killLabel,lastResult.spareLabel,`${lastResult.mn.toLocaleString()}～${lastResult.mx.toLocaleString()}（${lastResult.mp}%～${lastResult.xp}%）`,lastResult.remaining])if(value){const line=document.createElement('p');line.textContent=value;result.append(line)}sheet.append(result);panel.append(bar,sheet);overlay.append(panel);overlay.hidden=false;requestAnimationFrame(fitResultScreenshot);
   function onKey(e){if(e.key==='Escape')close.click()}document.addEventListener('keydown',onKey);close.focus();
 }
 
@@ -106,3 +101,5 @@ function calculatorHistoryDelete(id){const items=calculatorHistoryRead().filter(
 function calculatorHistoryRender(){const list=$('calculatorHistoryList'),count=$('calculatorHistoryCount');if(!list||!count)return;const items=calculatorHistoryRead();count.textContent=items.length+'件';list.replaceChildren();if(!items.length){const empty=document.createElement('p');empty.className='calculator-history-empty';empty.textContent='保存した計算結果はありません。';list.append(empty);return}for(const item of items){const card=document.createElement('div');card.className='calculator-history-item';const main=document.createElement('div');main.className='calculator-history-main';const names=document.createElement('strong');names.textContent=(item.characters?.attacker?.name||'攻撃キャラ未選択')+' → '+(item.characters?.defender?.name||'対象未選択');const date=document.createElement('time');const d=new Date(item.savedAt);date.textContent=Number.isNaN(d.getTime())?'保存日時不明':d.toLocaleString('ja-JP');main.append(names,date);const result=document.createElement('div');result.className='calculator-history-result';result.textContent=(item.result?.status||'')+'　'+(item.result?.range||'');const actions=document.createElement('div');actions.className='calculator-history-actions';const apply=document.createElement('button');apply.type='button';apply.textContent='計算機に反映';apply.onclick=()=>calculatorHistoryRestore(item.id);const del=document.createElement('button');del.type='button';del.className='calculator-history-delete';del.textContent='削除';del.onclick=()=>calculatorHistoryDelete(item.id);actions.append(apply,del);card.append(main,result,actions);list.append(card)}}
 function calculatorHistoryInit(){const button=$('saveCalculation');if(!button||button.dataset.historyBound)return;button.dataset.historyBound='1';button.addEventListener('click',calculatorHistorySave);calculatorHistoryRender()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',calculatorHistoryInit);else calculatorHistoryInit();
+
+window.addEventListener('resize',fitResultScreenshot);window.visualViewport?.addEventListener('resize',fitResultScreenshot);

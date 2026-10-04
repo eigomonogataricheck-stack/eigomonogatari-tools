@@ -1047,25 +1047,30 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 @media(max-width:700px){.result-shot-overlay{padding:8px}.result-shot-sheet{padding:12px}.result-shot-sides{grid-template-columns:1fr;gap:10px}.result-shot-side{padding:10px}.result-shot-identity img{width:70px;height:70px}.result-shot-toolbar{font-size:.8rem}}
 @media print{body:has(#resultScreenshot:not([hidden])) > :not(#resultScreenshot){display:none!important}.result-shot-overlay{position:static;display:block;padding:0;background:#fff}.result-shot-toolbar{display:none}.result-shot-sheet{box-shadow:none}}
 
-/* Screenshot: keep readable natural text; fit the rendered content to the viewport. */
+/* Screenshot layout: desktop side by side, phone stacked vertically. */
 #resultScreenshot.result-shot-overlay{padding:8px;align-items:flex-start;overflow:auto}
 #resultScreenshot .result-shot-panel{width:760px;max-width:none;margin:auto;zoom:1}
-#resultScreenshot .result-shot-toolbar{margin-bottom:7px;padding:5px 9px;font-size:12px}
+#resultScreenshot .result-shot-toolbar{margin-bottom:6px;padding:5px 9px;font-size:12px}
 #resultScreenshot .result-shot-toolbar button{padding:4px 10px}
-#resultScreenshot .result-shot-sheet{padding:15px;font-size:13px;line-height:1.35}
-#resultScreenshot .result-shot-sheet h2{margin:0 0 9px;font-size:19px}
-#resultScreenshot .result-shot-sides{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-#resultScreenshot .result-shot-side{padding:9px;border-top-width:3px}
-#resultScreenshot .result-shot-side h3{margin:0 0 6px;font-size:14px}
-#resultScreenshot .result-shot-identity{min-height:55px;gap:8px}
-#resultScreenshot .result-shot-identity img{width:55px;height:55px}
-#resultScreenshot .result-shot-values{gap:5px;margin:7px 0}
-#resultScreenshot .result-shot-values div{padding:5px}
-#resultScreenshot .result-shot-values dt{font-size:11px}
-#resultScreenshot .result-shot-values dd{margin:1px 0 0;font-size:12px}
-#resultScreenshot .result-shot-skills{padding:7px}
-#resultScreenshot .result-shot-skills p{margin:4px 0;overflow-wrap:anywhere}
-#resultScreenshot .result-shot-verdict{margin-top:9px;padding:8px}
-#resultScreenshot .result-shot-verdict strong{font-size:19px}
-#resultScreenshot .result-shot-verdict p{margin:3px 0}
+#resultScreenshot .result-shot-sheet{padding:13px;font-size:12px;line-height:1.3}
+#resultScreenshot .result-shot-sheet h2{margin:0 0 7px;font-size:18px}
+#resultScreenshot .result-shot-sides{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#resultScreenshot .result-shot-side{padding:7px;border-top-width:3px}
+#resultScreenshot .result-shot-side h3{margin:0 0 4px;font-size:13px}
+#resultScreenshot .result-shot-identity{min-height:45px;gap:7px}
+#resultScreenshot .result-shot-identity img{width:45px;height:45px}
+#resultScreenshot .result-shot-values{gap:4px;margin:5px 0}
+#resultScreenshot .result-shot-values div{padding:4px}
+#resultScreenshot .result-shot-values dt{font-size:10px}
+#resultScreenshot .result-shot-values dd{margin:1px 0 0;font-size:11px}
+#resultScreenshot .result-shot-skills{padding:6px}
+#resultScreenshot .result-shot-skills p{margin:3px 0;overflow-wrap:anywhere}
+#resultScreenshot .result-shot-verdict{margin-top:7px;padding:7px}
+#resultScreenshot .result-shot-verdict strong{font-size:18px}
+#resultScreenshot .result-shot-verdict p{margin:2px 0}
+@media(max-width:700px){
+ #resultScreenshot .result-shot-panel{width:360px}
+ #resultScreenshot .result-shot-sides{grid-template-columns:minmax(0,1fr);gap:6px}
+ #resultScreenshot .result-shot-values{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media print{#resultScreenshot .result-shot-panel{zoom:1!important;width:100%!important}}
