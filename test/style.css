@@ -1098,3 +1098,12 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
  #page-zukan .zukan-middle-chips,#page-zukan .zukan-small-chips{flex:0 1 auto;width:auto;max-width:100%;grid-column:auto}
  #page-zukan .zukan-small-chips{margin:0}
 }
+
+/* Desktop catalog navigation: large + middle on row 1, small from left edge on row 2. */
+@media(min-width:801px){
+ #page-zukan .zukan-category-bars{display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:6px;row-gap:5px;align-items:center}
+ #page-zukan .zukan-large-tabs{grid-column:1;grid-row:1;max-width:100%}
+ #page-zukan .zukan-middle-chips{grid-column:2;grid-row:1;width:auto;max-width:100%;min-width:0}
+ #page-zukan .zukan-small-chips{grid-column:1/-1;grid-row:2;justify-self:start;width:max-content;max-width:100%;margin:0}
+ #page-zukan .zukan-small-chips[hidden]{display:none}
+}
