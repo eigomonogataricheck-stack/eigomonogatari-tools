@@ -44,27 +44,31 @@ function renderZukan(){let searchMode=zukanNav.mode==='search',query=searchMode?
 
 function openPicker(r,purpose='character'){if($('pickerEnemySection'))$('pickerEnemySection').hidden=true;pickerRole=r;pickerPurpose=purpose;$('pickerTitle').textContent=purpose==='skill'?'使用する他キャラのスキルを選択':(r==='attacker'?'攻撃キャラ':'攻撃対象キャラ')+'を選択';$('pickerSearch').value='';ensurePickerTools();pickerNav.mode='category';renderPicker();$('picker').hidden=false}
 function renderPickerEnemyCharacters(){let section=$('pickerEnemyView'),box=$('pickerEnemies');if(!section||!box)return;let available=document.getElementById('page-coop')?.classList.contains('active')&&typeof coopPickerTarget!=='undefined'&&coopPickerTarget?.type==='deck'&&Array.isArray(coopEnemies);box.innerHTML='';$('pickerEnemyEmpty').hidden=available;if(!available)return;let seen=new Set();coopEnemies.forEach(e=>{let c=e.character,key=characterKey(c);if(!c||seen.has(key))return;seen.add(key);let i=chars.findIndex(x=>characterKey(x)===key);if(i>=0)box.append(card(c,i,true,null,true))})}
-/* Name-search view: every category is visible, without selecting category tabs. */
+/* All groups remain visible in name search; the same category-bar classes are reused. */
 function renderNameSearchGroups(items,box,inPicker){
  const tree=pickerTree(items),seen=new Set(),fragment=document.createDocumentFragment();let total=0;
  for(const [large,middles] of Object.entries(tree)){
-  const largeSection=document.createElement('section');largeSection.className='name-search-large';const largeTitle=document.createElement('h3');largeTitle.textContent=large;largeSection.append(largeTitle);
+  const largeSection=document.createElement('section');largeSection.className='name-search-large zk-l1';
+  const largeTitle=document.createElement('div');largeTitle.className='zk-b1 '+(large==='特殊ゆる'?'special':'normal');largeTitle.textContent=large;largeSection.append(largeTitle);
+  const largeBody=document.createElement('div');largeBody.className='zk-body open';
   for(const [middle,smalls] of Object.entries(middles)){
-   const middleSection=document.createElement('section');middleSection.className='name-search-middle';const middleTitle=document.createElement('h4');middleTitle.textContent=middle;middleSection.append(middleTitle);
+   const middleSection=document.createElement('section');middleSection.className='name-search-middle zk-l1';
+   const middleTitle=document.createElement('div');middleTitle.className='zk-b2';middleTitle.textContent=middle;middleSection.append(middleTitle);
+   const middleBody=document.createElement('div');middleBody.className='zk-body open';
    for(const [small,headings] of Object.entries(smalls)){
     const group=document.createElement('section');group.className='name-search-group';
-    if(small!=='__all__'&&small!=='その他'){const title=document.createElement('h5');title.textContent=small;group.append(title)}
+    if(small!=='__all__'&&small!=='その他'){const title=document.createElement('div');title.className=middle==='伝'?'zk-head':'zk-b3';title.textContent=small;group.append(title)}
     for(const [heading,list] of Object.entries(headings)){
      const grid=document.createElement('div');grid.className='zk-grid';
      for(const x of list){const key=characterKey(x.c)||String(x.i);if(seen.has(key))continue;seen.add(key);grid.append(card(x.c,x.i,inPicker,null,inPicker));total++}
      if(!grid.childElementCount)continue;
-     if(heading&&heading!=='その他'&&heading!==small){const title=document.createElement('h6');title.textContent=heading;group.append(title)}group.append(grid);
+     if(heading&&heading!=='その他'&&heading!==small){const title=document.createElement('div');title.className='zk-head';title.textContent=heading;group.append(title)}group.append(grid);
     }
-    if(group.querySelector('.zk-grid'))middleSection.append(group);
+    if(group.querySelector('.zk-grid'))middleBody.append(group);
    }
-   if(middleSection.querySelector('.zk-grid'))largeSection.append(middleSection);
+   if(middleBody.querySelector('.zk-grid')){middleSection.append(middleBody);largeBody.append(middleSection)}
   }
-  if(largeSection.querySelector('.zk-grid'))fragment.append(largeSection);
+  if(largeBody.querySelector('.zk-grid')){largeSection.append(largeBody);fragment.append(largeSection)}
  }
  box.replaceChildren(fragment);if(!total){const empty=document.createElement('p');empty.className='picker-empty';empty.textContent='該当するキャラがいません';box.append(empty)}return total;
 }

@@ -1075,6 +1075,7 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 }
 @media print{#resultScreenshot .result-shot-panel{zoom:1!important;width:100%!important}}
 
-/* Name search is a peer of category and filter, with all groups expanded. */
-.name-search-field{margin:10px 0}.name-search-field[hidden]{display:none!important}.name-search-field input{width:100%;max-width:440px;box-sizing:border-box}
-#picker .name-search-field{padding:0 12px}.name-search-large{margin:12px 0 22px}.name-search-large>h3{padding:9px 12px;border-radius:8px;background:#e7efff;color:#234579}.name-search-middle{margin:10px 0 18px}.name-search-middle>h4{padding:7px 10px;border-left:4px solid #537ac4;background:#f4f7fc}.name-search-group{margin:10px 0}.name-search-group>h5,.name-search-group>h6{margin:9px 0 6px;color:#435670}.name-search-group>.zk-grid{margin-bottom:12px}
+/* Name-search input matches calculator fields; headings reuse the category bars. */
+.name-search-field{display:grid;gap:5px;max-width:480px;margin:12px 0 14px;color:#60656b;font-size:.86rem;font-weight:700}.name-search-field[hidden]{display:none!important}.name-search-field input{display:block;width:100%;min-width:0;height:44px;padding:8px 11px;border:1px solid #aeb7c2;border-radius:8px;background:#fff;color:#1f2937;font:inherit;font-size:16px;font-weight:400;outline-offset:2px}.name-search-field input:focus-visible{outline:2px solid #0b57d0;border-color:#0b57d0}
+#picker .name-search-field{margin:12px 0 14px}.name-search-large{margin:8px 0 18px}.name-search-middle{margin:5px 0 13px}.name-search-group{margin:4px 0 10px}.name-search-group>.zk-grid{margin:6px 0 12px}.name-search-large .zk-b1,.name-search-middle .zk-b2,.name-search-group .zk-b3{cursor:default}.name-search-large .zk-body.open{display:block}
+@media(max-width:800px){.name-search-field{max-width:none}.name-search-field input{font-size:16px!important}}
