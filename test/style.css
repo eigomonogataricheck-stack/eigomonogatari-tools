@@ -1074,3 +1074,7 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
  #resultScreenshot .result-shot-values{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media print{#resultScreenshot .result-shot-panel{zoom:1!important;width:100%!important}}
+
+/* Name search is a peer of category and filter, with all groups expanded. */
+.name-search-field{margin:10px 0}.name-search-field[hidden]{display:none!important}.name-search-field input{width:100%;max-width:440px;box-sizing:border-box}
+#picker .name-search-field{padding:0 12px}.name-search-large{margin:12px 0 22px}.name-search-large>h3{padding:9px 12px;border-radius:8px;background:#e7efff;color:#234579}.name-search-middle{margin:10px 0 18px}.name-search-middle>h4{padding:7px 10px;border-left:4px solid #537ac4;background:#f4f7fc}.name-search-group{margin:10px 0}.name-search-group>h5,.name-search-group>h6{margin:9px 0 6px;color:#435670}.name-search-group>.zk-grid{margin-bottom:12px}
