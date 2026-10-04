@@ -1089,3 +1089,12 @@ html body #page-coop .coop-history-entry-body,html body #page-coop .coop-history
 .name-search-heading{margin:9px 0 6px;font-size:.82rem;font-weight:700}
 .name-search-large .zk-body.open{display:block}
 @media(max-width:800px){.name-search-field{max-width:none}.name-search-field input{font-size:16px!important}.name-search-large-label{font-size:1rem}.name-search-middle-label{font-size:.9rem}.name-search-small-label{font-size:.8rem}}
+
+/* Catalog navigation: three peer tabs; desktop subcategories follow middle categories without an empty grid cell. */
+#page-zukan .zukan-mode-tabs{grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,480px);max-width:none}
+@media(min-width:801px){
+ #page-zukan .zukan-category-bars{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:6px;row-gap:5px}
+ #page-zukan .zukan-large-tabs{flex:0 0 auto;max-width:100%}
+ #page-zukan .zukan-middle-chips,#page-zukan .zukan-small-chips{flex:0 1 auto;width:auto;max-width:100%;grid-column:auto}
+ #page-zukan .zukan-small-chips{margin:0}
+}
