@@ -67,11 +67,27 @@ function resultScreenshotSide(role){
   if(own||borrowed.length){const box=document.createElement('div');box.className='result-shot-skills';const heading=document.createElement('b');heading.textContent='スキル適用';box.append(heading);if(own){const line=document.createElement('p');line.textContent='自キャラ: '+own+(ownEffects.length?' / 効果量: '+ownEffects.join('・'):'');box.append(line)}if(borrowed.length){const line=document.createElement('p');line.textContent='他キャラ: '+borrowed.join('・');box.append(line)}section.append(box)}
   if(!attack&&detailMode&&ghostData){const box=document.createElement('p');box.textContent='幽霊攻撃への耐久: '+ghostData.survive+' / '+ghostData.kill;section.append(box)}return section;
 }
+function fitResultScreenshot(){
+  const overlay=$('resultScreenshot'),panel=overlay?.querySelector('.result-shot-panel');
+  if(!panel||overlay.hidden)return;
+  const viewport=window.visualViewport,availableWidth=Math.max(1,(viewport?.width||innerWidth)-16),availableHeight=Math.max(1,(viewport?.height||innerHeight)-16);
+  // Measure actual rendered content at full size. Long skills and optional rows increase height.
+  panel.style.zoom='1';panel.style.width=(availableWidth<650?680:760)+'px';
+  const naturalWidth=panel.offsetWidth,naturalHeight=panel.scrollHeight;
+  const scale=Math.min(1,availableWidth/naturalWidth,availableHeight/naturalHeight);
+  // Never crop or hide fields: exceptionally long content remains scrollable.
+  panel.style.zoom=String(Math.max(.45,scale));
+}
 function downloadResult(){
   calculate();let overlay=$('resultScreenshot');if(!overlay){overlay=document.createElement('div');overlay.id='resultScreenshot';overlay.className='overlay result-shot-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','スクショ用画面');document.body.append(overlay)}
   overlay.replaceChildren();const panel=document.createElement('div');panel.className='result-shot-panel';const bar=document.createElement('div');bar.className='result-shot-toolbar';const hint=document.createElement('span');hint.textContent='この画面を端末のスクリーンショット機能で保存してください';const close=document.createElement('button');close.type='button';close.textContent='閉じる';close.onclick=()=>{overlay.hidden=true;document.removeEventListener('keydown',onKey)};bar.append(hint,close);
   const sheet=document.createElement('article');sheet.className='result-shot-sheet';const heading=document.createElement('h2');heading.textContent='ダメージ計算結果';sheet.append(heading);const sides=document.createElement('div');sides.className='result-shot-sides';sides.append(resultScreenshotSide('attacker'),resultScreenshotSide('defender'));sheet.append(sides);
   const result=document.createElement('section');result.className='result-shot-verdict';const status=document.createElement('strong');status.textContent=lastResult.st;result.append(status);for(const value of [lastResult.killLabel,lastResult.spareLabel,`${lastResult.mn.toLocaleString()}～${lastResult.mx.toLocaleString()}（${lastResult.mp}%～${lastResult.xp}%）`,lastResult.remaining])if(value){const line=document.createElement('p');line.textContent=value;result.append(line)}sheet.append(result);panel.append(bar,sheet);overlay.append(panel);overlay.hidden=false;
+  requestAnimationFrame(fitResultScreenshot);
+  window.removeEventListener('resize',fitResultScreenshot);
+  window.visualViewport?.removeEventListener('resize',fitResultScreenshot);
+  window.addEventListener('resize',fitResultScreenshot);
+  window.visualViewport?.addEventListener('resize',fitResultScreenshot);
   function onKey(e){if(e.key==='Escape')close.click()}document.addEventListener('keydown',onKey);close.focus();
 }
 
