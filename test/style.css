@@ -1144,3 +1144,20 @@ html body #page-coop .coop-action-group .coop-proposal-deck-count,html body #pag
 .coop-detail-card-header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
 .coop-detail-card-header .coop-detail-score{position:static;margin:0;padding:4px 8px;border-radius:8px;background:#eaf2ff;color:#174ea6;font-weight:700;white-space:nowrap}
 .coop-proposal-card:has(.coop-detail-card-header) .coop-proposal-images{grid-column:1/-1}
+
+/* Cooperative result UI repair. Scoped to result and progress panels. */
+#coopDetailPager{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 14px;width:100%;grid-column:1/-1}
+#coopDetailPager[hidden]{display:none!important}
+#coopDetailPager .coop-count-control{margin:0;min-width:130px}
+#coopDetailPager .coop-all-decks-toggle{min-height:40px;flex:0 1 auto}
+#coopDetailPager .coop-styled-select-button{min-height:40px}
+#coopProposalGrid .coop-detail-card-header{display:flex;grid-column:1/-1;width:100%;align-items:center;justify-content:space-between;gap:8px}
+#coopProposalGrid .coop-detail-card-header>b{position:static!important;margin:0!important;flex:none}
+#coopProposalGrid .coop-detail-card-header .coop-detail-score{font-size:.85rem;max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:right}
+#coopProposalGrid .coop-proposal-card:has(.coop-detail-card-header){display:flex!important;flex-direction:column;align-items:stretch;gap:8px}
+#coopProposalGrid .coop-proposal-card:has(.coop-detail-card-header) .coop-proposal-images{width:100%;min-width:0}
+#coopProposalGrid .coop-detail-empty{grid-column:1/-1;margin:0;padding:18px;border:1px solid #d9dee5;border-radius:10px;color:#60656b}
+#coopProposalCalculationDialog .coop-calculation-dialog-panel{max-height:calc(100dvh - 32px);overflow-y:auto}
+#coopProposalCalculationDialog progress{height:12px;accent-color:#0b57d0;margin:8px 0}
+#coopProposalCalculationDialog .coop-calculation-dialog-actions{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:#fff;padding-top:10px}
+@media(max-width:600px){#coopDetailPager{gap:8px}#coopDetailPager .coop-all-decks-toggle{flex:1 1 140px}#coopDetailPager .coop-count-control{width:100%}#coopProposalGrid .coop-detail-score{font-size:.78rem}#coopProposalCalculationDialog .coop-calculation-dialog-actions>button{min-height:42px;flex:1}}

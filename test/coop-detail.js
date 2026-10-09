@@ -7,10 +7,14 @@ let coopDetailDatabase=null,coopDetailViewToken=0;
 const coopDetailRuns=new Set();
 const COOP_DETAIL_BATCH=128,COOP_DETAIL_PAGE=10;
 function coopDetailClearView(){
-  coopDetailUsageSummary=null;coopDetailView=null;coopDetailViewToken++;
+  const view=coopDetailView;
+  coopDetailUsageSummary=null;coopDetailView=null;coopDetailViewToken++;coopProposalRenderToken++;
   document.getElementById('coopDetailPager')?.remove();
   const controls=document.querySelector('#coopProposalBody .coop-proposal-controls');if(controls)controls.hidden=false;
+  if(view?.normalSettings){coopProposalDisplayLimit=view.normalSettings.limit;coopProposalShowAllDecks=view.normalSettings.all}
+  const usage=$('coopProposalUsageResults');if(usage)usage.hidden=true;
 }
+
 function coopDetailOpenDatabase(){
   if(coopDetailDatabase)return Promise.resolve(coopDetailDatabase);
   if(typeof indexedDB==='undefined')return Promise.reject(new Error('詳細計算にはIndexedDBが必要です。保存機能が利用できないため計算を開始できません。'));
@@ -161,41 +165,62 @@ function coopDetailChooseRanked(rows,needs){
  for(const row of rows){if(row.ids.some((id,slot)=>needs[slot]&&used[slot].has(String(id))))continue;selected.push(row);row.ids.forEach((id,slot)=>{if(needs[slot])used[slot].add(String(id))})}
  return selected;
 }
+function coopDetailUiMode(view){return !view.showInitial?'detail':view.initialAll?'initialAll':'initialSelected'}
+function coopDetailUiLimit(view,mode){return view.uiLimits?.[mode]??(mode==='detail'?6:10)}
+function coopDetailUiSetLimit(view,mode,value){view.uiLimits??={};view.uiLimits[mode]=Math.max(0,Math.floor(Number(value)||0))}
+async function coopDetailInitialRows(view){
+  if(!view.initialRowsPromise)view.initialRowsPromise=(async()=>{
+    const items=[];
+    await coopDetailWalk(view.db,view.initial,row=>items.push({ids:row.ids,deck:row.ids.map(coopFindCharacter),repeats:view.targetDecks}));
+    return coopProposalSortByUsage(items);
+  })().catch(error=>{view.initialRowsPromise=null;throw error});
+  return view.initialRowsPromise;
+}
 async function coopDetailSelectedRows(view){
- const phase=view.showInitial?view.initial:view.ranking,total=view.showInitial?view.initialCount:view.rankCount;
- const selected=[],used=Array.from({length:COOP_SLOTS},()=>new Set());
- for(let offset=0;offset<total;offset+=128){
-  const rows=await coopDetailRankingPage(view.db,phase,offset,128);
-  for(const row of rows){
-   if(!view.showInitial&&row.ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&used[slot].has(String(id))))continue;
-   selected.push(row);if(!view.showInitial)row.ids.forEach((id,slot)=>{if(coopProposalSlotNeedsCandidate(slot))used[slot].add(String(id))});
-  }
-  await coopYield();
- }
- return selected;
+  if(view.showInitial){const rows=await coopDetailInitialRows(view);return view.initialAll?rows:coopProposalNonOverlappingDecks(rows)}
+  if(!view.rankedRowsPromise)view.rankedRowsPromise=(async()=>{
+    const selected=[],used=Array.from({length:COOP_SLOTS},()=>new Set());
+    for(let offset=0;offset<view.rankCount;offset+=128){
+      const rows=await coopDetailRankingPage(view.db,view.ranking,offset,128);
+      for(const row of rows){if(row.ids.some((id,slot)=>view.needs[slot]&&used[slot].has(String(id))))continue;
+        selected.push(row);row.ids.forEach((id,slot)=>{if(view.needs[slot])used[slot].add(String(id))});}
+      await coopYield();
+    }
+    return selected;
+  })().catch(error=>{view.rankedRowsPromise=null;throw error});
+  return view.rankedRowsPromise;
+}
+function coopDetailUiToggle(label,pressed,action){
+  const button=document.createElement('button');button.type='button';button.className='coop-all-decks-toggle';
+  button.setAttribute('aria-pressed',String(pressed));button.innerHTML=`<span>${label}</span><b>${pressed?'ON':'OFF'}</b>`;button.onclick=action;return button;
 }
 async function coopDetailShowPage(){
- const view=coopDetailView,token=++coopDetailViewToken;if(!view)return;
- const selected=await coopDetailSelectedRows(view);if(token!==coopDetailViewToken||view!==coopDetailView)return;
- const limit=view.showInitial?(view.initialLimit||10):(view.detailLimit||6),data=selected.slice(0,limit);
- const grid=$('coopProposalGrid'),section=coopProposalResultSection(),body=$('coopProposalBody');if(!grid||!section)return;
- grid.innerHTML='';section.hidden=false;if(body)body.hidden=false;
- coopProposalDisplayed=data.map(row=>({ids:row.ids,deck:row.ids.map(coopFindCharacter),repeats:view.targetDecks,provisionalSlots:Array(COOP_SLOTS).fill(false),detailCertainCount:view.showInitial?undefined:row.detailCertainCount}));coopProposalAll=coopProposalDisplayed.slice();
- for(let i=0;i<data.length;i++){
-  const item=coopProposalDisplayed[i],card=coopProposalCard(item,i,true);
-  if(!view.showInitial){card.querySelector('.coop-proposal-copy')?.remove();const rank=await coopDetailRank(view.db,view.ranking,item.detailCertainCount);if(token!==coopDetailViewToken)return;card.querySelector('b').textContent=rank+'位'}
-  grid.append(card);
- }
- let controls=document.getElementById('coopDetailPager');if(!controls){controls=document.createElement('div');controls.id='coopDetailPager';controls.className='coop-proposal-controls';grid.before(controls)}controls.innerHTML='';
- const switcher=document.createElement('button');switcher.type='button';switcher.textContent=view.showInitial?'詳細結果を表示':'初回結果を表示';switcher.onclick=()=>{view.showInitial=!view.showInitial;coopDetailShowPage().catch(coopDetailViewError)};controls.append(switcher);
- const label=document.createElement('label');label.textContent='表示件数 ';const select=document.createElement('select'),base=view.showInitial?10:6,options=[];
- for(let n=base;n<selected.length;n*=10)options.push(n);if(selected.length)options.push(selected.length);
- for(const n of [...new Set(options.length?options:[0])]){const option=document.createElement('option');option.value=n;option.textContent=n.toLocaleString();select.append(option)}
- select.value=String(Math.min(limit,selected.length));if(!select.value&&select.options.length)select.selectedIndex=0;
- select.onchange=()=>{view[view.showInitial?'initialLimit':'detailLimit']=Number(select.value);coopDetailShowPage().catch(coopDetailViewError)};label.append(select);controls.append(label);
- const usage=$('coopProposalUsageResults');if(usage)usage.hidden=!view.showInitial;
- const count=$('coopProposalCount');if(count)count.textContent=`${data.length.toLocaleString()} / ${selected.length.toLocaleString()}件${view.skipped?` / 配置不可 ${view.skipped}件`:''}`;
- const original=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(original)original.hidden=true;
+  const view=coopDetailView,token=++coopDetailViewToken;if(!view)return;
+  coopProposalRenderToken++;
+  view.needs??=Array.from({length:COOP_SLOTS},(_,slot)=>coopProposalSlotNeedsCandidate(slot));
+  const mode=coopDetailUiMode(view),selected=await coopDetailSelectedRows(view);
+  if(token!==coopDetailViewToken||view!==coopDetailView||mode!==coopDetailUiMode(view))return;
+  const grid=$('coopProposalGrid'),section=coopProposalResultSection(),body=$('coopProposalBody');if(!grid||!section)return;
+  const controlsOriginal=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(controlsOriginal)controlsOriginal.hidden=true;
+  let controls=document.getElementById('coopDetailPager');if(!controls){controls=document.createElement('div');controls.id='coopDetailPager';controls.className='coop-proposal-controls coop-detail-controls';grid.before(controls)}controls.replaceChildren();
+  controls.append(coopDetailUiToggle('初回計算結果',view.showInitial,()=>{view.showInitial=!view.showInitial;coopDetailShowPage().catch(coopDetailViewError)}));
+  if(view.showInitial)controls.append(coopDetailUiToggle('全デッキ表示',!!view.initialAll,()=>{view.initialAll=!view.initialAll;coopDetailShowPage().catch(coopDetailViewError)}));
+  const label=document.createElement('label');label.className='coop-count-control';label.innerHTML='<span>表示件数</span>';
+  const select=document.createElement('select');select.setAttribute('aria-label','表示件数');label.append(select);controls.append(label);
+  const requested=coopDetailUiLimit(view,mode),limit=selected.length?coopFillDisplayLimitSelect(select,mode==='detail'?6:10,selected.length,requested):0;
+  if(!selected.length){select.innerHTML='<option value="0">0</option>';select.disabled=true;coopSyncStyledSelect(select)}
+  select.onchange=()=>{coopDetailUiSetLimit(view,mode,select.value);coopSyncStyledSelect(select);coopDetailShowPage().catch(coopDetailViewError)};
+  const data=selected.slice(0,limit);grid.replaceChildren();section.hidden=false;
+  const toggle=$('coopProposalToggle');if(toggle){toggle.setAttribute('aria-expanded',String(!body?.hidden));const arrow=toggle.querySelector('.coop-proposal-arrow');if(arrow)arrow.textContent=body?.hidden?'▶':'▼'}
+  coopProposalDisplayed=data.map(row=>({ids:row.ids,deck:row.deck||row.ids.map(coopFindCharacter),repeats:view.targetDecks,provisionalSlots:Array(COOP_SLOTS).fill(false),detailCertainCount:view.showInitial?undefined:row.detailCertainCount}));coopProposalAll=coopProposalDisplayed.slice();
+  for(let i=0;i<data.length;i++){
+    const item=coopProposalDisplayed[i],card=coopProposalCard(item,i,false);
+    if(!view.showInitial){card.querySelector('.coop-proposal-copy')?.remove();const rank=await coopDetailRank(view.db,view.ranking,item.detailCertainCount);if(token!==coopDetailViewToken||view!==coopDetailView)return;card.querySelector('b').textContent=rank+'位'}
+    grid.append(card);if(i%100===99){await coopYield();if(token!==coopDetailViewToken||view!==coopDetailView)return}
+  }
+  if(!data.length){const empty=document.createElement('p');empty.className='coop-detail-empty';empty.textContent=view.showInitial?'初回の確定撃破デッキはありません':'表示できる詳細結果はありません';grid.append(empty)}
+  const usage=$('coopProposalUsageResults');if(usage)usage.hidden=!view.showInitial||!view.initialCount;
+  const count=$('coopProposalCount');if(count)count.textContent=`${view.showInitial?'初回結果':'詳細結果'} ${data.length.toLocaleString()} / ${selected.length.toLocaleString()}件${view.skipped?` / 配置不可 ${view.skipped}件`:''}`;
 }
 
 function coopDetailViewError(error){const result=$('coopDamageResult');if(result)result.textContent='保存済み結果の読込に失敗しました: '+String(error?.message||error)}
@@ -240,6 +265,8 @@ async function coopProposeDetailed(){
     coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
     coopDetailUsageSummary=summary;coopRenderProposalUsage([],true);
     coopDetailView={db,run,initial:initial.phase,initialCount:initial.count,ranking,rankCount,skipped,targetDecks,offset:0,showInitial:rankCount===0};
+    coopDetailView.needs=needs.slice();coopDetailView.normalSettings={limit:coopProposalDisplayLimit,all:coopProposalShowAllDecks};coopDetailView.initialAll=false;coopDetailView.uiLimits={detail:6,initialAll:10,initialSelected:10};coopProposalRenderToken++;
+    const resultBody=$('coopProposalBody');if(resultBody)resultBody.hidden=false;
     await coopDetailShowPage();
     coopProposalLastFoundCount=initial.count;coopProposalLastWasExhaustive=true;
     $('coopClearResult').textContent=initial.count?'詳細計算完了':'提案不可';
