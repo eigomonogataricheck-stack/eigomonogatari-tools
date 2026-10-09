@@ -113,21 +113,29 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
       if(!Number.isSafeInteger(total))throw new Error('組み合わせ数が安全に集計できる整数範囲を超えています。枠の固定を増やしてください。');
       if(!await coopProposalConfirmMillion(total,slot))throw new Error('計算を停止しました');
       coopProposalProgressCoverage=pools.map(p=>p.filter(Boolean).length);
-      coopSetProposalProgress(`${label}・${slot+1}枠目`,true,0,total,0,1);
-      await coopDetailWalk(db,previous,async prefix=>{
-        for(let candidate of pool){
-          if(coopProposalCancelRequested)throw new Error('計算を停止しました');
-          const deck=prefix.ids.map(coopFindCharacter);deck[slot]=candidate;
-          const item=coopProposalPrefixLayerEvaluation(deck,slot,totalDecks);
-          checked++;
-          if(item&&(slot!==COOP_SLOTS-1||(!coopProposalHasDuplicateInCompletedDeck(deck,totalDecks)&&coopProposalWorks(deck,totalDecks)))){
-            passed++;
-            if(!(countOnly&&slot===COOP_SLOTS-1))pending.push({ids:coopProposalDeckIds(deck)});
-          }
+      coopProposalProgressSlot=slot+1;
+      let after=null;
+      while(true){
+        await coopWaitIfProposalPaused();
+        const rows=await coopDetailRead(db,previous,after);
+        if(!rows.length)break;
+        const baseChecked=checked,basePassed=passed,originalProgress=coopSetProposalProgress;
+        let items;
+        try{
+          coopSetProposalProgress=(text,busy,current,batchTotal,batchPassed,workers)=>originalProgress(`${label}・${slot+1}枠目`,busy,baseChecked+(current||0),total,basePassed+(batchPassed||0),workers);
+          items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label);
+        }finally{coopSetProposalProgress=originalProgress}
+        checked+=rows.length*pool.length;
+        for(const item of items){
+          const deck=item.deck;
+          if(slot===COOP_SLOTS-1&&(coopProposalHasDuplicateInCompletedDeck(deck,totalDecks)||!coopProposalWorks(deck,totalDecks)))continue;
+          passed++;
+          if(!(countOnly&&slot===COOP_SLOTS-1))pending.push({ids:coopProposalDeckIds(deck)});
           if(pending.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,phase,pending);pending=[]}
-          if(performance.now()-lastPaint>=24){coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,1);await coopYield();lastPaint=performance.now()}
         }
-      });
+        after=rows[rows.length-1].key;
+        coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));
+      }
       if(pending.length)await coopDetailPut(db,phase,pending);
       await coopDetailDelete(db,previous);
       coopProposalRecordWorkerHistory(slot,total,passed,[]);
