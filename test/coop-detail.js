@@ -165,8 +165,8 @@ function coopDetailChooseRanked(rows,needs){
  for(const row of rows){if(row.ids.some((id,slot)=>needs[slot]&&used[slot].has(String(id))))continue;selected.push(row);row.ids.forEach((id,slot)=>{if(needs[slot])used[slot].add(String(id))})}
  return selected;
 }
-function coopDetailUiMode(view){return !view.showInitial?'detail':view.initialAll?'initialAll':'initialSelected'}
-function coopDetailUiLimit(view,mode){return view.uiLimits?.[mode]??(mode==='detail'?6:10)}
+function coopDetailUiMode(view){return !view.showInitial?(view.detailAll?'detailAll':'detail'):view.initialAll?'initialAll':'initialSelected'}
+function coopDetailUiLimit(view,mode){return view.uiLimits?.[mode]??(mode.startsWith('detail')?6:10)}
 function coopDetailUiSetLimit(view,mode,value){view.uiLimits??={};view.uiLimits[mode]=Math.max(0,Math.floor(Number(value)||0))}
 async function coopDetailInitialRows(view){
   if(!view.initialRowsPromise)view.initialRowsPromise=(async()=>{
@@ -178,6 +178,14 @@ async function coopDetailInitialRows(view){
 }
 async function coopDetailSelectedRows(view){
   if(view.showInitial){const rows=await coopDetailInitialRows(view);return view.initialAll?rows:coopProposalNonOverlappingDecks(rows)}
+  if(view.detailAll){
+    if(!view.allRankedRowsPromise)view.allRankedRowsPromise=(async()=>{
+      const rows=[];
+      for(let offset=0;offset<view.rankCount;offset+=128){rows.push(...await coopDetailRankingPage(view.db,view.ranking,offset,128));await coopYield()}
+      return rows;
+    })().catch(error=>{view.allRankedRowsPromise=null;throw error});
+    return view.allRankedRowsPromise;
+  }
   if(!view.rankedRowsPromise)view.rankedRowsPromise=(async()=>{
     const selected=[],used=Array.from({length:COOP_SLOTS},()=>new Set());
     for(let offset=0;offset<view.rankCount;offset+=128){
@@ -202,12 +210,24 @@ async function coopDetailShowPage(){
   if(token!==coopDetailViewToken||view!==coopDetailView||mode!==coopDetailUiMode(view))return;
   const grid=$('coopProposalGrid'),section=coopProposalResultSection(),body=$('coopProposalBody');if(!grid||!section)return;
   const controlsOriginal=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(controlsOriginal)controlsOriginal.hidden=true;
-  let controls=document.getElementById('coopDetailPager');if(!controls){controls=document.createElement('div');controls.id='coopDetailPager';controls.className='coop-proposal-controls coop-detail-controls';grid.before(controls)}controls.replaceChildren();
-  controls.append(coopDetailUiToggle('初回計算結果',view.showInitial,()=>{view.showInitial=!view.showInitial;coopDetailShowPage().catch(coopDetailViewError)}));
-  if(view.showInitial)controls.append(coopDetailUiToggle('全デッキ表示',!!view.initialAll,()=>{view.initialAll=!view.initialAll;coopDetailShowPage().catch(coopDetailViewError)}));
-  const label=document.createElement('label');label.className='coop-count-control';label.innerHTML='<span>表示件数</span>';
-  const select=document.createElement('select');select.setAttribute('aria-label','表示件数');label.append(select);controls.append(label);
-  const requested=coopDetailUiLimit(view,mode),limit=selected.length?coopFillDisplayLimitSelect(select,mode==='detail'?6:10,selected.length,requested):0;
+  let controls=document.getElementById('coopDetailPager');
+  if(!controls){
+    controls=document.createElement('div');controls.id='coopDetailPager';controls.className='coop-proposal-controls coop-detail-controls';
+    const row=document.createElement('div');row.className='coop-detail-toggle-row';
+    const all=coopDetailUiToggle('全デッキ表示',false,()=>{});all.id='coopDetailShowAll';
+    const result=coopDetailUiToggle('初回計算結果',false,()=>{});result.id='coopDetailResultSwitch';
+    row.append(all,result);controls.append(row);
+    const label=document.createElement('label');label.className='coop-count-control';label.innerHTML='<span>表示件数</span>';
+    const select=document.createElement('select');select.id='coopDetailDisplayLimit';select.setAttribute('aria-label','表示件数');label.append(select);controls.append(label);grid.before(controls);
+  }
+  const all=controls.querySelector('#coopDetailShowAll'),result=controls.querySelector('#coopDetailResultSwitch');
+  const allOn=view.showInitial?!!view.initialAll:!!view.detailAll;
+  all.setAttribute('aria-pressed',String(allOn));all.querySelector('b').textContent=allOn?'ON':'OFF';
+  result.setAttribute('aria-pressed',String(view.showInitial));result.querySelector('b').textContent=view.showInitial?'ON':'OFF';
+  all.onclick=()=>{const key=view.showInitial?'initialAll':'detailAll';view[key]=!view[key];coopDetailShowPage().catch(coopDetailViewError)};
+  result.onclick=()=>{view.showInitial=!view.showInitial;coopDetailShowPage().catch(coopDetailViewError)};
+  const select=controls.querySelector('#coopDetailDisplayLimit');select.disabled=false;
+  const requested=coopDetailUiLimit(view,mode),limit=selected.length?coopFillDisplayLimitSelect(select,mode.startsWith('detail')?6:10,selected.length,requested):0;
   if(!selected.length){select.innerHTML='<option value="0">0</option>';select.disabled=true;coopSyncStyledSelect(select)}
   select.onchange=()=>{coopDetailUiSetLimit(view,mode,select.value);coopSyncStyledSelect(select);coopDetailShowPage().catch(coopDetailViewError)};
   const data=selected.slice(0,limit);grid.replaceChildren();section.hidden=false;
@@ -265,7 +285,7 @@ async function coopProposeDetailed(){
     coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
     coopDetailUsageSummary=summary;coopRenderProposalUsage([],true);
     coopDetailView={db,run,initial:initial.phase,initialCount:initial.count,ranking,rankCount,skipped,targetDecks,offset:0,showInitial:rankCount===0};
-    coopDetailView.needs=needs.slice();coopDetailView.normalSettings={limit:coopProposalDisplayLimit,all:coopProposalShowAllDecks};coopDetailView.initialAll=false;coopDetailView.uiLimits={detail:6,initialAll:10,initialSelected:10};coopProposalRenderToken++;
+    coopDetailView.needs=needs.slice();coopDetailView.normalSettings={limit:coopProposalDisplayLimit,all:coopProposalShowAllDecks};coopDetailView.initialAll=false;coopDetailView.detailAll=false;coopDetailView.uiLimits={detail:6,detailAll:6,initialAll:10,initialSelected:10};coopProposalRenderToken++;
     const resultBody=$('coopProposalBody');if(resultBody)resultBody.hidden=false;
     await coopDetailShowPage();
     coopProposalLastFoundCount=initial.count;coopProposalLastWasExhaustive=true;

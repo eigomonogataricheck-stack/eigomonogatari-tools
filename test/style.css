@@ -1161,3 +1161,10 @@ html body #page-coop .coop-action-group .coop-proposal-deck-count,html body #pag
 #coopProposalCalculationDialog progress{height:12px;accent-color:#0b57d0;margin:8px 0}
 #coopProposalCalculationDialog .coop-calculation-dialog-actions{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:#fff;padding-top:10px}
 @media(max-width:600px){#coopDetailPager{gap:8px}#coopDetailPager .coop-all-decks-toggle{flex:1 1 140px}#coopDetailPager .coop-count-control{width:100%}#coopProposalGrid .coop-detail-score{font-size:.78rem}#coopProposalCalculationDialog .coop-calculation-dialog-actions>button{min-height:42px;flex:1}}
+
+/* Both result toggles remain mounted and side-by-side in every result mode. */
+#coopDetailPager .coop-detail-toggle-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;flex:1 1 360px;min-width:0;width:100%}
+#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{display:flex!important;align-items:center;justify-content:space-between;gap:6px;width:100%!important;min-width:0!important;min-height:42px;margin:0!important;white-space:normal}
+#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{min-width:0;font-size:.82rem}
+#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle b{flex:none}
+@media(max-width:600px){#coopDetailPager .coop-detail-toggle-row{flex-basis:100%}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{padding:8px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{font-size:.75rem}}
