@@ -113,12 +113,11 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
       if(!Number.isSafeInteger(total))throw new Error('組み合わせ数が安全に集計できる整数範囲を超えています。枠の固定を増やしてください。');
       if(!await coopProposalConfirmMillion(total,slot))throw new Error('計算を停止しました');
       coopProposalProgressCoverage=pools.map(p=>p.filter(Boolean).length);
-      coopProposalProgressSlot=slot+1;
+      coopOverallProgress.slot=slot+1;
       let after=null;
       while(true){
         await coopWaitIfProposalPaused();
-        const rows=await coopDetailRead(db,previous,after);
-        if(!rows.length)break;
+        const rows=await coopDetailRead(db,previous,after);if(!rows.length)break;
         const baseChecked=checked,basePassed=passed,originalProgress=coopSetProposalProgress;
         let items;
         try{
@@ -128,7 +127,7 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
         checked+=rows.length*pool.length;
         for(const item of items){
           const deck=item.deck;
-          if(slot===COOP_SLOTS-1&&(coopProposalHasDuplicateInCompletedDeck(deck,totalDecks)||!coopProposalWorks(deck,totalDecks)))continue;
+          if(slot===COOP_SLOTS-1&&coopProposalHasDuplicateInCompletedDeck(deck,totalDecks))continue;
           passed++;
           if(!(countOnly&&slot===COOP_SLOTS-1))pending.push({ids:coopProposalDeckIds(deck)});
           if(pending.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,phase,pending);pending=[]}
@@ -157,33 +156,51 @@ async function coopDetailRankingPage(db,phase,offset,limit=COOP_DETAIL_PAGE){
 function coopDetailRank(db,phase,count){
   return new Promise((resolve,reject)=>{const request=db.transaction('records','readonly').objectStore('records').index('ranking').count(IDBKeyRange.bound([phase],[phase,-count],false,true));request.onsuccess=()=>resolve(request.result+1);request.onerror=()=>reject(request.error)});
 }
-async function coopDetailShowPage(){
-  const view=coopDetailView,token=++coopDetailViewToken;if(!view)return;
-  const phase=view.showInitial?view.initial:view.ranking,total=view.showInitial?view.initialCount:view.rankCount;
-  const offset=Math.min(view.offset,Math.max(0,Math.floor((total-1)/COOP_DETAIL_PAGE)*COOP_DETAIL_PAGE));view.offset=offset;
-  // Initial results also use the ranking index (all have order 0).
-  const data=await coopDetailRankingPage(view.db,phase,offset);
-  if(token!==coopDetailViewToken||view!==coopDetailView)return;
-  const grid=$('coopProposalGrid'),section=coopProposalResultSection(),body=$('coopProposalBody');if(!grid||!section)return;
-  grid.innerHTML='';section.hidden=false;if(body)body.hidden=false;
-  const toggle=$('coopProposalToggle');if(toggle){toggle.setAttribute('aria-expanded','true');const arrow=toggle.querySelector('.coop-proposal-arrow');if(arrow)arrow.textContent='▼'}
-  coopProposalDisplayed=data.map(row=>({ids:row.ids,deck:row.ids.map(coopFindCharacter),repeats:view.targetDecks,provisionalSlots:Array(COOP_SLOTS).fill(false),detailCertainCount:view.showInitial?undefined:row.detailCertainCount}));
-  coopProposalAll=coopProposalDisplayed.slice();
-  for(let i=0;i<coopProposalDisplayed.length;i++){
-    const item=coopProposalDisplayed[i],card=coopProposalCard(item,offset+i,true);
-    if(!view.showInitial){const rank=await coopDetailRank(view.db,phase,item.detailCertainCount);if(token!==coopDetailViewToken)return;card.querySelector('b').textContent=rank+'位';const note=document.createElement('small');note.textContent='仮入力: '+(data[i].placement||[]).map(x=>`D${x.row+1}/${x.slot+1}枠`).join('、');card.append(note)}
-    grid.append(card);
-  }
-  let pager=document.getElementById('coopDetailPager');if(!pager){pager=document.createElement('div');pager.id='coopDetailPager';pager.className='coop-proposal-controls';grid.before(pager)}pager.innerHTML='';
-  const switcher=document.createElement('button');switcher.type='button';switcher.textContent=view.showInitial?'個別再計算の順位を表示':'初回の全確定撃破デッキを表示';switcher.onclick=()=>{view.showInitial=!view.showInitial;view.offset=0;coopDetailShowPage().catch(coopDetailViewError)};pager.append(switcher);
-  for(let [text,delta] of [['前へ',-COOP_DETAIL_PAGE],['次へ',COOP_DETAIL_PAGE]]){const button=document.createElement('button');button.type='button';button.textContent=text;button.disabled=delta<0?offset===0:offset+COOP_DETAIL_PAGE>=total;button.onclick=()=>{view.offset+=delta;coopDetailShowPage().catch(coopDetailViewError)};pager.append(button)}
-  const status=document.createElement('span');status.textContent=`${total?offset+1:0}～${Math.min(offset+COOP_DETAIL_PAGE,total)} / 全${total.toLocaleString()}件${view.skipped?`・配置不可${view.skipped}件（順位対象外）`:''}`;pager.append(status);
-  const count=$('coopProposalCount');if(count)count.textContent=status.textContent;
-  const controls=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(controls)controls.hidden=true;
+function coopDetailChooseRanked(rows,needs){
+ const selected=[],used=Array.from({length:COOP_SLOTS},()=>new Set());
+ for(const row of rows){if(row.ids.some((id,slot)=>needs[slot]&&used[slot].has(String(id))))continue;selected.push(row);row.ids.forEach((id,slot)=>{if(needs[slot])used[slot].add(String(id))})}
+ return selected;
 }
+async function coopDetailSelectedRows(view){
+ const phase=view.showInitial?view.initial:view.ranking,total=view.showInitial?view.initialCount:view.rankCount;
+ const selected=[],used=Array.from({length:COOP_SLOTS},()=>new Set());
+ for(let offset=0;offset<total;offset+=128){
+  const rows=await coopDetailRankingPage(view.db,phase,offset,128);
+  for(const row of rows){
+   if(!view.showInitial&&row.ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&used[slot].has(String(id))))continue;
+   selected.push(row);if(!view.showInitial)row.ids.forEach((id,slot)=>{if(coopProposalSlotNeedsCandidate(slot))used[slot].add(String(id))});
+  }
+  await coopYield();
+ }
+ return selected;
+}
+async function coopDetailShowPage(){
+ const view=coopDetailView,token=++coopDetailViewToken;if(!view)return;
+ const selected=await coopDetailSelectedRows(view);if(token!==coopDetailViewToken||view!==coopDetailView)return;
+ const limit=view.showInitial?(view.initialLimit||10):(view.detailLimit||6),data=selected.slice(0,limit);
+ const grid=$('coopProposalGrid'),section=coopProposalResultSection(),body=$('coopProposalBody');if(!grid||!section)return;
+ grid.innerHTML='';section.hidden=false;if(body)body.hidden=false;
+ coopProposalDisplayed=data.map(row=>({ids:row.ids,deck:row.ids.map(coopFindCharacter),repeats:view.targetDecks,provisionalSlots:Array(COOP_SLOTS).fill(false),detailCertainCount:view.showInitial?undefined:row.detailCertainCount}));coopProposalAll=coopProposalDisplayed.slice();
+ for(let i=0;i<data.length;i++){
+  const item=coopProposalDisplayed[i],card=coopProposalCard(item,i,true);
+  if(!view.showInitial){card.querySelector('.coop-proposal-copy')?.remove();const rank=await coopDetailRank(view.db,view.ranking,item.detailCertainCount);if(token!==coopDetailViewToken)return;card.querySelector('b').textContent=rank+'位'}
+  grid.append(card);
+ }
+ let controls=document.getElementById('coopDetailPager');if(!controls){controls=document.createElement('div');controls.id='coopDetailPager';controls.className='coop-proposal-controls';grid.before(controls)}controls.innerHTML='';
+ const switcher=document.createElement('button');switcher.type='button';switcher.textContent=view.showInitial?'詳細結果を表示':'初回結果を表示';switcher.onclick=()=>{view.showInitial=!view.showInitial;coopDetailShowPage().catch(coopDetailViewError)};controls.append(switcher);
+ const label=document.createElement('label');label.textContent='表示件数 ';const select=document.createElement('select'),base=view.showInitial?10:6,options=[];
+ for(let n=base;n<selected.length;n*=10)options.push(n);if(selected.length)options.push(selected.length);
+ for(const n of [...new Set(options.length?options:[0])]){const option=document.createElement('option');option.value=n;option.textContent=n.toLocaleString();select.append(option)}
+ select.value=String(Math.min(limit,selected.length));if(!select.value&&select.options.length)select.selectedIndex=0;
+ select.onchange=()=>{view[view.showInitial?'initialLimit':'detailLimit']=Number(select.value);coopDetailShowPage().catch(coopDetailViewError)};label.append(select);controls.append(label);
+ const usage=$('coopProposalUsageResults');if(usage)usage.hidden=!view.showInitial;
+ const count=$('coopProposalCount');if(count)count.textContent=`${data.length.toLocaleString()} / ${selected.length.toLocaleString()}件${view.skipped?` / 配置不可 ${view.skipped}件`:''}`;
+ const original=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(original)original.hidden=true;
+}
+
 function coopDetailViewError(error){const result=$('coopDamageResult');if(result)result.textContent='保存済み結果の読込に失敗しました: '+String(error?.message||error)}
 async function coopProposeDetailed(){
-  await coopProposalStartClock();coopDetailClearView();renderCoopProposalDecks([]);
+  coopOverallReset(true);await coopProposalStartClock();coopDetailClearView();renderCoopProposalDecks([]);
   const db=await coopDetailOpenDatabase();
   // Delete only this tab's previous run; never clear another tab's calculation.
   for(const oldRun of coopDetailRuns)await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(oldRun+':',oldRun+':\uffff')));coopDetailRuns.clear();
@@ -203,13 +220,13 @@ async function coopProposeDetailed(){
     const topIds=coopDetailTopIds(summary),evaluation=run+':evaluation',ranking=run+':ranking';let buffer=[];
     await coopDetailWalk(db,initial.phase,async row=>{if(coopDetailIsTopDeck(row.ids,topIds,needs)){buffer.push({ids:row.ids});if(buffer.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,evaluation,buffer);buffer=[]}}});
     if(buffer.length)await coopDetailPut(db,evaluation,buffer);
-    const evaluationCount=await coopDetailCount(db,evaluation);
+    const evaluationCount=await coopDetailCount(db,evaluation);coopOverallProgress.percent=20;
     // All characters in the existing initial usage aggregation, not just its top ten.
     const restricted=summary.counts.map((map,slot)=>needs[slot]?[...map.values()].map(x=>x.character):[null]);
     let evaluated=0;
     await coopDetailWalk(db,evaluation,async row=>{
-      evaluated++;const placement=coopDetailPlace(base,row.ids);
-      if(!placement){skipped++;return}
+      coopOverallProgress.base=20+80*evaluated/Math.max(1,evaluationCount);coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;evaluated++;const placement=coopDetailPlace(base,row.ids);
+      if(!placement){skipped++;coopOverallProgress.percent=20+80*evaluated/Math.max(1,evaluationCount);return}
       coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
       const result=await coopDetailSearch(db,run+':score'+evaluated,restricted.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool:[null]),targetDecks,{countOnly:true,label:`個別再計算 ${evaluated.toLocaleString()} / ${evaluationCount.toLocaleString()}`});
       await coopDetailPut(db,ranking,[{ids:row.ids,detailCertainCount:result.count,placement:placement.placements}]);rankCount++;
@@ -227,9 +244,9 @@ async function coopProposeDetailed(){
     coopProposalLastFoundCount=initial.count;coopProposalLastWasExhaustive=true;
     $('coopClearResult').textContent=initial.count?'詳細計算完了':'提案不可';
     $('coopDamageResult').textContent=`初回確定撃破${initial.count.toLocaleString()}件 / 個別評価${rankCount.toLocaleString()}件${skipped?` / 配置不可${skipped}件`:''}`;
-    completed=true;return rankCount;
+    coopOverallProgress.percent=100;completed=true;return rankCount;
   }finally{
-    coopDecks=originalDecks;coopVisibleRows=originalVisible;coopDetailMode=originalDetail;coopProposalTargetDecks=completed?targetDecks:originalTarget;coopProposalEnemySecondFixed=originalSecond;coopDetailCalculationActive=false;coopProposalOrderCache.clear();coopTerminateProposalWorkerPool();
+    coopDecks=originalDecks;coopVisibleRows=originalVisible;coopDetailMode=originalDetail;coopProposalTargetDecks=completed?targetDecks:originalTarget;coopProposalEnemySecondFixed=originalSecond;coopDetailCalculationActive=false;calculateCoop();coopProposalOrderCache.clear();coopTerminateProposalWorkerPool();
     if(!completed){coopDetailRuns.delete(run);coopDetailClearView();await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(run+':',run+':\uffff'))).catch(()=>{})}
   }
 }

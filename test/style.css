@@ -1139,3 +1139,8 @@ html body #page-coop .coop-action-group .coop-proposal-deck-count,html body #pag
 #page-calculator .calculator-self-checkbox input[type=checkbox]{width:18px!important;height:18px!important;flex:none;margin:0;padding:0;transform:none!important}
 @media(max-width:800px){#page-calculator .calculator-self-checkbox .calculator-self-checkbox-control{height:42px}}
 
+
+/* Restored scored-card header, scoped to scored cards only. */
+.coop-detail-card-header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.coop-detail-card-header .coop-detail-score{position:static;margin:0;padding:4px 8px;border-radius:8px;background:#eaf2ff;color:#174ea6;font-weight:700;white-space:nowrap}
+.coop-proposal-card:has(.coop-detail-card-header) .coop-proposal-images{grid-column:1/-1}
