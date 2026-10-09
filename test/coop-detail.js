@@ -209,7 +209,7 @@ async function coopDetailShowPage(){
   const mode=coopDetailUiMode(view),selected=await coopDetailSelectedRows(view);
   if(token!==coopDetailViewToken||view!==coopDetailView||mode!==coopDetailUiMode(view))return;
   const grid=$('coopProposalGrid'),section=coopProposalResultSection(),body=$('coopProposalBody');if(!grid||!section)return;
-  const controlsOriginal=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(controlsOriginal)controlsOriginal.hidden=true;
+  const controlsOriginal=body?.querySelector('.coop-proposal-controls:not(#coopDetailPager)');if(controlsOriginal){controlsOriginal.hidden=true;controlsOriginal.setAttribute('aria-hidden','true')}
   let controls=document.getElementById('coopDetailPager');
   if(!controls){
     controls=document.createElement('div');controls.id='coopDetailPager';controls.className='coop-proposal-controls coop-detail-controls';
@@ -227,7 +227,7 @@ async function coopDetailShowPage(){
   all.onclick=()=>{const key=view.showInitial?'initialAll':'detailAll';view[key]=!view[key];coopDetailShowPage().catch(coopDetailViewError)};
   result.onclick=()=>{view.showInitial=!view.showInitial;coopDetailShowPage().catch(coopDetailViewError)};
   const select=controls.querySelector('#coopDetailDisplayLimit');select.disabled=false;
-  const requested=coopDetailUiLimit(view,mode),limit=selected.length?coopFillDisplayLimitSelect(select,mode.startsWith('detail')?6:10,selected.length,requested):0;
+  const requested=coopDetailUiLimit(view,mode),displayStart=(mode==='detail'?6:10),limit=selected.length?coopFillDisplayLimitSelect(select,displayStart,selected.length,requested):0;
   if(!selected.length){select.innerHTML='<option value="0">0</option>';select.disabled=true;coopSyncStyledSelect(select)}
   select.onchange=()=>{coopDetailUiSetLimit(view,mode,select.value);coopSyncStyledSelect(select);coopDetailShowPage().catch(coopDetailViewError)};
   const data=selected.slice(0,limit);grid.replaceChildren();section.hidden=false;
@@ -285,7 +285,7 @@ async function coopProposeDetailed(){
     coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
     coopDetailUsageSummary=summary;coopRenderProposalUsage([],true);
     coopDetailView={db,run,initial:initial.phase,initialCount:initial.count,ranking,rankCount,skipped,targetDecks,offset:0,showInitial:rankCount===0};
-    coopDetailView.needs=needs.slice();coopDetailView.normalSettings={limit:coopProposalDisplayLimit,all:coopProposalShowAllDecks};coopDetailView.initialAll=false;coopDetailView.detailAll=false;coopDetailView.uiLimits={detail:6,detailAll:6,initialAll:10,initialSelected:10};coopProposalRenderToken++;
+    coopDetailView.needs=needs.slice();coopDetailView.normalSettings={limit:coopProposalDisplayLimit,all:coopProposalShowAllDecks};coopDetailView.initialAll=false;coopDetailView.detailAll=false;coopDetailView.uiLimits={detail:6,detailAll:10,initialAll:10,initialSelected:10};coopProposalRenderToken++;
     const resultBody=$('coopProposalBody');if(resultBody)resultBody.hidden=false;
     await coopDetailShowPage();
     coopProposalLastFoundCount=initial.count;coopProposalLastWasExhaustive=true;

@@ -1168,3 +1168,17 @@ html body #page-coop .coop-action-group .coop-proposal-deck-count,html body #pag
 #coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{min-width:0;font-size:.82rem}
 #coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle b{flex:none}
 @media(max-width:600px){#coopDetailPager .coop-detail-toggle-row{flex-basis:100%}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{padding:8px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{font-size:.75rem}}
+/* Final detailed result controls: one compact row only. */
+#coopProposalBody > .coop-proposal-heading > .coop-proposal-controls[hidden],
+#coopProposalBody > .coop-proposal-controls[hidden],
+#coopProposalBody:has(#coopDetailPager) .coop-proposal-controls:not(#coopDetailPager){display:none!important}
+#coopDetailPager{display:flex!important;flex-flow:row wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;width:auto!important;max-width:100%!important;margin:0 0 12px!important;padding:0!important;grid-column:1/-1}
+#coopDetailPager .coop-detail-toggle-row{display:flex!important;flex:0 0 auto!important;flex-flow:row nowrap!important;align-items:center!important;width:auto!important;min-width:0!important;gap:8px!important}
+#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:flex-start!important;width:auto!important;min-width:0!important;max-width:none!important;min-height:40px!important;margin:0!important;padding:8px 12px!important;gap:10px!important;white-space:nowrap!important}
+#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{min-width:0!important;white-space:nowrap!important;font-size:.82rem!important}
+#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle b{flex:none!important}
+#coopDetailPager > .coop-count-control{display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;width:auto!important;min-width:0!important;margin:0!important;gap:7px!important}
+#coopDetailPager > .coop-count-control > span{white-space:nowrap!important}
+#coopDetailPager > .coop-count-control .coop-styled-select{width:auto!important;min-width:96px!important}
+#coopDetailPager > .coop-count-control .coop-styled-select-button{width:auto!important;min-width:96px!important;min-height:40px!important}
+@media(max-width:540px){#coopDetailPager{gap:7px!important}#coopDetailPager .coop-detail-toggle-row{gap:6px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{padding:7px 9px!important;gap:6px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{font-size:.74rem!important}#coopDetailPager > .coop-count-control{flex-basis:100%!important}}
