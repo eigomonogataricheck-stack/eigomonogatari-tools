@@ -268,19 +268,38 @@ async function coopProposeDetailed(){
     const evaluationCount=await coopDetailCount(db,evaluation);coopOverallProgress.percent=20;
     // All characters in the existing initial usage aggregation, not just its top ten.
     const restricted=summary.counts.map((map,slot)=>needs[slot]?[...map.values()].map(x=>x.character):[null]);
-    let evaluated=0;
-    await coopDetailWalk(db,evaluation,async row=>{
-      coopOverallProgress.base=20+80*evaluated/Math.max(1,evaluationCount);coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;evaluated++;const placement=coopDetailPlace(base,row.ids);
-      if(!placement){skipped++;coopOverallProgress.percent=20+80*evaluated/Math.max(1,evaluationCount);return}
-      coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
-      const result=await coopDetailSearch(db,run+':score'+evaluated,restricted.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool:[null]),targetDecks,{countOnly:true,label:`個別再計算 ${evaluated.toLocaleString()} / ${evaluationCount.toLocaleString()}`});
-      await coopDetailPut(db,ranking,[{ids:row.ids,detailCertainCount:result.count,placement:placement.placements}]);rankCount++;
-      await coopDetailDelete(db,result.phase);
-      coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
-      // Bound diagnostic history too; its counters do not participate in calculation.
-      if(coopProposalScaleHistory.length>100)coopProposalScaleHistory.splice(0,coopProposalScaleHistory.length-100);
+    let evaluated=0,evaluationAfter=null;
+    const COOP_DETAIL_EVALUATION_BATCH=16;
+    while(true){
+      await coopWaitIfProposalPaused();
+      const evaluationRows=await coopDetailRead(db,evaluation,evaluationAfter,COOP_DETAIL_EVALUATION_BATCH);
+      if(!evaluationRows.length)break;
+      evaluationAfter=evaluationRows[evaluationRows.length-1].key;
+      const prepared=[];
+      for(const row of evaluationRows){
+        const placement=coopDetailPlace(base,row.ids);evaluated++;
+        if(!placement){skipped++;continue}
+        prepared.push({row,placement,number:evaluated});
+      }
+      const rankingBatch=[];
+      /* Process one bounded candidate batch before the next IndexedDB read.
+         This preserves the proven per-candidate five-slot evaluator while removing
+         per-row cursor/yield/ranking transactions; the next revision can replace
+         this inner loop with a tagged cross-candidate worker queue. */
+      for(const entry of prepared){
+        coopOverallProgress.base=20+80*(entry.number-1)/Math.max(1,evaluationCount);
+        coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;
+        coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>entry.placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
+        const result=await coopDetailSearch(db,run+':score'+entry.number,restricted.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool:[null]),targetDecks,{countOnly:true,label:`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`});
+        rankingBatch.push({ids:entry.row.ids,detailCertainCount:result.count,placement:entry.placement.placements});rankCount++;
+        await coopDetailDelete(db,result.phase);
+        coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
+        if(coopProposalScaleHistory.length>100)coopProposalScaleHistory.splice(0,coopProposalScaleHistory.length-100);
+      }
+      if(rankingBatch.length)await coopDetailPut(db,ranking,rankingBatch);
+      coopOverallProgress.percent=20+80*evaluated/Math.max(1,evaluationCount);
       await coopYield();
-    });
+    }
     await coopDetailDelete(db,evaluation);
     coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
     coopDetailUsageSummary=summary;coopRenderProposalUsage([],true);
