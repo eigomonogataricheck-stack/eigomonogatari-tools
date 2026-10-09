@@ -244,6 +244,7 @@ async function coopDetailShowPage(){
 }
 
 function coopDetailViewError(error){const result=$('coopDamageResult');if(result)result.textContent='保存済み結果の読込に失敗しました: '+String(error?.message||error)}
+async function coopDetailScoreBatchParallel(entries,restricted,targetDecks,evaluationCount){if(!entries.length)return[];const count=coopWorkerCount(entries.length),workers=await coopEnsureProposalWorkerPool(count),poolIds=restricted.map(pool=>pool.map(coopCharacterKey)),results=Array(entries.length);let next=0,done=0;async function runWorker(worker){while(true){const index=next++;if(index>=entries.length)return;const entry=entries[index],jobId=++coopProposalWorkerJobSequence;results[index]=await new Promise((resolve,reject)=>{const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError);worker._coopReject=null},onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))},onMessage=event=>{const message=event.data||{};if(message.jobId!==jobId)return;if(message.type==='detailProgress'){coopSetProposalProgress(`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}・${message.slot+1}枠目`,true,message.slotChecked,message.slotTotal,null,count)}else if(message.type==='detailDone'){cleanup();done++;coopOverallProgress.percent=Math.max(coopOverallProgress.percent,20+80*(entry.number/evaluationCount));resolve(message.count||0)}else if(message.type==='error'){cleanup();reject(new Error(message.message||'Worker error'))}};worker._coopReject=reject;worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);worker.postMessage({type:'detailScore',jobId,evaluationId:index,decks:entry.placement.rows.map(row=>row.map(coopCharacterKey)),poolIds,targetDecks})})}}await Promise.all(workers.slice(0,count).map(runWorker));return results}
 async function coopProposeDetailed(){
   coopOverallReset(true);await coopProposalStartClock();coopDetailClearView();renderCoopProposalDecks([]);
   const db=await coopDetailOpenDatabase();
@@ -281,21 +282,7 @@ async function coopProposeDetailed(){
         if(!placement){skipped++;continue}
         prepared.push({row,placement,number:evaluated});
       }
-      const rankingBatch=[];
-      /* Process one bounded candidate batch before the next IndexedDB read.
-         This preserves the proven per-candidate five-slot evaluator while removing
-         per-row cursor/yield/ranking transactions; the next revision can replace
-         this inner loop with a tagged cross-candidate worker queue. */
-      for(const entry of prepared){
-        coopOverallProgress.base=20+80*(entry.number-1)/Math.max(1,evaluationCount);
-        coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;
-        coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>entry.placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
-        const result=await coopDetailSearch(db,run+':score'+entry.number,restricted.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool:[null]),targetDecks,{countOnly:true,label:`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`});
-        rankingBatch.push({ids:entry.row.ids,detailCertainCount:result.count,placement:entry.placement.placements});rankCount++;
-        await coopDetailDelete(db,result.phase);
-        coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
-        if(coopProposalScaleHistory.length>100)coopProposalScaleHistory.splice(0,coopProposalScaleHistory.length-100);
-      }
+      const rankingBatch=[];const counts=await coopDetailScoreBatchParallel(prepared,restricted,targetDecks,evaluationCount);for(let index=0;index<prepared.length;index++){const entry=prepared[index];rankingBatch.push({ids:entry.row.ids,detailCertainCount:counts[index],placement:entry.placement.placements});rankCount++}
       if(rankingBatch.length)await coopDetailPut(db,ranking,rankingBatch);
       coopOverallProgress.percent=20+80*evaluated/Math.max(1,evaluationCount);
       await coopYield();
