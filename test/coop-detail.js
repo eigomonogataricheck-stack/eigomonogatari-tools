@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261010-detail-5-initial-decks.
+/* Detailed cooperative proposal calculation, build 20261010-detail-6-parallel.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -57,7 +57,7 @@ function coopDetailCount(db,phase){
 async function coopDetailDelete(db,phase){await coopDetailTransaction(db,store=>store.delete(coopDetailRange(phase)))}
 async function coopDetailWalk(db,phase,visit){
   let after=null;
-  while(true){await coopWaitIfProposalPaused();const rows=await coopDetailRead(db,phase,after);if(!rows.length)break;for(let row of rows){await coopWaitIfProposalPaused();await visit(row)}after=rows[rows.length-1].key;await coopYield()}
+  while(true){await coopWaitIfProposalPaused();const rows=await coopDetailRead(db,phase,after);if(!rows.length)break;for(let i=0;i<rows.length;i++){if((i&127)===0)await coopWaitIfProposalPaused();const result=visit(rows[i]);if(result&&typeof result.then==='function')await result}after=rows[rows.length-1].key;await coopYield()}
 }
 function coopDetailMergeUsage(summary,items){
   // Reuse the same aggregator as the existing usage display, one bounded batch at a time.
@@ -158,22 +158,37 @@ for(const item of items){
   finally{coopProposalOrderCache.clear()}
 }
 async function coopDetailCountInitialDecks(db,phase,totalDecks,label='個別再計算'){
-  let after=null,checked=0,passed=0,lastPaint=performance.now();
+  const total=await coopDetailCount(db,phase),count=coopWorkerCount(total);
+  if(!total)return 0;
+  const workers=await coopEnsureProposalWorkerPool(count),checkedBy=Array(count).fill(0),passedBy=Array(count).fill(0);
+  let after=null,checkedBase=0,passedBase=0;
   while(true){
     await coopWaitIfProposalPaused();
-    const rows=await coopDetailRead(db,phase,after,COOP_DETAIL_BATCH);
-    if(!rows.length)break;
-    after=rows[rows.length-1].key;
-    for(let i=0;i<rows.length;i++){
-      if((i&127)===0)await coopWaitIfProposalPaused();
-      const deck=rows[i].ids.map(coopFindCharacter);
-      checked++;
-      if(coopProposalWorks(deck,totalDecks))passed++;
-      const now=performance.now();
-      if(now-lastPaint>=250){coopSetProposalProgress(label,true,checked,null,passed,1);await coopYield();lastPaint=performance.now()}
+    const rows=[];
+    for(let read=0;read<4;read++){
+      const part=await coopDetailRead(db,phase,after,COOP_DETAIL_BATCH);
+      if(!part.length)break;
+      rows.push(...part);after=part[part.length-1].key;
+      if(part.length<COOP_DETAIL_BATCH)break;
     }
+    if(!rows.length)break;
+    const activeCount=Math.min(count,rows.length),chunks=Array.from({length:activeCount},()=>[]);
+    for(let i=0;i<rows.length;i++)chunks[i%activeCount].push(rows[i].ids);
+    checkedBy.fill(0);passedBy.fill(0);
+    const jobId=++coopProposalWorkerJobSequence,compactEnemies=coopWorkerEnemies(),compactDecks=coopWorkerDecks();
+    const jobs=workers.slice(0,activeCount).map((worker,index)=>new Promise((resolve,reject)=>{
+      const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
+      const update=()=>coopSetProposalProgress(label,true,checkedBase+checkedBy.reduce((a,b)=>a+b,0),total,passedBase+passedBy.reduce((a,b)=>a+b,0),activeCount);
+      const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='detailCountProgress'){checkedBy[index]=m.checked;passedBy[index]=m.passed;update()}else if(m.type==='detailCountDone'){checkedBy[index]=m.checked;passedBy[index]=m.passed;cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message))}};
+      const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
+      worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);
+      worker.postMessage({type:'detailCount',jobId,deckIds:chunks[index],enemies:compactEnemies,decks:compactDecks,visibleRows:coopVisibleRows,detailMode:coopDetailMode,targetDecks:totalDecks,enemySecondFixed:coopProposalEnemySecondFixed,constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
+    }));
+    await Promise.all(jobs);
+    checkedBase+=checkedBy.reduce((a,b)=>a+b,0);passedBase+=passedBy.reduce((a,b)=>a+b,0);
   }
-  return passed;
+  coopSetProposalProgress(label,true,total,total,passedBase,count);
+  return passedBase;
 }
 
 async function coopDetailRankingPage(db,phase,offset,limit=COOP_DETAIL_PAGE){
