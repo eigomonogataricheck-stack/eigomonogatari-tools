@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261010-detail-3-result-restore.
+/* Detailed cooperative proposal calculation, build 20261010-detail-5-initial-decks.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -157,6 +157,25 @@ for(const item of items){
   }catch(error){for(let phase of phases)await coopDetailDelete(db,phase).catch(()=>{});throw error}
   finally{coopProposalOrderCache.clear()}
 }
+async function coopDetailCountInitialDecks(db,phase,totalDecks,label='個別再計算'){
+  let after=null,checked=0,passed=0,lastPaint=performance.now();
+  while(true){
+    await coopWaitIfProposalPaused();
+    const rows=await coopDetailRead(db,phase,after,COOP_DETAIL_BATCH);
+    if(!rows.length)break;
+    after=rows[rows.length-1].key;
+    for(let i=0;i<rows.length;i++){
+      if((i&127)===0)await coopWaitIfProposalPaused();
+      const deck=rows[i].ids.map(coopFindCharacter);
+      checked++;
+      if(coopProposalWorks(deck,totalDecks))passed++;
+      const now=performance.now();
+      if(now-lastPaint>=250){coopSetProposalProgress(label,true,checked,null,passed,1);await coopYield();lastPaint=performance.now()}
+    }
+  }
+  return passed;
+}
+
 async function coopDetailRankingPage(db,phase,offset,limit=COOP_DETAIL_PAGE){
   return new Promise((resolve,reject)=>{
     const tx=db.transaction('records','readonly'),out=[],range=IDBKeyRange.bound([phase],[phase,Infinity]);
@@ -274,8 +293,8 @@ async function coopProposeDetailed(){
     await coopDetailWalk(db,initial.phase,async row=>{if(coopDetailIsTopDeck(row.ids,topIds,needs)){buffer.push({ids:row.ids});if(buffer.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,evaluation,buffer);buffer=[]}}});
     if(buffer.length)await coopDetailPut(db,evaluation,buffer);
     const evaluationCount=await coopDetailCount(db,evaluation);coopOverallProgress.percent=20;
-    // All characters in the existing initial usage aggregation, not just its top ten.
-    const restricted=summary.counts.map((map,slot)=>needs[slot]?[...map.values()].map(x=>x.character):[null]);
+    // Individual scoring reuses the complete decks found by the initial calculation.
+    // Do not recombine the per-slot characters into new decks here.
     let evaluated=0,evaluationAfter=null;
     const COOP_DETAIL_EVALUATION_BATCH=16;
     while(true){
@@ -294,9 +313,8 @@ async function coopProposeDetailed(){
         coopOverallProgress.base=20+80*(entry.number-1)/Math.max(1,evaluationCount);
         coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;
         coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>entry.placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
-        const result=await coopDetailSearch(db,run+':score'+entry.number,restricted.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool:[null]),targetDecks,{countOnly:true,label:`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`});
-        rankingBatch.push({ids:entry.row.ids,detailCertainCount:result.count,placement:entry.placement.placements});rankCount++;
-        await coopDetailDelete(db,result.phase);
+        const detailCertainCount=await coopDetailCountInitialDecks(db,initial.phase,targetDecks,`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`);
+        rankingBatch.push({ids:entry.row.ids,detailCertainCount,placement:entry.placement.placements});rankCount++;
         coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
         if(coopProposalScaleHistory.length>100)coopProposalScaleHistory.splice(0,coopProposalScaleHistory.length-100);
       }
