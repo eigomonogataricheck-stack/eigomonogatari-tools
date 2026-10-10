@@ -1,11 +1,11 @@
-/* Detailed cooperative proposal calculation, build 20261010-detail-2-speed.
+/* Detailed cooperative proposal calculation, build 20261010-detail-3-result-restore.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
 let coopDetailCalculationActive=false,coopDetailUsageSummary=null,coopDetailView=null;
 let coopDetailDatabase=null,coopDetailViewToken=0;
 const coopDetailRuns=new Set();
-const COOP_DETAIL_BATCH=2048,COOP_DETAIL_PAGE=10;
+const COOP_DETAIL_BATCH=512,COOP_DETAIL_PAGE=10;
 function coopDetailClearView(){
   const view=coopDetailView;
   coopDetailUsageSummary=null;coopDetailView=null;coopDetailViewToken++;coopProposalRenderToken++;
@@ -277,7 +277,7 @@ async function coopProposeDetailed(){
     // All characters in the existing initial usage aggregation, not just its top ten.
     const restricted=summary.counts.map((map,slot)=>needs[slot]?[...map.values()].map(x=>x.character):[null]);
     let evaluated=0,evaluationAfter=null;
-    const COOP_DETAIL_EVALUATION_BATCH=64;
+    const COOP_DETAIL_EVALUATION_BATCH=16;
     while(true){
       await coopWaitIfProposalPaused();
       const evaluationRows=await coopDetailRead(db,evaluation,evaluationAfter,COOP_DETAIL_EVALUATION_BATCH);
