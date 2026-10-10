@@ -293,7 +293,7 @@ function coopWorkerCharacters(){return chars.map(coopWorkerCharacter)}
 function coopWorkerEnemies(){return coopEnemies.map(e=>({character:coopWorkerCharacter(e.character),hp:e.hp,attribute:e.attribute}))}
 function coopWorkerDecks(){return coopDecks.map(row=>row.map(coopWorkerCharacter))}
 function coopProposalWorkerTimingText(){let shown=coopProposalWorkerTimes.map((ms,i)=>ms>0?`W${i+1}:${(ms/1000).toFixed(2)}秒`:null).filter(Boolean);return shown.length?'Worker終了 '+shown.join(' / '):'Worker終了待ち'}
-async function coopEnsureProposalWorkerPool(count){count=Math.max(1,count);if(coopProposalWorkerPoolSize===count&&coopProposalWorkerPool.length===count)return coopProposalWorkerPool;coopTerminateProposalWorkerPool();let engineSource=coopWorkerEngineSource(),compactChars=coopWorkerCharacters(),readyJobs=[];coopProposalWorkerPoolSize=count;coopProposalWorkerTimes=Array(count).fill(0);for(let i=0;i<count;i++){let worker=new Worker('coop-worker.js?v=20261010-final-count');coopProposalWorkerPool.push(worker);readyJobs.push(new Promise((resolve,reject)=>{let onMessage=e=>{if(e.data?.type!=='initialized')return;worker.removeEventListener('message',onMessage);resolve()};worker.addEventListener('message',onMessage);worker.addEventListener('error',e=>reject(new Error(e.message||'Worker initialization error')),{once:true});worker.postMessage({type:'init',engineSource,chars:compactChars,workerIndex:i,constants:{ATTRS,MATCH,layerMultipliers:COOP_LAYER_MULTIPLIERS,damageBase:COOP_DAMAGE_BASE,damageScale:1}})}))}await Promise.all(readyJobs);return coopProposalWorkerPool}
+async function coopEnsureProposalWorkerPool(count){count=Math.max(1,count);if(coopProposalWorkerPoolSize===count&&coopProposalWorkerPool.length===count)return coopProposalWorkerPool;coopTerminateProposalWorkerPool();let engineSource=coopWorkerEngineSource(),compactChars=coopWorkerCharacters(),readyJobs=[];coopProposalWorkerPoolSize=count;coopProposalWorkerTimes=Array(count).fill(0);for(let i=0;i<count;i++){let worker=new Worker('coop-worker.js?v=20261010-expand4');coopProposalWorkerPool.push(worker);readyJobs.push(new Promise((resolve,reject)=>{let onMessage=e=>{if(e.data?.type!=='initialized')return;worker.removeEventListener('message',onMessage);resolve()};worker.addEventListener('message',onMessage);worker.addEventListener('error',e=>reject(new Error(e.message||'Worker initialization error')),{once:true});worker.postMessage({type:'init',engineSource,chars:compactChars,workerIndex:i,constants:{ATTRS,MATCH,layerMultipliers:COOP_LAYER_MULTIPLIERS,damageBase:COOP_DAMAGE_BASE,damageScale:1}})}))}await Promise.all(readyJobs);return coopProposalWorkerPool}
 function coopTerminateProposalWorkerPool(){for(let worker of coopProposalWorkerPool){if(worker._coopReject)worker._coopReject(new Error('計算を停止しました'));worker._coopReject=null;worker.terminate()};coopProposalWorkerPool=[];coopProposalWorkerPoolSize=0;coopProposalWorkerTimes=[]}
 
 function coopWorkerCount(total){let reported=Math.max(1,Number(navigator.hardwareConcurrency)||2);return Math.max(1,Math.min(coopDetailCalculationActive?16:8,reported,total))}
@@ -343,35 +343,46 @@ function coopProposalLimitPassedForNextSlot(items,slot){
   return kept;
 }
 async function coopProposalExpandEquivalentNonContinuous(items){
-  let source=items||[],out=[],seen=new Set(),checked=0,generated=0,total=source.length;
-  function add(item,deck){
-    let ids=coopProposalDeckIds(deck),key=coopProposalDeckKey(ids);
-    let requiredMissing=ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&!id);
-    if(!key||seen.has(key)||requiredMissing||coopProposalHasDuplicateInCompletedDeck(deck))return;
+  const source=items||[],out=[],seen=new Set(),total=source.length;
+  function add(sourceIndex,ids){
+    const item=source[sourceIndex],deck=ids.map(coopFindCharacter),key=coopProposalDeckKey(ids);
+    const requiredMissing=ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&!id);
+    if(!item||!key||seen.has(key)||requiredMissing||coopProposalHasDuplicateInCompletedDeck(deck))return;
     seen.add(key);
-    out.push({...item,ids:ids.slice(),deck:deck.slice(),provisionalSlots:Array(COOP_SLOTS).fill(false),equivalentNonContinuous:true});
+    out.push({...item,ids:ids.slice(),deck,provisionalSlots:Array(COOP_SLOTS).fill(false),equivalentNonContinuous:true});
   }
-  for(let item of source){
-    if(coopProposalCancelRequested)throw new Error('計算を停止しました');
-    let base=coopProposalItemDeck(item);
-    if(base.length!==COOP_SLOTS)continue;
-    let choices=[];
+  const tasks=[];
+  for(let sourceIndex=0;sourceIndex<source.length;sourceIndex++){
+    const base=coopProposalItemDeck(source[sourceIndex]);if(base.length!==COOP_SLOTS)continue;
+    const choices=[];
     for(let slot=0;slot<3;slot++){
-      let stored=coopProposalEquivalentNonContinuous[slot]||{};
-      let eq=slot===0?stored:stored.byPrefix?.get(coopProposalEquivalentPrefixKey(base,slot));
-      let baseId=coopCharacterKey(base[slot]),members=[],memberIds=new Set();
-      for(let c of eq?.characters||[]){let id=coopCharacterKey(c);if(c&&id&&!memberIds.has(id)){memberIds.add(id);members.push(c)}}
-      let isEquivalentBranch=!!baseId&&(baseId===String(eq?.representativeId||'')||memberIds.has(baseId));
-      choices[slot]=isEquivalentBranch&&members.length?members:[base[slot]];
+      const stored=coopProposalEquivalentNonContinuous[slot]||{};
+      const eq=slot===0?stored:stored.byPrefix?.get(coopProposalEquivalentPrefixKey(base,slot));
+      const baseId=coopCharacterKey(base[slot]),members=[],memberIds=new Set();
+      for(const c of eq?.characters||[]){const id=coopCharacterKey(c);if(c&&id&&!memberIds.has(id)){memberIds.add(id);members.push(id)}}
+      const equivalent=!!baseId&&(baseId===String(eq?.representativeId||'')||memberIds.has(baseId));
+      choices[slot]=equivalent&&members.length?members:[baseId];
     }
-    for(let first of choices[0])for(let second of choices[1])for(let third of choices[2]){
-      let deck=base.slice();deck[0]=first;deck[1]=second;deck[2]=third;generated++;add(item,deck);
-      if(generated%1000===0){coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${checked.toLocaleString()} / ${total.toLocaleString()}件・展開${generated.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,checked,total,out.length,1);await coopYield()}
-    }
-    checked++;
-    if(checked%100===0||checked===total){coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${checked.toLocaleString()} / ${total.toLocaleString()}件・展開${generated.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,checked,total,out.length,1);await coopYield()}
+    tasks.push({sourceIndex,baseIds:coopProposalDeckIds(base),choices});
   }
-  return out;
+  if(typeof Worker==='undefined'||tasks.length<32){
+    let checked=0,generated=0;
+    for(const task of tasks){
+      for(const first of task.choices[0])for(const second of task.choices[1])for(const third of task.choices[2]){const ids=task.baseIds.slice();ids[0]=first;ids[1]=second;ids[2]=third;generated++;add(task.sourceIndex,ids)}
+      checked++;if(checked%100===0||checked===tasks.length){coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${checked.toLocaleString()} / ${tasks.length.toLocaleString()}件・展開${generated.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,checked,tasks.length,out.length,1);await coopYield()}
+    }
+    return out;
+  }
+  const count=Math.min(4,coopWorkerCount(tasks.length)),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]),done=Array(count).fill(0),generated=Array(count).fill(0),jobId=++coopProposalWorkerJobSequence;
+  tasks.forEach((task,index)=>chunks[index%count].push(task));
+  const jobs=workers.slice(0,count).map((worker,index)=>new Promise((resolve,reject)=>{
+    const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
+    const update=()=>coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${done.reduce((a,b)=>a+b,0).toLocaleString()} / ${tasks.length.toLocaleString()}件・展開${generated.reduce((a,b)=>a+b,0).toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,done.reduce((a,b)=>a+b,0),tasks.length,out.length,count);
+    const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='expandItems'){for(const row of m.items||[])add(row.sourceIndex,row.ids);done[index]=m.checked;generated[index]=m.generated;update()}else if(m.type==='expandProgress'){done[index]=m.checked;generated[index]=m.generated;update()}else if(m.type==='expandDone'){done[index]=m.checked;generated[index]=m.generated;cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message||'Worker error'))}};
+    const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
+    worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);worker.postMessage({type:'expand',jobId,tasks:chunks[index]});
+  }));
+  await Promise.all(jobs);return out;
 }
 async function coopProposalBruteforceAtMaximumScale(totalDecks){
   let prefixes=[Array(COOP_SLOTS).fill(null)],sourcePools=Array.from({length:COOP_SLOTS},(_,slot)=>coopProposalSlotNeedsCandidate(slot)?(slot===0?coopProposalFirstCandidatesAll(chars):coopProposalPoolAll(slot)):[null]);coopProposalProgressCoverage=sourcePools.map((pool,slot)=>coopProposalSlotNeedsCandidate(slot)?pool.length:0);
