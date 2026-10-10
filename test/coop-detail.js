@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261010-detail-6-parallel.
+/* Detailed cooperative proposal calculation, build 20261010-detail-7-prefix.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -157,38 +157,39 @@ for(const item of items){
   }catch(error){for(let phase of phases)await coopDetailDelete(db,phase).catch(()=>{});throw error}
   finally{coopProposalOrderCache.clear()}
 }
+async function coopDetailEvaluatePrefixBatch(prefixes,slot,totalDecks,label){
+  const count=coopWorkerCount(prefixes.length),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]);
+  for(let i=0;i<prefixes.length;i++)chunks[i%count].push(prefixes[i]);
+  const checkedBy=Array(count).fill(0),passedBy=Array(count).fill(0),passedKeys=new Set(),jobId=++coopProposalWorkerJobSequence,compactEnemies=coopWorkerEnemies(),compactDecks=coopWorkerDecks();
+  await Promise.all(workers.slice(0,count).map((worker,index)=>new Promise((resolve,reject)=>{
+    const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
+    const update=()=>coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checkedBy.reduce((a,b)=>a+b,0),prefixes.length,passedBy.reduce((a,b)=>a+b,0),count);
+    const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='detailPrefixProgress'){checkedBy[index]=m.checked;passedBy[index]=m.passed;update()}else if(m.type==='detailPrefixDone'){checkedBy[index]=m.checked;passedBy[index]=m.passed;for(const key of m.passedKeys||[])passedKeys.add(key);cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message))}};
+    const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
+    worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);
+    worker.postMessage({type:'detailPrefix',jobId,prefixIds:chunks[index],slot,enemies:compactEnemies,decks:compactDecks,visibleRows:coopVisibleRows,detailMode:coopDetailMode,targetDecks:totalDecks,enemySecondFixed:coopProposalEnemySecondFixed,constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
+  })));
+  return passedKeys;
+}
 async function coopDetailCountInitialDecks(db,phase,totalDecks,label='個別再計算'){
-  const total=await coopDetailCount(db,phase),count=coopWorkerCount(total);
-  if(!total)return 0;
-  const workers=await coopEnsureProposalWorkerPool(count),checkedBy=Array(count).fill(0),passedBy=Array(count).fill(0);
-  let after=null,checkedBase=0,passedBase=0;
-  while(true){
-    await coopWaitIfProposalPaused();
-    const rows=[];
-    for(let read=0;read<4;read++){
-      const part=await coopDetailRead(db,phase,after,COOP_DETAIL_BATCH);
-      if(!part.length)break;
-      rows.push(...part);after=part[part.length-1].key;
-      if(part.length<COOP_DETAIL_BATCH)break;
+  let sourcePhase=phase,ownedPhase=null;
+  try{
+    for(let slot=0;slot<COOP_SLOTS;slot++){
+      await coopWaitIfProposalPaused();
+      const prefixes=new Map();
+      await coopDetailWalk(db,sourcePhase,row=>{const ids=row.ids.map(String),key=ids.slice(0,slot+1).join('\u0001');if(!prefixes.has(key))prefixes.set(key,ids)});
+      if(!prefixes.size)return 0;
+      const passedKeys=await coopDetailEvaluatePrefixBatch([...prefixes.values()],slot,totalDecks,label);
+      if(slot===COOP_SLOTS-1)return passedKeys.size;
+      const nextPhase=`${phase}:prefix:${Date.now()}:${Math.random().toString(36).slice(2)}:${slot}`,pending=[];
+      await coopDetailWalk(db,sourcePhase,async row=>{const key=row.ids.slice(0,slot+1).map(String).join('\u0001');if(passedKeys.has(key)){pending.push({ids:row.ids});if(pending.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,nextPhase,pending.splice(0))}}});
+      if(pending.length)await coopDetailPut(db,nextPhase,pending);
+      if(ownedPhase)await coopDetailDelete(db,ownedPhase);
+      ownedPhase=nextPhase;sourcePhase=nextPhase;
+      if(!passedKeys.size)return 0;
     }
-    if(!rows.length)break;
-    const activeCount=Math.min(count,rows.length),chunks=Array.from({length:activeCount},()=>[]);
-    for(let i=0;i<rows.length;i++)chunks[i%activeCount].push(rows[i].ids);
-    checkedBy.fill(0);passedBy.fill(0);
-    const jobId=++coopProposalWorkerJobSequence,compactEnemies=coopWorkerEnemies(),compactDecks=coopWorkerDecks();
-    const jobs=workers.slice(0,activeCount).map((worker,index)=>new Promise((resolve,reject)=>{
-      const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
-      const update=()=>coopSetProposalProgress(label,true,checkedBase+checkedBy.reduce((a,b)=>a+b,0),total,passedBase+passedBy.reduce((a,b)=>a+b,0),activeCount);
-      const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='detailCountProgress'){checkedBy[index]=m.checked;passedBy[index]=m.passed;update()}else if(m.type==='detailCountDone'){checkedBy[index]=m.checked;passedBy[index]=m.passed;cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message))}};
-      const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
-      worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);
-      worker.postMessage({type:'detailCount',jobId,deckIds:chunks[index],enemies:compactEnemies,decks:compactDecks,visibleRows:coopVisibleRows,detailMode:coopDetailMode,targetDecks:totalDecks,enemySecondFixed:coopProposalEnemySecondFixed,constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
-    }));
-    await Promise.all(jobs);
-    checkedBase+=checkedBy.reduce((a,b)=>a+b,0);passedBase+=passedBy.reduce((a,b)=>a+b,0);
-  }
-  coopSetProposalProgress(label,true,total,total,passedBase,count);
-  return passedBase;
+    return 0;
+  }finally{if(ownedPhase)await coopDetailDelete(db,ownedPhase).catch(()=>{})}
 }
 
 async function coopDetailRankingPage(db,phase,offset,limit=COOP_DETAIL_PAGE){
