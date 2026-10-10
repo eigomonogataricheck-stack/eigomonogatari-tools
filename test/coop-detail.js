@@ -123,14 +123,15 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
         await coopWaitIfProposalPaused();
         const rows=await coopDetailRead(db,previous,after);if(!rows.length)break;
         const baseChecked=checked,basePassed=passed,originalProgress=coopSetProposalProgress;
-        let items;
-        try{
-          coopSetProposalProgress=(text,busy,current,batchTotal,batchPassed,workers)=>originalProgress(`${label}・${slot+1}枠目`,busy,baseChecked+(current||0),total,basePassed+(batchPassed||0),workers);
-          const finalCountOnly=countOnly&&slot===COOP_SLOTS-1;items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly});
-        }finally{coopSetProposalProgress=originalProgress}
-        checked+=rows.length*pool.length;
-        if(finalCountOnly){passed+=items.count||0;after=rows[rows.length-1].key;coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));continue}
-        for(const item of items){
+        const finalCountOnly=countOnly&&slot===COOP_SLOTS-1;  
+        let items;  
+        try{  
+          coopSetProposalProgress=(text,busy,current,batchTotal,batchPassed,workers)=>originalProgress(`${label}・${slot+1}枠目`,busy,baseChecked+(current||0),total,basePassed+(batchPassed||0),workers);  
+          items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly});  
+        }finally{coopSetProposalProgress=originalProgress}  
+        checked+=rows.length*pool.length;  
+        if(finalCountOnly){passed+=items.count||0;after=rows[rows.length-1].key;coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));continue}  
+for(const item of items){
           const deck=item.deck;
           if(slot===COOP_SLOTS-1&&coopProposalHasDuplicateInCompletedDeck(deck,totalDecks))continue;
           passed++;
