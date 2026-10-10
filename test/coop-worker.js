@@ -8,9 +8,11 @@ if(m.type==='expand'){
   let checked=0,generated=0,items=[],last=performance.now();
   const flushExpand=()=>{if(items.length)postMessage({type:'expandItems',jobId:m.jobId,items:items.splice(0),checked,generated})};
   for(const task of m.tasks||[]){
-    await pausePoint();if(stopped)break;
-    for(const first of task.choices?.[0]||[])for(const second of task.choices?.[1]||[])for(const third of task.choices?.[2]||[]){const ids=task.baseIds.slice();ids[0]=first;ids[1]=second;ids[2]=third;items.push({sourceIndex:task.sourceIndex,ids});generated++;if(items.length>=1000)flushExpand()}
-    checked++;const now=performance.now();if(checked%50===0||now-last>=300){postMessage({type:'expandProgress',jobId:m.jobId,checked,generated});last=now}
+    const n2=task.choices?.[2]?.length||0,n1=task.choices?.[1]?.length||0;
+    for(let index=Number(task.start)||0,end=Number(task.end)||0;index<end&&!stopped;index++){
+      await pausePoint();if(stopped)break;let rest=index,i2=rest%n2;rest=Math.floor(rest/n2);let i1=rest%n1,i0=Math.floor(rest/n1),ids=task.baseIds.slice();ids[0]=task.choices[0][i0];ids[1]=task.choices[1][i1];ids[2]=task.choices[2][i2];items.push({sourceIndex:task.sourceIndex,ids});checked++;generated++;if(items.length>=1000)flushExpand();let now=performance.now();if(checked%1000===0||now-last>=300){postMessage({type:'expandProgress',jobId:m.jobId,checked,generated});last=now}
+    }
+    if(stopped)break;
   }
   if(!stopped){flushExpand();postMessage({type:'expandDone',jobId:m.jobId,checked,generated})}
 }else if(m.type==='stage'){let total=job.prefixIds.length*job.candidateIds.length;while(job.index<total&&!stopped){await pausePoint();if(stopped)break;let stop=Math.min(total,job.index+250);for(;job.index<stop&&!stopped;job.index++){let prefixIndex=Math.floor(job.index/job.candidateIds.length),candidateIndex=job.index%job.candidateIds.length,ids=job.prefixIds[prefixIndex].slice();ids[m.slot]=job.candidateIds[candidateIndex];let deck=ids.map(coopFindCharacter),item=coopProposalPrefixLayerEvaluation(deck,m.slot,m.targetDecks);if(item&&!(m.countOnly&&m.slot===COOP_SLOTS-1&&coopProposalHasDuplicateInCompletedDeck(item.deck,m.targetDecks))){if(!m.countOnly)job.items.push({ids:coopProposalDeckIds(item.deck)});job.passed++}job.checked++}if(!m.countOnly&&job.items.length>=3000)flush(job,'stage');let now=performance.now();if(job.checked%1000===0||now-job.last>=300){postMessage({type:'progress',jobId:job.jobId,checked:job.checked,passed:job.passed,confirmed:job.passed});job.last=now}if(now-lastYield>=40){await sleep(0);lastYield=performance.now()}}if(!stopped){if(!m.countOnly)flush(job,'stage');postMessage({type:'stageDone',jobId:job.jobId,checked:job.checked,passed:job.passed,items:[]})}}

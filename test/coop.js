@@ -293,7 +293,7 @@ function coopWorkerCharacters(){return chars.map(coopWorkerCharacter)}
 function coopWorkerEnemies(){return coopEnemies.map(e=>({character:coopWorkerCharacter(e.character),hp:e.hp,attribute:e.attribute}))}
 function coopWorkerDecks(){return coopDecks.map(row=>row.map(coopWorkerCharacter))}
 function coopProposalWorkerTimingText(){let shown=coopProposalWorkerTimes.map((ms,i)=>ms>0?`W${i+1}:${(ms/1000).toFixed(2)}秒`:null).filter(Boolean);return shown.length?'Worker終了 '+shown.join(' / '):'Worker終了待ち'}
-async function coopEnsureProposalWorkerPool(count){count=Math.max(1,count);if(coopProposalWorkerPoolSize===count&&coopProposalWorkerPool.length===count)return coopProposalWorkerPool;coopTerminateProposalWorkerPool();let engineSource=coopWorkerEngineSource(),compactChars=coopWorkerCharacters(),readyJobs=[];coopProposalWorkerPoolSize=count;coopProposalWorkerTimes=Array(count).fill(0);for(let i=0;i<count;i++){let worker=new Worker('coop-worker.js?v=20261010-prefix-local');coopProposalWorkerPool.push(worker);readyJobs.push(new Promise((resolve,reject)=>{let onMessage=e=>{if(e.data?.type!=='initialized')return;worker.removeEventListener('message',onMessage);resolve()};worker.addEventListener('message',onMessage);worker.addEventListener('error',e=>reject(new Error(e.message||'Worker initialization error')),{once:true});worker.postMessage({type:'init',engineSource,chars:compactChars,workerIndex:i,constants:{ATTRS,MATCH,layerMultipliers:COOP_LAYER_MULTIPLIERS,damageBase:COOP_DAMAGE_BASE,damageScale:1}})}))}await Promise.all(readyJobs);return coopProposalWorkerPool}
+async function coopEnsureProposalWorkerPool(count){count=Math.max(1,count);if(coopProposalWorkerPoolSize===count&&coopProposalWorkerPool.length===count)return coopProposalWorkerPool;coopTerminateProposalWorkerPool();let engineSource=coopWorkerEngineSource(),compactChars=coopWorkerCharacters(),readyJobs=[];coopProposalWorkerPoolSize=count;coopProposalWorkerTimes=Array(count).fill(0);for(let i=0;i<count;i++){let worker=new Worker('coop-worker.js?v=20261010-expand-range16');coopProposalWorkerPool.push(worker);readyJobs.push(new Promise((resolve,reject)=>{let onMessage=e=>{if(e.data?.type!=='initialized')return;worker.removeEventListener('message',onMessage);resolve()};worker.addEventListener('message',onMessage);worker.addEventListener('error',e=>reject(new Error(e.message||'Worker initialization error')),{once:true});worker.postMessage({type:'init',engineSource,chars:compactChars,workerIndex:i,constants:{ATTRS,MATCH,layerMultipliers:COOP_LAYER_MULTIPLIERS,damageBase:COOP_DAMAGE_BASE,damageScale:1}})}))}await Promise.all(readyJobs);return coopProposalWorkerPool}
 function coopTerminateProposalWorkerPool(){for(let worker of coopProposalWorkerPool){if(worker._coopReject)worker._coopReject(new Error('計算を停止しました'));worker._coopReject=null;worker.terminate()};coopProposalWorkerPool=[];coopProposalWorkerPoolSize=0;coopProposalWorkerTimes=[]}
 
 function coopWorkerCount(total){let reported=Math.max(1,Number(navigator.hardwareConcurrency)||2);return Math.max(1,Math.min(16,reported,total))}
@@ -343,44 +343,41 @@ function coopProposalLimitPassedForNextSlot(items,slot){
   return kept;
 }
 async function coopProposalExpandEquivalentNonContinuous(items){
-  const source=items||[],out=[],seen=new Set(),total=source.length;
+  const source=items||[],out=[],seen=new Set(),tasks=[];
   function add(sourceIndex,ids){
     const item=source[sourceIndex],deck=ids.map(coopFindCharacter),key=coopProposalDeckKey(ids);
     const requiredMissing=ids.some((id,slot)=>coopProposalSlotNeedsCandidate(slot)&&!id);
     if(!item||!key||seen.has(key)||requiredMissing||coopProposalHasDuplicateInCompletedDeck(deck))return;
-    seen.add(key);
-    out.push({...item,ids:ids.slice(),deck,provisionalSlots:Array(COOP_SLOTS).fill(false),equivalentNonContinuous:true});
+    seen.add(key);out.push({...item,ids:ids.slice(),deck,provisionalSlots:Array(COOP_SLOTS).fill(false),equivalentNonContinuous:true});
   }
-  const tasks=[];
+  let totalCombinations=0;
   for(let sourceIndex=0;sourceIndex<source.length;sourceIndex++){
     const base=coopProposalItemDeck(source[sourceIndex]);if(base.length!==COOP_SLOTS)continue;
     const choices=[];
     for(let slot=0;slot<3;slot++){
-      const stored=coopProposalEquivalentNonContinuous[slot]||{};
-      const eq=slot===0?stored:stored.byPrefix?.get(coopProposalEquivalentPrefixKey(base,slot));
+      const stored=coopProposalEquivalentNonContinuous[slot]||{},eq=slot===0?stored:stored.byPrefix?.get(coopProposalEquivalentPrefixKey(base,slot));
       const baseId=coopCharacterKey(base[slot]),members=[],memberIds=new Set();
       for(const c of eq?.characters||[]){const id=coopCharacterKey(c);if(c&&id&&!memberIds.has(id)){memberIds.add(id);members.push(id)}}
-      const equivalent=!!baseId&&(baseId===String(eq?.representativeId||'')||memberIds.has(baseId));
-      choices[slot]=equivalent&&members.length?members:[baseId];
+      const equivalent=!!baseId&&(baseId===String(eq?.representativeId||'')||memberIds.has(baseId));choices[slot]=equivalent&&members.length?members:[baseId];
     }
-    tasks.push({sourceIndex,baseIds:coopProposalDeckIds(base),choices});
+    const combinations=choices[0].length*choices[1].length*choices[2].length;
+    tasks.push({sourceIndex,baseIds:coopProposalDeckIds(base),choices,combinations});totalCombinations+=combinations;
   }
-  if(typeof Worker==='undefined'||tasks.length<32){
-    let checked=0,generated=0;
-    for(const task of tasks){
-      for(const first of task.choices[0])for(const second of task.choices[1])for(const third of task.choices[2]){const ids=task.baseIds.slice();ids[0]=first;ids[1]=second;ids[2]=third;generated++;add(task.sourceIndex,ids)}
-      checked++;if(checked%100===0||checked===tasks.length){coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${checked.toLocaleString()} / ${tasks.length.toLocaleString()}件・展開${generated.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,checked,tasks.length,out.length,1);await coopYield()}
-    }
-    return out;
+  if(typeof Worker==='undefined'||totalCombinations<32){
+    let generated=0;
+    for(const task of tasks)for(let index=0;index<task.combinations;index++){let rest=index,n2=task.choices[2].length,n1=task.choices[1].length,i2=rest%n2;rest=Math.floor(rest/n2);let i1=rest%n1,i0=Math.floor(rest/n1),ids=task.baseIds.slice();ids[0]=task.choices[0][i0];ids[1]=task.choices[1][i1];ids[2]=task.choices[2][i2];generated++;add(task.sourceIndex,ids);if(generated%1000===0)await coopYield()}
+    coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・展開${generated.toLocaleString()} / ${totalCombinations.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,generated,totalCombinations,out.length,1);return out;
   }
-  const count=Math.min(4,coopWorkerCount(tasks.length)),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]),done=Array(count).fill(0),generated=Array(count).fill(0),jobId=++coopProposalWorkerJobSequence;
-  tasks.forEach((task,index)=>chunks[index%count].push(task));
+  const count=coopWorkerCount(totalCombinations),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]),loads=Array(count).fill(0),done=Array(count).fill(0),generated=Array(count).fill(0),jobId=++coopProposalWorkerJobSequence;
+  for(const task of tasks){
+    const unitSize=Math.max(1,Math.ceil(task.combinations/count));
+    for(let start=0;start<task.combinations;start+=unitSize){let target=0;for(let i=1;i<count;i++)if(loads[i]<loads[target])target=i;let end=Math.min(task.combinations,start+unitSize);chunks[target].push({sourceIndex:task.sourceIndex,baseIds:task.baseIds,choices:task.choices,start,end});loads[target]+=end-start}
+  }
   const jobs=workers.slice(0,count).map((worker,index)=>new Promise((resolve,reject)=>{
     const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
-    const update=()=>coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・元デッキ${done.reduce((a,b)=>a+b,0).toLocaleString()} / ${tasks.length.toLocaleString()}件・展開${generated.reduce((a,b)=>a+b,0).toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,done.reduce((a,b)=>a+b,0),tasks.length,out.length,count);
+    const update=()=>{let complete=done.reduce((a,b)=>a+b,0),made=generated.reduce((a,b)=>a+b,0);coopSetProposalProgress(`1～3枠目の非継続キャラを全通り展開中・展開${complete.toLocaleString()} / ${totalCombinations.toLocaleString()}通り・提案${out.length.toLocaleString()}件`,true,complete,totalCombinations,out.length,count)};
     const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='expandItems'){for(const row of m.items||[])add(row.sourceIndex,row.ids);done[index]=m.checked;generated[index]=m.generated;update()}else if(m.type==='expandProgress'){done[index]=m.checked;generated[index]=m.generated;update()}else if(m.type==='expandDone'){done[index]=m.checked;generated[index]=m.generated;cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message||'Worker error'))}};
-    const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
-    worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);worker.postMessage({type:'expand',jobId,tasks:chunks[index],constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
+    const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);worker.postMessage({type:'expand',jobId,tasks:chunks[index],constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
   }));
   await Promise.all(jobs);return out;
 }
