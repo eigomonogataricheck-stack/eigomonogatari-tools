@@ -106,7 +106,7 @@ function coopDetailPlace(base,ids){
   }
   return best;
 }
-async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='詳細計算'}={}){
+async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='詳細計算',readAheadBatches=1}={}){
   let previous=run+':seed',previousCount=1,checked=0;
   const phases=[previous];
   await coopDetailPut(db,previous,[{ids:Array(COOP_SLOTS).fill('')}]);
@@ -121,7 +121,14 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
       let after=null;
       while(true){
         await coopWaitIfProposalPaused();
-        const rows=await coopDetailRead(db,previous,after);if(!rows.length)break;
+        const rows=[];
+        for(let batch=0;batch<Math.max(1,Math.floor(Number(readAheadBatches)||1));batch++){
+          const part=await coopDetailRead(db,previous,after,COOP_DETAIL_BATCH);
+          if(!part.length)break;
+          rows.push(...part);after=part[part.length-1].key;
+          if(part.length<COOP_DETAIL_BATCH)break;
+        }
+        if(!rows.length)break;
         const baseChecked=checked,basePassed=passed,originalProgress=coopSetProposalProgress;
         const finalCountOnly=countOnly&&slot===COOP_SLOTS-1;  
         let items;  
@@ -130,7 +137,7 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
           items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly});  
         }finally{coopSetProposalProgress=originalProgress}  
         checked+=rows.length*pool.length;  
-        if(finalCountOnly){passed+=items.count||0;after=rows[rows.length-1].key;coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));continue}  
+        if(finalCountOnly){passed+=items.count||0;coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));continue}  
 for(const item of items){
           const deck=item.deck;
           if(slot===COOP_SLOTS-1&&coopProposalHasDuplicateInCompletedDeck(deck,totalDecks))continue;
@@ -138,7 +145,6 @@ for(const item of items){
           if(!(countOnly&&slot===COOP_SLOTS-1))pending.push({ids:coopProposalDeckIds(deck)});
           if(pending.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,phase,pending);pending=[]}
         }
-        after=rows[rows.length-1].key;
         coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));
       }
       if(pending.length)await coopDetailPut(db,phase,pending);
@@ -261,7 +267,7 @@ async function coopProposeDetailed(){
     const pools=needs.map((need,slot)=>need?(slot===0?coopProposalFirstCandidatesAll(chars):coopProposalPoolAll(slot)):[null]);
     // Freeze the original input mapping, including normal-mode automatic fixed positions.
     const base=Array.from({length:targetDecks},(_,row)=>coopProposalDeck(Array(COOP_SLOTS).fill(null),row));
-    initial=await coopDetailSearch(db,run+':initial',pools,targetDecks,{label:'詳細計算・初回'});
+    initial=await coopDetailSearch(db,run+':initial',pools,targetDecks,{label:'詳細計算・初回',readAheadBatches:4});
     const summary={finalItems:{length:0},counts:Array.from({length:COOP_SLOTS},()=>new Map())};
     await coopDetailWalk(db,initial.phase,row=>{coopDetailMergeUsage(summary,[{ids:row.ids,deck:row.ids.map(coopFindCharacter)}])});
     const topIds=coopDetailTopIds(summary),evaluation=run+':evaluation',ranking=run+':ranking';let buffer=[];
