@@ -1,4 +1,4 @@
-/* 英語物語 対戦ツール: cooperative damage calculator build 20261010-420-speed */
+/* 英語物語 対戦ツール: cooperative damage calculator build 20260924-419 */
 const COOP_LAYER_MULTIPLIERS=[2.5,2.5,8,10,50],COOP_DAMAGE_BASE=0.81,COOP_SLOTS=5,COOP_MAX_ROWS=5,COOP_STORAGE_KEY='eigoCoopCalculatorV1',COOP_HISTORY_KEY='eigoCoopProposalHistoryV1';
 const COOP_PROPOSAL_OVERSHOOT_LIMIT=30;
 let coopProposalResultTarget=12;
@@ -198,8 +198,11 @@ function coopProposalFirstCandidatesAll(all){
 function coopProposalLimitFirstPassed(items){
   let passed=items||[],nonContinuous=[],continuous=[],noSkill=[];
   for(let item of passed){let c=coopProposalItemDeck(item)[0];if(!c)continue;let effects=coopProposalFirstActiveEffects(c),isContinuous=effects.some(e=>effectDuration(e)>=2);if(isContinuous)continuous.push(item);else{nonContinuous.push(item);if(!effects.length)noSkill.push(item)}}
-  let representative=null;for(let item of noSkill){let c=coopProposalItemDeck(item)[0],current=representative?coopProposalItemDeck(representative)[0]:null;if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))representative=item}
-  if(!representative)for(let item of nonContinuous){let c=coopProposalItemDeck(item)[0],current=representative?coopProposalItemDeck(representative)[0]:null;if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))representative=item}
+  // A legendary representative would block every later legendary candidate during prefix evaluation.
+  // Prefer a non-legendary equivalent whenever one exists; use a legendary only when the group has no alternative.
+  const chooseFirstRepresentative=list=>{let source=list.filter(item=>!coopProposalIsLegendary(coopProposalItemDeck(item)[0]));if(!source.length)source=list;let selected=null;for(let item of source){let c=coopProposalItemDeck(item)[0],current=selected?coopProposalItemDeck(selected)[0]:null;if(!current||coopPower(c)<coopPower(current)||coopPower(c)===coopPower(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))selected=item}return selected};
+  let representative=chooseFirstRepresentative(noSkill);
+  if(!representative)representative=chooseFirstRepresentative(nonContinuous);
   let characters=[],seen=new Set();for(let item of nonContinuous){let c=coopProposalItemDeck(item)[0],id=coopCharacterKey(c);if(c&&id&&!seen.has(id)){seen.add(id);characters.push(c)}}
   coopProposalEquivalentNonContinuous[0]={representativeId:representative?coopCharacterKey(coopProposalItemDeck(representative)[0]):'',characters};coopProposalDeferredFirstCandidates=[];
   return representative?continuous.concat(representative):continuous
@@ -293,7 +296,7 @@ function coopWorkerCharacters(){return chars.map(coopWorkerCharacter)}
 function coopWorkerEnemies(){return coopEnemies.map(e=>({character:coopWorkerCharacter(e.character),hp:e.hp,attribute:e.attribute}))}
 function coopWorkerDecks(){return coopDecks.map(row=>row.map(coopWorkerCharacter))}
 function coopProposalWorkerTimingText(){let shown=coopProposalWorkerTimes.map((ms,i)=>ms>0?`W${i+1}:${(ms/1000).toFixed(2)}秒`:null).filter(Boolean);return shown.length?'Worker終了 '+shown.join(' / '):'Worker終了待ち'}
-async function coopEnsureProposalWorkerPool(count){count=Math.max(1,count);if(coopProposalWorkerPoolSize===count&&coopProposalWorkerPool.length===count)return coopProposalWorkerPool;coopTerminateProposalWorkerPool();let engineSource=coopWorkerEngineSource(),compactChars=coopWorkerCharacters(),readyJobs=[];coopProposalWorkerPoolSize=count;coopProposalWorkerTimes=Array(count).fill(0);for(let i=0;i<count;i++){let worker=new Worker('coop-worker.js?v=20261010-speed2');coopProposalWorkerPool.push(worker);readyJobs.push(new Promise((resolve,reject)=>{let onMessage=e=>{if(e.data?.type!=='initialized')return;worker.removeEventListener('message',onMessage);resolve()};worker.addEventListener('message',onMessage);worker.addEventListener('error',e=>reject(new Error(e.message||'Worker initialization error')),{once:true});worker.postMessage({type:'init',engineSource,chars:compactChars,workerIndex:i,constants:{ATTRS,MATCH,layerMultipliers:COOP_LAYER_MULTIPLIERS,damageBase:COOP_DAMAGE_BASE,damageScale:1}})}))}await Promise.all(readyJobs);return coopProposalWorkerPool}
+async function coopEnsureProposalWorkerPool(count){count=Math.max(1,count);if(coopProposalWorkerPoolSize===count&&coopProposalWorkerPool.length===count)return coopProposalWorkerPool;coopTerminateProposalWorkerPool();let engineSource=coopWorkerEngineSource(),compactChars=coopWorkerCharacters(),readyJobs=[];coopProposalWorkerPoolSize=count;coopProposalWorkerTimes=Array(count).fill(0);for(let i=0;i<count;i++){let worker=new Worker('coop-worker.js?v=20261010-expand-range16');coopProposalWorkerPool.push(worker);readyJobs.push(new Promise((resolve,reject)=>{let onMessage=e=>{if(e.data?.type!=='initialized')return;worker.removeEventListener('message',onMessage);resolve()};worker.addEventListener('message',onMessage);worker.addEventListener('error',e=>reject(new Error(e.message||'Worker initialization error')),{once:true});worker.postMessage({type:'init',engineSource,chars:compactChars,workerIndex:i,constants:{ATTRS,MATCH,layerMultipliers:COOP_LAYER_MULTIPLIERS,damageBase:COOP_DAMAGE_BASE,damageScale:1}})}))}await Promise.all(readyJobs);return coopProposalWorkerPool}
 function coopTerminateProposalWorkerPool(){for(let worker of coopProposalWorkerPool){if(worker._coopReject)worker._coopReject(new Error('計算を停止しました'));worker._coopReject=null;worker.terminate()};coopProposalWorkerPool=[];coopProposalWorkerPoolSize=0;coopProposalWorkerTimes=[]}
 
 function coopWorkerCount(total){let reported=Math.max(1,Number(navigator.hardwareConcurrency)||2);return Math.max(1,Math.min(16,reported,total))}
@@ -330,7 +333,8 @@ function coopProposalLimitPassedForNextSlot(items,slot){
     let id=coopCharacterKey(c);
     if(id&&!group.ids.has(id)){group.ids.add(id);group.characters.push(c)}
     let current=group.representative?coopProposalItemDeck(group.representative)[slot]:null;
-    if(!current||coopCharacterCost(c)>coopCharacterCost(current)||coopCharacterCost(c)===coopCharacterCost(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id))group.representative=item;
+    const candidateLegendary=coopProposalIsLegendary(c),currentLegendary=coopProposalIsLegendary(current);
+    if(!current||currentLegendary&&!candidateLegendary||currentLegendary===candidateLegendary&&(coopCharacterCost(c)>coopCharacterCost(current)||coopCharacterCost(c)===coopCharacterCost(current)&&Number(c.details?.id??c.id)<Number(current.details?.id??current.id)))group.representative=item;
   }
   let byPrefix=new Map(),kept=continuous.slice();
   for(let [key,group] of groups){
