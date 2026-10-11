@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261011-detail-8-progress-reset.
+/* Detailed cooperative proposal calculation, build 20261010-detail-7-prefix.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -171,25 +171,33 @@ async function coopDetailEvaluatePrefixBatch(prefixes,slot,totalDecks,label){
   })));
   return passedKeys;
 }
-async function coopDetailCountInitialDecks(db,phase,totalDecks,label='個別再計算'){
-  let sourcePhase=phase,ownedPhase=null;
-  try{
-    for(let slot=0;slot<COOP_SLOTS;slot++){
-      await coopWaitIfProposalPaused();
-      const prefixes=new Map();
-      await coopDetailWalk(db,sourcePhase,row=>{const ids=row.ids.map(String),key=ids.slice(0,slot+1).join('\u0001');if(!prefixes.has(key))prefixes.set(key,ids)});
-      if(!prefixes.size)return 0;
-      const passedKeys=await coopDetailEvaluatePrefixBatch([...prefixes.values()],slot,totalDecks,label);
-      if(slot===COOP_SLOTS-1)return passedKeys.size;
-      const nextPhase=`${phase}:prefix:${Date.now()}:${Math.random().toString(36).slice(2)}:${slot}`,pending=[];
-      await coopDetailWalk(db,sourcePhase,async row=>{const key=row.ids.slice(0,slot+1).map(String).join('\u0001');if(passedKeys.has(key)){pending.push({ids:row.ids});if(pending.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,nextPhase,pending.splice(0))}}});
-      if(pending.length)await coopDetailPut(db,nextPhase,pending);
-      if(ownedPhase)await coopDetailDelete(db,ownedPhase);
-      ownedPhase=nextPhase;sourcePhase=nextPhase;
-      if(!passedKeys.size)return 0;
+async function coopDetailCountInitialDecks(initialDeckIds,totalDecks,label='個別再計算'){
+  let survivors=initialDeckIds;
+  for(let slot=0;slot<COOP_SLOTS;slot++){
+    await coopWaitIfProposalPaused();
+    const prefixes=new Map();
+    for(let i=0;i<survivors.length;i++){
+      const ids=survivors[i],key=ids.slice(0,slot+1).join('\u0001');
+      if(!prefixes.has(key))prefixes.set(key,ids);
     }
-    return 0;
-  }finally{if(ownedPhase)await coopDetailDelete(db,ownedPhase).catch(()=>{})}
+    if(!prefixes.size)return 0;
+    const passedKeys=await coopDetailEvaluatePrefixBatch([...prefixes.values()],slot,totalDecks,label);
+    if(slot===COOP_SLOTS-1)return passedKeys.size;
+    const next=[];
+    for(let i=0;i<survivors.length;i++){
+      if((i&1023)===0){
+        await coopWaitIfProposalPaused();
+        coopSetProposalProgress(`${label}・${slot+1}枠目通過デッキ整理`,true,i,survivors.length,next.length,1);
+        await coopYield();
+      }
+      const ids=survivors[i],key=ids.slice(0,slot+1).join('\u0001');
+      if(passedKeys.has(key))next.push(ids);
+    }
+    coopSetProposalProgress(`${label}・${slot+1}枠目通過デッキ整理`,true,survivors.length,survivors.length,next.length,1);
+    survivors=next;
+    if(!survivors.length)return 0;
+  }
+  return 0;
 }
 
 async function coopDetailRankingPage(db,phase,offset,limit=COOP_DETAIL_PAGE){
@@ -288,7 +296,6 @@ async function coopDetailShowPage(){
 
 function coopDetailViewError(error){const result=$('coopDamageResult');if(result)result.textContent='保存済み結果の読込に失敗しました: '+String(error?.message||error)}
 async function coopProposeDetailed(){
-  const proposalRunToken=coopProposalRunToken;
   coopOverallReset(true);await coopProposalStartClock();coopDetailClearView();renderCoopProposalDecks([]);
   const db=await coopDetailOpenDatabase();
   // Delete only this tab's previous run; never clear another tab's calculation.
@@ -304,8 +311,8 @@ async function coopProposeDetailed(){
     // Freeze the original input mapping, including normal-mode automatic fixed positions.
     const base=Array.from({length:targetDecks},(_,row)=>coopProposalDeck(Array(COOP_SLOTS).fill(null),row));
     initial=await coopDetailSearch(db,run+':initial',pools,targetDecks,{label:'詳細計算・初回',readAheadBatches:4});
-    const summary={finalItems:{length:0},counts:Array.from({length:COOP_SLOTS},()=>new Map())};
-    await coopDetailWalk(db,initial.phase,row=>{coopDetailMergeUsage(summary,[{ids:row.ids,deck:row.ids.map(coopFindCharacter)}])});
+    const summary={finalItems:{length:0},counts:Array.from({length:COOP_SLOTS},()=>new Map())},initialDeckIds=[];
+    await coopDetailWalk(db,initial.phase,row=>{const ids=row.ids.map(String);initialDeckIds.push(ids);coopDetailMergeUsage(summary,[{ids,deck:ids.map(coopFindCharacter)}])});
     const topIds=coopDetailTopIds(summary),evaluation=run+':evaluation',ranking=run+':ranking';let buffer=[];
     await coopDetailWalk(db,initial.phase,async row=>{if(coopDetailIsTopDeck(row.ids,topIds,needs)){buffer.push({ids:row.ids});if(buffer.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,evaluation,buffer);buffer=[]}}});
     if(buffer.length)await coopDetailPut(db,evaluation,buffer);
@@ -330,7 +337,7 @@ async function coopProposeDetailed(){
         coopOverallProgress.base=20+80*(entry.number-1)/Math.max(1,evaluationCount);
         coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;
         coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>entry.placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
-        const detailCertainCount=await coopDetailCountInitialDecks(db,initial.phase,targetDecks,`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`);
+        const detailCertainCount=await coopDetailCountInitialDecks(initialDeckIds,targetDecks,`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`);
         rankingBatch.push({ids:entry.row.ids,detailCertainCount,placement:entry.placement.placements});rankCount++;
         coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
         if(coopProposalScaleHistory.length>100)coopProposalScaleHistory.splice(0,coopProposalScaleHistory.length-100);
@@ -351,7 +358,7 @@ async function coopProposeDetailed(){
     $('coopDamageResult').textContent=`初回確定撃破${initial.count.toLocaleString()}件 / 個別評価${rankCount.toLocaleString()}件${skipped?` / 配置不可${skipped}件`:''}`;
     coopOverallProgress.percent=100;completed=true;return rankCount;
   }finally{
-    if(proposalRunToken===coopProposalRunToken){coopDecks=originalDecks;coopVisibleRows=originalVisible;coopDetailMode=originalDetail;coopProposalTargetDecks=completed?targetDecks:originalTarget;coopProposalEnemySecondFixed=originalSecond;coopDetailCalculationActive=false;calculateCoop();coopProposalOrderCache.clear();coopTerminateProposalWorkerPool()}
-    if(!completed){coopDetailRuns.delete(run);if(proposalRunToken===coopProposalRunToken)coopDetailClearView();await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(run+':',run+':\uffff'))).catch(()=>{})}
+    coopDecks=originalDecks;coopVisibleRows=originalVisible;coopDetailMode=originalDetail;coopProposalTargetDecks=completed?targetDecks:originalTarget;coopProposalEnemySecondFixed=originalSecond;coopDetailCalculationActive=false;calculateCoop();coopProposalOrderCache.clear();coopTerminateProposalWorkerPool();
+    if(!completed){coopDetailRuns.delete(run);coopDetailClearView();await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(run+':',run+':\uffff'))).catch(()=>{})}
   }
 }
