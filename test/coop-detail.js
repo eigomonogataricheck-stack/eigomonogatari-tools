@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261010-detail-7-prefix.
+/* Detailed cooperative proposal calculation, build 20261011-detail-8-progress-reset.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -288,6 +288,7 @@ async function coopDetailShowPage(){
 
 function coopDetailViewError(error){const result=$('coopDamageResult');if(result)result.textContent='保存済み結果の読込に失敗しました: '+String(error?.message||error)}
 async function coopProposeDetailed(){
+  const proposalRunToken=coopProposalRunToken;
   coopOverallReset(true);await coopProposalStartClock();coopDetailClearView();renderCoopProposalDecks([]);
   const db=await coopDetailOpenDatabase();
   // Delete only this tab's previous run; never clear another tab's calculation.
@@ -350,7 +351,7 @@ async function coopProposeDetailed(){
     $('coopDamageResult').textContent=`初回確定撃破${initial.count.toLocaleString()}件 / 個別評価${rankCount.toLocaleString()}件${skipped?` / 配置不可${skipped}件`:''}`;
     coopOverallProgress.percent=100;completed=true;return rankCount;
   }finally{
-    coopDecks=originalDecks;coopVisibleRows=originalVisible;coopDetailMode=originalDetail;coopProposalTargetDecks=completed?targetDecks:originalTarget;coopProposalEnemySecondFixed=originalSecond;coopDetailCalculationActive=false;calculateCoop();coopProposalOrderCache.clear();coopTerminateProposalWorkerPool();
-    if(!completed){coopDetailRuns.delete(run);coopDetailClearView();await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(run+':',run+':\uffff'))).catch(()=>{})}
+    if(proposalRunToken===coopProposalRunToken){coopDecks=originalDecks;coopVisibleRows=originalVisible;coopDetailMode=originalDetail;coopProposalTargetDecks=completed?targetDecks:originalTarget;coopProposalEnemySecondFixed=originalSecond;coopDetailCalculationActive=false;calculateCoop();coopProposalOrderCache.clear();coopTerminateProposalWorkerPool()}
+    if(!completed){coopDetailRuns.delete(run);if(proposalRunToken===coopProposalRunToken)coopDetailClearView();await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(run+':',run+':\uffff'))).catch(()=>{})}
   }
 }
