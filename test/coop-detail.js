@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261012-detail-10-pair-prefix.
+/* Detailed cooperative proposal calculation, build 20261012-detail-11-input-progress.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -166,14 +166,14 @@ function coopDetailPartitionMembers(members,keyOf){
   for(const member of members){const key=keyOf(member);let group=groups.get(key);if(!group){group=[];groups.set(key,group)}group.push(member)}
   return groups;
 }
-async function coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label){
+async function coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label,progressInfo){
   if(!tasks.length)return new Set();
   const count=coopWorkerCount(tasks.length),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]),loads=Array(count).fill(0);
   for(const task of tasks){let target=0;for(let i=1;i<count;i++)if(loads[i]<loads[target])target=i;chunks[target].push({taskId:task.taskId,placementRows:task.placementRows.map(row=>row.map(coopCharacterKey)),calculationIds:task.calculationIds});loads[target]++}
   const checkedBy=Array(count).fill(0),passedBy=Array(count).fill(0),passedTaskIds=new Set(),jobId=++coopProposalWorkerJobSequence,compactEnemies=coopWorkerEnemies();
   await Promise.all(workers.slice(0,count).map((worker,index)=>new Promise((resolve,reject)=>{
     const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
-    const update=()=>coopSetProposalProgress(`${label}・${slot+1}枠目・入力配置×計算接頭辞`,true,checkedBy.reduce((a,b)=>a+b,0),tasks.length,passedBy.reduce((a,b)=>a+b,0),count);
+    const update=()=>{const inputName=slot===COOP_SLOTS-1?'完成入力デッキ':'入力候補',info=progressInfo||{};coopSetProposalProgress(`${label}・${slot+1}枠目・${inputName} ${Number(info.inputCandidates||0).toLocaleString()} / ${Number(info.inputTotal||0).toLocaleString()}件・入力接頭辞 ${Number(info.inputPrefixes||0).toLocaleString()}件・計算接頭辞 ${Number(info.calculationPrefixes||0).toLocaleString()}件`,true,checkedBy.reduce((a,b)=>a+b,0),tasks.length,passedBy.reduce((a,b)=>a+b,0),count)};
     const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='detailPairProgress'){checkedBy[index]=m.checked;passedBy[index]=m.passed;update()}else if(m.type==='detailPairDone'){checkedBy[index]=m.checked;passedBy[index]=m.passed;for(const id of m.passedTaskIds||[])passedTaskIds.add(id);cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message))}};
     const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
     worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);
@@ -182,25 +182,32 @@ async function coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label){
   return passedTaskIds;
 }
 async function coopDetailEvaluateAllPairs(inputEntries,calculationDeckIds,totalDecks,label='詳細一括再計算'){
+  const inputTotal=inputEntries.length;
   let states=[{inputMembers:inputEntries,calculationMembers:calculationDeckIds}];
   const scores=new Map(inputEntries.map(entry=>[entry.inputKey,0]));
   for(let slot=0;slot<COOP_SLOTS;slot++){
     await coopWaitIfProposalPaused();
-    const tasks=[];let taskSequence=0;
+    const tasks=[];let taskSequence=0,inputPrefixKeys=new Set(),calculationPrefixKeys=new Set(),inputCandidateKeys=new Set();
     for(const state of states){
       const inputGroups=coopDetailPartitionMembers(state.inputMembers,entry=>coopDetailPlacementPrefixKey(entry.placement.rows,slot));
       const calculationGroups=coopDetailPartitionMembers(state.calculationMembers,ids=>coopDetailCalculationPrefixKey(ids,slot));
+      for(const entry of state.inputMembers)inputCandidateKeys.add(entry.inputKey);
+      for(const key of inputGroups.keys())inputPrefixKeys.add(key);
+      for(const key of calculationGroups.keys())calculationPrefixKeys.add(key);
       for(const inputMembers of inputGroups.values())for(const calculationMembers of calculationGroups.values()){
         const representativeInput=inputMembers[0],representativeCalculation=calculationMembers[0];
         tasks.push({taskId:`${slot}:${taskSequence++}`,inputMembers,calculationMembers,placementRows:representativeInput.placement.rows,calculationIds:representativeCalculation});
       }
     }
-    const passedTaskIds=await coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label),next=[];
+    const progressInfo={inputCandidates:inputCandidateKeys.size,inputTotal,inputPrefixes:inputPrefixKeys.size,calculationPrefixes:calculationPrefixKeys.size};
+    coopSetProposalProgress(`${label}・${slot+1}枠目・${slot===COOP_SLOTS-1?'完成入力デッキ':'入力候補'} ${progressInfo.inputCandidates.toLocaleString()} / ${inputTotal.toLocaleString()}件・入力接頭辞 ${progressInfo.inputPrefixes.toLocaleString()}件・計算接頭辞 ${progressInfo.calculationPrefixes.toLocaleString()}件`,true,0,tasks.length,0,coopWorkerCount(tasks.length));
+    const passedTaskIds=await coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label,progressInfo),next=[];
     for(const task of tasks)if(passedTaskIds.has(task.taskId)){
       if(slot===COOP_SLOTS-1){for(const entry of task.inputMembers)scores.set(entry.inputKey,(scores.get(entry.inputKey)||0)+task.calculationMembers.length)}
       else next.push({inputMembers:task.inputMembers,calculationMembers:task.calculationMembers});
     }
-    coopSetProposalProgress(`${label}・${slot+1}枠目・通過組整理`,true,tasks.length,tasks.length,next.length,1);
+    const passedInputKeys=new Set();for(const task of tasks)if(passedTaskIds.has(task.taskId))for(const entry of task.inputMembers)passedInputKeys.add(entry.inputKey);
+    coopSetProposalProgress(`${label}・${slot+1}枠目・通過組整理・通過入力候補 ${passedInputKeys.size.toLocaleString()} / ${inputTotal.toLocaleString()}件`,true,tasks.length,tasks.length,next.length,1);
     states=next;
     if(slot<COOP_SLOTS-1&&!states.length)break;
     await coopYield();
