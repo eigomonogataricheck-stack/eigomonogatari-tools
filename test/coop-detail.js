@@ -1,4 +1,4 @@
-/* Detailed cooperative proposal calculation, build 20261010-detail-7-prefix.
+/* Detailed cooperative proposal calculation, build 20261012-detail-10-pair-prefix.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
@@ -157,47 +157,55 @@ for(const item of items){
   }catch(error){for(let phase of phases)await coopDetailDelete(db,phase).catch(()=>{});throw error}
   finally{coopProposalOrderCache.clear()}
 }
-async function coopDetailEvaluatePrefixBatch(prefixes,slot,totalDecks,label){
-  const count=coopWorkerCount(prefixes.length),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]);
-  for(let i=0;i<prefixes.length;i++)chunks[i%count].push(prefixes[i]);
-  const checkedBy=Array(count).fill(0),passedBy=Array(count).fill(0),passedKeys=new Set(),jobId=++coopProposalWorkerJobSequence,compactEnemies=coopWorkerEnemies(),compactDecks=coopWorkerDecks();
+function coopDetailPlacementPrefixKey(rows,slot){
+  return rows.map(row=>row.slice(0,slot+1).map(coopCharacterKey).join('\u0001')).join('\u0002');
+}
+function coopDetailCalculationPrefixKey(ids,slot){return ids.slice(0,slot+1).map(String).join('\u0001')}
+function coopDetailPartitionMembers(members,keyOf){
+  const groups=new Map();
+  for(const member of members){const key=keyOf(member);let group=groups.get(key);if(!group){group=[];groups.set(key,group)}group.push(member)}
+  return groups;
+}
+async function coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label){
+  if(!tasks.length)return new Set();
+  const count=coopWorkerCount(tasks.length),workers=await coopEnsureProposalWorkerPool(count),chunks=Array.from({length:count},()=>[]),loads=Array(count).fill(0);
+  for(const task of tasks){let target=0;for(let i=1;i<count;i++)if(loads[i]<loads[target])target=i;chunks[target].push({taskId:task.taskId,placementRows:task.placementRows.map(row=>row.map(coopCharacterKey)),calculationIds:task.calculationIds});loads[target]++}
+  const checkedBy=Array(count).fill(0),passedBy=Array(count).fill(0),passedTaskIds=new Set(),jobId=++coopProposalWorkerJobSequence,compactEnemies=coopWorkerEnemies();
   await Promise.all(workers.slice(0,count).map((worker,index)=>new Promise((resolve,reject)=>{
     const cleanup=()=>{worker.removeEventListener('message',onMessage);worker.removeEventListener('error',onError)};
-    const update=()=>coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checkedBy.reduce((a,b)=>a+b,0),prefixes.length,passedBy.reduce((a,b)=>a+b,0),count);
-    const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='detailPrefixProgress'){checkedBy[index]=m.checked;passedBy[index]=m.passed;update()}else if(m.type==='detailPrefixDone'){checkedBy[index]=m.checked;passedBy[index]=m.passed;for(const key of m.passedKeys||[])passedKeys.add(key);cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message))}};
+    const update=()=>coopSetProposalProgress(`${label}・${slot+1}枠目・入力配置×計算接頭辞`,true,checkedBy.reduce((a,b)=>a+b,0),tasks.length,passedBy.reduce((a,b)=>a+b,0),count);
+    const onMessage=event=>{const m=event.data||{};if(m.jobId!==jobId)return;if(m.type==='detailPairProgress'){checkedBy[index]=m.checked;passedBy[index]=m.passed;update()}else if(m.type==='detailPairDone'){checkedBy[index]=m.checked;passedBy[index]=m.passed;for(const id of m.passedTaskIds||[])passedTaskIds.add(id);cleanup();update();resolve()}else if(m.type==='error'){cleanup();reject(new Error(m.message))}};
     const onError=event=>{cleanup();reject(new Error(event.message||'Worker error'))};
     worker.addEventListener('message',onMessage);worker.addEventListener('error',onError);
-    worker.postMessage({type:'detailPrefix',jobId,prefixIds:chunks[index],slot,enemies:compactEnemies,decks:compactDecks,visibleRows:coopVisibleRows,detailMode:coopDetailMode,targetDecks:totalDecks,enemySecondFixed:coopProposalEnemySecondFixed,constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
+    worker.postMessage({type:'detailPair',jobId,tasks:chunks[index],slot,enemies:compactEnemies,visibleRows:totalDecks,detailMode:true,targetDecks:totalDecks,enemySecondFixed:coopProposalEnemySecondFixed,constants:{damageBase:coopFixedDamageMultiplier(),damageScale:1}});
   })));
-  return passedKeys;
+  return passedTaskIds;
 }
-async function coopDetailCountInitialDecks(initialDeckIds,totalDecks,label='個別再計算'){
-  let survivors=initialDeckIds;
+async function coopDetailEvaluateAllPairs(inputEntries,calculationDeckIds,totalDecks,label='詳細一括再計算'){
+  let states=[{inputMembers:inputEntries,calculationMembers:calculationDeckIds}];
+  const scores=new Map(inputEntries.map(entry=>[entry.inputKey,0]));
   for(let slot=0;slot<COOP_SLOTS;slot++){
     await coopWaitIfProposalPaused();
-    const prefixes=new Map();
-    for(let i=0;i<survivors.length;i++){
-      const ids=survivors[i],key=ids.slice(0,slot+1).join('\u0001');
-      if(!prefixes.has(key))prefixes.set(key,ids);
-    }
-    if(!prefixes.size)return 0;
-    const passedKeys=await coopDetailEvaluatePrefixBatch([...prefixes.values()],slot,totalDecks,label);
-    if(slot===COOP_SLOTS-1)return passedKeys.size;
-    const next=[];
-    for(let i=0;i<survivors.length;i++){
-      if((i&1023)===0){
-        await coopWaitIfProposalPaused();
-        coopSetProposalProgress(`${label}・${slot+1}枠目通過デッキ整理`,true,i,survivors.length,next.length,1);
-        await coopYield();
+    const tasks=[];let taskSequence=0;
+    for(const state of states){
+      const inputGroups=coopDetailPartitionMembers(state.inputMembers,entry=>coopDetailPlacementPrefixKey(entry.placement.rows,slot));
+      const calculationGroups=coopDetailPartitionMembers(state.calculationMembers,ids=>coopDetailCalculationPrefixKey(ids,slot));
+      for(const inputMembers of inputGroups.values())for(const calculationMembers of calculationGroups.values()){
+        const representativeInput=inputMembers[0],representativeCalculation=calculationMembers[0];
+        tasks.push({taskId:`${slot}:${taskSequence++}`,inputMembers,calculationMembers,placementRows:representativeInput.placement.rows,calculationIds:representativeCalculation});
       }
-      const ids=survivors[i],key=ids.slice(0,slot+1).join('\u0001');
-      if(passedKeys.has(key))next.push(ids);
     }
-    coopSetProposalProgress(`${label}・${slot+1}枠目通過デッキ整理`,true,survivors.length,survivors.length,next.length,1);
-    survivors=next;
-    if(!survivors.length)return 0;
+    const passedTaskIds=await coopDetailEvaluatePairTasks(tasks,slot,totalDecks,label),next=[];
+    for(const task of tasks)if(passedTaskIds.has(task.taskId)){
+      if(slot===COOP_SLOTS-1){for(const entry of task.inputMembers)scores.set(entry.inputKey,(scores.get(entry.inputKey)||0)+task.calculationMembers.length)}
+      else next.push({inputMembers:task.inputMembers,calculationMembers:task.calculationMembers});
+    }
+    coopSetProposalProgress(`${label}・${slot+1}枠目・通過組整理`,true,tasks.length,tasks.length,next.length,1);
+    states=next;
+    if(slot<COOP_SLOTS-1&&!states.length)break;
+    await coopYield();
   }
-  return 0;
+  return scores;
 }
 
 async function coopDetailRankingPage(db,phase,offset,limit=COOP_DETAIL_PAGE){
@@ -317,35 +325,28 @@ async function coopProposeDetailed(){
     await coopDetailWalk(db,initial.phase,async row=>{if(coopDetailIsTopDeck(row.ids,topIds,needs)){buffer.push({ids:row.ids});if(buffer.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,evaluation,buffer);buffer=[]}}});
     if(buffer.length)await coopDetailPut(db,evaluation,buffer);
     const evaluationCount=await coopDetailCount(db,evaluation);coopOverallProgress.percent=20;
-    // Individual scoring reuses the complete decks found by the initial calculation.
-    // Do not recombine the per-slot characters into new decks here.
-    let evaluated=0,evaluationAfter=null;
-    const COOP_DETAIL_EVALUATION_BATCH=16;
+    const inputEntries=[];let evaluationAfter=null,evaluated=0;
     while(true){
       await coopWaitIfProposalPaused();
-      const evaluationRows=await coopDetailRead(db,evaluation,evaluationAfter,COOP_DETAIL_EVALUATION_BATCH);
+      const evaluationRows=await coopDetailRead(db,evaluation,evaluationAfter,COOP_DETAIL_BATCH);
       if(!evaluationRows.length)break;
       evaluationAfter=evaluationRows[evaluationRows.length-1].key;
-      const prepared=[];
       for(const row of evaluationRows){
         const placement=coopDetailPlace(base,row.ids);evaluated++;
         if(!placement){skipped++;continue}
-        prepared.push({row,placement,number:evaluated});
+        inputEntries.push({inputKey:row.deckKey||coopProposalDeckKey(row.ids),row,placement});
       }
-      const rankingBatch=[];
-      for(const entry of prepared){
-        coopOverallProgress.base=20+80*(entry.number-1)/Math.max(1,evaluationCount);
-        coopOverallProgress.span=80/Math.max(1,evaluationCount);coopOverallProgress.slot=1;
-        coopDecks=Array.from({length:COOP_MAX_ROWS},(_,i)=>entry.placement.rows[i]?.slice()||Array(COOP_SLOTS).fill(null));coopVisibleRows=targetDecks;coopDetailMode=true;
-        const detailCertainCount=await coopDetailCountInitialDecks(initialDeckIds,targetDecks,`個別再計算 ${entry.number.toLocaleString()} / ${evaluationCount.toLocaleString()}`);
-        rankingBatch.push({ids:entry.row.ids,detailCertainCount,placement:entry.placement.placements});rankCount++;
-        coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
-        if(coopProposalScaleHistory.length>100)coopProposalScaleHistory.splice(0,coopProposalScaleHistory.length-100);
-      }
-      if(rankingBatch.length)await coopDetailPut(db,ranking,rankingBatch);
-      coopOverallProgress.percent=20+80*evaluated/Math.max(1,evaluationCount);
+      coopSetProposalProgress('詳細一括再計算・入力デッキ配置準備',true,evaluated,evaluationCount,inputEntries.length,1);
       await coopYield();
     }
+    const scores=await coopDetailEvaluateAllPairs(inputEntries,initialDeckIds,targetDecks,'詳細一括再計算');
+    const rankingBatch=[];
+    for(let i=0;i<inputEntries.length;i++){
+      const entry=inputEntries[i],detailCertainCount=scores.get(entry.inputKey)||0;
+      rankingBatch.push({ids:entry.row.ids,detailCertainCount,placement:entry.placement.placements});rankCount++;
+      if(rankingBatch.length>=COOP_DETAIL_BATCH){await coopDetailPut(db,ranking,rankingBatch.splice(0));coopSetProposalProgress('詳細一括再計算・ランキング保存',true,i+1,inputEntries.length,rankCount,1);await coopYield()}
+    }
+    if(rankingBatch.length)await coopDetailPut(db,ranking,rankingBatch);
     await coopDetailDelete(db,evaluation);
     coopDecks=originalDecks.map(r=>r.slice());coopVisibleRows=originalVisible;coopDetailMode=originalDetail;
     coopDetailUsageSummary=summary;coopRenderProposalUsage([],true);
