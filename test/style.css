@@ -1182,3 +1182,95 @@ html body #page-coop .coop-action-group .coop-proposal-deck-count,html body #pag
 #coopDetailPager > .coop-count-control .coop-styled-select{width:auto!important;min-width:96px!important}
 #coopDetailPager > .coop-count-control .coop-styled-select-button{width:auto!important;min-width:96px!important;min-height:40px!important}
 @media(max-width:540px){#coopDetailPager{gap:7px!important}#coopDetailPager .coop-detail-toggle-row{gap:6px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{padding:7px 9px!important;gap:6px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{font-size:.74rem!important}#coopDetailPager > .coop-count-control{flex-basis:100%!important}}
+
+/* build 20261014-401: cooperative buttons unified with calculator UI */
+#page-coop .reset-btn,
+#page-coop .mini-reset,
+#page-coop .coop-all-decks-toggle,
+#page-coop .coop-proposal-copy,
+#coopProposalCalculationDialog button,
+#coopProposalIntro button,
+#coopMillionWarning button {
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 7px 11px !important;
+  border: 1px solid #a9adb2 !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  color: #24282c !important;
+  font-size: .74rem !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  box-shadow: none !important;
+  white-space: nowrap !important;
+}
+#page-coop .reset-btn:hover,
+#page-coop .mini-reset:hover,
+#page-coop .coop-all-decks-toggle:hover,
+#page-coop .coop-proposal-copy:hover,
+#coopProposalCalculationDialog button:hover,
+#coopProposalIntro button:hover,
+#coopMillionWarning button:hover {
+  background: #f5f7fa !important;
+  border-color: #8f98a3 !important;
+}
+#page-coop .reset-btn:focus-visible,
+#page-coop .mini-reset:focus-visible,
+#page-coop .coop-all-decks-toggle:focus-visible,
+#page-coop .coop-proposal-copy:focus-visible,
+#coopProposalCalculationDialog button:focus-visible,
+#coopProposalIntro button:focus-visible,
+#coopMillionWarning button:focus-visible {
+  outline: 2px solid #8aa4c8 !important;
+  outline-offset: 2px !important;
+}
+#page-coop .coop-propose,
+#coopProposalIntroExhaustive,
+#coopProposalIntroDetailed,
+#coopMillionContinue,
+#coopCalculationResume {
+  border-color: #8aa4c8 !important;
+  color: #0b57d0 !important;
+  background: #fff !important;
+}
+#page-coop .danger,
+#coopProposalCalculationDialog .danger,
+#coopMillionWarning .danger {
+  border-color: #e1aaa5 !important;
+  color: #b42318 !important;
+  background: #fff !important;
+}
+#coopProposalCalculationDialog .coop-calculation-dialog-actions,
+#coopProposalIntro .coop-proposal-intro-actions,
+#coopMillionWarning .coop-proposal-intro-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+#coopProposalCalculationDialog .coop-calculation-dialog-actions > button,
+#coopProposalIntro .coop-proposal-intro-actions > button,
+#coopMillionWarning .coop-proposal-intro-actions > button {
+  min-width: 112px !important;
+}
+@media(max-width:999px) {
+  #page-coop .reset-btn,
+  #page-coop .mini-reset,
+  #page-coop .coop-all-decks-toggle,
+  #page-coop .coop-proposal-copy,
+  #coopProposalCalculationDialog button,
+  #coopProposalIntro button,
+  #coopMillionWarning button {
+    min-height: 40px !important;
+    height: 40px !important;
+    padding: 7px 9px !important;
+    font-size: .68rem !important;
+  }
+  #coopProposalCalculationDialog .coop-calculation-dialog-actions > button,
+  #coopProposalIntro .coop-proposal-intro-actions > button,
+  #coopMillionWarning .coop-proposal-intro-actions > button {
+    flex: 1 1 120px !important;
+    min-width: 0 !important;
+  }
+}
