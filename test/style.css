@@ -1274,3 +1274,79 @@ html body #page-coop .coop-action-group .coop-proposal-deck-count,html body #pag
     min-width: 0 !important;
   }
 }
+
+/* build 20261014-402: final calculator-style button normalization */
+html body #page-coop button.reset-btn,
+html body #page-coop button.mini-reset,
+html body #page-coop button.detail-mode-btn,
+html body #page-coop button.coop-all-decks-toggle,
+html body #page-coop button.coop-proposal-copy,
+html body #coopProposalCalculationDialog .coop-calculation-dialog-actions > button,
+html body #coopProposalIntro .coop-proposal-intro-actions > button,
+html body #coopMillionWarning .coop-proposal-intro-actions > button {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid #a9adb2 !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  color: #24282c !important;
+  font-size: .74rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+html body #page-coop .coop-action-items > button {
+  flex: 1 1 150px !important;
+}
+html body #page-coop .coop-deck-actions > button {
+  flex: 1 1 0 !important;
+}
+html body #coopProposalCalculationDialog .coop-calculation-dialog-actions > button,
+html body #coopProposalIntro .coop-proposal-intro-actions > button,
+html body #coopMillionWarning .coop-proposal-intro-actions > button {
+  flex: 1 1 0 !important;
+  width: 0 !important;
+  min-width: 120px !important;
+  max-width: none !important;
+}
+html body #page-coop button.coop-propose,
+html body #coopProposalIntroExhaustive,
+html body #coopProposalIntroDetailed,
+html body #coopMillionContinue,
+html body #coopCalculationResume {
+  border-color: #0b57d0 !important;
+  background: #0b57d0 !important;
+  color: #fff !important;
+}
+html body #page-coop button.danger,
+html body #coopProposalCalculationDialog button.danger,
+html body #coopMillionWarning button.danger {
+  border-color: #e1aaa5 !important;
+  background: #fff !important;
+  color: #b42318 !important;
+}
+@media(max-width:999px){
+  html body #page-coop button.reset-btn,
+  html body #page-coop button.mini-reset,
+  html body #page-coop button.detail-mode-btn,
+  html body #page-coop button.coop-all-decks-toggle,
+  html body #page-coop button.coop-proposal-copy {
+    min-height: 40px !important;
+    height: 40px !important;
+    padding: 0 9px !important;
+    font-size: .68rem !important;
+  }
+  html body #page-coop .coop-action-items > button {
+    flex-basis: calc(50% - 4px) !important;
+  }
+}
