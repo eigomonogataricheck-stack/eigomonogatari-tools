@@ -1350,3 +1350,135 @@ html body #coopMillionWarning button.danger {
     flex-basis: calc(50% - 4px) !important;
   }
 }
+
+/* build 20261014-403: cooperative control family consistency fix */
+html body #page-coop .coop-action-items{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:6px!important;
+  width:100%!important;
+}
+html body #page-coop .coop-self-toggle,
+html body #page-coop .coop-proposal-progress-toggle,
+html body #page-coop .coop-question-level,
+html body #page-coop .coop-proposal-deck-count{
+  box-sizing:border-box!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:0!important;
+  min-height:40px!important;
+  height:40px!important;
+  margin:0!important;
+  padding:0 10px!important;
+  border:1px solid #a9adb2!important;
+  border-radius:7px!important;
+  background:#fff!important;
+  color:#24282c!important;
+  font-size:.74rem!important;
+  font-weight:700!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+html body #page-coop .coop-self-toggle,
+html body #page-coop .coop-proposal-progress-toggle{
+  gap:7px!important;
+}
+html body #page-coop .coop-self-toggle input,
+html body #page-coop .coop-proposal-progress-toggle input{
+  flex:0 0 auto!important;
+  width:18px!important;
+  height:18px!important;
+  margin:0!important;
+}
+html body #page-coop .coop-question-level,
+html body #page-coop .coop-proposal-deck-count{
+  gap:7px!important;
+  padding:0 6px 0 10px!important;
+}
+html body #page-coop .coop-question-level .coop-styled-select,
+html body #page-coop .coop-proposal-deck-count .coop-styled-select{
+  width:auto!important;
+  min-width:72px!important;
+  height:32px!important;
+}
+html body #page-coop .coop-question-level .coop-styled-select-button,
+html body #page-coop .coop-proposal-deck-count .coop-styled-select-button{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 14px!important;
+  align-items:center!important;
+  gap:5px!important;
+  width:100%!important;
+  min-width:72px!important;
+  max-width:none!important;
+  height:32px!important;
+  min-height:32px!important;
+  padding:0 7px 0 9px!important;
+  border:1px solid #b8c6d8!important;
+  border-radius:999px!important;
+  background:#fff!important;
+  color:#24282c!important;
+  font-size:.74rem!important;
+  font-weight:700!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+html body #page-coop .coop-question-level .coop-styled-select-button::after,
+html body #page-coop .coop-proposal-deck-count .coop-styled-select-button::after{
+  justify-self:end!important;
+  margin:0!important;
+  color:#46566f!important;
+  font-size:.72rem!important;
+}
+html body #page-coop .coop-action-items > button.reset-btn{
+  flex:0 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  height:40px!important;
+  min-height:40px!important;
+  padding:0 10px!important;
+  font-size:.74rem!important;
+  font-weight:700!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+html body #page-coop .coop-action-group:last-child .coop-action-items > button.reset-btn{
+  flex:1 1 0!important;
+  padding-inline:7px!important;
+  font-size:.68rem!important;
+}
+html body #page-coop button.coop-propose:hover,
+html body #page-coop button.coop-propose:focus-visible{
+  border-color:#0b57d0!important;
+  background:#0b57d0!important;
+  color:#fff!important;
+}
+html body #page-coop .coop-action-items > button,
+html body #page-coop .coop-self-toggle,
+html body #page-coop .coop-proposal-progress-toggle,
+html body #page-coop .coop-question-level,
+html body #page-coop .coop-proposal-deck-count,
+html body #page-coop .coop-styled-select-button{
+  font-family:system-ui,sans-serif!important;
+  letter-spacing:0!important;
+}
+@media(max-width:999px){
+  html body #page-coop .coop-action-items{flex-wrap:wrap!important}
+  html body #page-coop .coop-action-group:last-child .coop-action-items{flex-wrap:nowrap!important}
+  html body #page-coop .coop-self-toggle,
+  html body #page-coop .coop-proposal-progress-toggle,
+  html body #page-coop .coop-question-level,
+  html body #page-coop .coop-proposal-deck-count,
+  html body #page-coop .coop-action-items > button.reset-btn{
+    min-height:40px!important;
+    height:40px!important;
+    font-size:.68rem!important;
+  }
+  html body #page-coop .coop-action-group:last-child .coop-action-items > button.reset-btn{
+    flex:1 1 0!important;
+    min-width:0!important;
+    padding-inline:4px!important;
+    font-size:.58rem!important;
+  }
+}
