@@ -1489,10 +1489,14 @@ html body #page-coop .coop-condition-group .coop-self-toggle input{
   html body #page-coop .coop-decks .coop-proposal-group{grid-column:1/-1!important;grid-row:1!important;min-width:0!important}
   html body #page-coop .coop-decks .coop-condition-group{grid-column:1!important;grid-row:2!important;min-width:0!important}
   html body #page-coop .coop-decks .coop-organize-group{grid-column:2!important;grid-row:2!important;min-width:0!important}
-  html body #page-coop .coop-proposal-group .coop-action-items{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;gap:7px!important;width:100%!important;min-width:0!important;align-items:end!important}
+  html body #page-coop .coop-proposal-deck-count,html body #page-coop .coop-proposal-deck-count .coop-styled-select,html body #page-coop .coop-proposal-deck-count .coop-styled-select-button{width:100%!important;min-width:0!important;max-width:none!important}
+  html body #page-coop .coop-condition-group .coop-self-toggle{width:100%!important;min-width:0!important;max-width:none!important}
+  html body #page-coop .coop-proposal-group .coop-action-items{display:grid!important;grid-template-columns:minmax(0,28%) minmax(0,72%)!important;gap:7px!important;width:100%!important;min-width:0!important;align-items:end!important}
   html body #page-coop .coop-condition-group .coop-action-items,
-  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls{display:grid!important;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)!important;gap:6px!important;width:100%!important;min-width:0!important;align-items:end!important}
-  html body #page-coop .coop-organize-group .coop-action-items{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important;align-items:stretch!important}
+  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls{display:grid!important;grid-template-columns:minmax(0,65%) minmax(0,35%)!important;gap:6px!important;width:100%!important;min-width:0!important;align-items:end!important}
+  html body #page-coop .coop-organize-group .coop-action-items{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:column!important;gap:6px!important;width:100%!important;min-width:0!important;align-items:stretch!important}
+  html body #page-coop .coop-organize-group #coopKeepDropCharacters{grid-column:1!important}
+  html body #page-coop .coop-organize-group #coopDeckReset{grid-column:2!important}
   html body #page-coop #coopPropose,
   html body #page-coop .coop-condition-group .coop-self-toggle,
   html body #page-coop .coop-organize-group #coopKeepDropCharacters,
