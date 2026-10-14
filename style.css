@@ -1791,3 +1791,125 @@ html body #page-coop:not(.coop-detail-on) #coopProposalUsageResults:not([hidden]
     overflow-wrap:anywhere!important;
   }
 }
+
+/* build 20261014-434: restore compact mobile action layout */
+@media(max-width:999px){
+  html body #page-coop .coop-decks .coop-section-actions{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    align-items:start!important;
+  }
+  html body #page-coop .coop-decks .coop-section-actions > .coop-proposal-group{
+    grid-column:1 / -1!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-decks .coop-section-actions > .coop-condition-group{
+    grid-column:1!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-decks .coop-section-actions > .coop-organize-group{
+    grid-column:2!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-decks .coop-section-actions > fieldset.coop-action-group{
+    display:flex!important;
+    flex-direction:column!important;
+    margin:0!important;
+    padding:7px!important;
+    height:auto!important;
+    min-height:0!important;
+    box-sizing:border-box!important;
+  }
+  html body #page-coop .coop-proposal-group .coop-action-items{
+    display:grid!important;
+    grid-template-columns:160px minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:end!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls,
+  html body #page-coop .coop-organize-group .coop-action-items{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    align-items:end!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-proposal-deck-count,
+  html body #page-coop .coop-question-level{width:100%!important;min-width:0!important}
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select,
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select-button,
+  html body #page-coop #coopPropose,
+  html body #page-coop .coop-condition-group .coop-self-toggle,
+  html body #page-coop .coop-question-level .coop-styled-select,
+  html body #page-coop .coop-question-level .coop-styled-select-button,
+  html body #page-coop #coopKeepDropCharacters,
+  html body #page-coop #coopDeckReset{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    margin:0!important;
+    border-radius:7px!important;
+  }
+  html body #page-coop #coopPropose{
+    padding:0 8px!important;
+    line-height:32px!important;
+    font-size:.72rem!important;
+    white-space:nowrap!important;
+  }
+  html body #page-coop .coop-condition-group .coop-self-toggle{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    padding:0 3px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+  }
+  html body #page-coop .coop-condition-group .coop-self-toggle span{
+    min-width:0!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  html body #page-coop .coop-condition-group .coop-self-toggle input{
+    flex:0 0 17px!important;
+    width:17px!important;
+    height:17px!important;
+    min-width:17px!important;
+    margin:0!important;
+  }
+  html body #page-coop .coop-organize-group .coop-action-items{
+    height:auto!important;
+    min-height:0!important;
+  }
+  html body #page-coop #coopKeepDropCharacters,
+  html body #page-coop #coopDeckReset{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    padding:0 2px!important;
+    font-size:clamp(.43rem,1.72vw,.54rem)!important;
+    line-height:1.02!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+}
+@media(max-width:520px){
+  html body #page-coop .coop-proposal-group .coop-action-items{grid-template-columns:112px minmax(0,1fr)!important}
+}
