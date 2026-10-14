@@ -1606,3 +1606,188 @@ html body #page-coop:not(.coop-detail-on) #coopProposalUsageResults:not([hidden]
     font-size:clamp(.5rem,2.15vw,.66rem)!important;
   }
 }
+
+/* build 20261014-432: mobile layout correction */
+@media(max-width:999px){
+  html body #page-coop .coop-decks .coop-section-actions{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-decks .coop-section-actions > fieldset.coop-action-group{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    box-sizing:border-box!important;
+    grid-column:auto!important;
+  }
+  html body #page-coop .coop-proposal-group .coop-action-items{
+    display:grid!important;
+    grid-template-columns:minmax(104px,30%) minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:end!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls,
+  html body #page-coop .coop-organize-group .coop-action-items{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    align-items:end!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-proposal-deck-count,
+  html body #page-coop .coop-question-level{
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select,
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select-button,
+  html body #page-coop #coopPropose,
+  html body #page-coop .coop-condition-group .coop-self-toggle,
+  html body #page-coop .coop-question-level .coop-styled-select,
+  html body #page-coop .coop-question-level .coop-styled-select-button,
+  html body #page-coop #coopKeepDropCharacters,
+  html body #page-coop #coopDeckReset{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    height:48px!important;
+    min-height:48px!important;
+    max-height:48px!important;
+    margin:0!important;
+  }
+  html body #page-coop #coopPropose{padding:0 10px!important;white-space:nowrap!important}
+  html body #page-coop #coopKeepDropCharacters,
+  html body #page-coop #coopDeckReset{
+    padding:0 8px!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    overflow-wrap:normal!important;
+    word-break:keep-all!important;
+    font-size:.72rem!important;
+  }
+  html body #page-coop .coop-deck-slot .coop-slot-main{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "character"
+      "actions"
+      "power"!important;
+    gap:6px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-character-image-only{grid-area:character!important;width:100%!important;min-width:0!important}
+  html body #page-coop .coop-slot-main > .coop-slot-actions{grid-area:actions!important;width:100%!important;min-width:0!important}
+  html body #page-coop .coop-slot-main > .coop-ally-power{
+    grid-area:power!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:3px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-ally-power > span,
+  html body #page-coop .coop-slot-main > .coop-ally-power > input{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important}
+}
+
+/* build 20261014-433: compact mobile proposal controls */
+@media(max-width:999px){
+  html body #page-coop .coop-decks .coop-section-actions{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    align-items:start!important;
+  }
+  html body #page-coop .coop-decks .coop-section-actions > fieldset.coop-action-group{
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    margin:0!important;
+    padding:7px!important;
+    box-sizing:border-box!important;
+  }
+  html body #page-coop .coop-decks .coop-proposal-group{grid-column:1 / -1!important}
+  html body #page-coop .coop-decks .coop-condition-group{grid-column:1!important}
+  html body #page-coop .coop-decks .coop-organize-group{grid-column:2!important}
+  html body #page-coop .coop-proposal-group .coop-action-items{
+    display:grid!important;
+    grid-template-columns:minmax(92px,28%) minmax(0,1fr)!important;
+    gap:7px!important;
+    align-items:end!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls,
+  html body #page-coop .coop-organize-group .coop-action-items{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    width:100%!important;
+    min-width:0!important;
+    align-items:end!important;
+  }
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select,
+  html body #page-coop .coop-proposal-deck-count .coop-styled-select-button,
+  html body #page-coop #coopPropose,
+  html body #page-coop .coop-condition-group .coop-self-toggle,
+  html body #page-coop .coop-question-level .coop-styled-select,
+  html body #page-coop .coop-question-level .coop-styled-select-button,
+  html body #page-coop #coopKeepDropCharacters,
+  html body #page-coop #coopDeckReset{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+    margin:0!important;
+  }
+  html body #page-coop #coopPropose{
+    padding:0 8px!important;
+    line-height:34px!important;
+    font-size:.82rem!important;
+    white-space:nowrap!important;
+  }
+  html body #page-coop .coop-condition-group .coop-self-toggle{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    padding:0 5px!important;
+    font-size:.66rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+  }
+  html body #page-coop .coop-condition-group .coop-self-toggle span{
+    min-width:0!important;
+    font-size:.66rem!important;
+    white-space:nowrap!important;
+  }
+  html body #page-coop .coop-condition-group .coop-self-toggle input{
+    flex:0 0 20px!important;
+    width:20px!important;
+    height:20px!important;
+    margin:0!important;
+  }
+  html body #page-coop #coopKeepDropCharacters,
+  html body #page-coop #coopDeckReset{
+    position:static!important;
+    padding:0 3px!important;
+    font-size:clamp(.48rem,1.95vw,.61rem)!important;
+    line-height:1.08!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+}
