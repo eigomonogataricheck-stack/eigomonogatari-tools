@@ -1,11 +1,13 @@
-/* Detailed cooperative proposal calculation, build 20261014-postprocess-progress.
+/* Detailed cooperative proposal calculation, build 20261014-abort-active-transactions.
  * Intermediate prefixes are streamed to IndexedDB, never truncated.
  * Normal proposal rules and the existing usage aggregator are reused.
  */
 let coopDetailCalculationActive=false,coopDetailUsageSummary=null,coopDetailView=null,coopDetailGeneration=0;
 let coopDetailDatabase=null,coopDetailViewToken=0;
+const coopDetailActiveTransactions=new Set();
 const coopDetailRuns=new Set();
 function coopDetailInvalidateRun(){coopDetailGeneration++;coopDetailCalculationActive=false}
+function coopDetailAbortAllRuns(){coopDetailInvalidateRun();coopDetailViewToken++;coopDetailUsageSummary=null;coopDetailView=null;coopDetailRuns.clear();for(const tx of [...coopDetailActiveTransactions]){try{tx.abort()}catch{}}coopDetailActiveTransactions.clear();try{coopDetailDatabase?.close()}catch{}coopDetailDatabase=null;document.getElementById('coopDetailPager')?.remove()}
 function coopDetailAssertRun(generation){if(generation!==coopDetailGeneration||coopProposalCancelRequested)throw new Error('計算を停止しました')}
 function coopDetailPrepareNormalRun(){coopDetailInvalidateRun();coopDetailClearView();coopDetailUsageSummary=null;coopDetailView=null;document.getElementById('coopDetailPager')?.remove();let controls=document.querySelector('#coopProposalBody .coop-proposal-controls');if(controls)controls.hidden=false}
 const COOP_DETAIL_BATCH=512,COOP_DETAIL_PAGE=10;
@@ -22,11 +24,11 @@ function coopDetailOpenDatabase(){
   if(coopDetailDatabase)return Promise.resolve(coopDetailDatabase);
   if(typeof indexedDB==='undefined')return Promise.reject(new Error('詳細計算にはIndexedDBが必要です。保存機能が利用できないため計算を開始できません。'));
   return new Promise((resolve,reject)=>{
-    const request=indexedDB.open('eigoCoopDetailedCalculationV1',1);
+    const generation=coopDetailGeneration,request=indexedDB.open('eigoCoopDetailedCalculationV1',1);
     request.onupgradeneeded=()=>{let store=request.result.createObjectStore('records',{keyPath:'key'});store.createIndex('ranking',['phase','order','deckKey'])};
     request.onerror=()=>reject(new Error('詳細計算の保存領域を開けません: '+(request.error?.message||'')));
     request.onblocked=()=>reject(new Error('別のタブが詳細計算の保存領域を使用しています。'));
-    request.onsuccess=()=>{coopDetailDatabase=request.result;coopDetailDatabase.onversionchange=()=>{coopDetailDatabase.close();coopDetailDatabase=null};resolve(coopDetailDatabase)};
+    request.onsuccess=()=>{if(generation!==coopDetailGeneration){request.result.close();reject(new Error('Calculation stopped'));return}coopDetailDatabase=request.result;coopDetailDatabase.onversionchange=()=>{coopDetailDatabase.close();coopDetailDatabase=null};resolve(coopDetailDatabase)};
   });
 }
 function coopDetailRange(phase,after=null){
@@ -35,9 +37,9 @@ function coopDetailRange(phase,after=null){
 }
 function coopDetailTransaction(db,action){
   return new Promise((resolve,reject)=>{
-    const tx=db.transaction('records','readwrite');
-    tx.oncomplete=()=>resolve();
-    tx.onabort=()=>reject(new Error('詳細計算の保存に失敗しました。容量不足・保存権限を確認してください。計算は未完了です: '+(tx.error?.message||'')));
+    const tx=db.transaction('records','readwrite');coopDetailActiveTransactions.add(tx);
+    tx.oncomplete=()=>{coopDetailActiveTransactions.delete(tx);resolve()};
+    tx.onabort=()=>{coopDetailActiveTransactions.delete(tx);reject(new Error(coopProposalCancelRequested?'計算を停止しました':'詳細計算の保存に失敗しました。容量不足・保存権限を確認してください。計算は未完了です: '+(tx.error?.message||'')))};
     tx.onerror=()=>{};
     try{action(tx.objectStore('records'))}catch(error){tx.abort();reject(error)}
   });
@@ -48,14 +50,14 @@ async function coopDetailPut(db,phase,items){
 }
 function coopDetailRead(db,phase,after=null,limit=COOP_DETAIL_BATCH){
   return new Promise((resolve,reject)=>{
-    const tx=db.transaction('records','readonly'),out=[];
+    const tx=db.transaction('records','readonly'),out=[];coopDetailActiveTransactions.add(tx);tx.oncomplete=()=>coopDetailActiveTransactions.delete(tx);tx.onabort=()=>{coopDetailActiveTransactions.delete(tx);reject(new Error('計算を停止しました'))};
     const request=tx.objectStore('records').openCursor(coopDetailRange(phase,after));
     request.onerror=()=>reject(request.error);
     request.onsuccess=()=>{const cursor=request.result;if(!cursor||out.length>=limit){resolve(out);return}out.push(cursor.value);if(out.length>=limit)resolve(out);else cursor.continue()};
   });
 }
 function coopDetailCount(db,phase){
-  return new Promise((resolve,reject)=>{const request=db.transaction('records','readonly').objectStore('records').count(coopDetailRange(phase));request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)});
+  return new Promise((resolve,reject)=>{const tx=db.transaction('records','readonly');coopDetailActiveTransactions.add(tx);tx.oncomplete=()=>coopDetailActiveTransactions.delete(tx);tx.onabort=()=>{coopDetailActiveTransactions.delete(tx);reject(new Error('計算を停止しました'))};const request=tx.objectStore('records').count(coopDetailRange(phase));request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)});
 }
 async function coopDetailDelete(db,phase){await coopDetailTransaction(db,store=>store.delete(coopDetailRange(phase)))}
 async function coopDetailWalk(db,phase,visit){
@@ -81,7 +83,9 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
       const phase=run+':slot'+slot,pool=[...new Map((pools[slot]||[]).map(c=>[coopCharacterKey(c),c])).values()],total=previousCount*pool.length;
       phases.push(phase);checked=0;let passed=0,pending=[],lastPaint=performance.now();
       if(!Number.isSafeInteger(total))throw new Error('組み合わせ数が安全に集計できる整数範囲を超えています。枠の固定を増やしてください。');
+      if(generation!==null)coopDetailAssertRun(generation);
       if(!await coopProposalConfirmMillion(total,slot))throw new Error('計算を停止しました');
+      if(generation!==null)coopDetailAssertRun(generation);
       coopProposalProgressCoverage=pools.map(p=>p.filter(Boolean).length);
       coopOverallProgress.slot=slot+1;
       let after=null;
@@ -91,19 +95,20 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
         if(generation!==null)coopDetailAssertRun(generation);
         const rows=[];
         for(let batch=0;batch<Math.max(1,Math.floor(Number(readAheadBatches)||1));batch++){
-          const part=await coopDetailRead(db,previous,after,COOP_DETAIL_BATCH);
+          const part=await coopDetailRead(db,previous,after,COOP_DETAIL_BATCH);if(generation!==null)coopDetailAssertRun(generation);
           if(!part.length)break;
           rows.push(...part);after=part[part.length-1].key;
           if(part.length<COOP_DETAIL_BATCH)break;
         }
         if(!rows.length)break;
-        const baseChecked=checked,basePassed=passed,originalProgress=coopSetProposalProgress;
-        const finalCountOnly=countOnly&&slot===COOP_SLOTS-1;  
-        let items;  
-        try{  
-          coopSetProposalProgress=(text,busy,current,batchTotal,batchPassed,workers)=>{if(generation!==null&&generation!==coopDetailGeneration)return;originalProgress(`${label}・${slot+1}枠目`,busy,baseChecked+(current||0),total,basePassed+(batchPassed||0),workers)};  
-          items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly});  
-        }finally{coopSetProposalProgress=originalProgress}  
+        const baseChecked=checked,basePassed=passed;
+        const finalCountOnly=countOnly&&slot===COOP_SLOTS-1;
+        const onProgress=(text,busy,current,batchTotal,batchPassed,workers)=>{
+          if(generation!==null&&generation!==coopDetailGeneration)return;
+          coopSetProposalProgress(`${label}・${slot+1}枠目`,busy,baseChecked+(current||0),total,basePassed+(batchPassed||0),workers);
+        };
+        if(generation!==null)coopDetailAssertRun(generation);
+        const items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly,onProgress});
         checked+=rows.length*pool.length;
         if(generation!==null)coopDetailAssertRun(generation);
         if(finalCountOnly){passed+=items.count||0;coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));continue}  
@@ -117,14 +122,14 @@ for(const item of items){
         coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));
       }
       if(pending.length)await coopDetailPut(db,phase,pending);
-      await coopDetailDelete(db,previous);
+      await coopDetailDelete(db,previous);if(generation!==null)coopDetailAssertRun(generation);
       coopProposalRecordWorkerHistory(slot,total,passed,[]);
       previous=phase;previousCount=passed;
       if(!passed)break;
     }
     return {phase:previous,count:previousCount};
   }catch(error){for(let phase of phases)await coopDetailDelete(db,phase).catch(()=>{});throw error}
-  finally{coopProposalOrderCache.clear()}
+  finally{if(generation===null||generation===coopDetailGeneration)coopProposalOrderCache.clear()}
 }
 async function coopDetailInitialRows(view){
   if(!view.initialRowsPromise)view.initialRowsPromise=(async()=>{
