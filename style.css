@@ -1491,7 +1491,11 @@ html body #page-coop .coop-condition-group .coop-self-toggle input{
   html body #page-coop .coop-decks .coop-organize-group{grid-column:2!important;grid-row:2!important;display:flex!important;flex-direction:column!important;min-width:0!important;height:100%!important}
   html body #page-coop .coop-proposal-group .coop-action-items{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;gap:7px!important;width:100%!important;min-width:0!important;align-items:end!important}
   html body #page-coop .coop-condition-group .coop-action-items{display:flex!important;flex:1 1 auto!important;width:100%!important;min-width:0!important}
-  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls{display:grid!important;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)!important;gap:6px!important;width:100%!important;min-width:0!important;margin-top:auto!important;align-items:end!important}
+  html body #page-coop .coop-condition-group .coop-self-toggle,
+  html body #page-coop .coop-condition-group .coop-question-level,
+  html body #page-coop .coop-condition-group .coop-question-level .coop-styled-select,
+  html body #page-coop .coop-condition-group .coop-question-level .coop-styled-select-button{box-sizing:border-box!important;width:100%!important;min-width:0!important;max-width:100%!important}
+  html body #page-coop .coop-condition-group .coop-fixed-multiplier-controls{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:6px!important;width:100%!important;min-width:0!important;margin-top:auto!important;align-items:end!important}
   html body #page-coop .coop-organize-group .coop-action-items{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%!important;min-width:0!important;flex:1 1 auto!important;margin-top:auto!important;align-content:end!important;align-items:stretch!important}
   html body #page-coop #coopPropose,
   html body #page-coop .coop-condition-group .coop-self-toggle,
