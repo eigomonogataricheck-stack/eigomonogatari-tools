@@ -1534,3 +1534,54 @@ html body #page-coop:not(.coop-detail-on) #coopProposalResults:not([hidden]){
 html body #page-coop:not(.coop-detail-on) #coopProposalUsageResults:not([hidden]){
   display:block!important;
 }
+
+/* build 20261014-430: mobile deck slot vertical order */
+@media(max-width:999px){
+  html body #page-coop .coop-deck-slot .coop-slot-main{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "character"
+      "actions"
+      "power"!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+    gap:6px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-character-image-only{
+    grid-area:character!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-slot-actions{
+    grid-area:actions!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-ally-power{
+    grid-area:power!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:3px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-ally-power > span{
+    display:block!important;
+    width:100%!important;
+    text-align:left!important;
+    white-space:nowrap!important;
+  }
+  html body #page-coop .coop-slot-main > .coop-ally-power > input{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+}
