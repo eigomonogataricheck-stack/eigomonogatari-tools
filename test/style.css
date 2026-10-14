@@ -1119,7 +1119,9 @@ html body #page-coop .coop-action-group .coop-fixed-multiplier-controls{margin:0
 #coopDetailPager > .coop-count-control .coop-styled-select-button{width:auto!important;min-width:96px!important;min-height:40px!important}
 @media(max-width:540px){#coopDetailPager{gap:7px!important}#coopDetailPager .coop-detail-toggle-row{gap:6px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle{padding:7px 9px!important;gap:6px!important}#coopDetailPager .coop-detail-toggle-row .coop-all-decks-toggle span{font-size:.74rem!important}#coopDetailPager > .coop-count-control{flex-basis:100%!important}}
 
-/* build 20261014-409: readable cooperative controls without legacy conflicts */
+/* build 20261014-411: proposal-first controls and ally HP fields */
+html body #page-coop:not(.coop-detail-on) .coop-proposal-group{display:none}
+html body #page-coop.coop-detail-on .coop-proposal-group{display:flex}
 html body #page-coop .coop-action-items{
   display:flex;
   flex-wrap:nowrap;
@@ -1219,7 +1221,7 @@ html body #page-coop #coopPropose:focus-visible{
   background:#3157d5;
   color:#fff;
 }
-html body #page-coop .coop-action-group:last-child .coop-action-items{
+html body #page-coop .coop-organize-group .coop-action-items{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:6px;
@@ -1263,7 +1265,7 @@ html body #page-coop .coop-slot-actions>button.mini-reset.danger{
 }
 @media(max-width:999px){
   html body #page-coop .coop-action-items{flex-wrap:wrap}
-  html body #page-coop .coop-action-group:last-child .coop-action-items{
+  html body #page-coop .coop-organize-group .coop-action-items{
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:4px;
   }
@@ -1275,3 +1277,14 @@ html body #page-coop .coop-slot-actions>button.mini-reset.danger{
     font-size:11px;
   }
 }
+html body #page-coop .coop-section-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+html body #page-coop .coop-proposal-group{order:1}
+html body #page-coop .coop-condition-group{order:2}
+html body #page-coop .coop-organize-group{order:3}
+html body #page-coop .coop-slot-main{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"character actions" "hp actions";align-items:center;gap:6px}
+html body #page-coop .coop-slot-main>.coop-character{grid-area:character}
+html body #page-coop .coop-slot-main>.coop-slot-actions{grid-area:actions}
+html body #page-coop .coop-ally-hp{grid-area:hp;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:5px;color:#66717f;font:600 9px/1 system-ui,sans-serif}
+html body #page-coop .coop-ally-hp[hidden]{display:none}
+html body #page-coop .coop-ally-hp input{width:100%;min-width:0;height:28px;padding:3px 6px;border:1px solid #cbd3dc;border-radius:6px;background:#fff;color:#263241;font:500 12px/1 system-ui,sans-serif}
+@media(max-width:999px){html body #page-coop .coop-section-actions{grid-template-columns:1fr}html body #page-coop .coop-slot-main{grid-template-columns:1fr;grid-template-areas:"character" "hp" "actions"}html body #page-coop .coop-ally-hp input{font-size:16px}}
