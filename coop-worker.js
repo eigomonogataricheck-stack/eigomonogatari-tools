@@ -1,4 +1,4 @@
-/* Cooperative proposal worker build 20261014-power-matrix */
+/* Cooperative proposal worker build 20261014-power-override-v2 */
 let stopped=false,paused=false,initialized=false,workerIndex=0,currentJob=null;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function pausePoint(){while(paused&&!stopped)await sleep(40)}
