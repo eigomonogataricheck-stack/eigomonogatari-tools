@@ -1,9 +1,47 @@
-/* Cooperative proposal worker build 20260920-365 */
+/* Cooperative proposal worker build 20261014-flat-pairs */
 let stopped=false,paused=false,initialized=false,workerIndex=0,currentJob=null;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function pausePoint(){while(paused&&!stopped)await sleep(40)}
 function flush(job,type){if(!job.items.length)return;postMessage(type==='stage'?{type:'stageItems',jobId:job.jobId,items:job.items.splice(0),passed:job.passed}:{type:'confirmedItems',jobId:job.jobId,confirmed:job.items.splice(0),passed:job.passed})}
-async function run(m){stopped=false;self.coopEnemies=m.enemies;self.coopDecks=m.decks;self.coopVisibleRows=m.visibleRows;self.coopDetailMode=!!m.detailMode;self.coopProposalTargetDecks=m.targetDecks;self.coopProposalEnemySecondFixed=!!m.enemySecondFixed;self.COOP_DAMAGE_BASE=m.constants.damageBase;self.coopProposalDamageScale=Number(m.constants.damageScale??1);self.coopProposalOrderCache.clear();self.coopProposalManualCertainCache.clear();let job={jobId:m.jobId,prefixIds:m.prefixIds||[],candidateIds:m.candidateIds||[],items:[],checked:0,passed:0,last:performance.now(),index:0},lastYield=performance.now();currentJob=job;
-if(m.type==='stage'){let total=job.prefixIds.length*job.candidateIds.length;while(job.index<total&&!stopped){await pausePoint();if(stopped)break;let stop=Math.min(total,job.index+250);for(;job.index<stop&&!stopped;job.index++){let prefixIndex=Math.floor(job.index/job.candidateIds.length),candidateIndex=job.index%job.candidateIds.length,ids=job.prefixIds[prefixIndex].slice();ids[m.slot]=job.candidateIds[candidateIndex];let deck=ids.map(coopFindCharacter),item=coopProposalPrefixLayerEvaluation(deck,m.slot,m.targetDecks);if(item){job.items.push({ids:coopProposalDeckIds(item.deck)});job.passed++}job.checked++}if(job.items.length>=3000)flush(job,'stage');let now=performance.now();if(job.checked%1000===0||now-job.last>=300){postMessage({type:'progress',jobId:job.jobId,checked:job.checked,passed:job.passed,confirmed:job.passed});job.last=now}if(now-lastYield>=40){await sleep(0);lastYield=performance.now()}}if(!stopped){flush(job,'stage');postMessage({type:'stageDone',jobId:job.jobId,checked:job.checked,passed:job.passed,items:[]})}}
+function rejectedCompletedDeck(deck,targetDecks){return coopProposalHasDuplicateInCompletedDeck(deck,targetDecks)}
+async function run(m){stopped=false;self.coopEnemies=m.enemies;self.coopDecks=m.decks;self.coopVisibleRows=m.visibleRows;self.coopDetailMode=!!m.detailMode;self.coopProposalTargetDecks=m.targetDecks;self.coopProposalEnemySecondFixed=!!m.enemySecondFixed;const constants=m.constants||{};self.COOP_DAMAGE_BASE=Number(constants.damageBase??self.COOP_DAMAGE_BASE);self.coopProposalDamageScale=Number(constants.damageScale??self.coopProposalDamageScale??1);self.coopProposalOrderCache.clear();self.coopProposalManualCertainCache.clear();let job={jobId:m.jobId,prefixIds:m.prefixIds||[],candidateIds:m.candidateIds||[],items:[],checked:0,passed:0,last:performance.now(),index:0},lastYield=performance.now();if(m.type==='stage'){job.pairs=(m.pairs||[]).map(pair=>({prefixIds:pair.prefixIds||[],candidateId:pair.candidateId,prefixDeck:(pair.prefixIds||[]).map(coopFindCharacter),candidate:coopFindCharacter(pair.candidateId)}))}currentJob=job;
+if(m.type==='detailPrefix'){
+  const idsList=m.prefixIds||[],decks=idsList.map(ids=>ids.map(coopFindCharacter)),total=decks.length,passedKeys=[];
+  while(job.index<total&&!stopped){
+    await pausePoint();if(stopped)break;
+    const stop=Math.min(total,job.index+128);
+    for(;job.index<stop&&!stopped;job.index++){
+      const ids=idsList[job.index],item=coopProposalPrefixLayerEvaluation(decks[job.index],m.slot,m.targetDecks);
+      if(item){passedKeys.push(ids.slice(0,m.slot+1).map(String).join('\u0001'));job.passed++}
+      job.checked++;
+    }
+    const now=performance.now();
+    if(job.checked===total||now-job.last>=250){postMessage({type:'detailPrefixProgress',jobId:job.jobId,checked:job.checked,passed:job.passed});job.last=now}
+    if(now-lastYield>=50){await sleep(0);lastYield=performance.now()}
+  }
+  if(!stopped)postMessage({type:'detailPrefixDone',jobId:job.jobId,checked:job.checked,passed:job.passed,passedKeys});
+}else if(m.type==='detailCount'){
+  const idsList=m.deckIds||[],decks=idsList.map(ids=>ids.map(coopFindCharacter)),total=decks.length;
+  while(job.index<total&&!stopped){
+    await pausePoint();if(stopped)break;
+    const stop=Math.min(total,job.index+64);
+    for(;job.index<stop&&!stopped;job.index++){if(coopProposalWorks(decks[job.index],m.targetDecks))job.passed++;job.checked++}
+    const now=performance.now();
+    if(job.checked===total||now-job.last>=250){postMessage({type:'detailCountProgress',jobId:job.jobId,checked:job.checked,passed:job.passed});job.last=now}
+    if(now-lastYield>=50){await sleep(0);lastYield=performance.now()}
+  }
+  if(!stopped)postMessage({type:'detailCountDone',jobId:job.jobId,checked:job.checked,passed:job.passed});
+}else if(m.type==='expand'){
+  let checked=0,generated=0,items=[],last=performance.now();
+  const flushExpand=()=>{if(items.length)postMessage({type:'expandItems',jobId:m.jobId,items:items.splice(0),checked,generated})};
+  for(const task of m.tasks||[]){
+    const n2=task.choices?.[2]?.length||0,n1=task.choices?.[1]?.length||0;
+    for(let index=Number(task.start)||0,end=Number(task.end)||0;index<end&&!stopped;index++){
+      await pausePoint();if(stopped)break;let rest=index,i2=rest%n2;rest=Math.floor(rest/n2);let i1=rest%n1,i0=Math.floor(rest/n1),ids=task.baseIds.slice();ids[0]=task.choices[0][i0];ids[1]=task.choices[1][i1];ids[2]=task.choices[2][i2];items.push({sourceIndex:task.sourceIndex,ids});checked++;generated++;if(items.length>=1000)flushExpand();let now=performance.now();if(checked%1000===0||now-last>=300){postMessage({type:'expandProgress',jobId:m.jobId,checked,generated});last=now}
+    }
+    if(stopped)break;
+  }
+  if(!stopped){flushExpand();postMessage({type:'expandDone',jobId:m.jobId,checked,generated})}
+}else if(m.type==='stage'){let total=job.pairs.length;while(job.index<total&&!stopped){await pausePoint();if(stopped)break;let stop=Math.min(total,job.index+250);for(;job.index<stop&&!stopped;job.index++){let pair=job.pairs[job.index],ids=pair.prefixIds.slice(),deck=pair.prefixDeck.slice();ids[m.slot]=pair.candidateId;deck[m.slot]=pair.candidate;let item=coopProposalPrefixLayerEvaluation(deck,m.slot,m.targetDecks);if(item){if(!m.countOnly)job.items.push({ids:coopProposalDeckIds(item.deck)});job.passed++}job.checked++}if(!m.countOnly&&job.items.length>=3000)flush(job,'stage');let now=performance.now();if(job.checked%1000===0||now-job.last>=300){postMessage({type:'progress',jobId:job.jobId,checked:job.checked,passed:job.passed,confirmed:job.passed});job.last=now}if(now-lastYield>=40){await sleep(0);lastYield=performance.now()}}if(!stopped){if(!m.countOnly)flush(job,'stage');postMessage({type:'stageDone',jobId:job.jobId,checked:job.checked,passed:job.passed,items:[]})}}
 else{let total=job.candidateIds.length;while(job.index<total&&!stopped){await pausePoint();if(stopped)break;let stop=Math.min(total,job.index+100);for(;job.index<stop&&!stopped;job.index++){let ids=job.candidateIds[job.index],deck=ids.map(coopFindCharacter);if(coopProposalWorks(deck,m.targetDecks)){job.items.push({ids:ids.slice(),repeats:m.targetDecks,overkillRate:0});job.passed++}job.checked++}if(job.items.length>=3000)flush(job,'start');let now=performance.now();if(job.checked%1000===0||now-job.last>=300){postMessage({type:'progress',jobId:job.jobId,checked:job.checked,passed:job.passed,confirmed:job.passed});job.last=now}if(now-lastYield>=40){await sleep(0);lastYield=performance.now()}}if(!stopped){flush(job,'start');postMessage({type:'done',jobId:job.jobId,checked:job.checked,passed:job.passed,confirmed:[]})}}currentJob=null}
-self.onmessage=e=>{let m=e.data||{};if(m.type==='pause'){paused=true;return}if(m.type==='resume'){paused=false;return}if(m.type==='cancel'){stopped=true;paused=false;return}try{if(m.type==='init'){self.chars=m.chars||[];workerIndex=m.workerIndex||0;self.ATTRS=m.constants.ATTRS;self.MATCH=m.constants.MATCH;self.COOP_LAYER_MULTIPLIERS=m.constants.layerMultipliers;self.COOP_DAMAGE_BASE=m.constants.damageBase;self.coopProposalDamageScale=Number(m.constants.damageScale??1);self.COOP_SLOTS=5;self.COOP_MAX_ROWS=5;self.coopProposalOrderCache=new Map();self.coopProposalManualCertainCache=new Map();(0,eval)(m.engineSource);self.characterById=new Map(self.chars.map(c=>[coopCharacterKey(c),c]));self.coopFindCharacter=key=>self.characterById.get(String(key))||null;initialized=true;postMessage({type:'initialized',workerIndex});return}if(!initialized||!['start','stage'].includes(m.type)||currentJob)return;run(m).catch(error=>postMessage({type:'error',jobId:m.jobId,message:String(error&&error.stack||error)}))}catch(error){postMessage({type:'error',jobId:m.jobId,message:String(error&&error.stack||error)})}};
+self.onmessage=e=>{let m=e.data||{};if(m.type==='pause'){paused=true;return}if(m.type==='resume'){paused=false;return}if(m.type==='cancel'){stopped=true;paused=false;return}try{if(m.type==='init'){self.chars=m.chars||[];workerIndex=m.workerIndex||0;self.ATTRS=m.constants.ATTRS;self.MATCH=m.constants.MATCH;self.COOP_LAYER_MULTIPLIERS=m.constants.layerMultipliers;self.COOP_DAMAGE_BASE=m.constants.damageBase;self.coopProposalDamageScale=Number(m.constants.damageScale??1);self.COOP_SLOTS=5;self.COOP_MAX_ROWS=5;self.coopProposalOrderCache=new Map();self.coopProposalManualCertainCache=new Map();self.coopValidSkillEffectsCache=new Map();(0,eval)(m.engineSource);self.characterById=new Map(self.chars.map(c=>[coopCharacterKey(c),c]));self.coopFindCharacter=key=>self.characterById.get(String(key))||null;initialized=true;postMessage({type:'initialized',workerIndex});return}if(!initialized||!['start','stage','expand','detailCount','detailPrefix'].includes(m.type)||currentJob)return;run(m).catch(error=>postMessage({type:'error',jobId:m.jobId,message:String(error&&error.stack||error)}))}catch(error){postMessage({type:'error',jobId:m.jobId,message:String(error&&error.stack||error)})}};
