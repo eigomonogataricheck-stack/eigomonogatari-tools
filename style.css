@@ -1540,3 +1540,20 @@ html body #page-coop:not(.coop-detail-on) #coopProposalUsageResults:not([hidden]
   #coopDecksBody{margin-top:8px;padding:6px;border:1px solid #d9dee5;border-radius:10px;background:#fafcff}
   #coopManualJudge{clear:both;margin-top:14px!important}
 }
+
+/* build 20261015-446: ally-deck section tag only */
+@media(max-width:999px){
+  .coop-decks-toggle{
+    border:1px solid #cfe0ff!important;
+    border-radius:14px!important;
+  }
+  .coop-decks-toggle[aria-expanded="true"]{
+    border-bottom-left-radius:0!important;
+    border-bottom-right-radius:0!important;
+  }
+  .coop-decks-toggle[aria-expanded="true"] + #coopDecksBody{
+    margin-top:-1px!important;
+    border:1px solid #cfe0ff!important;
+    border-radius:0 0 14px 14px!important;
+  }
+}
