@@ -108,7 +108,17 @@ async function coopDetailSearch(db,run,pools,totalDecks,{countOnly=false,label='
           coopSetProposalProgress(`${label}・${slot+1}枠目`,busy,baseChecked+(current||0),total,basePassed+(batchPassed||0),workers);
         };
         if(generation!==null)coopDetailAssertRun(generation);
-        const items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly,onProgress});
+        const fixedSlot=pool.length===1&&pool[0]===null;
+        let items;
+        if(fixedSlot){
+          items=[];let fixedPassed=0;
+          for(let i=0;i<rows.length;i++){
+            if((i&127)===0){await coopWaitIfProposalPaused();if(generation!==null)coopDetailAssertRun(generation);await coopYield()}
+            const item=coopProposalPrefixLayerEvaluation(rows[i].ids.map(coopFindCharacter),slot,totalDecks);
+            if(item){fixedPassed++;if(!finalCountOnly)items.push(item)}
+          }
+          if(finalCountOnly)items={count:fixedPassed};
+        }else items=await coopProposalParallelStage(rows.map(row=>row.ids.map(coopFindCharacter)),pool,slot,totalDecks,label,{countOnly:finalCountOnly,onProgress});
         checked+=rows.length*pool.length;
         if(generation!==null)coopDetailAssertRun(generation);
         if(finalCountOnly){passed+=items.count||0;coopSetProposalProgress(`${label}・${slot+1}枠目`,true,checked,total,passed,coopWorkerCount(rows.length*pool.length));continue}  
@@ -183,7 +193,7 @@ async function coopProposeDetailed(){
   // Delete only this tab's previous run; never clear another tab's calculation.
   for(const oldRun of coopDetailRuns)await coopDetailTransaction(db,store=>store.delete(IDBKeyRange.bound(oldRun+':',oldRun+':\uffff')));coopDetailRuns.clear();
   const originalDecks=coopDecks.map(row=>row.slice()),originalVisible=coopVisibleRows,originalDetail=coopDetailMode,originalTarget=coopProposalTargetDecks,originalSecond=coopProposalEnemySecondFixed;
-  const targetDecks=originalDetail?Math.max(3,Math.min(5,Number($('coopProposalDeckCount')?.value)||4)):4;
+  const targetDecks=Math.max(3,Math.min(5,Number($('coopProposalDeckCount')?.value)||4));
   const run='detail-'+Date.now()+'-'+Math.random().toString(36).slice(2);coopDetailRuns.add(run);
   let initial=null,completed=false;
   coopDetailCalculationActive=true;coopProposalTargetDecks=targetDecks;coopProposalScaleHistory=[];coopProposalRenderScaleHistory();
