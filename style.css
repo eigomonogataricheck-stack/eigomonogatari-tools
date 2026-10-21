@@ -1557,3 +1557,11 @@ html body #page-coop:not(.coop-detail-on) #coopProposalUsageResults:not([hidden]
     border-radius:0 0 14px 14px!important;
   }
 }
+
+#page-coop-report .panel{max-width:760px}#coopReportEnemies{display:grid;gap:10px}
+#page-coop-report .coop-report-heading{margin:0;padding:11px 13px;background:#edf2f7}
+#page-coop-report .coop-report-row{display:flex;align-items:center;gap:8px;min-width:0;padding:7px;border:1px solid #d9dee5;border-radius:10px}
+#page-coop-report .coop-report-pick{display:block;flex:none;width:52px;height:52px;padding:0;border:0;border-radius:9px;background:#eef1f4;cursor:pointer}
+#page-coop-report .coop-portrait{display:block;width:52px!important;height:52px!important}
+#page-coop-report input{width:100%;min-width:0;height:44px;padding:6px;border:1px solid #bbb;border-radius:7px;background:#fff;font-size:16px}
+@media(max-width:600px){#page-coop-report .coop-report-row{gap:4px;padding:4px}#page-coop-report .coop-report-pick,#page-coop-report .coop-portrait{width:36px!important;height:36px!important}#page-coop-report input{padding:3px;height:38px}}
