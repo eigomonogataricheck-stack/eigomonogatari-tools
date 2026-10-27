@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-10-21T16:50:29.727Z",
+  "generatedAt": "2026-10-27T04:51:29.506Z",
   "characters": [
     {
       "id": 1189,
@@ -3474,6 +3474,7 @@
             "effect": "シールド",
             "value": 0.35,
             "duration": 5,
+            "applier": "自身",
             "sourceText": "5ターンの間、自身にダメージを35%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -6787,6 +6788,7 @@
             "effect": "シールド",
             "value": 0.99,
             "duration": 1,
+            "applier": "自身",
             "target": "水",
             "targetAttribute": "水",
             "sourceText": "1ターンの間、自身に水属性の敵からのダメージを99%軽減するシールドを与える。",
@@ -10345,6 +10347,7 @@
             "effect": "シールド",
             "value": 0.85,
             "duration": 2,
+            "applier": "自身",
             "target": "風",
             "targetAttribute": "風",
             "sourceText": "2ターンの間、自身に風属性の敵からのダメージを85%軽減するシールドを与える。",
@@ -10412,6 +10415,7 @@
             "effect": "シールド",
             "value": 0.2,
             "duration": 2,
+            "applier": "自身",
             "sourceText": "2ターンの間、自身にダメージを20%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -12232,6 +12236,7 @@
             "effect": "シールド",
             "value": 0.99,
             "duration": 1,
+            "applier": "自身",
             "sourceText": "1ターンの間、自身にダメージを99%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -12351,7 +12356,7 @@
         "attribute": "火水",
         "cost": 47,
         "hp": 3610,
-        "power": 1666,
+        "power": 1656,
         "limitBreak": 7,
         "limitHp": 6151,
         "limitPower": 2821,
@@ -12387,8 +12392,8 @@
         "hp": 3100,
         "power": 2200,
         "limitBreak": 7,
-        "limitHp": 3748,
-        "limitPower": 5282,
+        "limitHp": 5282,
+        "limitPower": 3748,
         "skillTurn": 2,
         "skill": "4ターンの間、自身のHPを50%回復する。",
         "rare": "MZR",
@@ -12960,6 +12965,7 @@
           {
             "effect": "シールド",
             "duration": 1,
+            "applier": "自身",
             "sourceText": "1ターンの間、自身にダメージを99%カットするシールドを与える。",
             "needsReview": false
           }
@@ -13906,6 +13912,7 @@
             "effect": "シールド",
             "value": 0.3,
             "duration": 3,
+            "applier": "自身",
             "sourceText": "3ターンの間、自身にダメージを30%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -15575,6 +15582,7 @@
             "effect": "シールド",
             "value": 0.9,
             "duration": 2,
+            "applier": "自身",
             "sourceText": "2ターンの間、自身にダメージを90%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -15911,6 +15919,7 @@
             "effect": "シールド",
             "value": 0.88,
             "duration": 2,
+            "applier": "自身",
             "target": "水",
             "targetAttribute": "水",
             "sourceText": "2ターンの間、自身に水属性の敵からのダメージを88%軽減するシールドを与える。",
@@ -15945,6 +15954,7 @@
             "effect": "シールド",
             "value": 0.55,
             "duration": 5,
+            "applier": "自身",
             "sourceText": "5ターンの間、自身にダメージを55%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -16010,6 +16020,7 @@
             "effect": "シールド",
             "value": 0.95,
             "duration": 1,
+            "applier": "自身",
             "target": "水",
             "targetAttribute": "水",
             "sourceText": "1ターンの間、自身に水属性の敵からのダメージを95%軽減するシールドを与える。",
@@ -16348,6 +16359,7 @@
             "effect": "シールド",
             "value": 0.11,
             "duration": 9,
+            "applier": "自身",
             "sourceText": "9ターンの間、自身にダメージを11%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -16413,6 +16425,7 @@
             "effect": "シールド",
             "value": 0.77,
             "duration": 1,
+            "applier": "自身",
             "sourceText": "1ターンの間、自身にダメージを77%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -16613,6 +16626,7 @@
             "effect": "シールド",
             "value": 0.5,
             "duration": 3,
+            "applier": "自身",
             "sourceText": "3ターンの間、自身にダメージを50%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -29963,6 +29977,7 @@
             "effect": "シールド",
             "value": 0.21,
             "duration": 2,
+            "applier": "自身",
             "target": "風",
             "targetAttribute": "風",
             "sourceText": "2ターンの間、自身に風属性の敵からのダメージを21%軽減するシールドを与える。",
@@ -29996,6 +30011,7 @@
             "effect": "シールド",
             "value": 0.23,
             "duration": 2,
+            "applier": "自身",
             "target": "風",
             "targetAttribute": "風",
             "sourceText": "2ターンの間、自身に風属性の敵からのダメージを23%軽減するシールドを与える。",
@@ -30029,6 +30045,7 @@
             "effect": "シールド",
             "value": 0.25,
             "duration": 2,
+            "applier": "自身",
             "target": "風",
             "targetAttribute": "風",
             "sourceText": "2ターンの間、自身に風属性の敵からのダメージを25%軽減するシールドを与える。",
@@ -30062,6 +30079,7 @@
             "effect": "シールド",
             "value": 0.1,
             "duration": 4,
+            "applier": "自身",
             "target": "火",
             "targetAttribute": "火",
             "sourceText": "4ターンの間、自身に火属性の敵からのダメージを10%軽減するシールドを与える。",
@@ -30095,6 +30113,7 @@
             "effect": "シールド",
             "value": 0.12,
             "duration": 5,
+            "applier": "自身",
             "target": "火",
             "targetAttribute": "火",
             "sourceText": "5ターンの間、自身に火属性の敵からのダメージを12%軽減するシールドを与える。",
@@ -30128,6 +30147,7 @@
             "effect": "シールド",
             "value": 0.1,
             "duration": 4,
+            "applier": "自身",
             "target": "火",
             "targetAttribute": "火",
             "sourceText": "4ターンの間、自身に火属性の敵からのダメージを10%軽減するシールドを与える。",
@@ -31719,6 +31739,7 @@
             "effect": "シールド",
             "value": 0.95,
             "duration": 1,
+            "applier": "自身",
             "target": "火",
             "targetAttribute": "火",
             "sourceText": "1ターンの間、自身に火属性の敵からのダメージを95%軽減するシールドを与える。",
@@ -31947,6 +31968,7 @@
             "effect": "シールド",
             "value": 0.96,
             "duration": 1,
+            "applier": "自身",
             "sourceText": "1ターンの間、自身にダメージを96%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -33940,6 +33962,7 @@
             "effect": "シールド",
             "value": 0.85,
             "duration": 4,
+            "applier": "自身",
             "target": "風",
             "targetAttribute": "風",
             "sourceText": "4ターンの間、自身に風属性の敵からのダメージを85%軽減するシールドを与える。",
@@ -33973,6 +33996,7 @@
             "effect": "シールド",
             "value": 0.92,
             "duration": 3,
+            "applier": "自身",
             "target": "風",
             "targetAttribute": "風",
             "sourceText": "3ターンの間、自身に風属性の敵からのダメージを92%軽減するシールドを与える。",
@@ -35617,6 +35641,7 @@
             "effect": "シールド",
             "value": 0.7,
             "duration": 1,
+            "applier": "自身",
             "sourceText": "1ターンの間、自身にダメージを70%軽減するシールドを与える。",
             "needsReview": false
           }
@@ -35648,6 +35673,7 @@
             "effect": "シールド",
             "value": 0.8,
             "duration": 1,
+            "applier": "自身",
             "sourceText": "1ターンの間、自身にダメージを80%軽減するシールドを与える。",
             "needsReview": false
           }
