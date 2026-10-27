@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-09-27T11:06:13.624Z",
+  "generatedAt": "2026-10-21T16:50:29.727Z",
   "characters": [
     {
       "id": 1189,
@@ -12233,6 +12233,172 @@
             "value": 0.99,
             "duration": 1,
             "sourceText": "1ターンの間、自身にダメージを99%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2303,
+      "name": "ペチェール先輩",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2303.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "ウクライナ",
+      "details": {
+        "id": 2303,
+        "name": "ペチェール先輩",
+        "attribute": "水",
+        "cost": 11,
+        "hp": 1051,
+        "power": 745,
+        "limitBreak": 4,
+        "limitHp": 1482,
+        "limitPower": 1051,
+        "skillTurn": 0,
+        "skill": "1ターンの間、風属性の敵に対する自身の攻撃力を150%増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1.5,
+            "duration": 1,
+            "applier": "自身",
+            "target": "風",
+            "targetAttribute": "風",
+            "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を150%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2304,
+      "name": "ブコヴィナくん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2304.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "ウクライナ",
+      "details": {
+        "id": 2304,
+        "name": "ブコヴィナくん",
+        "attribute": "水風",
+        "cost": 15,
+        "hp": 880,
+        "power": 1882,
+        "limitBreak": 5,
+        "limitHp": 1328,
+        "limitPower": 2842,
+        "skillTurn": 2,
+        "skill": "2ターンの間、自身の属性を風属性に変更する。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "風",
+            "duration": 2,
+            "applier": "自身",
+            "sourceText": "2ターンの間、自身の属性を風属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2305,
+      "name": "リヴィウ兵長",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2305.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "ウクライナ",
+      "details": {
+        "id": 2305,
+        "name": "リヴィウ兵長",
+        "attribute": "風火",
+        "cost": 23,
+        "hp": 2400,
+        "power": 2008,
+        "limitBreak": 6,
+        "limitHp": 3864,
+        "limitPower": 3233,
+        "skillTurn": 4,
+        "skill": "敵属性の攻撃カウントを1増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 1,
+            "sourceText": "敵属性の攻撃カウントを1増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2306,
+      "name": "ルィチさん(後期)",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2306.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "ウクライナ",
+      "details": {
+        "id": 2306,
+        "name": "ルィチさん(後期)",
+        "attribute": "火水",
+        "cost": 47,
+        "hp": 3610,
+        "power": 1666,
+        "limitBreak": 7,
+        "limitHp": 6151,
+        "limitPower": 2821,
+        "skillTurn": 6,
+        "skill": "3ターンの間、風属性の味方全員の攻撃が8回連続攻撃になる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 8,
+            "duration": 3,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "3ターンの間、風属性の味方全員の攻撃が8回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2307,
+      "name": "欧州ブーナッド",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2307.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "ウクライナ",
+      "details": {
+        "id": 2307,
+        "name": "欧州ブーナッド",
+        "attribute": "水風",
+        "cost": 46,
+        "hp": 3100,
+        "power": 2200,
+        "limitBreak": 7,
+        "limitHp": 3748,
+        "limitPower": 5282,
+        "skillTurn": 2,
+        "skill": "4ターンの間、自身のHPを50%回復する。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.5,
+            "duration": 4,
+            "applier": "自身",
+            "sourceText": "4ターンの間、自身のHPを50%回復する。",
             "needsReview": false
           }
         ]
@@ -29631,6 +29797,40 @@
             "target": "敵全員",
             "targetAttribute": "全",
             "sourceText": "1ターンの間、攻撃を自身に集中させる（90%カット）。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2308,
+      "name": "B・Wな永恵さん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2308.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "ゆる狩り",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2308,
+        "name": "B・Wな永恵さん",
+        "attribute": "水",
+        "cost": 60,
+        "hp": 3500,
+        "power": 3400,
+        "limitBreak": 7,
+        "limitHp": 5964,
+        "limitPower": 5793,
+        "skillTurn": 4,
+        "skill": "1ターンの間、攻撃を自身に集中させる(90%カット)。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.9,
+            "duration": 1,
+            "applier": "自身",
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "1ターンの間、攻撃を自身に集中させる(90%カット)。",
             "needsReview": false
           }
         ]
@@ -53100,207 +53300,6 @@
       "heading": "子音（他）"
     },
     {
-      "id": 1,
-      "name": "けいび",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1,
-        "name": "けいび",
-        "attribute": "火",
-        "cost": 5,
-        "hp": 295,
-        "power": 300,
-        "skillTurn": 3,
-        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 2,
-      "name": "ニート",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 2,
-        "name": "ニート",
-        "attribute": "水",
-        "cost": 5,
-        "hp": 314,
-        "power": 296,
-        "skillTurn": 3,
-        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 3,
-      "name": "ねっつ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon3.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 3,
-        "name": "ねっつ",
-        "attribute": "風",
-        "cost": 5,
-        "hp": 306,
-        "power": 297,
-        "skillTurn": 3,
-        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 4,
-      "name": "むりょく",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon4.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 4,
-        "name": "むりょく",
-        "attribute": "全",
-        "cost": 5,
-        "hp": 159,
-        "power": 144,
-        "skillTurn": 3,
-        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 152,
-      "name": "金のドナドナぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon152.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 152,
-        "name": "金のドナドナぴよ子",
-        "attribute": "火",
-        "cost": 4,
-        "hp": 100,
-        "power": 100,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "R"
-      }
-    },
-    {
-      "id": 153,
-      "name": "火の供犠ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon153.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 153,
-        "name": "火の供犠ぴよ子",
-        "attribute": "火",
-        "cost": 4,
-        "hp": 100,
-        "power": 100,
-        "limitBreak": 2,
-        "limitHp": 120,
-        "limitPower": 120,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "R"
-      }
-    },
-    {
-      "id": 154,
-      "name": "水の供犠ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon154.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 154,
-        "name": "水の供犠ぴよ子",
-        "attribute": "水",
-        "cost": 4,
-        "hp": 100,
-        "power": 100,
-        "limitBreak": 2,
-        "limitHp": 120,
-        "limitPower": 120,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "R"
-      }
-    },
-    {
-      "id": 155,
-      "name": "風の供犠ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon155.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 155,
-        "name": "風の供犠ぴよ子",
-        "attribute": "風",
-        "cost": 4,
-        "hp": 100,
-        "power": 100,
-        "limitBreak": 2,
-        "limitHp": 120,
-        "limitPower": 120,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "R"
-      }
-    },
-    {
       "id": 17,
       "name": "掘joy一号",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon17.png",
@@ -53414,6 +53413,578 @@
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "味方全員のスキルカウントを1減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 242,
+      "name": "剣闘士",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon242.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 243,
+      "name": "熟練の剣闘士",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon243.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 244,
+      "name": "歴戦の剣闘士",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon244.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 245,
+      "name": "譲らざる者",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon245.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 246,
+      "name": "流浪の騎士",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon246.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 247,
+      "name": "王家の騎士",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon247.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 248,
+      "name": "建国の騎士団",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon248.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 249,
+      "name": "護国の盾",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon249.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 250,
+      "name": "暗殺者",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon250.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 251,
+      "name": "流浪の殺し手",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon251.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 252,
+      "name": "ダークウォーカー",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon252.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 253,
+      "name": "アサシン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon253.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 791,
+      "name": "啓示のエルフ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon791.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 792,
+      "name": "必罰のエルフ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon792.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 793,
+      "name": "深淵のエルフ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon793.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 478,
+      "name": "発音鬼リチャード",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon478.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 478,
+        "name": "発音鬼リチャード",
+        "attribute": "風",
+        "cost": 17,
+        "hp": 1600,
+        "power": 2000,
+        "limitBreak": 6,
+        "limitHp": 2576,
+        "limitPower": 3220,
+        "skillTurn": 4,
+        "skill": "2ターンの間、自身の攻撃が全体攻撃になる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 2,
+            "applier": "自身",
+            "sourceText": "2ターンの間、自身の攻撃が全体攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 479,
+      "name": "小林伯爵",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon479.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 479,
+        "name": "小林伯爵",
+        "attribute": "水",
+        "cost": 15,
+        "hp": 2000,
+        "power": 1200,
+        "limitBreak": 5,
+        "limitHp": 3020,
+        "limitPower": 1812,
+        "skillTurn": 5,
+        "skill": "死亡している味方全員を15%のHPで蘇らせる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.15,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "死亡している味方全員を15%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 480,
+      "name": "狼先生ジョン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon480.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 480,
+        "name": "狼先生ジョン",
+        "attribute": "火",
+        "cost": 18,
+        "hp": 1300,
+        "power": 1900,
+        "limitBreak": 5,
+        "limitHp": 1963,
+        "limitPower": 2869,
+        "skillTurn": 1,
+        "skill": "2ターンの間、自身の属性を水属性に変更する。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "水",
+            "duration": 2,
+            "applier": "自身",
+            "sourceText": "2ターンの間、自身の属性を水属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1384,
+      "name": "米倉英子(大学生)",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1384.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1384,
+        "name": "米倉英子(大学生)",
+        "attribute": "全",
+        "cost": 77,
+        "hp": 1,
+        "power": 1,
+        "limitBreak": 7,
+        "limitHp": 1,
+        "limitPower": 1,
+        "skillTurn": 777,
+        "skill": "1ターンの間、自身の攻撃力を77777%増加させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 777.77,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を77777%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1385,
+      "name": "米倉英夫(ゆる)",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1385.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1385,
+        "name": "米倉英夫(ゆる)",
+        "attribute": "全",
+        "cost": 55,
+        "hp": 1,
+        "power": 1,
+        "limitBreak": 7,
+        "limitHp": 1,
+        "limitPower": 1,
+        "skillTurn": 55,
+        "skill": "55ターンの間、味方全員の属性を全属性(３色混合)に変更する。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "全",
+            "duration": 55,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "55ターンの間、味方全員の属性を全属性(３色混合)に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 537,
+      "name": "賀正ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon537.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 156,
+      "name": "愛のぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon156.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 156,
+        "name": "愛のぴよ子",
+        "attribute": "火",
+        "cost": 7,
+        "hp": 1080,
+        "power": 1320,
+        "limitBreak": 5,
+        "limitHp": 1631,
+        "limitPower": 1993,
+        "skillTurn": 3,
+        "skill": "水属性の味方全員のHPを100%回復する。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 1,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "水属性の味方全員のHPを100%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 221,
+      "name": "祝宴！さくらぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon221.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 294,
+      "name": "ご入学ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon294.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 313,
+      "name": "皐月ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon313.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 314,
+      "name": "端午ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon314.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 343,
+      "name": "ジャノメぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon343.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 369,
+      "name": "七夕ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon369.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 369,
+        "name": "七夕ぴよ子",
+        "attribute": "水",
+        "cost": 7,
+        "hp": 777,
+        "power": 777,
+        "limitBreak": 4,
+        "limitHp": 1104,
+        "limitPower": 1104,
+        "skillTurn": 3,
+        "skill": "死亡している風属性の味方全員を30%のHPで蘇らせる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.3,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "死亡している風属性の味方全員を30%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 410,
+      "name": "葉月ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon410.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 410,
+        "name": "葉月ぴよ子",
+        "attribute": "火",
+        "cost": 8,
+        "hp": 388,
+        "power": 1388,
+        "limitBreak": 5,
+        "limitHp": 590,
+        "limitPower": 2110,
+        "skillTurn": 6,
+        "skill": "3ターンの間、自身の攻撃力を400%増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 4,
+            "duration": 3,
+            "applier": "自身",
+            "sourceText": "3ターンの間、自身の攻撃力を400%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 413,
+      "name": "中秋ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon413.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 477,
+      "name": "収穫ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon477.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 505,
+      "name": "和みぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon505.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 531,
+      "name": "サンタぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon531.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 1,
+      "name": "けいび",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1,
+        "name": "けいび",
+        "attribute": "火",
+        "cost": 5,
+        "hp": 295,
+        "power": 300,
+        "skillTurn": 3,
+        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "ニート",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2,
+        "name": "ニート",
+        "attribute": "水",
+        "cost": 5,
+        "hp": 314,
+        "power": 296,
+        "skillTurn": 3,
+        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "ねっつ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon3.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 3,
+        "name": "ねっつ",
+        "attribute": "風",
+        "cost": 5,
+        "hp": 306,
+        "power": 297,
+        "skillTurn": 3,
+        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "むりょく",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon4.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 4,
+        "name": "むりょく",
+        "attribute": "全",
+        "cost": 5,
+        "hp": 159,
+        "power": 144,
+        "skillTurn": 3,
+        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
             "needsReview": false
           }
         ]
@@ -53543,126 +54114,6 @@
       }
     },
     {
-      "id": 344,
-      "name": "星の白金ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon344.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 344,
-        "name": "星の白金ぴよ子",
-        "attribute": "水",
-        "cost": 5,
-        "hp": 999,
-        "power": 999,
-        "limitBreak": 6,
-        "limitHp": 999,
-        "limitPower": 999,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "CR"
-      }
-    },
-    {
-      "id": 345,
-      "name": "紅玉の供犠ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon345.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 345,
-        "name": "紅玉の供犠ぴよ子",
-        "attribute": "火",
-        "cost": 6,
-        "hp": 999,
-        "power": 999,
-        "limitBreak": 6,
-        "limitHp": 1609,
-        "limitPower": 1609,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "CR"
-      }
-    },
-    {
-      "id": 346,
-      "name": "青玉の供犠ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon346.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 346,
-        "name": "青玉の供犠ぴよ子",
-        "attribute": "水",
-        "cost": 6,
-        "hp": 999,
-        "power": 999,
-        "limitBreak": 6,
-        "limitHp": 1609,
-        "limitPower": 1609,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "CR"
-      }
-    },
-    {
-      "id": 347,
-      "name": "翠玉の供犠ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon347.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 347,
-        "name": "翠玉の供犠ぴよ子",
-        "attribute": "風",
-        "cost": 6,
-        "hp": 999,
-        "power": 999,
-        "limitBreak": 6,
-        "limitHp": 1609,
-        "limitPower": 1609,
-        "skillTurn": 0,
-        "skill": "なし。",
-        "rare": "CR"
-      }
-    },
-    {
-      "id": 242,
-      "name": "剣闘士",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon242.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 243,
-      "name": "熟練の剣闘士",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon243.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 244,
-      "name": "歴戦の剣闘士",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon244.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 245,
-      "name": "譲らざる者",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon245.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
       "id": 319,
       "name": "朱雀けいび",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon319.png",
@@ -53775,6 +54226,435 @@
             "needsReview": false
           }
         ]
+      }
+    },
+    {
+      "id": 501,
+      "name": "玄武けいび",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon501.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 502,
+      "name": "玄武ニート",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon502.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 503,
+      "name": "玄武ねっつ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon503.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 504,
+      "name": "玄武むりょく",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon504.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 632,
+      "name": "白虎けいび",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon632.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 633,
+      "name": "白虎ニート",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon633.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 634,
+      "name": "白虎ねっつ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon634.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 635,
+      "name": "白虎むりょく",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon635.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 746,
+      "name": "青竜けいび",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon746.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 747,
+      "name": "青竜ニート",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon747.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 748,
+      "name": "青竜ねっつ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon748.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 749,
+      "name": "青竜むりょく",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon749.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 1030,
+      "name": "覚醒けいび",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1030.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1030,
+        "name": "覚醒けいび",
+        "attribute": "火",
+        "cost": 6,
+        "hp": 345,
+        "power": 300,
+        "skillTurn": 2,
+        "skill": "1ターンの間、火属性の味方全員の攻撃が2回連続攻撃になる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 2,
+            "duration": 1,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "1ターンの間、火属性の味方全員の攻撃が2回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1031,
+      "name": "覚醒ニート",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1031.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1031,
+        "name": "覚醒ニート",
+        "attribute": "水",
+        "cost": 6,
+        "hp": 346,
+        "power": 297,
+        "skillTurn": 2,
+        "skill": "1ターンの間、水属性の味方全員の攻撃が2回連続攻撃になる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 2,
+            "duration": 1,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "1ターンの間、水属性の味方全員の攻撃が2回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1032,
+      "name": "覚醒ねっつ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1032.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1032,
+        "name": "覚醒ねっつ",
+        "attribute": "風",
+        "cost": 6,
+        "hp": 354,
+        "power": 296,
+        "skillTurn": 2,
+        "skill": "1ターンの間、風属性の味方全員の攻撃が2回連続攻撃になる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 2,
+            "duration": 1,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "1ターンの間、風属性の味方全員の攻撃が2回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1033,
+      "name": "覚醒むりょく",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1033.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1033,
+        "name": "覚醒むりょく",
+        "attribute": "全",
+        "cost": 6,
+        "hp": 198,
+        "power": 89,
+        "skillTurn": 3,
+        "skill": "1ターンの間、味方全員の攻撃が2回連続攻撃になる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 2,
+            "duration": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "1ターンの間、味方全員の攻撃が2回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 315,
+      "name": "皐月けいび",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon315.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 316,
+      "name": "皐月ニート",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon316.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 317,
+      "name": "皐月ねっつ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon317.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 318,
+      "name": "皐月むりょく",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon318.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 312,
+      "name": "ニートエンペラー",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon312.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他"
+    },
+    {
+      "id": 152,
+      "name": "金のドナドナぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon152.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 152,
+        "name": "金のドナドナぴよ子",
+        "attribute": "火",
+        "cost": 4,
+        "hp": 100,
+        "power": 100,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "R"
+      }
+    },
+    {
+      "id": 153,
+      "name": "火の供犠ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon153.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 153,
+        "name": "火の供犠ぴよ子",
+        "attribute": "火",
+        "cost": 4,
+        "hp": 100,
+        "power": 100,
+        "limitBreak": 2,
+        "limitHp": 120,
+        "limitPower": 120,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "R"
+      }
+    },
+    {
+      "id": 154,
+      "name": "水の供犠ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon154.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 154,
+        "name": "水の供犠ぴよ子",
+        "attribute": "水",
+        "cost": 4,
+        "hp": 100,
+        "power": 100,
+        "limitBreak": 2,
+        "limitHp": 120,
+        "limitPower": 120,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "R"
+      }
+    },
+    {
+      "id": 155,
+      "name": "風の供犠ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon155.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 155,
+        "name": "風の供犠ぴよ子",
+        "attribute": "風",
+        "cost": 4,
+        "hp": 100,
+        "power": 100,
+        "limitBreak": 2,
+        "limitHp": 120,
+        "limitPower": 120,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "R"
+      }
+    },
+    {
+      "id": 344,
+      "name": "星の白金ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon344.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 344,
+        "name": "星の白金ぴよ子",
+        "attribute": "水",
+        "cost": 5,
+        "hp": 999,
+        "power": 999,
+        "limitBreak": 6,
+        "limitHp": 999,
+        "limitPower": 999,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "CR"
+      }
+    },
+    {
+      "id": 345,
+      "name": "紅玉の供犠ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon345.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 345,
+        "name": "紅玉の供犠ぴよ子",
+        "attribute": "火",
+        "cost": 6,
+        "hp": 999,
+        "power": 999,
+        "limitBreak": 6,
+        "limitHp": 1609,
+        "limitPower": 1609,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "CR"
+      }
+    },
+    {
+      "id": 346,
+      "name": "青玉の供犠ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon346.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 346,
+        "name": "青玉の供犠ぴよ子",
+        "attribute": "水",
+        "cost": 6,
+        "hp": 999,
+        "power": 999,
+        "limitBreak": 6,
+        "limitHp": 1609,
+        "limitPower": 1609,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "CR"
+      }
+    },
+    {
+      "id": 347,
+      "name": "翠玉の供犠ぴよ子",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon347.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "その他",
+      "smallCategory": "その他",
+      "details": {
+        "id": 347,
+        "name": "翠玉の供犠ぴよ子",
+        "attribute": "風",
+        "cost": 6,
+        "hp": 999,
+        "power": 999,
+        "limitBreak": 6,
+        "limitHp": 1609,
+        "limitPower": 1609,
+        "skillTurn": 0,
+        "skill": "なし。",
+        "rare": "CR"
       }
     },
     {
@@ -53907,70 +54787,6 @@
       }
     },
     {
-      "id": 246,
-      "name": "流浪の騎士",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon246.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 247,
-      "name": "王家の騎士",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon247.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 248,
-      "name": "建国の騎士団",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon248.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 249,
-      "name": "護国の盾",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon249.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 501,
-      "name": "玄武けいび",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon501.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 502,
-      "name": "玄武ニート",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon502.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 503,
-      "name": "玄武ねっつ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon503.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 504,
-      "name": "玄武むりょく",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon504.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
       "id": 151,
       "name": "欣喜ぴよ子",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon151.png",
@@ -54045,70 +54861,6 @@
       }
     },
     {
-      "id": 250,
-      "name": "暗殺者",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon250.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 251,
-      "name": "流浪の殺し手",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon251.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 252,
-      "name": "ダークウォーカー",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon252.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 253,
-      "name": "アサシン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon253.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 632,
-      "name": "白虎けいび",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon632.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 633,
-      "name": "白虎ニート",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon633.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 634,
-      "name": "白虎ねっつ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon634.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 635,
-      "name": "白虎むりょく",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon635.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
       "id": 1856,
       "name": "応援ぴよ子団長",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1856.png",
@@ -54120,62 +54872,6 @@
       "id": 1857,
       "name": "ぴっよコイン先生",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1857.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 791,
-      "name": "啓示のエルフ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon791.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 792,
-      "name": "必罰のエルフ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon792.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 793,
-      "name": "深淵のエルフ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon793.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 746,
-      "name": "青竜けいび",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon746.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 747,
-      "name": "青竜ニート",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon747.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 748,
-      "name": "青竜ねっつ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon748.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 749,
-      "name": "青竜むりょく",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon749.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "その他",
       "smallCategory": "その他"
@@ -54280,126 +54976,6 @@
       }
     },
     {
-      "id": 1030,
-      "name": "覚醒けいび",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1030.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1030,
-        "name": "覚醒けいび",
-        "attribute": "火",
-        "cost": 6,
-        "hp": 345,
-        "power": 300,
-        "skillTurn": 2,
-        "skill": "1ターンの間、火属性の味方全員の攻撃が2回連続攻撃になる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "連撃",
-            "value": 2,
-            "duration": 1,
-            "applier": "火",
-            "applierAttribute": "火",
-            "sourceText": "1ターンの間、火属性の味方全員の攻撃が2回連続攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1031,
-      "name": "覚醒ニート",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1031.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1031,
-        "name": "覚醒ニート",
-        "attribute": "水",
-        "cost": 6,
-        "hp": 346,
-        "power": 297,
-        "skillTurn": 2,
-        "skill": "1ターンの間、水属性の味方全員の攻撃が2回連続攻撃になる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "連撃",
-            "value": 2,
-            "duration": 1,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "1ターンの間、水属性の味方全員の攻撃が2回連続攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1032,
-      "name": "覚醒ねっつ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1032.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1032,
-        "name": "覚醒ねっつ",
-        "attribute": "風",
-        "cost": 6,
-        "hp": 354,
-        "power": 296,
-        "skillTurn": 2,
-        "skill": "1ターンの間、風属性の味方全員の攻撃が2回連続攻撃になる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "連撃",
-            "value": 2,
-            "duration": 1,
-            "applier": "風",
-            "applierAttribute": "風",
-            "sourceText": "1ターンの間、風属性の味方全員の攻撃が2回連続攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1033,
-      "name": "覚醒むりょく",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1033.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1033,
-        "name": "覚醒むりょく",
-        "attribute": "全",
-        "cost": 6,
-        "hp": 198,
-        "power": 89,
-        "skillTurn": 3,
-        "skill": "1ターンの間、味方全員の攻撃が2回連続攻撃になる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "連撃",
-            "value": 2,
-            "duration": 1,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "1ターンの間、味方全員の攻撃が2回連続攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
       "id": 1383,
       "name": "渇求するネギの果て",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1383.png",
@@ -54467,38 +55043,6 @@
       }
     },
     {
-      "id": 315,
-      "name": "皐月けいび",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon315.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 316,
-      "name": "皐月ニート",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon316.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 317,
-      "name": "皐月ねっつ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon317.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 318,
-      "name": "皐月むりょく",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon318.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
       "id": 1285,
       "name": "強化ゆる骨格のススメ",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1285.png",
@@ -54563,350 +55107,6 @@
           }
         ]
       }
-    },
-    {
-      "id": 312,
-      "name": "ニートエンペラー",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon312.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 537,
-      "name": "賀正ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon537.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 156,
-      "name": "愛のぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon156.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 156,
-        "name": "愛のぴよ子",
-        "attribute": "火",
-        "cost": 7,
-        "hp": 1080,
-        "power": 1320,
-        "limitBreak": 5,
-        "limitHp": 1631,
-        "limitPower": 1993,
-        "skillTurn": 3,
-        "skill": "水属性の味方全員のHPを100%回復する。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "回復",
-            "value": 1,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "水属性の味方全員のHPを100%回復する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 221,
-      "name": "祝宴！さくらぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon221.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 294,
-      "name": "ご入学ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon294.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 1384,
-      "name": "米倉英子(大学生)",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1384.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1384,
-        "name": "米倉英子(大学生)",
-        "attribute": "全",
-        "cost": 77,
-        "hp": 1,
-        "power": 1,
-        "limitBreak": 7,
-        "limitHp": 1,
-        "limitPower": 1,
-        "skillTurn": 777,
-        "skill": "1ターンの間、自身の攻撃力を77777%増加させる。",
-        "rare": "MZR",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 777.77,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を77777%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1385,
-      "name": "米倉英夫(ゆる)",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1385.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1385,
-        "name": "米倉英夫(ゆる)",
-        "attribute": "全",
-        "cost": 55,
-        "hp": 1,
-        "power": 1,
-        "limitBreak": 7,
-        "limitHp": 1,
-        "limitPower": 1,
-        "skillTurn": 55,
-        "skill": "55ターンの間、味方全員の属性を全属性(３色混合)に変更する。",
-        "rare": "MZR",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "全",
-            "duration": 55,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "55ターンの間、味方全員の属性を全属性(３色混合)に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 313,
-      "name": "皐月ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon313.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 314,
-      "name": "端午ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon314.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 343,
-      "name": "ジャノメぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon343.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 369,
-      "name": "七夕ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon369.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 369,
-        "name": "七夕ぴよ子",
-        "attribute": "水",
-        "cost": 7,
-        "hp": 777,
-        "power": 777,
-        "limitBreak": 4,
-        "limitHp": 1104,
-        "limitPower": 1104,
-        "skillTurn": 3,
-        "skill": "死亡している風属性の味方全員を30%のHPで蘇らせる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.3,
-            "applier": "風",
-            "applierAttribute": "風",
-            "sourceText": "死亡している風属性の味方全員を30%のHPで蘇らせる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 478,
-      "name": "発音鬼リチャード",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon478.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 478,
-        "name": "発音鬼リチャード",
-        "attribute": "風",
-        "cost": 17,
-        "hp": 1600,
-        "power": 2000,
-        "limitBreak": 6,
-        "limitHp": 2576,
-        "limitPower": 3220,
-        "skillTurn": 4,
-        "skill": "2ターンの間、自身の攻撃が全体攻撃になる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "全体攻撃",
-            "duration": 2,
-            "applier": "自身",
-            "sourceText": "2ターンの間、自身の攻撃が全体攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 479,
-      "name": "小林伯爵",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon479.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 479,
-        "name": "小林伯爵",
-        "attribute": "水",
-        "cost": 15,
-        "hp": 2000,
-        "power": 1200,
-        "limitBreak": 5,
-        "limitHp": 3020,
-        "limitPower": 1812,
-        "skillTurn": 5,
-        "skill": "死亡している味方全員を15%のHPで蘇らせる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.15,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "死亡している味方全員を15%のHPで蘇らせる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 480,
-      "name": "狼先生ジョン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon480.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 480,
-        "name": "狼先生ジョン",
-        "attribute": "火",
-        "cost": 18,
-        "hp": 1300,
-        "power": 1900,
-        "limitBreak": 5,
-        "limitHp": 1963,
-        "limitPower": 2869,
-        "skillTurn": 1,
-        "skill": "2ターンの間、自身の属性を水属性に変更する。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "水",
-            "duration": 2,
-            "applier": "自身",
-            "sourceText": "2ターンの間、自身の属性を水属性に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 410,
-      "name": "葉月ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon410.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他",
-      "details": {
-        "id": 410,
-        "name": "葉月ぴよ子",
-        "attribute": "火",
-        "cost": 8,
-        "hp": 388,
-        "power": 1388,
-        "limitBreak": 5,
-        "limitHp": 590,
-        "limitPower": 2110,
-        "skillTurn": 6,
-        "skill": "3ターンの間、自身の攻撃力を400%増加させる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 4,
-            "duration": 3,
-            "applier": "自身",
-            "sourceText": "3ターンの間、自身の攻撃力を400%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 413,
-      "name": "中秋ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon413.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 477,
-      "name": "収穫ぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon477.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 505,
-      "name": "和みぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon505.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
-    },
-    {
-      "id": 531,
-      "name": "サンタぴよ子",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon531.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "その他",
-      "smallCategory": "その他"
     }
   ]
 }
