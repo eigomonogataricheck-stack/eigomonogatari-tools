@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-10-28T04:51:17.030Z",
+  "generatedAt": "2026-10-28T05:04:01.690Z",
   "characters": [
     {
       "id": 1189,
@@ -36210,651 +36210,31 @@
       }
     },
     {
-      "id": 1219,
-      "name": "よりりんＫ林スタイル",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1219.png",
+      "id": 1579,
+      "name": "美音三銃士を連れてきたよ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1579.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1219,
-        "name": "よりりんＫ林スタイル",
-        "attribute": "火水",
-        "cost": 24,
-        "hp": 1600,
-        "power": 1600,
-        "limitBreak": 6,
-        "limitHp": 2576,
-        "limitPower": 2576,
-        "skillTurn": 2,
-        "skill": "1ターンの間、味方全員の属性を風属性に変更する。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "風",
-            "duration": 1,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "1ターンの間、味方全員の属性を風属性に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1242,
-      "name": "恋愛成就☆どうしん様",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1242.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1242,
-        "name": "恋愛成就☆どうしん様",
-        "attribute": "水風",
-        "cost": 25,
-        "hp": 1645,
-        "power": 1555,
-        "limitBreak": 6,
-        "limitHp": 2649,
-        "limitPower": 2504,
-        "skillTurn": 1,
-        "skill": "水属性の味方全員のHPを18%回復する。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "回復",
-            "value": 0.18,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "水属性の味方全員のHPを18%回復する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1243,
-      "name": "雛段芸人☆さくらんず",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1243.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1243,
-        "name": "雛段芸人☆さくらんず",
+        "id": 1579,
+        "name": "美音三銃士を連れてきたよ",
         "attribute": "全",
-        "cost": 16,
-        "hp": 1000,
-        "power": 1250,
-        "limitBreak": 5,
-        "limitHp": 1510,
-        "limitPower": 1887,
-        "skillTurn": 5,
-        "skill": "味方全員のスキルカウントを2減少させる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "短縮",
-            "value": 2,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "味方全員のスキルカウントを2減少させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1258,
-      "name": "極東恋姫☆霧子たん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1258.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1258,
-        "name": "極東恋姫☆霧子たん",
-        "attribute": "風火",
-        "cost": 15,
-        "hp": 879,
-        "power": 821,
-        "limitBreak": 4,
-        "limitHp": 1243,
-        "limitPower": 1161,
-        "skillTurn": 5,
-        "skill": "死亡している味方全員を1%のHPで蘇らせる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.01,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "死亡している味方全員を1%のHPで蘇らせる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1259,
-      "name": "子供神・わらしちゃん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1259.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1259,
-        "name": "子供神・わらしちゃん",
-        "attribute": "全",
-        "cost": 7,
-        "hp": 400,
-        "power": 800,
-        "limitBreak": 4,
-        "limitHp": 565,
-        "limitPower": 1131,
-        "skillTurn": 4,
-        "skill": "火属性の敵全員の攻撃カウントを1増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 1,
-            "target": "火",
-            "targetAttribute": "火",
-            "sourceText": "火属性の敵全員の攻撃カウントを1増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1268,
-      "name": "聖☆いんてぃないか",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1268.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1268,
-        "name": "聖☆いんてぃないか",
-        "attribute": "火水",
-        "cost": 19,
-        "hp": 1750,
-        "power": 1450,
-        "limitBreak": 6,
-        "limitHp": 2817,
-        "limitPower": 2334,
-        "skillTurn": 4,
-        "skill": "3ターンの間、自身の攻撃が全体攻撃になる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "全体攻撃",
-            "duration": 3,
-            "applier": "自身",
-            "sourceText": "3ターンの間、自身の攻撃が全体攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1271,
-      "name": "海の日シスターズ♪",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1271.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1271,
-        "name": "海の日シスターズ♪",
-        "attribute": "火水",
-        "cost": 40,
-        "hp": 2244,
-        "power": 2733,
+        "cost": 50,
+        "hp": 3800,
+        "power": 2200,
         "limitBreak": 7,
-        "limitHp": 3823,
-        "limitPower": 4657,
-        "skillTurn": 4,
-        "skill": "3ターンの間、水属性の味方全員の攻撃力を80%増加させる。",
+        "limitHp": 6475,
+        "limitPower": 3748,
+        "skillTurn": 5,
+        "skill": "死亡している味方全員を20%のHPで甦らせる。",
         "rare": "ZR",
         "skillEffects": [
           {
-            "effect": "攻撃力アップ",
-            "value": 0.8,
-            "duration": 3,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "3ターンの間、水属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1272,
-      "name": "BON JOVE",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1272.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1272,
-        "name": "BON JOVE",
-        "attribute": "全",
-        "cost": 24,
-        "hp": 2000,
-        "power": 2000,
-        "limitBreak": 6,
-        "limitHp": 3220,
-        "limitPower": 3220,
-        "skillTurn": 5,
-        "skill": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "全体攻撃",
-            "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
-            "sourceText": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1281,
-      "name": "収穫☆にいがタン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1281.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1281,
-        "name": "収穫☆にいがタン",
-        "attribute": "風火",
-        "cost": 26,
-        "hp": 2800,
-        "power": 2270,
-        "limitBreak": 6,
-        "limitHp": 4508,
-        "limitPower": 3655,
-        "skillTurn": 3,
-        "skill": "2ターンの間、水属性の攻撃を自身に集中させる(70%カット)。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "かばう",
-            "value": 0.7,
-            "duration": 2,
-            "applier": "自身",
-            "target": "水",
-            "targetAttribute": "水",
-            "sourceText": "2ターンの間、水属性の攻撃を自身に集中させる(70%カット)。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1283,
-      "name": "ハロハロ☆ナモミさま",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1283.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1283,
-        "name": "ハロハロ☆ナモミさま",
-        "attribute": "水風",
-        "cost": 36,
-        "hp": 1500,
-        "power": 2500,
-        "limitBreak": 7,
-        "limitHp": 2556,
-        "limitPower": 4260,
-        "skillTurn": 2,
-        "skill": "1ターンの間、自身の攻撃力を200%増加させる。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 2,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1290,
-      "name": "ｱﾙﾊﾟ力のお兄(父)さん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1290.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1290,
-        "name": "ｱﾙﾊﾟ力のお兄(父)さん",
-        "attribute": "水風",
-        "cost": 10,
-        "hp": 540,
-        "power": 1560,
-        "limitBreak": 4,
-        "limitHp": 763,
-        "limitPower": 2205,
-        "skillTurn": 3,
-        "skill": "味方全員のHPを40%回復する。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "回復",
-            "value": 0.4,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1301,
-      "name": "聖なる打毬神！みるるん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1301.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1301,
-        "name": "聖なる打毬神！みるるん",
-        "attribute": "風火",
-        "cost": 19,
-        "hp": 800,
-        "power": 1300,
-        "limitBreak": 5,
-        "limitHp": 1208,
-        "limitPower": 1963,
-        "skillTurn": 2,
-        "skill": "1ターンの間、火属性の敵に対する味方全員の攻撃力を100%増加させる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1,
-            "duration": 1,
-            "applier": "全員",
-            "target": "火",
-            "applierAttribute": "全",
-            "targetAttribute": "火",
-            "sourceText": "1ターンの間、火属性の敵に対する味方全員の攻撃力を100%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1302,
-      "name": "帰って来たいぬやマン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1302.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1302,
-        "name": "帰って来たいぬやマン",
-        "attribute": "火水",
-        "cost": 21,
-        "hp": 1100,
-        "power": 1100,
-        "limitBreak": 5,
-        "limitHp": 1661,
-        "limitPower": 1661,
-        "skillTurn": 4,
-        "skill": "1ターンの間、味方全員の攻撃力を150%増加させる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1.5,
-            "duration": 1,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "1ターンの間、味方全員の攻撃力を150%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1311,
-      "name": "仮面のいはと先生",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1311.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1311,
-        "name": "仮面のいはと先生",
-        "attribute": "水風",
-        "cost": 25,
-        "hp": 1300,
-        "power": 1900,
-        "limitBreak": 6,
-        "limitHp": 2095,
-        "limitPower": 3063,
-        "skillTurn": 3,
-        "skill": "水属性の敵全員の攻撃カウントを1増加させる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 1,
-            "target": "水",
-            "targetAttribute": "水",
-            "sourceText": "水属性の敵全員の攻撃カウントを1増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1315,
-      "name": "ほたるん！卒業祭り",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1315.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1315,
-        "name": "ほたるん！卒業祭り",
-        "attribute": "風火",
-        "cost": 18,
-        "hp": 750,
-        "power": 1700,
-        "limitBreak": 5,
-        "limitHp": 1132,
-        "limitPower": 2567,
-        "skillTurn": 0,
-        "skill": "1ターンの間、自身の属性を水属性に変更する。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "水",
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の属性を水属性に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1318,
-      "name": "満開☆チゥりっぷちゃん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1318.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1318,
-        "name": "満開☆チゥりっぷちゃん",
-        "attribute": "火水",
-        "cost": 20,
-        "hp": 400,
-        "power": 2100,
-        "limitBreak": 4,
-        "limitHp": 563,
-        "limitPower": 2957,
-        "skillTurn": 2,
-        "skill": "1ターンの間、味方全員の属性を水属性に変更する。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "水",
-            "duration": 1,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "1ターンの間、味方全員の属性を水属性に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1333,
-      "name": "華麗なる塚ジェンヌ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1333.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1333,
-        "name": "華麗なる塚ジェンヌ",
-        "attribute": "風火",
-        "cost": 13,
-        "hp": 1115,
-        "power": 1110,
-        "limitBreak": 5,
-        "limitHp": 1684,
-        "limitPower": 1676,
-        "skillTurn": 3,
-        "skill": "死亡している水属性の味方全員を13%のHPで蘇らせる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.13,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "死亡している水属性の味方全員を13%のHPで蘇らせる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1336,
-      "name": "羊蟹☆こ祝いくん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1336.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1336,
-        "name": "羊蟹☆こ祝いくん",
-        "attribute": "風火",
-        "cost": 24,
-        "hp": 1300,
-        "power": 1700,
-        "limitBreak": 6,
-        "limitHp": 2093,
-        "limitPower": 2737,
-        "skillTurn": 3,
-        "skill": "風属性の敵全員の攻撃カウントを1増加させる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 1,
-            "target": "風",
-            "targetAttribute": "風",
-            "sourceText": "風属性の敵全員の攻撃カウントを1増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1346,
-      "name": "七夕星人☆たたるんるん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1346.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1346,
-        "name": "七夕星人☆たたるんるん",
-        "attribute": "全",
-        "cost": 20,
-        "hp": 2000,
-        "power": 1000,
-        "limitBreak": 6,
-        "limitHp": 3220,
-        "limitPower": 1610,
-        "skillTurn": 2,
-        "skill": "2ターンの間、味方全員の攻撃力を30%増加させる。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 0.3,
-            "duration": 2,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "2ターンの間、味方全員の攻撃力を30%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1353,
-      "name": "山ガール！？さなこりん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1353.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1353,
-        "name": "山ガール！？さなこりん",
-        "attribute": "水風",
-        "cost": 15,
-        "hp": 1700,
-        "power": 811,
-        "limitBreak": 5,
-        "limitHp": 2567,
-        "limitPower": 1225,
-        "skillTurn": 6,
-        "skill": "2ターンの間、味方全員の攻撃が3回連続攻撃になる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "連撃",
-            "value": 3,
-            "duration": 2,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "2ターンの間、味方全員の攻撃が3回連続攻撃になる。",
-            "needsReview": false
+            "sourceText": "死亡している味方全員を20%のHPで甦らせる。",
+            "needsReview": true
           }
         ]
       }
@@ -36895,64 +36275,294 @@
       }
     },
     {
-      "id": 1360,
-      "name": "IMO NI FESTIVAL 2018",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1360.png",
+      "id": 1540,
+      "name": "暗黒王まはーかーらん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1540.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1360,
-        "name": "IMO NI FESTIVAL 2018",
-        "attribute": "風火",
-        "cost": 14,
-        "hp": 1300,
-        "power": 821,
-        "limitBreak": 4,
-        "limitHp": 1837,
-        "limitPower": 1161,
-        "skillTurn": 3,
-        "skill": "2ターンの間、水属性の味方全員の攻撃が全体攻撃になる。",
-        "rare": "N",
+        "id": 1540,
+        "name": "暗黒王まはーかーらん",
+        "attribute": "火水",
+        "cost": 47,
+        "hp": 2190,
+        "power": 2304,
+        "limitBreak": 7,
+        "limitHp": 3731,
+        "limitPower": 3926,
+        "skillTurn": 4,
+        "skill": "水属性の敵全員の攻撃カウントを2増加させる。",
+        "rare": "ZR",
         "skillEffects": [
           {
-            "effect": "全体攻撃",
-            "duration": 2,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "2ターンの間、水属性の味方全員の攻撃が全体攻撃になる。",
+            "effect": "遅延",
+            "value": 2,
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "水属性の敵全員の攻撃カウントを2増加させる。",
             "needsReview": false
           }
         ]
       }
     },
     {
-      "id": 1368,
-      "name": "やまなしーヌの心",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1368.png",
+      "id": 1466,
+      "name": "覚醒大氷怪・雪愛",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1466.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1368,
-        "name": "やまなしーヌの心",
+        "id": 1466,
+        "name": "覚醒大氷怪・雪愛",
+        "attribute": "風火",
+        "cost": 37,
+        "hp": 2550,
+        "power": 2650,
+        "limitBreak": 7,
+        "limitHp": 4345,
+        "limitPower": 4515,
+        "skillTurn": 1,
+        "skill": "2ターンの間、自身の属性を水属性に変更する。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "水",
+            "duration": 2,
+            "applier": "自身",
+            "sourceText": "2ターンの間、自身の属性を水属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1538,
+      "name": "ピカリャー射的ｽﾀｲﾙ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1538.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1538,
+        "name": "ピカリャー射的ｽﾀｲﾙ",
+        "attribute": "火水",
+        "cost": 45,
+        "hp": 2222,
+        "power": 2222,
+        "limitBreak": 7,
+        "limitHp": 3786,
+        "limitPower": 3786,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身の攻撃が全体攻撃になる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃が全体攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1271,
+      "name": "海の日シスターズ♪",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1271.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1271,
+        "name": "海の日シスターズ♪",
+        "attribute": "火水",
+        "cost": 40,
+        "hp": 2244,
+        "power": 2733,
+        "limitBreak": 7,
+        "limitHp": 3823,
+        "limitPower": 4657,
+        "skillTurn": 4,
+        "skill": "3ターンの間、水属性の味方全員の攻撃力を80%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 0.8,
+            "duration": 3,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "3ターンの間、水属性の味方全員の攻撃力を80%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1283,
+      "name": "ハロハロ☆ナモミさま",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1283.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1283,
+        "name": "ハロハロ☆ナモミさま",
         "attribute": "水風",
-        "cost": 25,
+        "cost": 36,
         "hp": 1500,
-        "power": 1600,
-        "limitBreak": 6,
-        "limitHp": 2415,
-        "limitPower": 2576,
+        "power": 2500,
+        "limitBreak": 7,
+        "limitHp": 2556,
+        "limitPower": 4260,
+        "skillTurn": 2,
+        "skill": "1ターンの間、自身の攻撃力を200%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 2,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を200%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1391,
+      "name": "広報担当：アッシュ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1391.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1391,
+        "name": "広報担当：アッシュ",
+        "attribute": "火水",
+        "cost": 37,
+        "hp": 3000,
+        "power": 2200,
+        "limitBreak": 7,
+        "limitHp": 5112,
+        "limitPower": 3748,
+        "skillTurn": 2,
+        "skill": "1ターンの間、火属性の攻撃を自身に集中させる。(70%カット)。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.7,
+            "duration": 1,
+            "applier": "自身",
+            "target": "火",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、火属性の攻撃を自身に集中させる。(70%カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1505,
+      "name": "ﾜﾙﾌﾟﾙｷﾞｽなメル子様",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1505.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1505,
+        "name": "ﾜﾙﾌﾟﾙｷﾞｽなメル子様",
+        "attribute": "水風",
+        "cost": 39,
+        "hp": 3850,
+        "power": 1850,
+        "limitBreak": 7,
+        "limitHp": 6560,
+        "limitPower": 3152,
         "skillTurn": 3,
-        "skill": "味方全員のスキルカウントを1減少させる。",
-        "rare": "CR",
+        "skill": "1ターンの間、火属性の攻撃を自身に集中させる(80%カット)。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.8,
+            "duration": 1,
+            "applier": "自身",
+            "target": "火",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、火属性の攻撃を自身に集中させる(80%カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1438,
+      "name": "大杉に願いを☆ミ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1438.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1438,
+        "name": "大杉に願いを☆ミ",
+        "attribute": "水風",
+        "cost": 39,
+        "hp": 3010,
+        "power": 1800,
+        "limitBreak": 7,
+        "limitHp": 5129,
+        "limitPower": 3067,
+        "skillTurn": 2,
+        "skill": "1ターンの間、水属性の攻撃を自身に集中させる(77%カット)。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.77,
+            "duration": 1,
+            "applier": "自身",
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "1ターンの間、水属性の攻撃を自身に集中させる(77%カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1479,
+      "name": "シャーロック&エッジュ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1479.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1479,
+        "name": "シャーロック&エッジュ",
+        "attribute": "風火",
+        "cost": 41,
+        "hp": 2500,
+        "power": 3000,
+        "limitBreak": 7,
+        "limitHp": 4260,
+        "limitPower": 5112,
+        "skillTurn": 2,
+        "skill": "水属性の味方全員のスキルカウントを1減少させる。",
+        "rare": "ZR",
         "skillEffects": [
           {
             "effect": "短縮",
             "value": 1,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "味方全員のスキルカウントを1減少させる。",
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "水属性の味方全員のスキルカウントを1減少させる。",
             "needsReview": false
           }
         ]
@@ -36994,72 +36604,6 @@
       }
     },
     {
-      "id": 1391,
-      "name": "広報担当：アッシュ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1391.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1391,
-        "name": "広報担当：アッシュ",
-        "attribute": "火水",
-        "cost": 37,
-        "hp": 3000,
-        "power": 2200,
-        "limitBreak": 7,
-        "limitHp": 5112,
-        "limitPower": 3748,
-        "skillTurn": 2,
-        "skill": "1ターンの間、火属性の攻撃を自身に集中させる。(70%カット)。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "かばう",
-            "value": 0.7,
-            "duration": 1,
-            "applier": "自身",
-            "target": "火",
-            "targetAttribute": "火",
-            "sourceText": "1ターンの間、火属性の攻撃を自身に集中させる。(70%カット)。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1396,
-      "name": "グリンすマン・ﾌｨｰﾊﾞｰ!",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1396.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1396,
-        "name": "グリンすマン・ﾌｨｰﾊﾞｰ!",
-        "attribute": "水風",
-        "cost": 22,
-        "hp": 1100,
-        "power": 1150,
-        "limitBreak": 5,
-        "limitHp": 1661,
-        "limitPower": 1736,
-        "skillTurn": 5,
-        "skill": "敵全員の攻撃カウントを2増加させる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 2,
-            "target": "敵全員",
-            "targetAttribute": "全",
-            "sourceText": "敵全員の攻撃カウントを2増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
       "id": 1405,
       "name": "白い悪魔の小町さん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1405.png",
@@ -37092,490 +36636,31 @@
       }
     },
     {
-      "id": 1410,
-      "name": "花めく☆まつやマン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1410.png",
+      "id": 1268,
+      "name": "聖☆いんてぃないか",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1268.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1410,
-        "name": "花めく☆まつやマン",
-        "attribute": "風火",
-        "cost": 24,
-        "hp": 2900,
-        "power": 1350,
-        "limitBreak": 6,
-        "limitHp": 4669,
-        "limitPower": 2173,
-        "skillTurn": 1,
-        "skill": "自身のHPを50%回復する。",
-        "rare": "CR",
-        "skillEffects": [
-          {
-            "effect": "回復",
-            "value": 0.5,
-            "applier": "自身",
-            "sourceText": "自身のHPを50%回復する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1417,
-      "name": "ハリウッドナナコ師匠",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1417.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1417,
-        "name": "ハリウッドナナコ師匠",
-        "attribute": "全",
-        "cost": 5,
-        "hp": 1775,
-        "power": 775,
-        "limitBreak": 4,
-        "limitHp": 2503,
-        "limitPower": 1093,
-        "skillTurn": 9,
-        "skill": "敵全員の攻撃カウントを4増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 4,
-            "target": "敵全員",
-            "targetAttribute": "全",
-            "sourceText": "敵全員の攻撃カウントを4増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1429,
-      "name": "アロハる☆水島神人",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1429.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1429,
-        "name": "アロハる☆水島神人",
-        "attribute": "火水",
-        "cost": 16,
-        "hp": 2150,
-        "power": 1250,
-        "limitBreak": 5,
-        "limitHp": 3246,
-        "limitPower": 1887,
-        "skillTurn": 2,
-        "skill": "3ターンの間、自身の属性を水属性に変更する。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "水",
-            "duration": 3,
-            "applier": "自身",
-            "sourceText": "3ターンの間、自身の属性を水属性に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1438,
-      "name": "大杉に願いを☆ミ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1438.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1438,
-        "name": "大杉に願いを☆ミ",
-        "attribute": "水風",
-        "cost": 39,
-        "hp": 3010,
-        "power": 1800,
-        "limitBreak": 7,
-        "limitHp": 5129,
-        "limitPower": 3067,
-        "skillTurn": 2,
-        "skill": "1ターンの間、水属性の攻撃を自身に集中させる(77%カット)。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "かばう",
-            "value": 0.77,
-            "duration": 1,
-            "applier": "自身",
-            "target": "水",
-            "targetAttribute": "水",
-            "sourceText": "1ターンの間、水属性の攻撃を自身に集中させる(77%カット)。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1440,
-      "name": "二条嬢☆浴衣モード",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1440.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1440,
-        "name": "二条嬢☆浴衣モード",
+        "id": 1268,
+        "name": "聖☆いんてぃないか",
         "attribute": "火水",
         "cost": 19,
-        "hp": 1650,
-        "power": 1550,
+        "hp": 1750,
+        "power": 1450,
         "limitBreak": 6,
-        "limitHp": 2656,
-        "limitPower": 2495,
-        "skillTurn": 1,
-        "skill": "1ターンの間、風属性の攻撃を自身に集中させる（80%カット）。",
+        "limitHp": 2817,
+        "limitPower": 2334,
+        "skillTurn": 4,
+        "skill": "3ターンの間、自身の攻撃が全体攻撃になる。",
         "rare": "CR",
         "skillEffects": [
           {
-            "effect": "かばう",
-            "value": 0.8,
-            "duration": 1,
+            "effect": "全体攻撃",
+            "duration": 3,
             "applier": "自身",
-            "target": "風",
-            "targetAttribute": "風",
-            "sourceText": "1ターンの間、風属性の攻撃を自身に集中させる（80%カット）。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1447,
-      "name": "月見だよ！叡智州利偉",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1447.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1447,
-        "name": "月見だよ！叡智州利偉",
-        "attribute": "風火",
-        "cost": 10,
-        "hp": 780,
-        "power": 1420,
-        "limitBreak": 4,
-        "limitHp": 1100,
-        "limitPower": 2002,
-        "skillTurn": 4,
-        "skill": "2ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 0.8,
-            "duration": 2,
-            "applier": "火",
-            "applierAttribute": "火",
-            "sourceText": "2ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1450,
-      "name": "Halloweenな藤原マミー",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1450.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1450,
-        "name": "Halloweenな藤原マミー",
-        "attribute": "水風",
-        "cost": 18,
-        "hp": 800,
-        "power": 1300,
-        "limitBreak": 5,
-        "limitHp": 1208,
-        "limitPower": 1963,
-        "skillTurn": 5,
-        "skill": "死亡している水属性の味方全員を90%のHPで蘇らせる。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.9,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "死亡している水属性の味方全員を90%のHPで蘇らせる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1456,
-      "name": "ﾀｰｷｰﾃﾞｰなじとっこ君",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1456.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1456,
-        "name": "ﾀｰｷｰﾃﾞｰなじとっこ君",
-        "attribute": "火水",
-        "cost": 10,
-        "hp": 500,
-        "power": 1700,
-        "limitBreak": 4,
-        "limitHp": 706,
-        "limitPower": 2403,
-        "skillTurn": 4,
-        "skill": "2ターンの間、風属性の敵に対する自信の攻撃力を400%増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 4,
-            "duration": 2,
-            "applier": "自身",
-            "target": "風",
-            "targetAttribute": "風",
-            "sourceText": "2ターンの間、風属性の敵に対する自信の攻撃力を400%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1466,
-      "name": "覚醒大氷怪・雪愛",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1466.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1466,
-        "name": "覚醒大氷怪・雪愛",
-        "attribute": "風火",
-        "cost": 37,
-        "hp": 2550,
-        "power": 2650,
-        "limitBreak": 7,
-        "limitHp": 4345,
-        "limitPower": 4515,
-        "skillTurn": 1,
-        "skill": "2ターンの間、自身の属性を水属性に変更する。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "色変",
-            "value": "水",
-            "duration": 2,
-            "applier": "自身",
-            "sourceText": "2ターンの間、自身の属性を水属性に変更する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1479,
-      "name": "シャーロック&エッジュ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1479.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1479,
-        "name": "シャーロック&エッジュ",
-        "attribute": "風火",
-        "cost": 41,
-        "hp": 2500,
-        "power": 3000,
-        "limitBreak": 7,
-        "limitHp": 4260,
-        "limitPower": 5112,
-        "skillTurn": 2,
-        "skill": "水属性の味方全員のスキルカウントを1減少させる。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "短縮",
-            "value": 1,
-            "applier": "水",
-            "applierAttribute": "水",
-            "sourceText": "水属性の味方全員のスキルカウントを1減少させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1489,
-      "name": "ニート達の日常。",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1489.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1489,
-        "name": "ニート達の日常。",
-        "attribute": "全",
-        "cost": 21,
-        "hp": 2100,
-        "power": 210,
-        "limitBreak": 4,
-        "limitHp": 2968,
-        "limitPower": 296,
-        "skillTurn": 3,
-        "skill": "敵全員の攻撃カウントを1増加させる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 1,
-            "target": "敵全員",
-            "targetAttribute": "全",
-            "sourceText": "敵全員の攻撃カウントを1増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1496,
-      "name": "牛タソ☆行進曲",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1496.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1496,
-        "name": "牛タソ☆行進曲",
-        "attribute": "火水",
-        "cost": 14,
-        "hp": 500,
-        "power": 1200,
-        "limitBreak": 5,
-        "limitHp": 755,
-        "limitPower": 1812,
-        "skillTurn": 2,
-        "skill": "2ターンの間、攻撃を自身に集中させる(30%カット。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "かばう",
-            "value": 0.3,
-            "duration": 2,
-            "applier": "自身",
-            "target": "敵全員",
-            "targetAttribute": "全",
-            "sourceText": "2ターンの間、攻撃を自身に集中させる(30%カット。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1505,
-      "name": "ﾜﾙﾌﾟﾙｷﾞｽなメル子様",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1505.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1505,
-        "name": "ﾜﾙﾌﾟﾙｷﾞｽなメル子様",
-        "attribute": "水風",
-        "cost": 39,
-        "hp": 3850,
-        "power": 1850,
-        "limitBreak": 7,
-        "limitHp": 6560,
-        "limitPower": 3152,
-        "skillTurn": 3,
-        "skill": "1ターンの間、火属性の攻撃を自身に集中させる(80%カット)。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "かばう",
-            "value": 0.8,
-            "duration": 1,
-            "applier": "自身",
-            "target": "火",
-            "targetAttribute": "火",
-            "sourceText": "1ターンの間、火属性の攻撃を自身に集中させる(80%カット)。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1512,
-      "name": "Dr.＆萌やﾁﾝｹﾞｰﾙ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1512.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1512,
-        "name": "Dr.＆萌やﾁﾝｹﾞｰﾙ",
-        "attribute": "全",
-        "cost": 14,
-        "hp": 512,
-        "power": 1704,
-        "limitBreak": 5,
-        "limitHp": 773,
-        "limitPower": 2573,
-        "skillTurn": 1,
-        "skill": "味方全員のHPを40%回復する。",
-        "rare": "R",
-        "skillEffects": [
-          {
-            "effect": "回復",
-            "value": 0.4,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "味方全員のHPを40%回復する。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1522,
-      "name": "侵略成功!?イカ翁",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1522.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1522,
-        "name": "侵略成功!?イカ翁",
-        "attribute": "火水",
-        "cost": 20,
-        "hp": 800,
-        "power": 900,
-        "limitBreak": 4,
-        "limitHp": 1131,
-        "limitPower": 1272,
-        "skillTurn": 2,
-        "skill": "死亡している風属性の味方全員を1%のHPで蘇らせる。",
-        "rare": "N",
-        "skillEffects": [
-          {
-            "effect": "蘇生",
-            "value": 0.01,
-            "applier": "風",
-            "applierAttribute": "風",
-            "sourceText": "死亡している風属性の味方全員を1%のHPで蘇らせる。",
+            "sourceText": "3ターンの間、自身の攻撃が全体攻撃になる。",
             "needsReview": false
           }
         ]
@@ -37614,95 +36699,101 @@
       }
     },
     {
-      "id": 1538,
-      "name": "ピカリャー射的ｽﾀｲﾙ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1538.png",
+      "id": 1281,
+      "name": "収穫☆にいがタン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1281.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1538,
-        "name": "ピカリャー射的ｽﾀｲﾙ",
-        "attribute": "火水",
-        "cost": 45,
-        "hp": 2222,
-        "power": 2222,
-        "limitBreak": 7,
-        "limitHp": 3786,
-        "limitPower": 3786,
-        "skillTurn": 2,
-        "skill": "1ターンの間、自身の攻撃が全体攻撃になる。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "全体攻撃",
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃が全体攻撃になる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1540,
-      "name": "暗黒王まはーかーらん",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1540.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1540,
-        "name": "暗黒王まはーかーらん",
-        "attribute": "火水",
-        "cost": 47,
-        "hp": 2190,
-        "power": 2304,
-        "limitBreak": 7,
-        "limitHp": 3731,
-        "limitPower": 3926,
-        "skillTurn": 4,
-        "skill": "水属性の敵全員の攻撃カウントを2増加させる。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "遅延",
-            "value": 2,
-            "target": "水",
-            "targetAttribute": "水",
-            "sourceText": "水属性の敵全員の攻撃カウントを2増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
-      "id": 1550,
-      "name": "ビール売りの小娘",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1550.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "旧協力",
-      "smallCategory": "その他",
-      "details": {
-        "id": 1550,
-        "name": "ビール売りの小娘",
+        "id": 1281,
+        "name": "収穫☆にいがタン",
         "attribute": "風火",
-        "cost": 18,
-        "hp": 942,
-        "power": 2260,
+        "cost": 26,
+        "hp": 2800,
+        "power": 2270,
         "limitBreak": 6,
-        "limitHp": 1516,
-        "limitPower": 3638,
+        "limitHp": 4508,
+        "limitPower": 3655,
         "skillTurn": 3,
-        "skill": "味方全員のスキルカウントを1減少させる。",
+        "skill": "2ターンの間、水属性の攻撃を自身に集中させる(70%カット)。",
         "rare": "CR",
         "skillEffects": [
           {
-            "effect": "短縮",
-            "value": 1,
+            "effect": "かばう",
+            "value": 0.7,
+            "duration": 2,
+            "applier": "自身",
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "2ターンの間、水属性の攻撃を自身に集中させる(70%カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1219,
+      "name": "よりりんＫ林スタイル",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1219.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1219,
+        "name": "よりりんＫ林スタイル",
+        "attribute": "火水",
+        "cost": 24,
+        "hp": 1600,
+        "power": 1600,
+        "limitBreak": 6,
+        "limitHp": 2576,
+        "limitPower": 2576,
+        "skillTurn": 2,
+        "skill": "1ターンの間、味方全員の属性を風属性に変更する。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "風",
+            "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
-            "sourceText": "味方全員のスキルカウントを1減少させる。",
+            "sourceText": "1ターンの間、味方全員の属性を風属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1440,
+      "name": "二条嬢☆浴衣モード",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1440.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1440,
+        "name": "二条嬢☆浴衣モード",
+        "attribute": "火水",
+        "cost": 19,
+        "hp": 1650,
+        "power": 1550,
+        "limitBreak": 6,
+        "limitHp": 2656,
+        "limitPower": 2495,
+        "skillTurn": 1,
+        "skill": "1ターンの間、風属性の攻撃を自身に集中させる（80%カット）。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.8,
+            "duration": 1,
+            "applier": "自身",
+            "target": "風",
+            "targetAttribute": "風",
+            "sourceText": "1ターンの間、風属性の攻撃を自身に集中させる（80%カット）。",
             "needsReview": false
           }
         ]
@@ -37744,6 +36835,556 @@
       }
     },
     {
+      "id": 1368,
+      "name": "やまなしーヌの心",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1368.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1368,
+        "name": "やまなしーヌの心",
+        "attribute": "水風",
+        "cost": 25,
+        "hp": 1500,
+        "power": 1600,
+        "limitBreak": 6,
+        "limitHp": 2415,
+        "limitPower": 2576,
+        "skillTurn": 3,
+        "skill": "味方全員のスキルカウントを1減少させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "短縮",
+            "value": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "味方全員のスキルカウントを1減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1550,
+      "name": "ビール売りの小娘",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1550.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1550,
+        "name": "ビール売りの小娘",
+        "attribute": "風火",
+        "cost": 18,
+        "hp": 942,
+        "power": 2260,
+        "limitBreak": 6,
+        "limitHp": 1516,
+        "limitPower": 3638,
+        "skillTurn": 3,
+        "skill": "味方全員のスキルカウントを1減少させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "短縮",
+            "value": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "味方全員のスキルカウントを1減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1346,
+      "name": "七夕星人☆たたるんるん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1346.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1346,
+        "name": "七夕星人☆たたるんるん",
+        "attribute": "全",
+        "cost": 20,
+        "hp": 2000,
+        "power": 1000,
+        "limitBreak": 6,
+        "limitHp": 3220,
+        "limitPower": 1610,
+        "skillTurn": 2,
+        "skill": "2ターンの間、味方全員の攻撃力を30%増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 0.3,
+            "duration": 2,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "2ターンの間、味方全員の攻撃力を30%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1410,
+      "name": "花めく☆まつやマン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1410.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1410,
+        "name": "花めく☆まつやマン",
+        "attribute": "風火",
+        "cost": 24,
+        "hp": 2900,
+        "power": 1350,
+        "limitBreak": 6,
+        "limitHp": 4669,
+        "limitPower": 2173,
+        "skillTurn": 1,
+        "skill": "自身のHPを50%回復する。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.5,
+            "applier": "自身",
+            "sourceText": "自身のHPを50%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1272,
+      "name": "BON JOVE",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1272.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1272,
+        "name": "BON JOVE",
+        "attribute": "全",
+        "cost": 24,
+        "hp": 2000,
+        "power": 2000,
+        "limitBreak": 6,
+        "limitHp": 3220,
+        "limitPower": 3220,
+        "skillTurn": 5,
+        "skill": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1336,
+      "name": "羊蟹☆こ祝いくん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1336.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1336,
+        "name": "羊蟹☆こ祝いくん",
+        "attribute": "風火",
+        "cost": 24,
+        "hp": 1300,
+        "power": 1700,
+        "limitBreak": 6,
+        "limitHp": 2093,
+        "limitPower": 2737,
+        "skillTurn": 3,
+        "skill": "風属性の敵全員の攻撃カウントを1増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 1,
+            "target": "風",
+            "targetAttribute": "風",
+            "sourceText": "風属性の敵全員の攻撃カウントを1増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1311,
+      "name": "仮面のいはと先生",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1311.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1311,
+        "name": "仮面のいはと先生",
+        "attribute": "水風",
+        "cost": 25,
+        "hp": 1300,
+        "power": 1900,
+        "limitBreak": 6,
+        "limitHp": 2095,
+        "limitPower": 3063,
+        "skillTurn": 3,
+        "skill": "水属性の敵全員の攻撃カウントを1増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 1,
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "水属性の敵全員の攻撃カウントを1増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1614,
+      "name": "みどりのたけしマン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1614.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1614,
+        "name": "みどりのたけしマン",
+        "attribute": "水風",
+        "cost": 23,
+        "hp": 1610,
+        "power": 1512,
+        "limitBreak": 6,
+        "limitHp": 2592,
+        "limitPower": 2432,
+        "skillTurn": 3,
+        "skill": "3ターンの間、味方全員にダメージを40%軽減するシールドを与える。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "シールド",
+            "value": 0.4,
+            "duration": 3,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "3ターンの間、味方全員にダメージを40%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1242,
+      "name": "恋愛成就☆どうしん様",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1242.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1242,
+        "name": "恋愛成就☆どうしん様",
+        "attribute": "水風",
+        "cost": 25,
+        "hp": 1645,
+        "power": 1555,
+        "limitBreak": 6,
+        "limitHp": 2649,
+        "limitPower": 2504,
+        "skillTurn": 1,
+        "skill": "水属性の味方全員のHPを18%回復する。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.18,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "水属性の味方全員のHPを18%回復する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1450,
+      "name": "Halloweenな藤原マミー",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1450.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1450,
+        "name": "Halloweenな藤原マミー",
+        "attribute": "水風",
+        "cost": 18,
+        "hp": 800,
+        "power": 1300,
+        "limitBreak": 5,
+        "limitHp": 1208,
+        "limitPower": 1963,
+        "skillTurn": 5,
+        "skill": "死亡している水属性の味方全員を90%のHPで蘇らせる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.9,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "死亡している水属性の味方全員を90%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1591,
+      "name": "魔滅！鷹山先生",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1591.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1591,
+        "name": "魔滅！鷹山先生",
+        "attribute": "水風",
+        "cost": 27,
+        "hp": 850,
+        "power": 850,
+        "limitBreak": 5,
+        "limitHp": 1283,
+        "limitPower": 1283,
+        "skillTurn": 4,
+        "skill": "風属性の敵全員の攻撃カウントを2増加させる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 2,
+            "target": "風",
+            "targetAttribute": "風",
+            "sourceText": "風属性の敵全員の攻撃カウントを2増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1396,
+      "name": "グリンすマン・ﾌｨｰﾊﾞｰ!",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1396.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1396,
+        "name": "グリンすマン・ﾌｨｰﾊﾞｰ!",
+        "attribute": "水風",
+        "cost": 22,
+        "hp": 1100,
+        "power": 1150,
+        "limitBreak": 5,
+        "limitHp": 1661,
+        "limitPower": 1736,
+        "skillTurn": 5,
+        "skill": "敵全員の攻撃カウントを2増加させる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 2,
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "敵全員の攻撃カウントを2増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1333,
+      "name": "華麗なる塚ジェンヌ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1333.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1333,
+        "name": "華麗なる塚ジェンヌ",
+        "attribute": "風火",
+        "cost": 13,
+        "hp": 1115,
+        "power": 1110,
+        "limitBreak": 5,
+        "limitHp": 1684,
+        "limitPower": 1676,
+        "skillTurn": 3,
+        "skill": "死亡している水属性の味方全員を13%のHPで蘇らせる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.13,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "死亡している水属性の味方全員を13%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1429,
+      "name": "アロハる☆水島神人",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1429.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1429,
+        "name": "アロハる☆水島神人",
+        "attribute": "火水",
+        "cost": 16,
+        "hp": 2150,
+        "power": 1250,
+        "limitBreak": 5,
+        "limitHp": 3246,
+        "limitPower": 1887,
+        "skillTurn": 2,
+        "skill": "3ターンの間、自身の属性を水属性に変更する。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "水",
+            "duration": 3,
+            "applier": "自身",
+            "sourceText": "3ターンの間、自身の属性を水属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1496,
+      "name": "牛タソ☆行進曲",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1496.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1496,
+        "name": "牛タソ☆行進曲",
+        "attribute": "火水",
+        "cost": 14,
+        "hp": 500,
+        "power": 1200,
+        "limitBreak": 5,
+        "limitHp": 755,
+        "limitPower": 1812,
+        "skillTurn": 2,
+        "skill": "2ターンの間、攻撃を自身に集中させる(30%カット。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.3,
+            "duration": 2,
+            "applier": "自身",
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "2ターンの間、攻撃を自身に集中させる(30%カット。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1301,
+      "name": "聖なる打毬神！みるるん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1301.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1301,
+        "name": "聖なる打毬神！みるるん",
+        "attribute": "風火",
+        "cost": 19,
+        "hp": 800,
+        "power": 1300,
+        "limitBreak": 5,
+        "limitHp": 1208,
+        "limitPower": 1963,
+        "skillTurn": 2,
+        "skill": "1ターンの間、火属性の敵に対する味方全員の攻撃力を100%増加させる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "全員",
+            "target": "火",
+            "applierAttribute": "全",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、火属性の敵に対する味方全員の攻撃力を100%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1627,
+      "name": "雨降る倉敷のみかん姐",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1627.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1627,
+        "name": "雨降る倉敷のみかん姐",
+        "attribute": "火水",
+        "cost": 15,
+        "hp": 1800,
+        "power": 1300,
+        "limitBreak": 5,
+        "limitHp": 2718,
+        "limitPower": 1963,
+        "skillTurn": 4,
+        "skill": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1564,
       "name": "ホーリーエンジェるん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1564.png",
@@ -37777,62 +37418,258 @@
       }
     },
     {
-      "id": 1579,
-      "name": "美音三銃士を連れてきたよ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1579.png",
+      "id": 1512,
+      "name": "Dr.＆萌やﾁﾝｹﾞｰﾙ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1512.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1579,
-        "name": "美音三銃士を連れてきたよ",
+        "id": 1512,
+        "name": "Dr.＆萌やﾁﾝｹﾞｰﾙ",
         "attribute": "全",
-        "cost": 50,
-        "hp": 3800,
-        "power": 2200,
-        "limitBreak": 7,
-        "limitHp": 6475,
-        "limitPower": 3748,
-        "skillTurn": 5,
-        "skill": "死亡している味方全員を20%のHPで甦らせる。",
-        "rare": "ZR",
+        "cost": 14,
+        "hp": 512,
+        "power": 1704,
+        "limitBreak": 5,
+        "limitHp": 773,
+        "limitPower": 2573,
+        "skillTurn": 1,
+        "skill": "味方全員のHPを40%回復する。",
+        "rare": "R",
         "skillEffects": [
           {
+            "effect": "回復",
+            "value": 0.4,
             "applier": "全員",
             "applierAttribute": "全",
-            "sourceText": "死亡している味方全員を20%のHPで甦らせる。",
-            "needsReview": true
+            "sourceText": "味方全員のHPを40%回復する。",
+            "needsReview": false
           }
         ]
       }
     },
     {
-      "id": 1591,
-      "name": "魔滅！鷹山先生",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1591.png",
+      "id": 1302,
+      "name": "帰って来たいぬやマン",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1302.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1591,
-        "name": "魔滅！鷹山先生",
-        "attribute": "水風",
-        "cost": 27,
-        "hp": 850,
-        "power": 850,
+        "id": 1302,
+        "name": "帰って来たいぬやマン",
+        "attribute": "火水",
+        "cost": 21,
+        "hp": 1100,
+        "power": 1100,
         "limitBreak": 5,
-        "limitHp": 1283,
-        "limitPower": 1283,
+        "limitHp": 1661,
+        "limitPower": 1661,
         "skillTurn": 4,
-        "skill": "風属性の敵全員の攻撃カウントを2増加させる。",
+        "skill": "1ターンの間、味方全員の攻撃力を150%増加させる。",
         "rare": "R",
         "skillEffects": [
           {
-            "effect": "遅延",
+            "effect": "攻撃力アップ",
+            "value": 1.5,
+            "duration": 1,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "1ターンの間、味方全員の攻撃力を150%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1353,
+      "name": "山ガール！？さなこりん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1353.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1353,
+        "name": "山ガール！？さなこりん",
+        "attribute": "水風",
+        "cost": 15,
+        "hp": 1700,
+        "power": 811,
+        "limitBreak": 5,
+        "limitHp": 2567,
+        "limitPower": 1225,
+        "skillTurn": 6,
+        "skill": "2ターンの間、味方全員の攻撃が3回連続攻撃になる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 3,
+            "duration": 2,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "2ターンの間、味方全員の攻撃が3回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1315,
+      "name": "ほたるん！卒業祭り",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1315.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1315,
+        "name": "ほたるん！卒業祭り",
+        "attribute": "風火",
+        "cost": 18,
+        "hp": 750,
+        "power": 1700,
+        "limitBreak": 5,
+        "limitHp": 1132,
+        "limitPower": 2567,
+        "skillTurn": 0,
+        "skill": "1ターンの間、自身の属性を水属性に変更する。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "水",
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の属性を水属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1243,
+      "name": "雛段芸人☆さくらんず",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1243.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1243,
+        "name": "雛段芸人☆さくらんず",
+        "attribute": "全",
+        "cost": 16,
+        "hp": 1000,
+        "power": 1250,
+        "limitBreak": 5,
+        "limitHp": 1510,
+        "limitPower": 1887,
+        "skillTurn": 5,
+        "skill": "味方全員のスキルカウントを2減少させる。",
+        "rare": "R",
+        "skillEffects": [
+          {
+            "effect": "短縮",
             "value": 2,
-            "target": "風",
-            "targetAttribute": "風",
-            "sourceText": "風属性の敵全員の攻撃カウントを2増加させる。",
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "味方全員のスキルカウントを2減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1522,
+      "name": "侵略成功!?イカ翁",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1522.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1522,
+        "name": "侵略成功!?イカ翁",
+        "attribute": "火水",
+        "cost": 20,
+        "hp": 800,
+        "power": 900,
+        "limitBreak": 4,
+        "limitHp": 1131,
+        "limitPower": 1272,
+        "skillTurn": 2,
+        "skill": "死亡している風属性の味方全員を1%のHPで蘇らせる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.01,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "死亡している風属性の味方全員を1%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1417,
+      "name": "ハリウッドナナコ師匠",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1417.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1417,
+        "name": "ハリウッドナナコ師匠",
+        "attribute": "全",
+        "cost": 5,
+        "hp": 1775,
+        "power": 775,
+        "limitBreak": 4,
+        "limitHp": 2503,
+        "limitPower": 1093,
+        "skillTurn": 9,
+        "skill": "敵全員の攻撃カウントを4増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 4,
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "敵全員の攻撃カウントを4増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1360,
+      "name": "IMO NI FESTIVAL 2018",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1360.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1360,
+        "name": "IMO NI FESTIVAL 2018",
+        "attribute": "風火",
+        "cost": 14,
+        "hp": 1300,
+        "power": 821,
+        "limitBreak": 4,
+        "limitHp": 1837,
+        "limitPower": 1161,
+        "skillTurn": 3,
+        "skill": "2ターンの間、水属性の味方全員の攻撃が全体攻撃になる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 2,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "2ターンの間、水属性の味方全員の攻撃が全体攻撃になる。",
             "needsReview": false
           }
         ]
@@ -37905,65 +37742,228 @@
       }
     },
     {
-      "id": 1614,
-      "name": "みどりのたけしマン",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1614.png",
+      "id": 1456,
+      "name": "ﾀｰｷｰﾃﾞｰなじとっこ君",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1456.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1614,
-        "name": "みどりのたけしマン",
-        "attribute": "水風",
-        "cost": 23,
-        "hp": 1610,
-        "power": 1512,
-        "limitBreak": 6,
-        "limitHp": 2592,
-        "limitPower": 2432,
-        "skillTurn": 3,
-        "skill": "3ターンの間、味方全員にダメージを40%軽減するシールドを与える。",
-        "rare": "CR",
+        "id": 1456,
+        "name": "ﾀｰｷｰﾃﾞｰなじとっこ君",
+        "attribute": "火水",
+        "cost": 10,
+        "hp": 500,
+        "power": 1700,
+        "limitBreak": 4,
+        "limitHp": 706,
+        "limitPower": 2403,
+        "skillTurn": 4,
+        "skill": "2ターンの間、風属性の敵に対する自信の攻撃力を400%増加させる。",
+        "rare": "N",
         "skillEffects": [
           {
-            "effect": "シールド",
-            "value": 0.4,
-            "duration": 3,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "3ターンの間、味方全員にダメージを40%軽減するシールドを与える。",
+            "effect": "攻撃力アップ",
+            "value": 4,
+            "duration": 2,
+            "applier": "自身",
+            "target": "風",
+            "targetAttribute": "風",
+            "sourceText": "2ターンの間、風属性の敵に対する自信の攻撃力を400%増加させる。",
             "needsReview": false
           }
         ]
       }
     },
     {
-      "id": 1627,
-      "name": "雨降る倉敷のみかん姐",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1627.png",
+      "id": 1447,
+      "name": "月見だよ！叡智州利偉",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1447.png",
       "largeCategory": "特殊ゆる",
       "middleCategory": "旧協力",
       "smallCategory": "その他",
       "details": {
-        "id": 1627,
-        "name": "雨降る倉敷のみかん姐",
-        "attribute": "火水",
-        "cost": 15,
-        "hp": 1800,
-        "power": 1300,
-        "limitBreak": 5,
-        "limitHp": 2718,
-        "limitPower": 1963,
+        "id": 1447,
+        "name": "月見だよ！叡智州利偉",
+        "attribute": "風火",
+        "cost": 10,
+        "hp": 780,
+        "power": 1420,
+        "limitBreak": 4,
+        "limitHp": 1100,
+        "limitPower": 2002,
         "skillTurn": 4,
-        "skill": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
-        "rare": "R",
+        "skill": "2ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
+        "rare": "N",
         "skillEffects": [
           {
-            "effect": "全体攻撃",
+            "effect": "攻撃力アップ",
+            "value": 0.8,
+            "duration": 2,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "2ターンの間、火属性の味方全員の攻撃力を80%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1318,
+      "name": "満開☆チゥりっぷちゃん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1318.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1318,
+        "name": "満開☆チゥりっぷちゃん",
+        "attribute": "火水",
+        "cost": 20,
+        "hp": 400,
+        "power": 2100,
+        "limitBreak": 4,
+        "limitHp": 563,
+        "limitPower": 2957,
+        "skillTurn": 2,
+        "skill": "1ターンの間、味方全員の属性を水属性に変更する。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "水",
             "duration": 1,
             "applier": "全員",
             "applierAttribute": "全",
-            "sourceText": "1ターンの間、味方全員の攻撃が全体攻撃になる。",
+            "sourceText": "1ターンの間、味方全員の属性を水属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1489,
+      "name": "ニート達の日常。",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1489.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1489,
+        "name": "ニート達の日常。",
+        "attribute": "全",
+        "cost": 21,
+        "hp": 2100,
+        "power": 210,
+        "limitBreak": 4,
+        "limitHp": 2968,
+        "limitPower": 296,
+        "skillTurn": 3,
+        "skill": "敵全員の攻撃カウントを1増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 1,
+            "target": "敵全員",
+            "targetAttribute": "全",
+            "sourceText": "敵全員の攻撃カウントを1増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1258,
+      "name": "極東恋姫☆霧子たん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1258.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1258,
+        "name": "極東恋姫☆霧子たん",
+        "attribute": "風火",
+        "cost": 15,
+        "hp": 879,
+        "power": 821,
+        "limitBreak": 4,
+        "limitHp": 1243,
+        "limitPower": 1161,
+        "skillTurn": 5,
+        "skill": "死亡している味方全員を1%のHPで蘇らせる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "蘇生",
+            "value": 0.01,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "死亡している味方全員を1%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1259,
+      "name": "子供神・わらしちゃん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1259.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1259,
+        "name": "子供神・わらしちゃん",
+        "attribute": "全",
+        "cost": 7,
+        "hp": 400,
+        "power": 800,
+        "limitBreak": 4,
+        "limitHp": 565,
+        "limitPower": 1131,
+        "skillTurn": 4,
+        "skill": "火属性の敵全員の攻撃カウントを1増加させる。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "遅延",
+            "value": 1,
+            "target": "火",
+            "targetAttribute": "火",
+            "sourceText": "火属性の敵全員の攻撃カウントを1増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 1290,
+      "name": "ｱﾙﾊﾟ力のお兄(父)さん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1290.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "旧協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 1290,
+        "name": "ｱﾙﾊﾟ力のお兄(父)さん",
+        "attribute": "水風",
+        "cost": 10,
+        "hp": 540,
+        "power": 1560,
+        "limitBreak": 4,
+        "limitHp": 763,
+        "limitPower": 2205,
+        "skillTurn": 3,
+        "skill": "味方全員のHPを40%回復する。",
+        "rare": "N",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.4,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "味方全員のHPを40%回復する。",
             "needsReview": false
           }
         ]
