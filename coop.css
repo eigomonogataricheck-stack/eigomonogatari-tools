@@ -1,0 +1,280 @@
+/* 英語物語 非公式ツール: 協力ダメージ計算・協力報告書のスタイル
+   このページの見た目はこのファイルだけで定義する。
+   色・角丸・影は base.css の :root にある --ui-* 変数を使う。開閉は JS が付ける .closed / .mobile-closed で切り替える。 */
+
+/* ===== 共通部品 ===== */
+.coop-portrait{display:block;width:100%;aspect-ratio:1;border-radius:10px;background:#eef2f6 center/cover no-repeat}
+.coop-fold-card,.coop-enemies,.coop-decks,.coop-manual-judge{min-width:0;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.coop-fold-card{margin-top:14px;overflow:hidden}
+/* 開閉できるカードの見出し */
+.coop-enemies-toggle,.coop-decks-toggle,.coop-proposal-toggle,.coop-history-toggle{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;margin:0;padding:10px 16px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:#fff;color:var(--ui-heading);font-size:.95rem;font-weight:850;text-align:left;box-shadow:none;cursor:pointer}
+.coop-enemies-toggle>span:first-child,.coop-decks-toggle>span:first-child,.coop-proposal-toggle>span:first-child,.coop-history-toggle>span:first-child{flex:1 1 auto}
+.coop-proposal-toggle small,.coop-history-toggle small{color:var(--ui-muted);font-size:.74rem;font-weight:700}
+.coop-enemies-toggle[aria-expanded="false"],.coop-decks-toggle[aria-expanded="false"],.coop-proposal-toggle[aria-expanded="false"],.coop-history-toggle[aria-expanded="false"]{border-bottom-color:transparent}
+.coop-enemies-arrow,.coop-decks-arrow,.coop-layer-arrow,.coop-deck-arrow,.coop-proposal-arrow,.coop-proposal-usage-arrow,.coop-history-arrow,.coop-scale-history-arrow{flex:none;color:#98a2b3;font-size:.7rem}
+.coop-enemies-body.closed,.coop-layer.closed .coop-layer-body,.coop-deck-row.mobile-closed .coop-deck-body{display:none}
+
+/* ===== 協力ダメージ計算 =====
+   主役は「敵」と「味方デッキ」。PCでは2つの欄を画面の高さいっぱいに並べ、それぞれの中でスクロールする。
+   操作欄・判定・提案結果は脇役なので小さくまとめる(判定はデッキ欄の下端に常に表示)。 */
+#page-coop>.panel{max-width:none;padding:14px 16px}
+#page-coop .page-head{margin-bottom:10px}
+.coop-input-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+@media(min-width:1000px){
+ .coop-input-layout{grid-template-columns:minmax(0,2fr) minmax(0,3fr);align-items:stretch;height:calc(100vh - var(--topbar-h) - 120px);min-height:560px}
+ .coop-input-layout>.coop-enemies,.coop-input-layout>.coop-decks{display:flex;flex-direction:column;min-height:0;overflow:auto;overscroll-behavior:contain}
+ .coop-input-layout>.coop-enemies .coop-enemies-toggle,.coop-input-layout>.coop-decks .coop-decks-toggle{position:sticky;top:0;z-index:3;flex:none}
+ #coopDecksBody{flex:1 0 auto}
+}
+/* 詳細モードは敵欄に入力列が増えるので、中くらいのPC幅では左右を1:1にして名前の列を確保する */
+@media(min-width:1000px) and (max-width:1279px){
+ .coop-detail-on .coop-input-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+
+/* 敵: 1層=3行の表。列見出し(.coop-enemy-columns)を層ごとに1回だけ出し、各行は1体分。
+   通常モードは「キャラ|属性|倍率後のHP」、詳細モードは「キャラ|無凸HP|属性|倍率後のHP」(属性と無凸HPは入力欄になる) */
+.coop-enemies-body{display:grid;gap:8px;padding:10px;container-type:inline-size}
+.coop-layer{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
+.coop-layer-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:32px;margin:0;padding:5px 10px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:var(--ui-soft);color:var(--ui-heading);font-size:.8rem;font-weight:850;text-align:left;box-shadow:none;cursor:pointer}
+.coop-layer.closed .coop-layer-toggle{border-bottom-color:transparent}
+.coop-layer-body{display:grid;padding:0 10px 2px}
+.coop-enemy-columns,.coop-enemy-card{display:grid;grid-template-columns:minmax(0,1fr) 44px 76px;align-items:center;gap:8px;min-width:0}
+.coop-detail-on .coop-enemy-columns,.coop-detail-on .coop-enemy-card{grid-template-columns:minmax(0,1fr) 84px 58px 68px;gap:6px}
+.coop-enemy-columns{padding:5px 0 3px;border-bottom:1px solid var(--ui-line);color:var(--ui-muted);font-size:.6rem;font-weight:800;line-height:1.3}
+.coop-enemy-columns>span:nth-child(3){text-align:center}
+.coop-enemy-columns>span:last-child{text-align:right}
+#page-coop:not(.coop-detail-on) .coop-enemy-columns>.coop-col-detail{display:none}
+.coop-enemy-card{padding:5px 0;border-bottom:1px solid var(--ui-line)}
+.coop-enemy-card:last-child{border-bottom:0}
+.coop-enemy-card>.coop-character{grid-column:1;grid-row:1;display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto auto;align-items:start;align-content:center;row-gap:2px;column-gap:8px;width:100%;min-width:0;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:var(--ui-heading);text-align:left;box-shadow:none;cursor:pointer}
+.coop-enemy-card>.coop-character .coop-portrait{grid-row:1/3;width:34px;border-radius:8px}
+.coop-enemy-card>.coop-character:hover .coop-portrait{box-shadow:0 0 0 2px var(--ui-accent)}
+.coop-enemy-card>.coop-character strong{min-width:0;font-size:.72rem;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.coop-enemy-card>.coop-character small{justify-self:start;padding:0 6px;border-radius:99px;background:#eef2f6;color:var(--ui-muted);font-size:.6rem;font-weight:800;line-height:1.6}
+/* 表示用の属性・HP。見出しは列見出しにあるので各行の「属性」「HP」の文字は読み上げ用にだけ残す */
+.coop-enemy-summary,.coop-enemy-manual{display:contents}
+.coop-enemy-attr{grid-column:2;grid-row:1;text-align:center}
+.coop-enemy-hp{grid-column:-2;grid-row:1;text-align:right}
+.coop-detail-on .coop-enemy-attr{display:none}
+.coop-enemy-summary b{color:var(--ui-heading);font-size:.8rem;font-weight:850;font-variant-numeric:tabular-nums;white-space:nowrap}
+.coop-enemy-summary i,.coop-enemy-manual label>span:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.coop-enemy-manual label{grid-row:1;min-width:0}
+.coop-enemy-manual label:first-child{grid-column:2}
+.coop-enemy-manual label:last-child{grid-column:3}
+.coop-enemy-manual input{width:100%;min-width:0;height:30px;padding:2px 4px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.coop-enemy-manual .coop-styled-select{display:block;width:100%;min-width:0}
+.coop-enemy-manual .coop-styled-select-button{width:100%;height:30px;min-height:30px;padding:0 6px;font-size:.74rem}
+/* 敵欄が狭いとき(スマホ・PCの中くらいの幅)は、画面幅ではなく敵欄の幅で列を詰める */
+@container (max-width:420px){
+ .coop-layer-body{padding:0 6px 2px}
+ .coop-enemy-columns,.coop-enemy-card{grid-template-columns:minmax(0,1fr) 36px 64px;gap:6px}
+ .coop-detail-on .coop-enemy-columns,.coop-detail-on .coop-enemy-card{grid-template-columns:minmax(0,1fr) 66px 48px 54px;gap:4px}
+ .coop-enemy-card>.coop-character{grid-template-columns:30px minmax(0,1fr);column-gap:5px}
+ .coop-enemy-card>.coop-character .coop-portrait{width:30px}
+ .coop-detail-on .coop-enemy-summary b{font-size:.7rem}
+}
+
+/* 味方デッキ */
+#coopDecksBody{padding:10px 12px 12px}
+.coop-section-title{display:block}
+.coop-section-title>div:first-child{display:none}
+/* 操作欄(デッキ提案・計算条件・整理): 枠を重ねず1本のツールバーにまとめる。
+   各入力には自分の小見出しがあるので、グループ名は読み上げ用にだけ残す。幅が足りなければグループ単位で折り返す */
+.coop-section-actions{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 16px;padding:7px 10px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.coop-action-group{display:flex;flex:1 1 auto;min-width:0;margin:0;padding:0;border:0}
+#page-coop:not(.coop-detail-on) .coop-proposal-group{display:none}
+.coop-action-group-title{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.coop-action-items,.coop-fixed-multiplier-controls{display:flex;flex-wrap:nowrap;align-items:flex-end;gap:6px;width:100%;min-width:0;margin:0}
+.coop-action-items>.reset-btn{flex:1 1 auto;min-height:32px;margin:0;padding:5px 10px;font-size:.74rem;line-height:1.2;white-space:nowrap}
+.coop-action-items>.coop-propose{flex:0 0 auto;min-width:88px}
+.coop-self-field,.coop-question-level,.coop-proposal-deck-count{display:grid;gap:2px;flex:1 0 100px;min-width:0;margin:0;color:var(--ui-muted);font-size:.64rem;font-weight:800}
+.coop-proposal-deck-count{flex:0 0 72px}
+.coop-self-field{flex-basis:132px}
+.coop-self-field .ui-switch{min-height:32px;padding:2px}
+.coop-self-field .ui-switch button{font-size:.7rem}
+.coop-action-group .coop-styled-select{display:block;width:100%;min-width:0}
+.coop-action-group .coop-styled-select-button{width:100%;height:32px;min-height:32px;padding:0 10px;font-size:.76rem}
+
+#coopDeckRows{display:grid;gap:8px;margin-top:10px;container-type:inline-size}
+.coop-deck-row{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
+.coop-deck-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-height:36px;padding:4px 10px;border-bottom:1px solid var(--ui-line);background:var(--ui-soft);cursor:pointer}
+.coop-deck-row.mobile-closed .coop-deck-head{border-bottom-color:transparent}
+.coop-deck-head h3{margin:0;color:var(--ui-heading);font-size:.84rem;font-weight:850}
+.coop-deck-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;margin-left:auto}
+.coop-deck-actions .mini-reset{min-height:26px;margin:0;padding:2px 8px;font-size:.68rem;white-space:nowrap}
+.coop-deck-body{padding:8px}
+/* 各キャラ枠: 画像の右上に小さな×(削除)、下にスキル確認 */
+.coop-deck-slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.coop-deck-slot{position:relative;min-width:0;padding:4px;border:1px solid var(--ui-line);border-radius:10px;background:#fff}
+.coop-slot-main{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.coop-character-image-only{display:block;width:100%;max-width:72px;margin:0 auto;padding:0;border:1px dashed var(--ui-border);border-radius:9px;background:var(--ui-soft);box-shadow:none;cursor:pointer}
+.coop-character-image-only .coop-portrait{border-radius:8px;background-color:transparent}
+.coop-character-image-only:hover{border-color:var(--ui-accent)}
+.coop-ally-power{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:3px;min-width:0;margin:0;color:var(--ui-muted);font-size:.6rem;font-weight:800}
+/* 狭い数字欄は増減ボタン(▲▼)の幅を取らず、5桁でも数字が欠けないようにする */
+.coop-ally-power input,.coop-enemy-manual input{appearance:textfield}
+.coop-ally-power input::-webkit-inner-spin-button,.coop-enemy-manual input::-webkit-inner-spin-button{appearance:none;margin:0}
+/* 枠が狭いとき(デッキ欄の幅で判定)は「Power」を入力欄の上に置き、数字が欠けないようにする */
+@container (max-width:560px){.coop-ally-power{grid-template-columns:minmax(0,1fr)}}
+.coop-ally-power input{width:100%;min-width:0;height:26px;padding:1px 2px;font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+.coop-slot-actions{display:grid;gap:3px}
+.coop-slot-actions .mini-reset{width:100%;min-width:0;min-height:24px;margin:0;padding:1px 3px;font-size:.64rem;line-height:1.15;white-space:nowrap}
+.coop-slot-actions .coop-character-delete{position:absolute;top:2px;right:2px;z-index:1;display:grid;place-items:center;width:22px;min-height:0;height:22px;padding:0;border-radius:50%;background:rgba(255,255,255,.95);font-size:0;box-shadow:0 1px 3px rgba(16,24,40,.2)}
+.coop-slot-actions .coop-character-delete::before{content:"×";font-size:14px;font-weight:700;line-height:1}
+.coop-skill-detail{margin-top:8px;padding:8px 10px;border:1px solid var(--ui-line);border-radius:10px;background:var(--ui-soft);font-size:.78rem;line-height:1.6}
+.coop-skill-detail section{display:grid;gap:4px}
+.coop-skill-detail section>b{color:var(--ui-heading);font-weight:850}
+.coop-skill-detail small{color:var(--ui-muted)}
+.coop-skill-detail p{margin:0}
+.coop-row-result:empty{display:none}
+.coop-row-result{margin-top:6px;color:var(--ui-text-sub);font-size:.76rem}
+
+/* 手動デッキ判定: デッキ欄の下端に小さく固定し、どこまでスクロールしても見える */
+.coop-manual-judge{position:sticky;bottom:0;z-index:2;flex:none;display:grid;max-height:min(36vh,280px);overflow:auto;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:10px;margin:0;padding:8px 12px;border-width:1px 0 0;border-radius:0 0 var(--ui-radius-card) var(--ui-radius-card);box-shadow:0 -6px 14px -10px rgba(16,24,40,.35);text-align:left}
+.coop-manual-judge-title{display:grid;gap:0;margin:0}
+.coop-manual-judge>:not(.coop-manual-judge-title):not(#coopClearResult){grid-column:1/-1}
+.coop-manual-judge-title h2{margin:0;color:var(--ui-heading);font-size:.84rem;font-weight:850}
+.coop-manual-judge-title small{color:var(--ui-muted);font-size:.68rem}
+#coopClearResult{display:block;padding:6px 10px;border-radius:10px;background:#f2f4f7;color:var(--ui-muted);font-size:.84rem;font-weight:850;text-align:center}
+.coop-manual-judge[data-status="certain"] #coopClearResult{background:#ecfdf3;color:#067647;font-size:1.05rem;font-weight:900}
+.coop-manual-judge[data-status="random"] #coopClearResult{background:var(--ui-warn-soft);color:var(--ui-warn);font-size:1.05rem;font-weight:900}
+.coop-manual-judge[data-status="failed"] #coopClearResult{background:#fef3f2;color:var(--ui-attack);font-size:1.05rem;font-weight:900}
+#coopDamageResult:not(:empty){margin-top:4px;color:var(--ui-text);font-size:.76rem}
+#coopResultDetails{max-height:72px;margin-top:4px;overflow:auto;color:var(--ui-text-sub);font-size:.72rem;line-height:1.5}
+.coop-random-reason{margin-top:4px;padding:6px 8px;border-radius:8px;background:var(--ui-soft)}
+.coop-random-reason summary{color:var(--ui-accent);font-weight:800;cursor:pointer}
+@media(max-width:999px){
+ .coop-enemies,.coop-decks{margin:0}
+ .coop-manual-judge{border-width:1px;border-radius:12px;margin:10px 10px 10px}
+}
+@media(max-width:600px){
+ .coop-enemies-body{padding:8px}
+ #coopDecksBody{padding:8px}
+ .coop-deck-body{padding:6px}
+ .coop-deck-slots{gap:4px}
+ .coop-deck-slot{padding:3px}
+ .coop-slot-actions .mini-reset{min-height:24px;padding:1px;font-size:.58rem;white-space:normal}
+ .coop-deck-actions .mini-reset{padding:2px 6px;font-size:.64rem}
+}
+
+/* 記録データ・計算履歴 */
+.coop-history-columns{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.coop-history-columns>.coop-fold-card{margin-top:14px}
+#coopHistoryBody,#coopScaleHistoryBody{padding:12px 14px}
+#coopProposalHistoryEmpty{margin:0;color:var(--ui-muted);font-size:.84rem}
+#coopProposalHistory{display:grid;gap:10px}
+.coop-history-item{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
+.coop-history-entry-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin:0;padding:9px 12px;border:0;border-radius:0;background:var(--ui-soft);color:var(--ui-heading);font-size:.84rem;text-align:left;box-shadow:none;cursor:pointer}
+.coop-history-entry-toggle span{color:#98a2b3;font-size:.7rem}
+.coop-history-entry-body{display:grid;gap:10px;padding:10px 12px}
+.coop-history-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;color:var(--ui-muted);font-size:.76rem}
+.coop-history-actions{display:flex;gap:6px}
+.coop-history-actions .mini-reset{min-height:30px;padding:4px 10px;font-size:.74rem;white-space:nowrap}
+.coop-history-enemies{display:grid;gap:6px}
+.coop-history-layer{display:grid;grid-template-columns:44px repeat(3,52px);align-items:center;gap:6px}
+.coop-history-layer-label{color:var(--ui-text-sub);font-size:.72rem;font-weight:850}
+.coop-history-enemy{display:grid;justify-items:center;gap:2px;min-width:0;font-size:.62rem;color:var(--ui-muted);text-align:center}
+.coop-history-enemy img,.coop-history-enemy .coop-portrait{display:block;width:100%;aspect-ratio:1;border-radius:8px;background:#eef2f6;object-fit:cover}
+.coop-history-proposals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:8px}
+.coop-scale-history-list{color:var(--ui-text-sub);font-size:.8rem}
+
+/* ===== 協力報告書作成 ===== */
+.coop-random-toolbar-final{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0 0 14px}
+.coop-step-control{display:grid;grid-template-columns:auto 34px 44px 34px;align-items:center;color:var(--ui-text-sub);font-size:.8rem;font-weight:800}
+.coop-step-control>span{margin-right:6px}
+.coop-step-control button{display:grid;place-items:center;width:34px;height:34px;margin:0;padding:0;border:1px solid var(--ui-border);background:#f2f4f7;color:var(--ui-text);font-size:1.05rem;font-weight:900;line-height:1;box-shadow:none;cursor:pointer}
+.coop-step-control button:first-of-type{border-radius:10px 0 0 10px}
+.coop-step-control button:last-of-type{border-radius:0 10px 10px 0}
+.coop-step-control button:hover{background:#e4e7ec}
+.coop-step-control output{display:grid;place-items:center;width:44px;height:34px;border:solid var(--ui-border);border-width:1px 0;background:#fff;color:var(--ui-text);font-size:16px;line-height:1}
+#coopRandomDeleteAll{min-height:34px;padding:6px 14px;font-size:.8rem}
+.coop-random-grid{display:grid;grid-template-columns:repeat(var(--coop-random-columns,3),minmax(0,1fr));gap:8px}
+.coop-report-random-cell{display:grid;gap:6px;min-width:0;padding:6px;border:1px solid var(--ui-line);border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.04)}
+.coop-report-pick{display:grid;place-items:center;width:100%;margin:0;padding:0;border:1px dashed var(--ui-border);border-radius:10px;background:var(--ui-soft);box-shadow:none;cursor:pointer}
+.coop-report-pick .coop-portrait{width:min(100%,96px);background-color:transparent}
+.coop-report-pick:hover{border-color:var(--ui-accent)}
+.coop-report-random-cell>input{width:100%;min-width:0;height:36px;padding:2px 4px;border:1px solid var(--ui-border);border-radius:10px;background:#fff;color:var(--ui-text);font-size:16px;text-align:center;font-variant-numeric:tabular-nums}
+.coop-random-cell-delete{width:100%;min-height:36px;margin:0;padding:4px;border:1px solid var(--ui-danger-border);border-radius:10px;background:#fff;color:var(--ui-danger);font-size:.78rem;font-weight:800;box-shadow:none;cursor:pointer}
+.coop-random-cell-delete:hover{background:var(--ui-danger-soft)}
+@media(max-width:600px){
+ .coop-random-grid{gap:5px}
+ .coop-report-random-cell{padding:4px;gap:4px}
+ .coop-report-random-cell>input,.coop-random-cell-delete{height:32px;min-height:32px;font-size:14px}
+}
+
+/* ===== デッキ提案の結果(提案デッキ・枠別キャラ使用数・計算処理履歴) ===== */
+#page-coop:not(.coop-detail-on) #coopScaleHistoryPanel{display:none}
+#coopProposalBody,#coopProposalUsageBody{padding:14px 16px 16px}
+.coop-proposal-heading{margin:0 0 14px;padding:0 0 12px;border-bottom:1px solid var(--ui-line)}
+.coop-proposal-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px}
+.coop-all-decks-toggle{display:inline-flex;align-items:center;gap:8px;min-height:36px;margin:0;padding:4px 6px 4px 12px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-size:.8rem;font-weight:800;box-shadow:none}
+.coop-all-decks-toggle b{min-width:36px;padding:3px 8px;border-radius:99px;background:#98a2b3;color:#fff;font-size:.7rem}
+.coop-all-decks-toggle[aria-pressed="true"] b{background:var(--ui-accent)}
+.coop-count-control{display:inline-flex;align-items:center;gap:8px;margin:0;color:var(--ui-text-sub);font-size:.8rem;font-weight:800;white-space:nowrap}
+.coop-count-control .coop-styled-select{width:110px}
+.coop-proposal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.coop-proposal-card{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:start;gap:6px;min-width:0;padding:8px;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
+.coop-proposal-card>b{color:var(--ui-accent);font-size:.9rem;line-height:1.6;text-align:center}
+.coop-proposal-copy{grid-column:1/-1;justify-self:end;order:3;min-height:28px;padding:3px 10px;font-size:.72rem;white-space:nowrap}
+.coop-proposal-images{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;min-width:0}
+.coop-proposal-image-cell{position:relative;min-width:0}
+.coop-proposal-image-cell img,.coop-proposal-image-cell span{display:block;width:100%;aspect-ratio:1;border-radius:9px;background:#eef1f4;object-fit:cover;cursor:pointer}
+.coop-proposal-image-cell.is-provisional img,.coop-proposal-image-cell.is-provisional span{outline:3px dashed #e18a00;outline-offset:-3px}
+.coop-proposal-image-cell small{position:absolute;right:4px;bottom:4px;padding:1px 6px;border-radius:99px;background:#fff4d6;color:#975a00;font-size:.62rem;font-weight:800}
+/* 詳細計算の結果(coop-detail.js) */
+.coop-detail-card-header{display:flex;grid-column:1/-1;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.coop-detail-card-header>b{color:var(--ui-accent)}
+.coop-detail-score{padding:4px 8px;border-radius:8px;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.78rem;font-weight:700;overflow-wrap:anywhere;text-align:right}
+.coop-proposal-card:has(.coop-detail-card-header){display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.coop-detail-empty{grid-column:1/-1;margin:0;padding:18px;border:1px solid var(--ui-line);border-radius:10px;color:var(--ui-muted)}
+#coopDetailPager{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px;margin:0 0 14px}
+#coopProposalBody:has(#coopDetailPager) .coop-proposal-controls:not(#coopDetailPager){display:none}
+/* 枠別キャラ使用数 */
+.coop-proposal-usage{display:grid;gap:10px}
+.coop-usage-slot{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
+.coop-usage-slot-summary{display:grid;grid-template-columns:minmax(0,1fr) 24px;align-items:center;gap:10px;min-height:44px;padding:9px 14px;background:var(--ui-soft);color:var(--ui-heading);font-size:.86rem;font-weight:850;list-style:none;cursor:pointer}
+.coop-usage-slot-summary::-webkit-details-marker{display:none}
+.coop-usage-slot-arrow{justify-self:end;color:#98a2b3;font-size:.7rem}
+.coop-usage-slot-content{padding:10px 12px 12px}
+.coop-usage-slot-toolbar{display:flex;justify-content:flex-end;margin:0 0 10px}
+.coop-usage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:8px}
+.coop-usage-character{display:flex;align-items:center;gap:9px;min-width:0;padding:7px;border-radius:10px;background:var(--ui-soft)}
+.coop-usage-rank{display:grid;place-items:center;width:24px;height:24px;flex:none;border-radius:99px;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.74rem;font-weight:900}
+.coop-usage-character img{width:48px;height:48px;flex:none;border-radius:8px;object-fit:cover}
+.coop-usage-character div{display:grid;gap:2px;min-width:0}
+.coop-usage-character b{color:var(--ui-heading);font-size:.8rem;overflow-wrap:anywhere}
+.coop-usage-character span{color:var(--ui-accent);font-size:.76rem;font-weight:800}
+/* 計算処理履歴 */
+#coopScaleHistoryList{display:grid;gap:8px}
+.coop-scale-history-row{padding:9px 11px;border-radius:10px;background:var(--ui-soft);font-variant-numeric:tabular-nums}
+.coop-scale-history-row b,.coop-scale-history-row span{display:block}
+.coop-scale-history-row span{color:var(--ui-text-sub);overflow-wrap:anywhere}
+#coopReportEnemies{display:grid;gap:10px}
+.coop-applied-skill{display:grid;gap:2px;margin-top:7px;padding:7px;border:1px solid var(--ui-line);border-radius:8px;background:#fff}
+.coop-applied-skill small{display:block}
+
+/* ===== デッキ提案の小窓(開始時の説明・候補の確認・計算中) coop.js が作る ===== */
+.coop-stage-dialog{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:rgba(15,23,42,.62)}
+.coop-stage-dialog-panel{width:min(760px,calc(100vw - 28px));max-height:calc(100dvh - 36px);padding:22px;overflow:auto;border-radius:18px;background:#fff;box-shadow:0 22px 70px rgba(0,0,0,.3);text-align:center}
+.coop-stage-dialog-panel h2{margin:0 0 8px;color:var(--ui-heading);font-size:1.2rem;font-weight:850}
+.coop-stage-dialog-panel p{margin:0 0 16px;color:var(--ui-text-sub);font-weight:700}
+.coop-stage-dialog-panel button{min-width:140px;margin:0;padding:10px 22px;border:1px solid var(--ui-accent);border-radius:10px;background:var(--ui-accent);color:#fff;font-weight:850}
+.coop-stage-dialog-panel button:hover{background:var(--ui-accent-hover)}
+.coop-stage-dialog-characters{display:grid;grid-template-columns:repeat(5,minmax(90px,1fr));gap:12px;margin:0 0 18px}
+.coop-stage-dialog-character{min-width:0}
+.coop-stage-dialog-character img,.coop-stage-dialog-character span{display:block;width:100%;aspect-ratio:1;border-radius:12px;background:#edf1f5;object-fit:cover}
+.coop-stage-dialog-character b{display:block;margin-top:5px;font-size:.8rem;line-height:1.25;overflow-wrap:anywhere}
+.coop-proposal-intro-panel{max-width:560px}
+.coop-proposal-intro-panel p{font-size:.92rem;line-height:1.75;text-align:left}
+.coop-proposal-intro-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.coop-calculation-dialog-panel{width:min(680px,calc(100vw - 28px));text-align:left}
+.coop-calculation-dialog-body{display:grid;gap:12px;margin:12px 0 18px;padding:14px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft);font-variant-numeric:tabular-nums}
+.coop-calculation-dialog-body progress{width:100%;height:12px;margin:8px 0;accent-color:var(--ui-accent)}
+.coop-calculation-status{color:var(--ui-accent);font-weight:800}
+.coop-calculation-sub{color:var(--ui-text-sub);font-weight:700}
+.coop-calculation-dialog-actions{position:sticky;bottom:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding-top:10px;background:#fff}
+.coop-calculation-dialog-actions>button{flex:1 1 120px;min-height:42px}
+.coop-calculation-dialog-actions>button:not(.danger){border-color:var(--ui-border);background:#fff;color:var(--ui-text-sub)}
+.coop-calculation-dialog-actions>button:not(.danger):hover{background:var(--ui-hover)}
+.coop-calculation-dialog-actions .danger{border-color:var(--ui-danger);background:var(--ui-danger);color:#fff}
+@media(max-width:620px){.coop-stage-dialog-characters{grid-template-columns:repeat(2,minmax(110px,1fr))}}

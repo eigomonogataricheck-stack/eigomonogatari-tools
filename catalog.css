@@ -1,0 +1,270 @@
+/* 英語物語 非公式ツール: 図鑑・キャラ選択・キャラ詳細
+   図鑑とキャラ選択は同じ部品(catalog.js の共通部品)なので、見た目もここで1組だけ定義する。
+   図鑑だけ・キャラ選択だけの違いは「置き場所」(上部の固定位置など)に限る。 */
+
+/* ===== 図鑑ページの上部 =====
+   見出しはスクロールで流し、表示切替タブ・分類タグ・現在の分類はまとめて画面上部に固定する */
+.zukan-head{margin-bottom:10px}
+.zukan-quick-access{position:sticky;top:var(--topbar-h);z-index:20;display:grid;gap:10px;margin:0 -20px 12px;padding:10px 20px 12px;border-bottom:1px solid var(--ui-line);background:rgba(255,255,255,.97);box-shadow:0 8px 16px -14px rgba(16,24,40,.35)}
+.zukan-quick-access .char-mode-tabs{margin-top:0}
+.zukan-quick-access .char-category-bars,.zukan-quick-access .name-search-field{margin:0}
+.zukan-quick-access .char-current{position:static;margin:0}
+@media(max-width:800px){
+ .zukan-head{flex-direction:row;align-items:flex-end}
+ .zukan-quick-access{gap:7px;margin:0 -12px 10px;padding:7px 12px 9px}
+ .zukan-quick-access .char-category-bars{padding:0;border:0;box-shadow:none}
+}
+
+/* ===== 表示モードの切替(分類・絞り込み・名前検索…) ===== */
+.char-mode-tabs{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;width:min(100%,480px);margin-top:7px;padding:2px;border-radius:9px;background:#e8edf3}
+.char-mode-tabs button{min-width:0;min-height:31px;margin:0;padding:5px 8px;overflow:hidden;border:0;border-radius:7px;background:transparent;color:#5a697a;font-size:.8rem;font-weight:800;white-space:nowrap;text-overflow:ellipsis}
+.char-mode-tabs button.active{background:#fff;color:#172033;box-shadow:0 1px 5px rgba(15,23,42,.13)}
+@media(max-width:800px){.char-mode-tabs{width:100%}.char-mode-tabs button{padding:5px 3px;font-size:.72rem}}
+
+/* ===== 分類タブ(大分類=スイッチ型、中・小分類=チップ型。絞り込みと同じ部品) ===== */
+.char-category-bars{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:10px 12px;margin:12px 0 0;padding:12px 14px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.char-large-tabs,.char-middle-chips,.char-small-chips{display:flex;min-width:0;max-width:100%;gap:6px;overflow-x:auto;scrollbar-width:thin}
+.char-large-tabs{gap:2px;padding:3px;border-radius:10px;background:#eef2f6}
+.char-large-tabs button,.char-middle-chips button,.char-small-chips button{flex:0 0 auto;min-width:max-content;min-height:32px;margin:0;padding:6px 11px;border:1px solid var(--ui-border);border-radius:9px;background:#fff;color:var(--ui-text-sub);font-size:.78rem;font-weight:800;white-space:nowrap;box-shadow:none}
+.char-large-tabs button{border-color:transparent;border-radius:8px;background:transparent;color:var(--ui-muted);font-weight:850}
+.char-large-tabs button.active{background:#fff;color:var(--ui-accent);box-shadow:0 1px 5px rgba(16,24,40,.16)}
+.char-middle-chips button:hover:not(.active),.char-small-chips button:hover:not(.active){background:var(--ui-hover)}
+.char-middle-chips button.active,.char-small-chips button.active{border-color:var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}
+.char-middle-chips .char-all-categories{position:sticky;right:0;border-style:dashed;color:var(--ui-accent);box-shadow:-10px 0 10px #fff}
+.char-small-chips{grid-column:1/-1;justify-self:start;width:100%;padding:10px 0 0;border-top:1px dashed var(--ui-line)}
+.char-small-chips button{min-height:28px;padding:4px 10px;font-size:.74rem}
+@media(max-width:800px){.char-category-bars{gap:8px;padding:10px}.char-large-tabs button,.char-middle-chips button,.char-small-chips button{min-height:30px;padding:4px 9px;font-size:.7rem}}
+
+/* 現在の分類と件数 */
+.char-current{position:sticky;top:0;z-index:8;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;padding:8px 12px;border:1px solid var(--ui-line);border-radius:12px;background:rgba(255,255,255,.95);color:var(--ui-heading);font-size:.8rem;font-weight:800;box-shadow:0 2px 8px rgba(16,24,40,.05)}
+.char-current>span{padding:3px 10px;border-radius:99px;background:var(--ui-accent-soft);color:var(--ui-accent);font-weight:900}
+.char-item-heading{display:flex;align-items:center;gap:8px;margin:13px 0 6px;color:#39485a;font-size:.82rem}
+.char-item-heading::after{content:"";flex:1;height:1px;background:#e4e9ef}
+.char-category-grid{margin-bottom:14px}
+@media(max-width:800px){.char-current{padding:6px 8px;font-size:.68rem}.char-item-heading{font-size:.72rem}}
+
+/* ===== キャラのカード一覧 ===== */
+.zk-grid{display:grid;grid-template-columns:repeat(auto-fill,78px);align-items:start;gap:10px}
+.zk-card{display:grid;grid-template-rows:64px 36px;width:78px;height:112px;margin:0;padding:4px;overflow:hidden;border:0;background:transparent;text-align:center;cursor:pointer}
+.zk-card img{display:block;width:64px;height:64px;margin:auto;border:2px solid #ddd;border-radius:9px;background:#f3f4f6;object-fit:cover}
+.zk-card small{display:-webkit-box;height:36px;margin-top:4px;overflow:hidden;color:var(--ui-text);font-size:.62rem;line-height:1.15;overflow-wrap:anywhere;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+/* キャラ画像の右上の星(お気に入りの登録/解除)。カード本体とは別のボタンなので、カードと並べて .zk-card-wrap で包む */
+.zk-card-wrap{position:relative;min-width:0}
+.zk-fav{position:absolute;top:1px;right:1px;z-index:1;display:grid;place-items:center;width:26px;height:26px;min-height:0;margin:0;padding:0;border:1px solid var(--ui-line);border-radius:50%;background:rgba(255,255,255,.94);color:var(--ui-muted);font-size:15px;line-height:1;box-shadow:0 1px 3px rgba(16,24,40,.18);cursor:pointer}
+.zk-fav:hover{color:var(--ui-warn)}
+.zk-fav.active{border-color:var(--ui-warn);color:var(--ui-warn)}
+.picker-empty{margin:8px 0;color:var(--ui-muted);font-size:.86rem}
+@media(max-width:800px){
+ .zk-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 4px}
+ .zk-card{width:100%;height:94px;padding:2px;grid-template-rows:56px 32px}
+ .zk-card img{width:56px;height:56px}
+ .zk-card small{height:32px;margin-top:3px;font-size:.58rem;line-height:1.12;-webkit-line-clamp:2}
+}
+@media(max-width:360px){.zk-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(prefers-reduced-motion:no-preference){
+ .zk-card img{transition:transform .16s ease,box-shadow .16s ease}
+ .zk-card:hover img{transform:translateY(-2px);box-shadow:0 6px 14px rgba(16,24,40,.14)}
+ @keyframes ui-star-pop{50%{transform:scale(1.3)}}
+ .zk-fav.active{animation:ui-star-pop .22s ease-out}
+ .zk-grid{animation:ui-fade .22s ease-out both}
+ :is(.char-mode-tabs,.char-large-tabs,.char-middle-chips,.char-small-chips) button{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease}
+}
+
+/* ===== キャラ名で検索 ===== */
+.name-search-field{display:grid;gap:5px;margin:12px 0 14px;color:#60656b;font-size:.86rem;font-weight:700}
+.name-search-field input{display:block;width:100%;height:44px;padding:8px 11px;font-size:16px}
+.zk-body{display:none}
+.zk-body.open{display:block}
+.name-search-large{margin:12px 0 18px}
+.name-search-middle{margin:8px 0 13px}
+.name-search-group{margin:7px 0 12px}
+.name-search-group>.zk-grid{margin:8px 0 12px}
+.name-search-large-label,.name-search-middle-label,.name-search-small-label,.name-search-heading{display:flex;align-items:center;gap:10px;color:#39485a;font-weight:800}
+.name-search-large-label::after,.name-search-middle-label::after,.name-search-small-label::after,.name-search-heading::after{content:"";flex:1;height:1px;background:#e4e9ef}
+.name-search-large-label{margin:18px 0 10px;color:#26384e;font-size:1.08rem}
+.name-search-large-label::after{height:2px;background:#cbd7e5}
+.name-search-middle-label{margin:13px 0 8px;color:#34465a;font-size:.94rem}
+.name-search-middle-label::after{background:#d8e1ec}
+.name-search-small-label{margin:10px 0 7px;color:#46566f;font-size:.84rem}
+.name-search-heading{margin:9px 0 6px;font-size:.82rem;font-weight:700}
+@media(max-width:800px){.name-search-large-label{font-size:1rem}.name-search-middle-label{font-size:.9rem}.name-search-small-label{font-size:.8rem}}
+
+/* ===== 絞り込み(図鑑・キャラ選択 共通。デザインの基準) ===== */
+.char-filter,.char-filter-results{max-width:1080px;margin:20px auto 0}
+.zukan-filter-header,.zukan-filter-footer,.filtered-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.zukan-filter-header{margin-bottom:16px}
+.zukan-filter-header h2,.filtered-heading h2{margin:2px 0;color:var(--ui-heading);font-size:1.35rem}
+.zukan-filter-header p{margin:3px 0;color:var(--ui-muted)}
+.zukan-filter-header small,.filtered-heading small{color:var(--ui-accent);font-weight:900;letter-spacing:.16em}
+.zukan-filter-reset,.char-filter-back{margin:0;padding:9px 12px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-weight:800}
+.zukan-filter-reset:hover,.char-filter-back:hover{background:var(--ui-hover)}
+.zukan-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.filter-card{min-width:0;padding:18px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.filter-card-wide{grid-column:1/-1}
+.filter-card h3{margin:0 0 15px;color:var(--ui-heading);font-size:1rem}
+.filter-card h3 span{display:inline-grid;place-items:center;width:29px;height:29px;margin-right:8px;border-radius:8px;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.7rem}
+.multi-filter{min-width:0;margin:0 0 16px;padding:0;border:0}
+.multi-filter legend{margin-bottom:8px;padding:0;color:var(--ui-text-sub);font-size:.77rem;font-weight:850}
+/* チップ(複数選択) */
+.check-options,.skill-attribute-options{display:flex;flex-wrap:wrap;gap:7px;min-width:0}
+.check-options label,.skill-attribute-options label{position:relative;display:block}
+.check-options input,.skill-attribute-options input,.segmented-switch input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.check-options span{display:block;padding:7px 11px;border:1px solid var(--ui-border);border-radius:9px;background:#fff;color:var(--ui-text-sub);font-size:.78rem;font-weight:800;cursor:pointer}
+.skill-attribute-options span{display:block;padding:8px 13px;border:1px solid #bfc9d6;border-radius:999px;background:#fff;color:var(--ui-text-sub);font-size:.8rem;font-weight:800;cursor:pointer}
+.check-options input:checked+span,.skill-attribute-options input:checked+span{border-color:var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}
+.check-options input:focus-visible+span,.skill-attribute-options input:focus-visible+span,.segmented-switch input:focus-visible+span{outline:2px solid #3577ca;outline-offset:2px}
+/* 含む/一致 のスイッチ */
+.segmented-switch{display:grid;grid-template-columns:1fr 1fr;width:min(230px,100%);margin-bottom:10px;padding:3px;border-radius:10px;background:#eef2f6}
+.segmented-switch label{position:relative}
+.segmented-switch span{display:block;padding:7px;border-radius:8px;color:var(--ui-muted);font-weight:850;text-align:center;cursor:pointer}
+.segmented-switch input:checked+span{background:#fff;color:var(--ui-accent);box-shadow:0 1px 5px rgba(16,24,40,.16)}
+.attribute-exact-only{display:none}
+.char-filter.attribute-mode-exact .attribute-exact-only{display:block}
+/* 範囲(− 数値 ＋) */
+.range-row{display:grid;grid-template-columns:minmax(105px,1fr) minmax(150px,220px) 20px minmax(150px,220px);align-items:center;gap:8px;margin-top:12px}
+.range-label{display:grid}
+.range-label small{color:#98a2b3}
+.stepper{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;height:42px;overflow:hidden;border:1px solid var(--ui-border);border-radius:10px;background:#fff}
+.stepper button{min-width:0;margin:0;border:0;border-radius:0;background:#f2f4f7;color:var(--ui-text);font-size:1.1rem;font-weight:900;touch-action:none;user-select:none;-webkit-user-select:none}
+.stepper input{width:100%;height:40px;padding:0 4px;border:0;border-inline:1px solid #e4e7ec;border-radius:0;font-size:16px;text-align:center}
+.stepper input:focus-visible{outline-offset:-2px}
+.stepper input::placeholder{font-size:.78em}
+/* 分類・並び順の選択欄(catalog.js の zkSyncCustomSelect が作る) */
+.category-filter-grid,.filter-sort-controls,.skill-detail-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.category-filter-grid label,.filter-sort-controls label{display:grid;gap:6px;min-width:0;color:var(--ui-text-sub);font-size:.76rem;font-weight:800}
+.zk-custom-select{position:relative;display:block;width:100%;min-width:0}
+.zk-custom-select>select{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.zk-custom-select-button{display:grid;grid-template-columns:minmax(0,1fr) 18px;align-items:center;gap:8px;width:100%;height:44px;margin:0;padding:0 13px;border:1px solid var(--ui-border-strong);border-radius:22px;background:#fff;color:var(--ui-text);font-size:.86rem;font-weight:750;text-align:left;box-shadow:none}
+.zk-custom-select-text{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.zk-custom-select-arrow{position:relative;display:block;width:12px;height:8px}
+.zk-custom-select-arrow::before,.zk-custom-select-arrow::after{content:"";position:absolute;top:3px;width:8px;height:2px;border-radius:2px;background:#667085}
+.zk-custom-select-arrow::before{left:0;transform:rotate(45deg)}
+.zk-custom-select-arrow::after{right:0;transform:rotate(-45deg)}
+.zk-custom-select.open .zk-custom-select-arrow::before{transform:rotate(-45deg)}
+.zk-custom-select.open .zk-custom-select-arrow::after{transform:rotate(45deg)}
+.zk-custom-select-menu{position:absolute;top:calc(100% + 5px);left:0;z-index:1000;display:none;width:100%;max-height:280px;padding:5px;overflow:auto;border:1px solid #cad3df;border-radius:14px;background:#fff;box-shadow:0 12px 30px rgba(16,24,40,.18)}
+.zk-custom-select.open .zk-custom-select-menu{display:block}
+.zk-custom-select-option{display:block;width:100%;min-height:38px;margin:0;padding:9px 12px;border:0;border-radius:9px;background:#fff;color:var(--ui-text);font-size:.82rem;font-weight:700;line-height:1.25;text-align:left;box-shadow:none}
+.zk-custom-select-option:hover{background:var(--ui-hover)}
+.zk-custom-select-option[aria-selected="true"]{background:var(--ui-accent-soft);color:var(--ui-accent);font-weight:850}
+/* スキル別の効果量 */
+.skill-effect-amounts{margin-top:16px;padding:14px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:var(--ui-soft)}
+.skill-effect-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px}
+.skill-effect-heading small,.skill-effect-label small{color:var(--ui-muted);font-size:.72rem}
+.skill-effect-empty{margin:0;color:var(--ui-muted);font-size:.8rem}
+.skill-effect-row{display:grid;grid-template-columns:minmax(120px,.75fr) minmax(0,1fr) 16px minmax(0,1fr);align-items:center;gap:7px;min-width:0;padding:10px 0;border-top:1px solid #e4e7ec}
+.skill-effect-row:first-child{border-top:0}
+.skill-effect-row>*{min-width:0}
+.skill-effect-row.skill-effect-row-choice{grid-template-columns:minmax(120px,.75fr) minmax(0,2fr)}
+.skill-effect-label{display:grid}
+/* 下の「この条件でキャラを表示」 */
+.zukan-filter-footer{position:sticky;bottom:9px;z-index:8;margin-top:16px;padding:12px 14px;border:1px solid #dbe3ec;border-radius:13px;background:rgba(255,255,255,.96);box-shadow:0 8px 26px rgba(16,24,40,.14)}
+.char-filter-apply{margin:0;padding:11px 18px;border:0;border-radius:10px;background:var(--ui-accent);color:#fff;font-weight:900}
+.char-filter-apply:hover{background:var(--ui-accent-hover)}
+/* 結果 */
+.filtered-heading{margin-bottom:15px}
+.char-filter-count{padding:6px 10px;border-radius:99px;background:var(--ui-accent-soft);color:var(--ui-accent);font-weight:900}
+@media(max-width:800px){
+ .zukan-filter-grid{grid-template-columns:1fr}
+ .filter-card-wide{grid-column:auto}
+ .filter-card{padding:14px}
+ .range-row{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr)}
+ .range-label{grid-column:1/-1}
+ .stepper{grid-template-columns:32px minmax(0,1fr) 32px}
+ .category-filter-grid,.skill-detail-filters{grid-template-columns:1fr}
+ .skill-effect-heading{display:grid;gap:2px}
+ .skill-effect-row,.skill-effect-row.skill-effect-row-choice{grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr)}
+ .skill-effect-row.skill-effect-row-choice{grid-template-columns:1fr}
+ .skill-effect-label{grid-column:1/-1}
+ .zukan-filter-footer{flex-direction:column;align-items:stretch}
+ .char-filter-apply{width:100%}
+ .filtered-heading{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:no-preference){
+ .char-filter:not([hidden]),.char-filter-results:not([hidden]){animation:ui-fade .22s ease-out both}
+ .check-options span,.segmented-switch span,.skill-attribute-options span{transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease}
+}
+
+/* ===== 「一覧」シート(大分類ごとのカードに中分類を1行ずつ) ===== */
+.cat-sheet-panel{width:min(880px,calc(100vw - 36px))}
+.cat-sheet-head{position:sticky;top:-18px;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:-18px -22px 14px;padding:16px 22px 12px;border-bottom:1px solid var(--ui-line);background:rgba(255,255,255,.96)}
+.cat-sheet-head h2{margin:2px 0 0;color:var(--ui-heading);font-size:1.1rem;font-weight:850}
+.cat-sheet-head .close-button{flex:none;width:34px;height:34px;font-size:1.3rem}
+.cat-sheet-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start;gap:14px}
+.cat-sheet-group{overflow:hidden;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.cat-sheet-group-title{margin:0;padding:10px 14px;border-bottom:1px solid var(--ui-line);background:var(--ui-soft);color:var(--ui-heading);font-size:.88rem;font-weight:850}
+.cat-sheet-rows{display:grid}
+.cat-sheet-row{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:10px;min-height:44px;padding:7px 14px;border:0;border-top:1px solid #eef1f5;background:#fff;text-align:left}
+.cat-sheet-row:first-child{border-top:0}
+.cat-sheet-row-label{color:var(--ui-text);font-size:.82rem;font-weight:800}
+.cat-sheet-row.current .cat-sheet-row-label{color:var(--ui-accent)}
+.cat-sheet-row-button{grid-template-columns:minmax(0,1fr) auto;width:100%;margin:0;border-radius:0;box-shadow:none}
+.cat-sheet-row-button:hover{background:var(--ui-hover)}
+.cat-sheet-row-arrow{color:#98a2b3;font-size:1.1rem;line-height:1}
+.cat-sheet-row-button.active{background:var(--ui-accent-soft)}
+.cat-sheet-row-button.active .cat-sheet-row-label,.cat-sheet-row-button.active .cat-sheet-row-arrow{color:var(--ui-accent)}
+.cat-sheet-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cat-sheet-chip{min-height:30px;margin:0;padding:4px 11px;border:1px solid var(--ui-border);border-radius:9px;background:#fff;color:var(--ui-text-sub);font-size:.78rem;font-weight:800;box-shadow:none}
+.cat-sheet-chip:hover:not(.active){background:var(--ui-hover)}
+.cat-sheet-chip.active{border-color:var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}
+@media(max-width:800px){
+ .cat-sheet-panel{width:100%}
+ .cat-sheet-head{top:-14px;margin:-14px -14px 12px;padding:14px 14px 10px}
+ .cat-sheet-body{grid-template-columns:1fr}
+ .cat-sheet-row{grid-template-columns:78px minmax(0,1fr);padding:7px 12px}
+ .cat-sheet-row-button{grid-template-columns:minmax(0,1fr) auto}
+ .cat-sheet-chip{font-size:.74rem}
+}
+
+/* ===== キャラ選択の小窓 ===== */
+.picker-modal{display:flex;flex-direction:column;width:min(1080px,96vw);height:92vh;overflow:hidden;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.2)}
+.picker-fixed{flex:0 0 auto;padding:8px 12px 7px;border-bottom:1px solid #e5e9ef;background:#fff}
+.picker-title-row{display:flex;align-items:center;justify-content:space-between;min-height:28px}
+.picker-title-row h2{margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
+.picker-layout{display:flex;flex:1 1 auto;min-height:0;overflow:hidden}
+.picker-content{flex:1 1 auto;min-width:0;min-height:0;padding:8px 12px 22px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.picker-content .char-filter,.picker-content .char-filter-results{margin-top:8px}
+#pickerTemporaryView>p,#pickerEnemyView>p{margin:8px 0;color:var(--ui-muted);font-size:.86rem}
+@media(max-width:800px){
+ .picker-modal{width:100%;height:calc(100dvh - 10px);border-radius:14px}
+ .picker-fixed{padding:6px 8px}
+ .picker-title-row h2{font-size:.9rem}
+ .picker-content{padding:6px 8px 16px}
+}
+
+/* ===== キャラ詳細 ===== */
+/* 色は catalog.js がキャラの属性から --accent / --bar / --soft に入れる */
+.detail-overlay{gap:12px}
+.detail-modal{--accent:#6c757d;--bar:#6c757d;--soft:#f1f3f5;width:min(646px,calc(100vw - 150px));max-height:88vh;padding:30px;overflow-y:auto;border-radius:24px}
+.detail-modal::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;border-radius:24px 24px 0 0;background:var(--bar)}
+.detail-close{position:absolute;top:12px;right:12px;z-index:20}
+.detail-head{display:flex;align-items:center;gap:22px}
+.detail-head>div{min-width:0}
+.detail-head img{width:140px;height:140px;padding:4px;border-radius:18px;background:var(--bar);object-fit:cover}
+#detailName{margin:0 0 6px;color:var(--ui-heading);font-size:1.25rem;line-height:1.25;overflow-wrap:anywhere}
+.detail-head p{margin:0;color:var(--accent);font-weight:800}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.stats>div{display:flex;justify-content:space-between;padding:12px;border-radius:10px;background:var(--soft)}
+.stats>div b{color:var(--accent)}
+.skill-detail{margin-top:18px;padding:15px;border-left:5px solid var(--accent);border-radius:0 10px 10px 0;background:var(--soft)}
+.skill-detail>b{color:var(--accent)}
+.skill-detail>span{float:right;padding:4px 9px;border-radius:999px;background:var(--bar);color:#fff;font-weight:700}
+.skill-detail p{margin:8px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.actions button{flex:1 1 auto;min-height:40px;margin:0;padding:8px 12px;border-radius:10px;font-weight:850;box-shadow:none}
+#detailTemp{border:1px solid var(--ui-border);background:#fff;color:var(--ui-text-sub)}
+#detailTemp:hover{background:var(--ui-hover)}
+#detailTemp.danger{border-color:var(--ui-danger-border);color:var(--ui-danger)}
+#detailActions [data-role]{border:1px solid var(--ui-accent);background:var(--ui-accent);color:#fff}
+#detailActions [data-role]:hover{border-color:var(--ui-accent-hover);background:var(--ui-accent-hover)}
+.detail-nav{width:48px;height:72px;margin:0;padding:0;border:0;border-radius:12px;background:#fff;color:var(--ui-text);font-size:2.3rem;line-height:1}
+@media(max-width:800px){
+ #detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,auto) 48px;align-content:center;gap:10px 12px;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+ .detail-modal{grid-column:1/-1;grid-row:1;justify-self:center;width:min(100%,540px);max-height:calc(100dvh - 94px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:18px 14px;border-radius:18px}
+ #detailPrev{grid-column:1;grid-row:2}
+ #detailNext{grid-column:2;grid-row:2}
+ .detail-nav{justify-self:center;width:100%;max-width:264px;height:48px;font-size:2rem;box-shadow:0 2px 10px rgba(0,0,0,.13)}
+ .detail-head{gap:14px;padding-right:40px}
+ .detail-head img{width:88px;height:88px}
+ .detail-close{top:10px;right:10px}
+}

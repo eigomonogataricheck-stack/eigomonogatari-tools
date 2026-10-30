@@ -65,30 +65,39 @@
   }
 
   function ensureUi(){
-    const help=document.querySelector('#page-help .help-panel');
-    if(!help||document.getElementById('browserDataMigration'))return;
+    const host=document.getElementById('migrationMount');
+    if(!host||document.getElementById('browserDataMigration'))return;
     const section=document.createElement('section');
     section.id='browserDataMigration';
     section.className='migration-panel';
     section.innerHTML=`
-      <h2>ブラウザーデータ移行</h2>
-      <p>一時保存、計算履歴、協力ダメージ計算の入力状態・提案履歴を、別のURLやブラウザーへ移行します。</p>
       <div class="migration-grid">
-        <div class="migration-box">
-          <h3>1. 移行元でコードを発行</h3>
+        <section class="migration-box">
+          <h3><span class="help-num">01</span>移行元でコードを発行</h3>
+          <p>今まで使っていたブラウザーでこのページを開き、コードを発行してコピーします。</p>
           <button id="migrationExport" type="button">移行コードを発行</button>
           <textarea id="migrationOutput" rows="6" readonly placeholder="発行したコードがここに表示されます"></textarea>
           <button id="migrationCopy" type="button" disabled>コードをコピー</button>
-        </div>
-        <div class="migration-box">
-          <h3>2. 移行先でコードを入力</h3>
+        </section>
+        <section class="migration-box">
+          <h3><span class="help-num">02</span>移行先でコードを取り込む</h3>
+          <p>新しいブラウザーでこのページを開き、コピーしたコードを貼り付けて取り込みます。</p>
           <textarea id="migrationInput" rows="6" spellcheck="false" placeholder="EIGO1- から始まる移行コードを貼り付け"></textarea>
           <button id="migrationImport" class="primary" type="button">データを取り込む</button>
-        </div>
+        </section>
       </div>
-      <p class="migration-note">移行コードにはブラウザー内の英語物語ツール用データが含まれます。第三者へ共有しないでください。詳細計算の一時的なIndexedDB結果は移行対象外です。</p>
-      <p id="migrationStatus" class="migration-status" role="status" aria-live="polite"></p>`;
-    help.append(section);
+      <p id="migrationStatus" class="migration-status" role="status" aria-live="polite"></p>
+      <section class="migration-info">
+        <h3>移行されるデータ</h3>
+        <ul>
+          <li>お気に入りのキャラ</li>
+          <li>計算機の計算履歴と、詳細モード・解答速度・自力モード・問題レベルの設定</li>
+          <li>協力ダメージ計算の敵・味方デッキ・Power・計算条件・記録データ</li>
+          <li>協力報告書のキャラ・数値・列数・行数</li>
+        </ul>
+        <p class="migration-note">取り込むと、移行先にある同じ種類のデータは上書きされます。デッキ提案の詳細計算の途中結果は移行されません。移行コードには上記のデータがそのまま入っているため、他の人には渡さないでください。</p>
+      </section>`;
+    host.append(section);
 
     const output=document.getElementById('migrationOutput');
     const input=document.getElementById('migrationInput');
@@ -118,8 +127,6 @@
 
   function start(){
     ensureUi();
-    const help=document.querySelector('#page-help .help-panel');
-    if(help)new MutationObserver(ensureUi).observe(help,{childList:true});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();

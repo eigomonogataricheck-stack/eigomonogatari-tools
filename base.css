@@ -1,0 +1,194 @@
+/* 英語物語 非公式ツール: 全ページ共通の土台
+   デザインの変数・ページの枠組み・役割別のボタン・入力欄・小窓など、どのページでも同じ部品はここだけで定義する。
+   ページ固有の見た目は calculator.css / catalog.css / coop.css / help.css に書く。
+   同じセレクタを後ろで定義し直したり、!important で上書きしたりしない(例外は下の [hidden] だけ)。 */
+
+/* ===== デザインの変数(図鑑の絞り込みを基準) ===== */
+:root{
+ --ui-accent:#175cd3;--ui-accent-hover:#1849a9;--ui-accent-soft:#eaf2ff;--ui-accent-ring:rgba(23,92,211,.13);
+ --ui-heading:#101828;--ui-text:#344054;--ui-text-sub:#475467;--ui-muted:#667085;
+ --ui-border:#d0d5dd;--ui-border-strong:#b8c4d2;--ui-line:#dfe5ec;--ui-soft:#f8fafc;--ui-hover:#f2f5f9;--ui-bg:#f3f5f8;
+ --ui-danger:#b42318;--ui-danger-border:#fda29b;--ui-danger-soft:#fef3f2;
+ --ui-attack:#d92d20;--ui-attack-soft:#fee4e2;--ui-guard:#1570ef;--ui-guard-soft:#e0eaff;--ui-warn:#dc6803;--ui-warn-soft:#fffaeb;
+ --ui-radius:9px;--ui-radius-card:14px;--ui-shadow-card:0 4px 15px rgba(16,24,40,.05);
+ --topbar-h:42px;--sidebar-w:184px;--sidebar-rail-w:56px
+}
+
+/* ===== 基本 ===== */
+*,*::before,*::after{box-sizing:border-box}
+/* hidden 属性は、どの部品の display 指定よりも優先して隠す(唯一の !important) */
+[hidden]{display:none!important}
+html{font-size:14px;-webkit-text-size-adjust:100%}
+body{margin:0;overflow-x:hidden;background:var(--ui-bg);color:var(--ui-text);font:1rem/1.5 system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+img{max-width:100%}
+h1{margin:0;font-size:1.45rem}
+h2{margin:0 0 10px;font-size:1rem}
+h3{margin:0 0 8px;font-size:.95rem}
+:where(button,a,select,input,textarea,summary,[tabindex]):focus-visible{outline:2px solid #3577ca;outline-offset:2px}
+@media(max-width:800px){html{font-size:13px}}
+
+/* ===== ヘッダー・メニュー ===== */
+.topbar{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;gap:9px;height:var(--topbar-h);padding:0 12px;border-bottom:1px solid var(--ui-line);background:rgba(255,255,255,.92);-webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px);font-size:.88rem}
+.hamburger{display:grid;place-content:center;gap:4px;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:transparent}
+.hamburger i{display:block;width:18px;height:2px;background:#333}
+.brand{display:flex;align-items:center;gap:9px;color:var(--ui-heading);font-weight:900;letter-spacing:.01em;white-space:nowrap}
+.brand-mark{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#175cd3 55%,#1849a9);color:#fff;font-size:.82rem;font-weight:900;box-shadow:0 2px 6px rgba(23,92,211,.35)}
+.brand-sub{color:var(--ui-muted);font-weight:700}
+.sidebar{position:fixed;top:var(--topbar-h);bottom:0;left:0;z-index:35;display:none;width:var(--sidebar-w);padding:7px;overflow-y:auto;border-right:1px solid var(--ui-line);background:#fff;box-shadow:6px 0 18px rgba(0,0,0,.13)}
+.sidebar.open{display:block}
+.sidebar button{display:flex;align-items:center;gap:10px;width:100%;margin:2px 0;padding:8px 10px;border:0;border-radius:9px;background:#fff;color:var(--ui-text-sub);font-size:.84rem;font-weight:750;text-align:left}
+.sidebar button:hover:not(.active){background:var(--ui-hover);color:var(--ui-text)}
+.sidebar button.active{background:var(--ui-accent-soft);color:var(--ui-accent);font-weight:850}
+.nav-icon{width:18px;height:18px;flex:none;color:#98a2b3}
+.sidebar button.active .nav-icon{color:var(--ui-accent)}
+main{padding:calc(var(--topbar-h) + 12px) 16px 16px}
+/* PC(1000px以上)では左のメニューを常に表示し、左上の≡で「アイコンだけの細い列」と切り替える(html.sidebar-collapsed。app.js の toggleMenu) */
+@media(min-width:1000px){
+ .sidebar{display:block;box-shadow:none}
+ main{padding-left:calc(var(--sidebar-w) + 16px)}
+ .sidebar-collapsed .sidebar{width:var(--sidebar-rail-w)}
+ .sidebar-collapsed .sidebar button{justify-content:center;padding:8px 0}
+ .sidebar-collapsed .sidebar button span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ .sidebar-collapsed main{padding-left:calc(var(--sidebar-rail-w) + 16px)}
+}
+@media(max-width:800px){.brand-sub{display:none}main{padding:calc(var(--topbar-h) + 12px) 8px 8px}}
+
+/* ===== ページの枠と見出し ===== */
+.page{display:none}
+.page.active{display:block}
+.panel{max-width:1180px;margin:0 auto;padding:20px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 18px}
+.page-head-text{min-width:0}
+.page-eyebrow{display:block;color:var(--ui-accent);font-size:.68rem;font-weight:900;letter-spacing:.16em;line-height:1.4}
+.page-head h1{margin:2px 0 0;color:var(--ui-heading);font-size:1.45rem;font-weight:850;line-height:1.3}
+.page-lead{margin:4px 0 0;color:var(--ui-muted);font-size:.84rem;line-height:1.5}
+.page-actions,.calculator-actions,.coop-title-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px}
+.page-head :is(.page-actions,.calculator-actions,.coop-title-actions)>button{min-height:36px;margin:0;padding:7px 13px;font-size:.8rem;line-height:1.2;white-space:nowrap}
+@media(max-width:800px){
+ .panel{padding:12px}
+ .page-head{flex-direction:column;align-items:stretch;gap:10px;margin-bottom:12px}
+ .page-head h1{font-size:1.2rem}
+ .page-lead{font-size:.76rem}
+ .page-actions,.calculator-actions,.coop-title-actions{justify-content:flex-start}
+ .page-head :is(.page-actions,.calculator-actions,.coop-title-actions)>button{min-height:34px;padding:6px 10px;font-size:.74rem}
+}
+
+/* ===== ボタン(役割で見た目を決める) ===== */
+/* 補助: 図鑑の「すべて初期化」と同じ */
+:is(.reset-btn,.mini-reset,.detail-mode-btn,.swap,.temp-toggle){display:inline-flex;align-items:center;justify-content:center;gap:5px;margin:0;padding:6px 10px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-size:.76rem;font-weight:800;line-height:1.25;text-align:center;box-shadow:none}
+.temp-toggle{margin-left:auto;padding:4px 10px;font-size:.74rem}
+:is(.reset-btn,.mini-reset,.detail-mode-btn,.swap,.temp-toggle):hover:not(:disabled){background:var(--ui-hover)}
+/* ON 状態: 図鑑のチェック済みチップと同じ */
+:is(.reset-btn,.mini-reset,.detail-mode-btn,.swap):is(.active,[aria-pressed="true"]){border-color:var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}
+/* 危険 */
+:is(.reset-btn,.mini-reset).danger{border-color:var(--ui-danger-border);color:var(--ui-danger)}
+:is(.reset-btn,.mini-reset).danger:hover:not(:disabled){background:var(--ui-danger-soft)}
+:is(.reset-btn,.mini-reset).danger[aria-pressed="true"]{border-color:var(--ui-danger);background:var(--ui-danger-soft);color:var(--ui-danger);box-shadow:inset 0 0 0 1px var(--ui-danger)}
+/* 主: 図鑑の「この条件でキャラを表示」と同じ */
+:is(.download,.primary){display:inline-flex;align-items:center;justify-content:center;margin:0;padding:8px 14px;border:1px solid var(--ui-accent);border-radius:10px;background:var(--ui-accent);color:#fff;font-weight:900;line-height:1.25;box-shadow:none}
+:is(.download,.primary):hover:not(:disabled){border-color:var(--ui-accent-hover);background:var(--ui-accent-hover)}
+:is(.reset-btn,.mini-reset,.detail-mode-btn,.swap,.download,.primary):disabled{opacity:.45}
+/* 使い方 */
+.help-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-accent);font-weight:850;box-shadow:none}
+.help-btn:hover{background:var(--ui-accent-soft)}
+.help-btn-mark{display:grid;place-items:center;width:18px;height:18px;flex:none;border-radius:50%;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.72rem;font-weight:900;line-height:1}
+/* 閉じる(×) */
+.close-button{display:grid;place-items:center;width:32px;height:32px;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:#7f8da3;font-size:18px;font-weight:300;line-height:1;touch-action:manipulation}
+.close-button:hover{background:#f1f4f8;color:#46566f}
+@media(max-width:800px){:is(.reset-btn,.mini-reset,.detail-mode-btn,.swap){padding:5px 8px;font-size:.72rem}}
+
+/* ===== 入力欄・選択欄 ===== */
+input[type=number],input[type=search],input[type=text],textarea{min-width:0;border:1px solid var(--ui-border);border-radius:10px;background:#fff;color:var(--ui-text)}
+input[type=number]:focus-visible,input[type=search]:focus-visible,input[type=text]:focus-visible,textarea:focus-visible{border-color:var(--ui-accent);outline:3px solid var(--ui-accent-ring);outline-offset:0}
+/* JS(coopSyncStyledSelect など)が select を隠して作る選択欄。計算機・協力で共通 */
+.coop-styled-select{position:relative;display:inline-flex;align-items:center;min-width:0;vertical-align:middle}
+.coop-styled-select>select{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);border:0;white-space:nowrap}
+.coop-styled-select-button{display:grid;grid-template-columns:minmax(0,1fr) 14px;align-items:center;gap:4px;width:100%;min-width:0;height:36px;margin:0;padding:0 10px 0 12px;border:1px solid var(--ui-border-strong);border-radius:999px;background:#fff;color:var(--ui-text);font-size:.8rem;font-weight:750;line-height:1.15;text-align:center;box-shadow:none}
+.coop-styled-select-button::after{content:"";justify-self:end;width:7px;height:7px;margin-top:-4px;border:solid #667085;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.coop-styled-select-button[aria-expanded="true"]{border-color:var(--ui-accent);box-shadow:0 0 0 3px var(--ui-accent-ring)}
+.coop-styled-select-button:focus-visible{border-color:var(--ui-accent);outline:3px solid var(--ui-accent-ring);outline-offset:0}
+.coop-styled-select-menu{position:fixed;z-index:1000;max-height:min(320px,60vh);min-width:min(180px,calc(100vw - 16px));max-width:calc(100vw - 16px);padding:5px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;border:1px solid #cad3df;border-radius:14px;background:#fff;box-shadow:0 12px 30px rgba(16,24,40,.18)}
+.coop-styled-select-option{display:block;width:100%;margin:0;padding:9px 12px;border:0;border-radius:9px;background:#fff;color:var(--ui-text);font-size:.82rem;font-weight:700;line-height:1.25;text-align:left;white-space:nowrap}
+.coop-styled-select-option:hover{background:var(--ui-hover)}
+.coop-styled-select-option[aria-selected="true"]{background:var(--ui-accent-soft);color:var(--ui-accent);font-weight:850}
+
+/* 2択の切替スイッチ(図鑑の「含む/一致」と同じ形)。app.js の uiBuildSwitch が作る */
+.ui-switch-native{position:absolute;width:1px;max-width:1px;height:1px;min-height:0;margin:0;padding:0;overflow:hidden;opacity:0;pointer-events:none;clip-path:inset(50%)}
+.ui-switch{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:2px;width:100%;min-height:44px;padding:3px;border-radius:10px;background:#eef2f6}
+.ui-switch button{display:grid;place-content:center;min-width:0;margin:0;padding:3px 2px;border:0;border-radius:8px;background:transparent;color:var(--ui-muted);font-size:.76rem;font-weight:850;line-height:1.15;text-align:center;box-shadow:none}
+.ui-switch button small{display:block;margin-top:1px;font-size:.82em;font-weight:700;opacity:.8}
+.ui-switch button:hover:not(.active){color:var(--ui-text)}
+.ui-switch button.active{background:#fff;color:var(--ui-accent);box-shadow:0 1px 5px rgba(16,24,40,.16)}
+
+/* ===== 小窓 ===== */
+.overlay{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(20,25,30,.62)}
+.modal{position:relative;background:#fff}
+@media(max-width:800px){.overlay{padding:6px}}
+/* シート(一覧・使い方の説明)。PCは中央、スマホは下から */
+.picker-category-sheet{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:18px}
+.picker-sheet-backdrop{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;border-radius:0;background:rgba(22,32,45,.45)}
+.picker-sheet-panel{position:relative;z-index:1;width:min(1600px,calc(100vw - 36px));max-height:calc(100vh - 72px);padding:18px 22px 24px;overflow:auto;overscroll-behavior:contain;border-radius:22px;background:#fff;box-shadow:0 22px 60px rgba(15,23,42,.22)}
+@media(max-width:800px){.picker-category-sheet{align-items:flex-end;padding:0}.picker-sheet-panel{width:100%;max-height:78vh;padding:14px 14px max(14px,env(safe-area-inset-bottom));border-radius:20px 20px 0 0}}
+/* 各ページの「使い方」ボタンの説明 */
+.page-help .page-help-panel{width:min(580px,calc(100vw - 36px))}
+.page-help-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.page-help-head h2{margin:2px 0 0;color:var(--ui-heading);font-size:1.15rem;font-weight:850}
+.page-help-head .close-button{flex:none;width:34px;height:34px;font-size:1.3rem}
+.page-help-steps{display:grid;gap:10px;margin:16px 0;padding:0;list-style:none;counter-reset:help-step}
+.page-help-steps li{display:grid;grid-template-columns:29px minmax(0,1fr);gap:10px;align-items:start;color:var(--ui-text);font-size:.9rem;line-height:1.65;counter-increment:help-step}
+.page-help-steps li::before{content:counter(help-step,decimal-leading-zero);display:grid;place-items:center;width:29px;height:29px;border-radius:8px;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.7rem;font-weight:900}
+.page-help-tips{display:grid;gap:6px;padding:12px 14px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.page-help-tips p{margin:0;padding-left:1em;color:var(--ui-text-sub);font-size:.84rem;line-height:1.6;text-indent:-1em}
+.page-help-tips p::before{content:"・"}
+.page-help-more{width:100%;min-height:42px;margin-top:14px}
+@media(max-width:800px){.page-help .page-help-panel{width:100%}.page-help-steps li{font-size:.84rem}}
+
+/* ===== お気に入りの引き出し(右上) ===== */
+.temp-drawer{position:fixed;top:var(--topbar-h);right:0;z-index:39;display:none;width:min(360px,94vw);max-height:calc(100vh - var(--topbar-h));padding:14px;overflow:auto;border-left:1px solid var(--ui-line);background:#fff;box-shadow:-8px 8px 24px rgba(0,0,0,.13)}
+.temp-drawer.open{display:block}
+.temp-drawer h2{color:var(--ui-heading);font-size:1rem;font-weight:850}
+#tempEmpty{margin:0;color:var(--ui-muted);font-size:.84rem}
+.temp-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #eef1f5}
+.temp-open{display:flex;align-items:center;gap:8px;min-width:0;margin:0;padding:0;border:0;background:transparent;color:var(--ui-text);text-align:left}
+.temp-open img{width:44px;height:44px;flex:none;border-radius:8px;object-fit:cover}
+.temp-open span{overflow-wrap:anywhere;font-size:.84rem}
+.temp-delete{white-space:nowrap}
+.temp-actions{display:flex;gap:8px;margin-top:12px}
+.temp-actions button{flex:1 1 0;min-height:36px;margin:0;padding:6px 10px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-size:.8rem;font-weight:800}
+.temp-actions button:hover{background:var(--ui-hover)}
+
+/* ===== キャラ画像のドラッグ&ドロップ(app.js の registerCharDrag。data-char-drag の付いた枠で共通) =====
+   長押しで文字選択や画像メニューが出ないようにする。掴んだ画像は指の少し上に出し、置ける枠は青、置けない枠は赤の点線で示す */
+button[data-char-drag]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.char-dragging,.char-dragging *{cursor:grabbing}
+.char-drag-ghost{position:fixed;z-index:1000;width:60px;height:60px;border:2px solid #fff;border-radius:12px;background:var(--ui-soft) center/cover no-repeat;box-shadow:0 10px 24px rgba(16,24,40,.32);pointer-events:none;transform:translate(-50%,-75%)}
+.char-drag-source{opacity:.4}
+.char-drop-target{outline:3px solid var(--ui-accent);outline-offset:-3px}
+.char-drop-invalid{outline:2px dashed var(--ui-danger);outline-offset:-2px}
+
+/* ===== アニメーション(端末で「視差効果を減らす」を選んでいる人には動かさない) ===== */
+@media(prefers-reduced-motion:no-preference){
+ @keyframes ui-fade{from{opacity:0}to{opacity:1}}
+ @keyframes ui-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+ @keyframes ui-pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+ @keyframes ui-sheet-up{from{transform:translateY(100%)}to{transform:none}}
+ @keyframes ui-drag-lift{from{opacity:.6;transform:translate(-50%,-50%) scale(.8)}to{opacity:1;transform:translate(-50%,-75%)}}
+ .char-drag-ghost{animation:ui-drag-lift .14s ease-out}
+ @keyframes ui-slide-in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+ @keyframes ui-drawer-in{from{transform:translateX(105%)}to{transform:none}}
+ .page.active{animation:ui-rise .26s ease-out both}
+ .overlay:not([hidden]){animation:ui-fade .18s ease-out}
+ .overlay:not([hidden])>.modal{animation:ui-pop .24s cubic-bezier(.2,.8,.2,1)}
+ .picker-category-sheet:not([hidden]) .picker-sheet-backdrop{animation:ui-fade .2s ease-out}
+ .picker-category-sheet:not([hidden]) .picker-sheet-panel{animation:ui-pop .26s cubic-bezier(.2,.8,.2,1)}
+ .temp-drawer.open{animation:ui-drawer-in .2s ease-out}
+ :is(.reset-btn,.mini-reset,.detail-mode-btn,.swap,.download,.primary,.help-btn,.ui-switch button,.sidebar button){transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease,transform .12s ease}
+ :is(.reset-btn,.mini-reset,.detail-mode-btn,.swap,.download,.primary,.help-btn,.ui-switch button):active:not(:disabled){transform:scale(.97)}
+}
+@media(prefers-reduced-motion:no-preference) and (max-width:999px){.sidebar.open{animation:ui-slide-in .2s ease-out}}
+@media(prefers-reduced-motion:no-preference) and (min-width:1000px){.sidebar{transition:width .2s ease}main{transition:padding-left .2s ease}}
+@media(prefers-reduced-motion:no-preference) and (max-width:800px){.picker-category-sheet:not([hidden]) .picker-sheet-panel{animation:ui-sheet-up .28s cubic-bezier(.2,.8,.2,1)}}
+@media print{.topbar,.sidebar,.temp-drawer{display:none}main{padding:0}}

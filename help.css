@@ -1,0 +1,64 @@
+/* 英語物語 非公式ツール: 使い方・データ移行 */
+
+/* ===== 使い方 ===== */
+.help-panel{max-width:980px}
+.help-panel>h1{margin:2px 0 0;color:var(--ui-heading);font-size:1.45rem;font-weight:850;line-height:1.3}
+.help-index{position:sticky;top:var(--topbar-h);z-index:15;display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px;padding:8px 0;border-bottom:1px solid var(--ui-line);background:rgba(255,255,255,.96)}
+.help-index a{padding:6px 11px;border:1px solid var(--ui-border);border-radius:9px;background:#fff;color:var(--ui-text-sub);font-size:.8rem;font-weight:800;text-decoration:none}
+.help-index a:hover{border-color:var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent)}
+.help-panel>section{margin:18px 0;padding:20px 22px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card);scroll-margin-top:110px}
+.help-panel h2{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:var(--ui-heading);font-size:1.05rem;font-weight:850}
+.help-panel h3{margin:20px 0 8px;color:var(--ui-heading);font-size:.95rem;font-weight:850}
+.help-panel p,.help-panel li,.help-panel dd{color:var(--ui-text);line-height:1.8}
+.help-num{display:inline-grid;place-items:center;width:29px;height:29px;flex:none;border-radius:8px;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.7rem;font-weight:900}
+/* 冒頭のページ紹介カード */
+.help-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:4px 0 6px}
+.help-card{display:grid;gap:4px;margin:0;padding:14px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft);text-align:left;box-shadow:none}
+.help-card b{color:var(--ui-accent);font-size:.95rem;font-weight:850}
+.help-card span{color:var(--ui-text-sub);font-size:.82rem;line-height:1.6}
+.help-card:hover{border-color:#9eb7d5;background:#eef5ff}
+/* 用語と説明 */
+.help-dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:8px 16px;margin:10px 0;padding:14px 16px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.help-dl dt{color:var(--ui-heading);font-weight:850;line-height:1.8}
+.help-dl dd{margin:0}
+/* 手順 */
+.help-steps{display:grid;gap:8px;margin:10px 0;padding:0;list-style:none;counter-reset:help-step}
+.help-steps li{display:grid;grid-template-columns:26px minmax(0,1fr);align-items:start;gap:10px;counter-increment:help-step}
+.help-steps li::before{content:counter(help-step);display:grid;place-items:center;width:26px;height:26px;margin-top:2px;border-radius:50%;background:var(--ui-accent);color:#fff;font-size:.75rem;font-weight:900}
+.help-panel .help-note{padding:10px 12px;border-radius:10px;background:var(--ui-warn-soft);color:#93370d;font-size:.84rem}
+/* 計算式と表 */
+.formula{padding:10px 14px;border-left:3px solid var(--ui-accent);border-radius:0 10px 10px 0;background:var(--ui-accent-soft);overflow-wrap:anywhere}
+.help-table-scroll{margin:12px 0;overflow-x:auto}
+.help-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.help-table th,.help-table td{padding:9px 10px;border-bottom:1px solid var(--ui-line);line-height:1.7;text-align:left;vertical-align:top}
+.help-table thead th{background:var(--ui-soft);color:var(--ui-heading)}
+.help-table tbody th{background:var(--ui-soft);white-space:nowrap}
+.help-table td:first-child{color:var(--ui-heading);font-weight:800;white-space:nowrap}
+#help-formula .help-table{min-width:560px}
+#help-formula .help-table td:first-child{font-weight:400}
+.help-link{display:inline;margin:0 2px;padding:0;border:0;background:none;color:var(--ui-accent);font:inherit;font-weight:850;text-decoration:underline}
+@media(max-width:800px){
+ .help-panel>h1{font-size:1.2rem}
+ .help-panel>section{padding:16px 14px}
+ .help-dl{grid-template-columns:1fr;gap:2px;padding:12px}
+ .help-dl dd{margin-bottom:8px}
+ .help-table td:first-child{white-space:normal}
+}
+
+/* ===== データ移行(migration.js が #migrationMount に描画する) ===== */
+.migration-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.migration-box{display:grid;align-content:start;gap:10px;padding:18px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.migration-box h3,.migration-info h3{display:flex;align-items:center;gap:9px;margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
+.migration-box p{margin:0;color:var(--ui-text-sub);font-size:.86rem;line-height:1.6}
+.migration-box textarea{width:100%;min-height:126px;padding:10px;font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical;overflow-wrap:anywhere}
+.migration-box button{min-height:42px}
+#migrationExport,#migrationCopy{margin:0;padding:9px 12px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-weight:800}
+#migrationExport:hover,#migrationCopy:hover:not(:disabled){background:var(--ui-hover)}
+#migrationCopy:disabled{opacity:.5}
+.migration-status{min-height:1.5em;margin:10px 0 0;font-weight:700}
+.migration-status.success{color:#157347}
+.migration-status.error{color:var(--ui-danger)}
+.migration-info{margin-top:14px;padding:16px 18px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:var(--ui-soft)}
+.migration-info ul{margin:10px 0 0;padding-left:1.3em;color:var(--ui-text);line-height:1.8}
+.migration-note{margin:10px 0 0;color:var(--ui-muted);font-size:.8rem;line-height:1.6}
+@media(max-width:800px){.migration-grid{grid-template-columns:1fr}.migration-box textarea{font-size:16px}}
