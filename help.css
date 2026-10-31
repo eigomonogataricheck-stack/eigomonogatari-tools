@@ -51,10 +51,13 @@
 .migration-box h3,.migration-info h3{display:flex;align-items:center;gap:9px;margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
 .migration-box p{margin:0;color:var(--ui-text-sub);font-size:.86rem;line-height:1.6}
 .migration-box textarea{width:100%;min-height:126px;padding:10px;font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical;overflow-wrap:anywhere}
-.migration-box button{min-height:42px}
-#migrationExport,#migrationCopy{margin:0;padding:9px 12px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-weight:800}
-#migrationExport:hover,#migrationCopy:hover:not(:disabled){background:var(--ui-hover)}
-#migrationCopy:disabled{opacity:.5}
+.migration-box :is(button,.migration-file){min-height:42px;margin:0}
+.migration-box button:disabled{opacity:.5}
+.migration-actions{display:flex;flex-wrap:wrap;gap:8px}
+.migration-actions>*{flex:1 1 140px}
+/* ファイル選択: 見た目はボタン(.reset-btn)、本物の input は隠して label のクリックで開く */
+.migration-file{display:flex;align-items:center;justify-content:center;cursor:pointer}
+.migration-file input{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;clip-path:inset(50%)}
 .migration-status{min-height:1.5em;margin:10px 0 0;font-weight:700}
 .migration-status.success{color:#157347}
 .migration-status.error{color:var(--ui-danger)}

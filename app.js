@@ -57,9 +57,9 @@ const PAGE_HELP={
   tips:['入力した内容と列・行の数は、このブラウザーに自動で保存されます。','列・行を減らしても、キャラの位置(何行目・何列目)は変わりません。表の外に出たマスは、増やし直すと元の位置に戻ります。','でき上がった表は、端末のスクリーンショットで共有してください。','キャラ画像はドラッグで別のマスへ動かせます(スマホは長押ししてから動かす)。数値も一緒に入れ替わります。']},
  migration:{title:'データ移行の使い方',steps:[
   '今まで使っていたブラウザーでこのページを開き、「移行コードを発行」→「コードをコピー」を押します。',
-  'コピーしたコードを、メモやメッセージなどで新しい端末・ブラウザーへ送ります。',
-  '新しいブラウザーでこのページを開き、コードを貼り付けて「データを取り込む」を押します。確認のあと、ページが読み込み直されます。'],
-  tips:['取り込むと、移行先にある同じ種類のデータは上書きされます。','移行コードには保存データがそのまま入っているので、他の人には渡さないでください。']}
+  'コピーしたコードを、メモやメッセージなどで新しい端末・ブラウザーへ送ります。コードが長くてメッセージで切れるときは、「ファイルに保存」でできたファイルを送ります。',
+  '新しいブラウザーでこのページを開き、コードを貼り付けるか「ファイルから読み込む」でファイルを選び、「データを取り込む」を押します。確認のあと、ページが読み込み直されます。'],
+  tips:['以前に発行した EIGO1- から始まるコードも、そのまま取り込めます。','取り込むと、移行先にある同じ種類のデータは上書きされます。','移行コードには保存データがそのまま入っているので、他の人には渡さないでください。']}
 };
 function openPageHelp(page){const d=PAGE_HELP[page];if(!d)return;$('pageHelpTitle').textContent=d.title;$('pageHelpSteps').replaceChildren(...d.steps.map(t=>{const li=document.createElement('li');li.textContent=t;return li}));const tips=$('pageHelpTips');tips.replaceChildren(...(d.tips||[]).map(t=>{const p=document.createElement('p');p.textContent=t;return p}));tips.hidden=!d.tips?.length;const sheet=$('pageHelp');sheet.hidden=false;sheet.querySelector('.close-button').focus()}
 function closePageHelp(){$('pageHelp').hidden=true}
