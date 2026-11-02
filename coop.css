@@ -117,6 +117,11 @@
 /* 枠が狭いとき(デッキ欄の幅で判定)は「Power」を入力欄の上に置き、数字が欠けないようにする */
 @container (max-width:560px){.coop-ally-power{grid-template-columns:minmax(0,1fr)}}
 .coop-ally-power input{width:100%;min-width:0;height:26px;padding:1px 2px;font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+/* 凸のデータがあるキャラは「Power + 凸数」の下に、その凸の Power(手入力のときは入力欄)を出す */
+.coop-ally-power .coop-styled-select{display:block;width:100%;min-width:0}
+.coop-ally-power .coop-styled-select-button{width:100%;height:26px;min-height:26px;grid-template-columns:minmax(0,1fr) 10px;gap:1px;padding:0 3px 0 5px;font-size:.72rem;white-space:nowrap}
+.coop-ally-power .coop-styled-select~:is(.coop-ally-power-value,input){grid-column:1/-1}
+.coop-ally-power-value{color:var(--ui-text);font-size:13px;font-weight:850;text-align:center;font-variant-numeric:tabular-nums}
 .coop-slot-actions{display:grid;gap:3px}
 .coop-slot-actions .mini-reset{width:100%;min-width:0;min-height:24px;margin:0;padding:1px 3px;font-size:.64rem;line-height:1.15;white-space:nowrap}
 .coop-slot-actions .coop-character-delete{position:absolute;top:2px;right:2px;z-index:1;display:grid;place-items:center;width:22px;min-height:0;height:22px;padding:0;border-radius:50%;background:rgba(255,255,255,.95);font-size:0;box-shadow:0 1px 3px rgba(16,24,40,.2)}
