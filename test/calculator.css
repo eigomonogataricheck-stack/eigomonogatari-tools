@@ -1,0 +1,158 @@
+/* 英語物語 非公式ツール: ダメージ計算機
+   計算機ページ(#page-calculator)とスクショ用画面(#resultScreenshot)の見た目はこのファイルだけで定義する。
+   共通の部品(ボタン・入力欄・選択欄・切替スイッチ)は base.css。 */
+
+/* ===== 全体の並び ===== */
+/* PC: 攻撃・攻撃対象の2列 + 右に結果。中くらいの幅では結果を下へ回す */
+.calculator-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.battle{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:1219px){.calculator-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:800px){.battle{grid-template-columns:minmax(0,1fr);gap:18px}}
+
+/* ===== 攻撃キャラ・攻撃対象キャラのカード ===== */
+.fighter{min-width:0;padding:18px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+/* 見出しは省略せず1行。収まらないときは app.js が両方のカードに .is-stacked を付け、ボタンを下の行へ回す */
+.fighter-title{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:10px;min-height:34px;margin-bottom:14px}
+.fighter-title h2{display:flex;flex:none;align-items:center;gap:9px;margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
+.fighter-name{white-space:nowrap}
+.role-badge{display:inline-grid;place-items:center;width:29px;height:29px;flex:none;border-radius:8px;font-size:.8rem;font-weight:900}
+.attacker .role-badge{background:var(--ui-attack-soft);color:var(--ui-attack)}
+.defender .role-badge{background:var(--ui-guard-soft);color:var(--ui-guard)}
+.fighter-actions{display:flex;flex:none;gap:6px}
+.fighter-actions .mini-reset{white-space:nowrap}
+.fighter-title.is-stacked{flex-wrap:wrap;row-gap:10px}
+.fighter-title.is-stacked .fighter-actions{width:100%}
+.fighter-title.is-stacked .fighter-actions>button{flex:1 1 0}
+/* キャラを選ぶ枠: 高さ固定・名前は最大2行(攻守で画像の高さがそろう) */
+.pick{display:flex;align-items:center;gap:10px;width:100%;height:76px;margin:0;padding:10px 12px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft);color:var(--ui-text);text-align:left}
+.pick:hover{border-color:#9eb7d5;background:#eef5ff}
+.portrait{width:52px;height:52px;flex:none;border-radius:10px;background:#e9eef4 center/cover no-repeat}
+.pick>span:last-child{min-width:0}
+.pick strong{display:-webkit-box;overflow:hidden;color:var(--ui-heading);font-size:.98rem;font-weight:850;line-height:1.25;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pick small{display:block;overflow:hidden;color:var(--ui-muted);font-size:.8rem;white-space:nowrap;text-overflow:ellipsis}
+@media(max-width:800px){.fighter{padding:14px}}
+
+/* ===== 入力欄(3列・ラベルは下揃えで入力欄の高さをそろえる) ===== */
+.fields,.progressive-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}
+.inline-progressive{display:contents}
+#extraHitFields{grid-column:1/-1;margin-top:0}
+.fields label,.progressive-fields label{display:grid;grid-template-rows:minmax(2.1em,auto) 44px;align-items:end;gap:4px;min-width:0;color:var(--ui-text-sub);font-size:.7rem;font-weight:850}
+.fields input,.progressive-fields input{width:100%;height:44px;padding:8px;font-size:.8rem;line-height:1.2}
+.calculator-styled-select{display:flex;width:100%}
+.calculator-styled-select-button{height:44px;font-size:.76rem;white-space:normal}
+.calculator-styled-select-menu{min-width:min(220px,calc(100vw - 16px))}
+.calculator-self-checkbox{position:relative}
+.detail-mode-target.detail-mode-hidden{display:none}
+@media(max-width:800px){
+ .fields,.progressive-fields{gap:5px}
+ .fields label,.progressive-fields label{grid-template-rows:minmax(2.4em,auto) 42px;font-size:.62rem}
+ .fields input,.progressive-fields input{height:42px;padding:6px 5px;font-size:14px}
+ .calculator-styled-select-button{height:42px;padding:0 6px 0 8px}
+}
+
+/* ===== スキル ===== */
+.skill,.borrowed-skills{margin-top:12px;padding:14px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.skill{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.skill b,.borrowed-skills b{color:var(--ui-heading);font-weight:850}
+.skill p{margin:3px 0;color:var(--ui-text);font-size:.8rem}
+.skill small{color:#137333;font-size:.78rem}
+.skill>button{flex:none;white-space:nowrap}
+.borrowed-skills>div:first-child{display:flex;justify-content:space-between;gap:8px}
+.borrowed-buttons{display:flex;gap:8px;margin-top:8px}
+.borrowed-buttons button{flex:1;min-height:34px}
+.borrowed-item{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:7px;margin-top:8px;font-size:.76rem}
+.borrowed-item>span{min-width:0;overflow-wrap:anywhere}
+.borrowed-item .mini-reset{white-space:nowrap}
+.borrowed-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+@media(max-width:800px){.borrowed-item{gap:5px}.borrowed-item .mini-reset{min-height:34px;padding:5px}}
+
+/* 自キャラ以外のスキル・リセット系ボタンの共通配置は .skill button(id 付き)で行う */
+.skill button,#attackerBorrowSkill,#defenderBorrowSkill{display:inline-flex;align-items:center;justify-content:center;margin:0;padding:6px 12px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-size:.78rem;font-weight:800;box-shadow:none}
+.skill button:hover:not(:disabled),#attackerBorrowSkill:hover,#defenderBorrowSkill:hover{background:var(--ui-hover)}
+.skill button.active{border-color:var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}
+.skill button:disabled{opacity:.45}
+
+/* ===== 耐久値・幽霊攻撃 ===== */
+.durability,.ghost{margin-top:12px;padding:14px 16px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.durability h2,.ghost h2{margin:0 0 6px;color:var(--ui-heading);font-size:.9rem;font-weight:850}
+.durability b{display:block;color:var(--ui-heading);font-size:1.15rem}
+#ghostResult{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;white-space:nowrap}
+#ghostResult>div{padding:8px;border-radius:8px;background:#fff;text-align:center}
+@media(max-width:800px){#ghostResult{grid-template-columns:minmax(0,1fr);font-size:.86rem}}
+
+/* ===== 予想ダメージ(結果) ===== */
+.calculator-result-rail{min-width:0}
+@media(min-width:1220px){.calculator-result-rail{position:sticky;top:calc(var(--topbar-h) + 16px)}}
+.result{padding:22px 18px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card);text-align:center}
+.result .result-label{display:block;margin-top:2px;color:var(--ui-text-sub);font-size:.86rem;font-weight:850}
+/* 判定の色: calculator.js が data-state を付ける */
+#killResult{display:block;margin:14px 0 10px;padding:12px;border-radius:12px;background:#f2f4f7;color:var(--ui-muted);font-size:1rem;font-weight:850;line-height:1.3}
+#killResult[data-state="kill"]{background:var(--ui-danger-soft);color:var(--ui-attack);font-size:1.6rem;font-weight:900}
+#killResult[data-state="chance"]{background:var(--ui-warn-soft);color:var(--ui-warn);font-size:1.6rem;font-weight:900}
+#killResult[data-state="safe"]{background:#eff8ff;color:var(--ui-guard);font-size:1.6rem;font-weight:900}
+#damageRange{color:var(--ui-heading);font-size:1.25rem;font-weight:700}
+.multi-hit-result{margin:6px 0;color:#3f4b59;font-size:1rem;font-weight:700;line-height:1.35}
+.multi-hit-result small{display:block;margin-top:3px;color:#66717f;font-size:.82rem;font-weight:600}
+.remaining-hp{margin-top:6px;color:#46566f;font-weight:700}
+.calculation-warning{margin:8px auto 0;color:#89929e;font-size:.76rem;line-height:1.35}
+.multi-hit-result:empty,.remaining-hp:empty,.calculation-warning:empty{display:none}
+.calculator-result-actions{display:grid;gap:8px;margin-top:14px}
+.calculator-result-actions .download{width:100%;min-height:42px}
+
+/* 計算履歴 */
+.calculator-history{margin-top:16px;overflow:hidden;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.calculator-history>summary{display:flex;align-items:center;gap:10px;min-height:52px;padding:12px 16px;color:var(--ui-heading);font-weight:850;list-style:none;cursor:pointer}
+.calculator-history>summary::-webkit-details-marker{display:none}
+.calculator-history>summary:focus-visible{outline-offset:-3px}
+.calculator-history>summary span:not(.calculator-history-arrow){color:var(--ui-muted);font-size:.8rem;font-weight:700}
+.calculator-history-arrow{margin-left:auto;color:#98a2b3;font-size:.75em}
+.calculator-history-arrow::after{content:"▶"}
+.calculator-history[open] .calculator-history-arrow::after{content:"▼"}
+.calculator-history-list{display:grid;gap:10px;max-height:440px;padding:12px;overflow-y:auto;border-top:1px solid var(--ui-line)}
+.calculator-history-item{min-width:0;padding:12px;border:1px solid var(--ui-line);border-radius:10px;background:var(--ui-soft)}
+.calculator-history-main{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;overflow-wrap:anywhere}
+.calculator-history-main strong{color:var(--ui-heading);font-size:.86rem}
+.calculator-history-main time{color:var(--ui-muted);font-size:.76rem}
+.calculator-history-result{margin:7px 0;color:var(--ui-text);font-size:.84rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.calculator-history-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.calculator-history-actions button{margin:0;padding:6px 12px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-size:.78rem;font-weight:800}
+.calculator-history-actions button:hover{background:var(--ui-hover)}
+.calculator-history-actions .calculator-history-delete{border-color:var(--ui-danger-border);color:var(--ui-danger)}
+.calculator-history-empty{margin:4px 0;color:var(--ui-muted)}
+
+@media(prefers-reduced-motion:no-preference){
+ @keyframes ui-result{0%{transform:scale(.96)}55%{transform:scale(1.03)}100%{transform:none}}
+ #killResult.ui-pop{animation:ui-result .32s ease-out}
+ .pick{transition:border-color .15s ease,background-color .15s ease}
+}
+
+/* ===== スクショ用画面(calculator.js が作る。表示倍率は JS が画面の大きさから決める) ===== */
+.result-shot-overlay{z-index:150;align-items:flex-start;overflow:auto;padding:8px;background:#e9eef5}
+.result-shot-panel{width:760px;max-width:none;margin:auto}
+.result-shot-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;padding:5px 9px;border-radius:9px;background:var(--ui-accent-soft);color:#27466a;font-size:12px}
+.result-shot-toolbar button{flex:none;padding:4px 10px;border:1px solid var(--ui-border);border-radius:8px;background:#fff;font-weight:800}
+.result-shot-sheet{padding:13px;border-radius:12px;background:#fff;color:#24282c;font-size:12px;line-height:1.3;overflow-wrap:anywhere;box-shadow:0 4px 20px rgba(0,0,0,.13)}
+.result-shot-sheet h2{margin:0 0 7px;font-size:18px;text-align:center}
+.result-shot-sides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.result-shot-side{min-width:0;padding:7px;border:1px solid #dce2e9;border-top:3px solid var(--ui-attack);border-radius:9px}
+.result-shot-side.defender{border-top-color:var(--ui-guard)}
+.result-shot-side h3{margin:0 0 4px;font-size:13px}
+.result-shot-identity{display:flex;align-items:center;gap:7px;min-height:45px}
+.result-shot-identity img{width:45px;height:45px;flex:none;border-radius:9px;background:#eef1f4;object-fit:cover}
+.result-shot-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin:5px 0}
+.result-shot-values div{padding:4px;border-radius:7px;background:#f5f7fa}
+.result-shot-values dt{color:#607086;font-size:10px}
+.result-shot-values dd{margin:1px 0 0;font-size:11px;font-weight:700}
+.result-shot-skills{padding:6px;border-radius:8px;background:#f4f7fb}
+.result-shot-skills p{margin:3px 0;overflow-wrap:anywhere}
+.result-shot-verdict{margin-top:7px;padding:7px;border:1px solid #dce2e9;border-radius:9px;text-align:center}
+.result-shot-verdict strong{color:var(--ui-attack);font-size:18px}
+.result-shot-verdict p{margin:2px 0}
+@media(max-width:700px){.result-shot-panel{width:360px}.result-shot-sides{grid-template-columns:minmax(0,1fr);gap:6px}}
+@media print{
+ body:has(#resultScreenshot:not([hidden]))>:not(#resultScreenshot){display:none}
+ .result-shot-overlay{position:static;display:block;padding:0;background:#fff}
+ .result-shot-toolbar{display:none}
+ .result-shot-sheet{box-shadow:none}
+ .result-shot-panel{width:100%}
+}
