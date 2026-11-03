@@ -44,7 +44,7 @@ const PC_MENU=matchMedia('(min-width:1000px)');
 function setSidebarOpen(open){$('sidebar').classList.toggle('open',open);syncMenuToggle()}
 function toggleMenu(){if(!PC_MENU.matches){setSidebarOpen(!$('sidebar').classList.contains('open'));return}let collapsed=document.documentElement.classList.toggle('sidebar-collapsed');try{localStorage.setItem('eigoSidebarCollapsed',collapsed?'1':'0')}catch{}syncMenuToggle()}
 function syncMenuToggle(){let collapsed=document.documentElement.classList.contains('sidebar-collapsed'),open=PC_MENU.matches?!collapsed:$('sidebar').classList.contains('open');$('menuToggle').setAttribute('aria-expanded',String(open));$('menuToggle').setAttribute('aria-label',open?'メニューを閉じる':'メニューを開く');document.querySelectorAll('#sidebar [data-page]').forEach(b=>{if(PC_MENU.matches&&collapsed)b.title=b.textContent.trim();else b.removeAttribute('title')})}
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
+function showPage(n){if((n==='zukan'||n==='deck')&&typeof mountZukanBrowser==='function')mountZukanBrowser(n);document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
 async function loadData(){try{let r=await fetch('zukan_beta.json',{cache:'no-cache'}).then(x=>{if(!x.ok)throw Error(x.status);return x.json()});chars=Array.isArray(r)?r:(r.characters||[]);if(!chars.length)throw Error('charactersが空です');$('zkStatus').textContent='';initZukanAdvancedFilters();renderZukan();renderTemporaryCharacters();renderPickerTemporary();if(typeof initZukanDeck==='function')initZukanDeck();if(typeof hydrateCoopState==='function')hydrateCoopState()}catch(error){chars=[];$('zkStatus').textContent='図鑑データを読み込めません';console.error(error)}}
 function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase().includes(q))}
 /* 各ページの「使い方」ボタンで開く短い説明。詳しい仕様は「使い方」ページ(catalog.js の renderComprehensiveHelp) */
@@ -54,14 +54,18 @@ const PAGE_HELP={
   'イベント補正・解答結果(Excellent / Correct / 2回目で正解)・自力モード・問題レベルを、実際の対戦に合わせて切り替えます。',
   'ゆるスキルを使うときは「スキル使用」を押します。ほかのキャラのスキルも重ねたいときは「他キャラのスキルを追加」で選び、その行の「スキル使用」を押します。',
   '予想ダメージ欄で結果を見ます。確定撃破は最低ダメージでも倒せる、乱数撃破は乱数しだい、撃破不可は倒せない、という意味です。'],
-  tips:['スキル以外で受けている攻撃力アップや軽減は、「追加攻撃力増加」「追加軽減率」に%で入れます。','「詳細モード」をONにすると、凸数の選択(無凸〜完凸・手入力)、生存補正・全体攻撃・追加連撃・追加回復と、幽霊攻撃への耐久が使えます。','「キャラ以外リセット」はキャラとPower/HP・属性・イベント補正を残して他を戻し、「キャラ削除」はキャラごと消します。','「計算結果を保存」すると計算履歴(最大100件)に残り、「計算機に反映」で入力を戻せます。','キャラ画像はドラッグで動かせます(スマホは長押ししてから動かす)。攻撃キャラと攻撃対象キャラの間で動かすと入れ替わり、「他キャラのスキル」の欄に置くとそのキャラのスキルを追加します。']},
+  tips:['スキル以外で受けている攻撃力アップや軽減は、「追加攻撃力増加」「追加軽減率」に%で入れます。','キャラを選ぶと「凸数」で無凸〜完凸を選べます(初めは完凸)。数値を直接入れるときは「手入力」を選びます。キャラを選んでいないときは、Power / HP を数値で入れます。','「詳細モード」をONにすると、生存補正・全体攻撃・追加連撃・追加回復と、幽霊攻撃への耐久が使えます。','「キャラ以外リセット」はキャラとPower/HP・属性・イベント補正を残して他を戻し、「キャラ削除」はキャラごと消します。','「計算結果を保存」すると計算履歴(最大100件)に残り、「計算機に反映」で入力を戻せます。','キャラ画像はドラッグで動かせます(スマホは長押ししてから動かす)。攻撃キャラと攻撃対象キャラの間で動かすと入れ替わり、「他キャラのスキル」の欄に置くとそのキャラのスキルを追加します。']},
  zukan:{title:'キャラ図鑑の使い方',steps:[
   '「分類」では、上の段で大分類と中分類、下の段で小分類を選ぶとキャラが並びます。「一覧」を押すと、全分類を見渡して選べます。',
   '「絞り込み」では、属性・レア・Cost・スキル・分類などの条件を選びます。下に該当数が出るので、「この条件でキャラを表示」を押します。',
   '「キャラ名で検索」では、名前の一部を入れると該当するキャラが分類ごとに出ます。',
-  'キャラを押すと詳細が開きます。詳細から「攻撃キャラに設定」「攻撃対象に設定」「お気に入りに追加」ができます。',
-  '右上の「デッキを組む」を ON にすると、図鑑の下にデッキ(5枠)が出て、キャラを押すたびに空き枠へ入ります。空き枠を先に押すと、その枠に入ります。'],
-  tips:['詳細画面は ← →(A・D、J・K でも可)で前後のキャラへ移り、Esc で閉じます。','詳細画面の「凸数」で、無凸〜完凸のHP・Powerを切り替えて見られます(途中の凸は、ゲームの式に図鑑の値を当てはめた推定値)。','デッキでは同じキャラは1体まで。×で外し、画像のドラッグで枠を入れ替えます。デッキの下に合計コスト・完凸HP / Power の合計・属性の内訳が出ます。','絞り込みは、同じ項目の中で複数選ぶと「どれか」、別の項目どうしは「すべて」に当てはまるキャラが出ます。','キャラ画像の右上の☆を押すとお気に入りに登録(★)、もう一度押すと解除できます。','お気に入りのキャラは右上の「お気に入り」と、各ページのキャラ選択から呼び出せます。「お気に入り」のキャラ画像は、各ページのキャラの枠へドラッグしても置けます。']},
+  'キャラを押すと詳細が開きます。詳細から「攻撃キャラに設定」「攻撃対象に設定」「お気に入りに追加」ができます。'],
+  tips:['詳細画面は ← →(A・D、J・K でも可)で前後のキャラへ移り、Esc で閉じます。','詳細画面の「凸数」で、無凸〜完凸のHP・Powerを切り替えて見られます(途中の凸は、ゲームの式に図鑑の値を当てはめた推定値)。','絞り込みは、同じ項目の中で複数選ぶと「どれか」、別の項目どうしは「すべて」に当てはまるキャラが出ます。','キャラ画像の右上の☆を押すとお気に入りに登録(★)、もう一度押すと解除できます。','お気に入りのキャラは右上の「お気に入り」と、各ページのキャラ選択から呼び出せます。「お気に入り」のキャラ画像は、各ページのキャラの枠へドラッグしても置けます。']},
+ deck:{title:'デッキ作成の使い方',steps:[
+  '「分類」「絞り込み」「キャラ名で検索」でキャラを探します(図鑑と同じ部品で、条件も図鑑と共通です)。',
+  'キャラを押すと、下のデッキ(5枠)の左の空き枠から順に入ります。空き枠を先に押してからキャラを押すと、その枠に入ります。',
+  'デッキの下に、体数と合計コストが出ます。'],
+  tips:['同じキャラは1体までです。デッキに入っているキャラは、一覧で青い枠と「デッキ」の印が付きます。','各キャラの右上の×で外し、「全部外す」で空にします。キャラ画像をドラッグすると枠どうしで入れ替わります(スマホは長押ししてから動かす)。お気に入りのキャラ画像もデッキの枠へドラッグして置けます。','デッキに入っているキャラ画像を押すと、そのキャラの詳細が開きます。','デッキはブラウザーに保存され、次に開いたときも残ります。']},
  coop:{title:'協力ダメージ計算の使い方',steps:[
   '敵を入れます。1〜5層の表の左・真ん中・右の行を押して敵キャラを選ぶと、属性とHP(無凸HP×層の倍率)が自動で出ます。',
   '味方デッキの上の操作欄で、「自力」(自力/他力)と「問題レベル」を実際のプレイに合わせます。全員の火力に掛かります。',

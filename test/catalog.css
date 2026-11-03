@@ -272,8 +272,8 @@
  .detail-close{top:10px;right:10px}
 }
 
-/* ===== デッキ編成(図鑑の「デッキを組む」。処理は deck.js) ===== */
-/* 図鑑の下に貼り付くデッキ欄。ON のあいだは図鑑のキャラを押すとここへ入る */
+/* ===== デッキ作成(#page-deck。処理は deck.js) ===== */
+/* ページの下に貼り付くデッキ欄。上の図鑑の部品(#zukanBrowser)でキャラを押すとここへ入る */
 .deck-tray{position:sticky;bottom:0;z-index:20;display:grid;gap:8px;margin:16px 0 0;padding:12px 14px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--ui-line);border-radius:var(--ui-radius-card) var(--ui-radius-card) 0 0;background:#fff;box-shadow:0 -8px 24px rgba(16,24,40,.12)}
 .deck-tray-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
 .deck-tray-head h2{display:flex;align-items:center;gap:8px;margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
