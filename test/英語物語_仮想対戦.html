@@ -63,14 +63,22 @@ input[type=number] { width: 4.2em; font-variant-numeric: tabular-nums; }
 .field { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink2); }
 
 /* キャラタイル(画像のみ) */
-.tile { position: relative; width: var(--s, 64px); height: var(--s, 64px); border-radius: 0; background: var(--soft); border: 2px solid var(--ring, var(--line)); overflow: hidden; flex: none; }
+.tile { position: relative; width: var(--s, 64px); height: auto; aspect-ratio: 1; border-radius: 0; background: var(--soft); border: 2px solid var(--ring, var(--line)); overflow: hidden; flex: none; }
 .tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .tile .fb { position: absolute; inset: 0; display: none; place-items: center; font-size: 11px; color: var(--ink2); background: var(--soft); }
 .tile.noimg .fb { display: grid; } .tile.noimg img { display: none; }
 .tile.a-火 { --ring: var(--fire); } .tile.a-水 { --ring: var(--water); } .tile.a-風 { --ring: var(--wind); }
-.tile.multi { --ring: var(--ink2); }
+.tile { --cf: #e8504a; --cw: #3b8be0; --cd: #3fae5a; --ca: #efe2a2; --c1: var(--line); --c2: var(--line); --a2: 15%;
+  border: 0; box-sizing: border-box;
+  background: linear-gradient(to bottom left, color-mix(in srgb, var(--c1) 50%, transparent), color-mix(in srgb, var(--c2) var(--a2), transparent)); }
+.tile[class*="f-"]::after { content: ""; position: absolute; inset: 0; padding: 2px; z-index: 3; pointer-events: none; background: linear-gradient(to bottom left, var(--c1) 50%, var(--c2) 50%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }   /* ふちだけ(中は抜く) */   /* 枠: 属性の色(2色は右上が先の属性)。中は背景が透ける薄いグラデーション */
+.tile.f-火 { --c1: var(--cf); --c2: var(--cf); } .tile.f-水 { --c1: var(--cw); --c2: var(--cw); } .tile.f-風 { --c1: var(--cd); --c2: var(--cd); } .tile.f-全 { --c1: var(--ca); --c2: var(--ca); }
+.tile.f-火水 { --c1: var(--cf); --c2: var(--cw); --a2: 50%; } .tile.f-水風 { --c1: var(--cw); --c2: var(--cd); --a2: 50%; } .tile.f-風火 { --c1: var(--cd); --c2: var(--cf); --a2: 50%; }
 .tile .waku { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; z-index: 2; }
-.tile.wk { border-width: 0; border-color: transparent; background: transparent; overflow: visible; }
+.tile.wk { border-width: 0; border-color: transparent; background: transparent; overflow: visible; aspect-ratio: 460 / 680; }   /* 枠画像(460×680)の縦横比のまま。キャラ画像は枠の内側いっぱいに入れる */
+.tile.wk > img:not(.waku) { position: absolute; left: 2.4%; top: 1.6%; width: 95.2%; height: 96.8%; object-fit: cover; }
+.tile.indeck { opacity: .4; }
 .tile.dead { filter: grayscale(1); opacity: .45; }
 .dots { position: absolute; left: 3px; bottom: 3px; display: flex; gap: 2px; }
 .dots i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #fff; display: block; }
@@ -88,7 +96,16 @@ button.tile { padding: 0; cursor: pointer; }
 .prow:first-of-type { border-top: 0; }
 .pid { font-family: var(--font-head); font-weight: 900; color: var(--ink2); padding-top: 4px; }
 .pid .ld { display: block; font-size: 10px; color: var(--accent); }
-.slots { display: flex; gap: 8px; flex-wrap: wrap; }
+.slots { display: grid; grid-template-columns: repeat(5, minmax(0, 64px)); gap: 8px; }
+.slotwrap { min-width: 0; } .slotwrap .tile, .dtray .tile { --s: 100%; width: 100%; } .slotwrap .tile.empty, .dtray .tile.empty { aspect-ratio: 460 / 680; }
+.modal.pk { grid-template-rows: auto minmax(0, 1fr) auto; }
+.dtray { border-top: 1px solid var(--line); padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 6px; background: #fff; }
+.dtray-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; }
+.dslots5 { display: grid; grid-template-columns: repeat(5, minmax(0, 64px)); gap: 8px; justify-content: center; }
+.dslots5 .dsl { position: relative; min-width: 0; } .dslots5 .dsl.on .tile { outline: 3px solid var(--accent); outline-offset: 1px; }
+@media (max-width: 560px) { .slots { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; } .prow { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0; }
+  .pid { display: flex; gap: 6px; align-items: baseline; padding-top: 0; } .pid .ld { display: inline; } .popts { gap: 6px 10px; margin-top: 2px; }
+  .panel { padding: 10px; } .slotwrap .tile .x { width: 16px; height: 16px; font-size: 10px; line-height: 14px; } .dslots5 { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; } }
 .popts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
 
 /* 戦闘 */
@@ -102,7 +119,7 @@ button.tile { padding: 0; cursor: pointer; }
 .deckrow.closed .dbody { display: none; }
 .dslots { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .dslot { display: grid; gap: 4px; min-width: 0; }
-.dslot .tile { --s: 100%; width: 100%; height: auto; aspect-ratio: 1; opacity: .88; }
+.dslot .tile { --s: 100%; width: 100%; opacity: .88; }
 .dslot.cur .tile { opacity: 1; border-width: 3px; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--accent); }
 .dslot .tile.dead { opacity: .4; }
 .dslot .tile.ready { box-shadow: 0 0 0 2px #fff, 0 0 0 5px rgba(31,138,82,.55); }
@@ -129,7 +146,7 @@ button.tile { padding: 0; cursor: pointer; }
 .card { display: grid; gap: 4px; min-width: 0; align-content: start; }
 .card.ghost { opacity: .6; }
 .pt { position: relative; display: block; width: 100%; padding: 0; border: 0; background: transparent; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; z-index: 2; border-radius: 0; }
-.pt { max-width: 64px; margin-inline: auto; } .pt .tile { --s: 100%; display: block; width: 100%; height: auto; aspect-ratio: 1; border-radius: 0; }
+.pt { max-width: 64px; margin-inline: auto; } .pt .tile { --s: 100%; display: block; width: 100%; height: auto; border-radius: 0; }
 body.autorun * { pointer-events: none !important; } body.autorun [data-act=autorun] { pointer-events: auto !important; }
 body.fxon [data-act=autorun] { position: relative; z-index: 2147483100; }   /* 演出で画面が暗くなっても、止めるボタンは暗くしない */
 .btn.stopbtn { background: #d93025; border-color: #d93025; color: #fff; font-weight: 800; box-shadow: 0 0 0 3px rgba(217,48,37,.25); }
@@ -177,7 +194,13 @@ body.fxon [data-act=autorun] { position: relative; z-index: 2147483100; }   /* �
 .drow:first-of-type { border-top: 0; } .drow b { font-family: var(--font-head); width: 2em; }
 details.sub { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 8px 12px; }
 details.sub > summary { cursor: pointer; font-weight: 700; }
-@media (max-width: 560px) { .trow { gap: 4px; } .skmark { min-width: 18px; height: 18px; font-size: 12px; } .cb { font-size: 9.5px; padding: 3px 0; } .tside.far { padding-bottom: 28px; } .skmark { width: 18px; height: 18px; font-size: 12px; } }
+@media (max-width: 560px) {
+  header.top { gap: 2px 8px; padding: 6px 0; } h1 { font-size: 15px; } .tab { padding: 4px 7px; font-size: 13px; }
+  main { padding-top: 8px; gap: 8px; } .board { gap: 4px; } .tside.far { padding-bottom: 6px; } .tside.near { padding-top: 2px; } .tside { gap: 3px; }
+  .panel .row { gap: 4px 6px; } .btn.sm { padding: 2px 6px; font-size: 11px; } .card { gap: 3px; }
+  .pt .left { top: 1px; left: 1px; font-size: 10px; padding: 0 3px; } .pt .skmark { top: 1px; right: 1px; min-width: 16px; height: 16px; width: auto; font-size: 11px; padding: 0 2px; border-radius: 8px; }
+  .dtray > .muted { display: none; } .grid { grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 6px; } .grid .tile { --s: 56px; } .modal .mh { padding: 8px 10px; gap: 6px; } .modal .mb { padding: 8px 10px; } .overlay { padding: 8px; }
+  .cb { min-height: 24px; } .hint { line-height: 1.4; margin: 0; } .trow { gap: 4px; } .cb { font-size: 9.5px; padding: 3px 0; } }
 
 #fxl { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 6; }
 /* 演出中は実機の戦闘背景のように暗くし、キャラ画像だけを前面に出す(エフェクトはさらに前面の WebGL) */
@@ -215,6 +238,35 @@ table.t th { color: var(--ink2); font-weight: 500; }
 .grid .tile { --s: 68px; }
 .stb { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); background: rgba(255,255,255,.92); color: #c9ced8; font-size: 12px; line-height: 1; padding: 0; }
 .stb.on { color: #e6a700; border-color: #e6a700; }
+/* 参考サイト(図鑑)のキャラ選択に合わせた見た目 */
+.char-mode-tabs { display: grid; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; padding: 2px; border-radius: 9px; background: #e8edf3; }
+.char-mode-tabs button { min-width: 0; min-height: 31px; padding: 5px 6px; border: 0; border-radius: 7px; background: transparent; color: #5a697a; font-size: .8rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.char-mode-tabs button.active { background: #fff; color: #172033; box-shadow: 0 1px 5px rgba(15,23,42,.13); }
+.char-category-bars { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid #dfe5ec; border-radius: 14px; background: #fff; box-shadow: 0 4px 15px rgba(16,24,40,.05); }
+.char-large-tabs, .char-middle-chips, .char-small-chips { display: flex; min-width: 0; max-width: 100%; gap: 6px; overflow-x: auto; scrollbar-width: thin; }
+.char-large-tabs { gap: 2px; padding: 3px; border-radius: 10px; background: #eef2f6; }
+.char-large-tabs button, .char-middle-chips button, .char-small-chips button { flex: 0 0 auto; min-width: max-content; min-height: 32px; padding: 6px 11px; border: 1px solid #d0d5dd; border-radius: 9px; background: #fff; color: #475467; font-size: .78rem; font-weight: 800; white-space: nowrap; }
+.char-large-tabs button { border-color: transparent; border-radius: 8px; background: transparent; color: #667085; font-weight: 850; }
+.char-large-tabs button.active { background: #fff; color: #175cd3; box-shadow: 0 1px 5px rgba(16,24,40,.16); }
+.char-middle-chips button:hover:not(.active), .char-small-chips button:hover:not(.active) { background: #f2f5f9; }
+.char-middle-chips button.active, .char-small-chips button.active { border-color: #175cd3; background: #eaf2ff; color: #175cd3; box-shadow: inset 0 0 0 1px #175cd3; }
+.char-middle-chips .char-all { position: sticky; right: 0; border-style: dashed; color: #175cd3; box-shadow: -10px 0 10px #fff; }
+.char-small-chips { padding-top: 8px; border-top: 1px dashed #dfe5ec; }
+.char-small-chips button { min-height: 28px; padding: 4px 10px; font-size: .74rem; }
+.char-current { position: sticky; top: -12px; z-index: 8; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 8px; padding: 8px 12px; border: 1px solid #dfe5ec; border-radius: 12px; background: rgba(255,255,255,.95); color: #101828; font-size: .8rem; font-weight: 800; box-shadow: 0 2px 8px rgba(16,24,40,.05); }
+.char-current > span { padding: 3px 10px; border-radius: 99px; background: #eaf2ff; color: #175cd3; font-weight: 900; white-space: nowrap; }
+.zk-grid { display: grid; grid-template-columns: repeat(auto-fill, 78px); justify-content: center; align-items: start; gap: 8px 6px; }
+.zk-card-wrap { position: relative; width: 78px; display: grid; justify-items: center; align-content: start; gap: 3px; padding: 4px 0; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.zk-card-wrap .tile { --s: 64px; } .zk-card-wrap .tile * { pointer-events: none; -webkit-user-drag: none; }
+.zk-card-wrap small { display: -webkit-box; width: 100%; height: 2.4em; overflow: hidden; color: #344054; font-size: .62rem; line-height: 1.2; text-align: center; overflow-wrap: anywhere; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.zk-card-wrap .stb { top: 1px; right: 4px; }
+.filter-card { border: 1px solid #dfe5ec; border-radius: 14px; background: #fff; box-shadow: 0 4px 15px rgba(16,24,40,.05); padding: 10px 12px 12px; display: grid; gap: 8px; margin-bottom: 10px; }
+.filter-card h3 { margin: 0; font-size: .95rem; display: flex; align-items: center; gap: 8px; color: #101828; }
+.filter-card h3 span { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #eaf2ff; color: #175cd3; font-size: .68rem; font-weight: 900; }
+.filter-card fieldset { border: 0; padding: 0; margin: 0; } .filter-card legend { padding: 0; font-weight: 800; color: #475467; font-size: .8rem; margin-bottom: 4px; }
+.dnd-ghost { position: fixed; z-index: 100000; pointer-events: none; opacity: .88; width: 56px; transform: translate(-50%, -60%); filter: drop-shadow(0 6px 10px rgba(0,0,0,.35)); }
+.dsl.drop .tile { outline: 3px dashed #175cd3; outline-offset: 1px; } .dsl[data-drag] { cursor: grab; }
+@media (max-width: 560px) { .zk-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 2px; } .zk-card-wrap { width: 100%; } .zk-card-wrap .tile { --s: 56px; } .char-current { top: -8px; } }
 .ptabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; }
 .ptab { border: 0; border-bottom: 3px solid transparent; background: transparent; padding: 6px 12px; font-weight: 700; color: var(--ink2); white-space: nowrap; }
 .ptab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
@@ -246,8 +298,6 @@ textarea { width: 100%; min-height: 220px; font-family: ui-monospace, Menlo, Con
   <header class="top">
     <h1>英語物語 仮想対戦</h1>
     <nav class="tabs" role="tablist" id="tabs"></nav>
-    <label class="btn sm" for="imgfiles" title="ゲームのアイコン画像(Icon123.png など)をまとめて選ぶと、画像が表示されます">画像を読み込む</label>
-    <input type="file" id="imgfiles" accept="image/*" multiple hidden>
   </header>
   <main id="app"></main>
   <footer class="muted" style="margin:24px 12px 32px;font-size:12px;line-height:1.7;text-align:center">
@@ -1098,6 +1148,7 @@ else root.EigoBattle = api;
   function resize() {
     const d = Math.min(window.devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight;
     if (cv.width !== Math.round(w * d) || cv.height !== Math.round(h * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); }
+    cv.style.width = w + "px"; cv.style.height = h + "px";   // スマホでは 100vh がアドレスバー分だけ innerHeight より大きく、効果の位置がずれるため
     gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(loc.R, w, h);
   }
   // Unity BlendMode → WebGL(背景ページへの合成を考慮し、α チャンネルは別扱い)
@@ -3064,42 +3115,13 @@ const S = {
 
 /* ---------- 画像 ---------- */
 function imgSrc(id) { return S.imgs.get(id) || `https://englishstoryserver.com/Icon/Icon/Icon${id}.png`; }
-/* キャラ枠: https://storage.googleapis.com/englishstoryserver.com/Card/waku{X}_{X}.png
-   属性番号(実機 EnumAttribute): 火1 水2 風3 火水4 水風5 風火6 火水風7 / レア番号(実機 MyConst.GetRare): N1 R2 CR3 ZR4 MZR5 伝6
-   2つの数字の並び(属性_レア か レア_属性)は、起動時に waku7_1 と waku1_7 のどちらが存在するかで判定する */
-const WAKU_BASE = "https://storage.googleapis.com/englishstoryserver.com/Card/waku";
-const ATTR_NO = { "火": 1, "水": 2, "風": 3, "火水": 4, "水風": 5, "風火": 6, "火水風": 7 };
-const RARE_NO = { N: 1, R: 2, CR: 3, ZR: 4, MZR: 5, "伝": 6 };
-let WAKU = { ok: false, order: "ar" };
-function attrNo(attrs) {
-  const s = new Set(attrs || []);
-  const key = ["火", "水", "風"].filter((x) => s.has(x)).join("");
-  return ATTR_NO[key === "火風" ? "風火" : key] || 0;
-}
-function wakuSrc(cid, attrs) {
-  const c = BYID.get(cid), a = attrNo(attrs), r = c ? RARE_NO[c.r] : 0;
-  if (!WAKU.ok || !a || !r) return "";
-  return WAKU_BASE + (WAKU.order === "ar" ? `${a}_${r}` : `${r}_${a}`) + ".png";
-}
-(function probeWaku() {
-  const tryLoad = (src) => new Promise((res) => { const im = new Image(); im.onload = () => res(true); im.onerror = () => res(false); im.src = src; });
-  Promise.all([tryLoad(WAKU_BASE + "7_1.png"), tryLoad(WAKU_BASE + "1_7.png"), tryLoad(WAKU_BASE + "3_5.png")]).then(([ar, ra, any]) => {
-    if (ar || ra || any) { WAKU = { ok: true, order: ar ? "ar" : ra ? "ra" : "ar" }; try { render(); } catch (e) {} }
-  });
-})();
+/* キャラ画像は正方形のアイコン。属性は枠の色(複数属性は点)で示す */
 function tileHTML(cid, attrs, extra = "", cls = "", tag = "div", attrs2 = "") {
-  const a = attrs && attrs.length === 1 ? `a-${attrs[0]}` : "multi";
-  const w = wakuSrc(cid, attrs);
-  const dots = !w && attrs && attrs.length > 1 ? `<span class="dots">${attrs.map((x) => `<i class="${x}"></i>`).join("")}</span>` : "";
-  const wk = w ? `<img class="waku" src="${esc(w)}" alt="" draggable="false" onerror="this.remove()">` : "";
-  return `<${tag} class="tile ${a} ${w ? "wk" : ""} ${cls}" ${attrs2}><img src="${esc(imgSrc(cid))}" alt="" loading="lazy" decoding="async" draggable="false"><span class="fb">#${cid}</span>${wk}${dots}${extra}</${tag}>`;
+  const set = new Set(attrs || []), has = (x) => set.has(x);
+  const f = set.size >= 3 ? "全" : set.size === 2 ? (has("火") && has("水") ? "火水" : has("水") && has("風") ? "水風" : "風火") : (attrs && attrs[0]) || "";   // 枠の色(2色は 右上=先の属性・左下=後の属性)
+  return `<${tag} class="tile f-${f} ${cls}" ${attrs2}><img src="${esc(imgSrc(cid))}" alt="" loading="lazy" decoding="async" draggable="false"><span class="fb">#${cid}</span>${extra}</${tag}>`;
 }
 document.addEventListener("error", (e) => { const t = e.target; if (t.tagName === "IMG" && !t.classList.contains("waku")) t.closest(".tile")?.classList.add("noimg"); }, true);
-$("#imgfiles").addEventListener("change", (e) => {
-  let n = 0; const keep = [];
-  for (const f of e.target.files) { const m = /(\d+)\.[a-z]+$/i.exec(f.name); if (m) { S.imgs.set(Number(m[1]), URL.createObjectURL(f)); keep.push([Number(m[1]), f]); n++; } }
-  imgStore(keep); toast(`${n}枚の画像を読み込みました(次回から自動で表示されます)`); render();
-});
 
 /* ---------- 編成データ ---------- */
 function specOf(id) {
@@ -3622,19 +3644,66 @@ function filterResults(f) {
   return r;
 }
 function pickTile(c) {
-  const on = S.temp.includes(c.id);
-  return tileHTML(c.id, c.attrs, `<button class="stb ${on ? "on" : ""}" data-act="tmp" data-id="${c.id}" aria-label="一時保存" aria-pressed="${on}">★</button>`, "", "div",
-    `data-act="pickc" data-id="${c.id}" role="button" tabindex="0" aria-label="${esc(c.n)}" style="cursor:pointer"`);
+  const on = S.temp.includes(c.id), dk = S.picker ? S.setup[S.picker.t][S.picker.pi].deck : [];
+  return `<div class="zk-card-wrap" data-drag="char:${c.id}">${tileHTML(c.id, c.attrs, "", dk.some((x) => x.id === c.id) ? "indeck" : "", "div", `data-act="pickc" data-id="${c.id}" role="button" tabindex="0" aria-label="${esc(c.n)}をデッキに入れる" style="cursor:pointer"`)}<small>${esc(c.n)}</small><button class="stb ${on ? "on" : ""}" data-act="tmp" data-id="${c.id}" aria-label="一時保存" aria-pressed="${on}">★</button></div>`;
 }
+const chipsX = (items, cur, act) => items.map((n) => `<button type="button" class="${n === cur ? "active" : ""}" data-act="${act}" data-v="${esc(n)}">${esc(n)}</button>`).join("");
 function chips(items, cur, act, extra = "") { return items.map((n) => `<button class="chip ${n === cur ? "on" : ""}" data-act="${act}" data-v="${esc(n)}" ${extra}>${esc(n)}</button>`).join(""); }
 function checks(name, items, sel) { return items.map(([v, l]) => `<label class="ck"><input type="checkbox" data-pf="${name}" value="${esc(v)}" ${sel.includes(v) ? "checked" : ""}><span>${esc(l)}</span></label>`).join(""); }
+function trayHTML(P) {
+  const pl = S.setup[P.t][P.pi], deck = pl.deck, sum = deck.reduce((a, c) => a + (c.cost || 0), 0);
+  return `<div class="dtray"><div class="dtray-head"><b>デッキ</b><span class="muted">${deck.length}/5 ・合計コスト ${sum}</span><span class="grow"></span><button class="btn sm" data-act="pclear">全部外す</button></div>
+    <div class="dslots5">${[0, 1, 2, 3, 4].map((i) => { const c = deck[i];
+      return c ? `<div class="dsl ${P.ci === i ? "on" : ""}" data-slot="${i}" data-drag="slot:${i}">${tileHTML(c.id, c.attrs, `<button class="x" data-act="pdel" data-i="${i}" aria-label="外す">×</button>`, "", "div", `data-act="ptarget" data-i="${i}" role="button" tabindex="0" style="cursor:pointer" aria-label="${esc(c.name)}を入れ替える"`)}</div>`
+        : `<div class="dsl" data-slot="${i}"><button class="tile empty" data-act="ptarget" data-i="${i}" aria-label="空き枠">＋</button></div>`; }).join("")}</div>
+    <div class="muted" style="font-size:11px;text-align:center">キャラを押す・＋の枠へドラッグすると入ります。入れ替えは、デッキ内のキャラを押してから新しいキャラを押すか、枠どうしのドラッグで。</div></div>`;
+}
+/* デッキへ入れる。at >= 0 ならその枠のキャラと置き換え、-1 なら空き枠(末尾)へ。同じキャラ・伝2体は不可 */
+function deckPlace(id, at) {
+  const P = S.picker, deck = S.setup[P.t][P.pi].deck, sp = specOf(id);
+  if (deck.some((x, k) => x.id === sp.id && k !== at)) return toast("同じキャラは1体までです");
+  if (BYID.get(sp.id).r === "伝" && deck.some((x, k) => k !== at && BYID.get(x.id).r === "伝")) return toast("伝は1デッキに1体までです");
+  if (at >= 0) { sp.theme = deck[at].theme; deck[at] = sp; P.ci = null; }
+  else if (deck.length < 5) deck.push(sp);
+  else toast("デッキがいっぱいです。入れ替えたいキャラを押すか、キャラを枠へドラッグしてください");
+}
+function pickerRefresh() { const sc = $("#pbody")?.scrollTop; S.battle = null; save(); render(); if (sc) { const b = $("#pbody"); if (b) b.scrollTop = sc; } }
+/* ドラッグ&ドロップ: 一覧のキャラ(char:ID)・デッキの枠(slot:番号)を、デッキの枠へ。マウスはそのままドラッグ、タッチは少し長押ししてからドラッグ */
+let dnd = null, dndSwallow = false;
+const dndCancel = () => { if (dnd) { clearTimeout(dnd.timer); dnd.ghost?.remove(); document.querySelectorAll(".dsl.drop").forEach((x) => x.classList.remove("drop")); dnd = null; } };
+function dndStart() { if (!dnd || dnd.active) return; dnd.active = true; const g = dnd.src.querySelector("img")?.cloneNode(); if (g) { g.className = "dnd-ghost"; document.body.append(g); dnd.ghost = g; } dndMove(); }
+function dndMove() { if (!dnd || !dnd.active) return; if (dnd.ghost) { dnd.ghost.style.left = dnd.x + "px"; dnd.ghost.style.top = dnd.y + "px"; }
+  document.querySelectorAll(".dsl.drop").forEach((x) => x.classList.remove("drop")); const t = document.elementFromPoint(dnd.x, dnd.y)?.closest(".dsl"); if (t) t.classList.add("drop"); }
+document.addEventListener("pointerdown", (e) => {
+  const src = e.target.closest("[data-drag]"); if (!src || e.button !== 0 || !S.picker || e.target.closest(".x,.stb")) return;
+  dndCancel(); dnd = { src, kind: src.dataset.drag, x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, active: false, touch: e.pointerType !== "mouse" };
+  if (dnd.touch) dnd.timer = setTimeout(dndStart, 320);
+});
+document.addEventListener("pointermove", (e) => {
+  if (!dnd) return; dnd.x = e.clientX; dnd.y = e.clientY; const moved = Math.hypot(dnd.x - dnd.x0, dnd.y - dnd.y0);
+  if (!dnd.active) { if (dnd.touch) { if (moved > 10) dndCancel(); } else if (moved > 6) dndStart(); }
+  else { e.preventDefault(); dndMove(); }
+}, { passive: false });
+document.addEventListener("touchmove", (e) => { if (dnd && dnd.active) e.preventDefault(); }, { passive: false });
+document.addEventListener("contextmenu", (e) => { if (dnd) e.preventDefault(); });
+document.addEventListener("pointerup", (e) => {
+  if (!dnd) return; const d = dnd, was = d.active; dndCancel(); if (!was) return;
+  dndSwallow = true; setTimeout(() => (dndSwallow = false), 0);
+  const slot = document.elementFromPoint(e.clientX, e.clientY)?.closest(".dsl"), P = S.picker; if (!slot || !P) return;
+  const deck = S.setup[P.t][P.pi].deck, to = Number(slot.dataset.slot), [kind, v] = d.kind.split(":");
+  if (kind === "char") deckPlace(Number(v), to < deck.length ? to : -1);
+  else { const from = Number(v); if (from === to) return; if (to < deck.length) [deck[from], deck[to]] = [deck[to], deck[from]]; else deck.push(deck.splice(from, 1)[0]); }
+  pickerRefresh();
+});
+document.addEventListener("pointercancel", () => dndCancel());
+document.addEventListener("click", (e) => { if (dndSwallow) { e.stopPropagation(); e.preventDefault(); } }, true);
 function pickerHTML() {
   const P = S.picker, f = P.f; let body = "", note = "";
   const mids = Object.keys(TREE[P.large] || {});
   if (!mids.includes(P.middle)) P.middle = mids[0] || "";
   const smalls = Object.keys((TREE[P.large] || {})[P.middle] || {});
   if (!smalls.includes(P.small)) P.small = smalls[0] || "";
-  const grid = (list, cap = 300) => `<div class="grid">${list.slice(0, cap).map(pickTile).join("")}</div>${list.length > cap ? `<p class="muted">先頭${cap}件を表示中(絞り込んでください)</p>` : ""}`;
+  const grid = (list, cap = 300) => `<div class="zk-grid">${list.slice(0, cap).map(pickTile).join("")}</div>${list.length > cap ? `<p class="muted">先頭${cap}件を表示中(絞り込んでください)</p>` : ""}`;
   if (P.mode === "cat") {
     const list = ((TREE[P.large] || {})[P.middle] || {})[P.small] || []; note = `${list.length}件`;
     body = grid(list);
@@ -3646,26 +3715,29 @@ function pickerHTML() {
     body = q ? grid(list) : `<p class="muted">キャラ名またはIDを入力してください。</p>`;
   } else {
     const list = filterResults(f); note = `${list.length}件`;
-    body = `<div class="fgrid">
+    body = `<section class="filter-card"><h3><span>01</span>基本条件</h3>
       <fieldset><legend>属性</legend><div class="seg"><label><input type="radio" name="amode" data-pf="amode" value="include" ${f.amode === "include" ? "checked" : ""}><span>含む</span></label><label><input type="radio" name="amode" data-pf="amode" value="exact" ${f.amode === "exact" ? "checked" : ""}><span>一致</span></label></div>
         <div class="cks">${checks("attrs", [["火", "火"], ["水", "水"], ["風", "風"]].concat(f.amode === "exact" ? [["火水", "火水"], ["水風", "水風"], ["風火", "風火"], ["全", "全"]] : []), f.attrs)}</div></fieldset>
       <fieldset><legend>レア</legend><div class="cks">${checks("rares", RARES.map((r) => [r, r]), f.rares)}</div></fieldset>
-      <fieldset class="wide"><legend>ゆるスキル</legend><div class="cks">${checks("skills", SKILL_FILTERS, f.skills)}</div></fieldset>
-      <fieldset><legend>Cost</legend><div class="row"><input type="number" data-pf="cmin" value="${esc(f.cmin)}" placeholder="下限"> 〜 <input type="number" data-pf="cmax" value="${esc(f.cmax)}" placeholder="上限"></div></fieldset>
-      <fieldset><legend>スキルターン</legend><div class="row"><input type="number" data-pf="tmin" value="${esc(f.tmin)}" placeholder="下限"> 〜 <input type="number" data-pf="tmax" value="${esc(f.tmax)}" placeholder="上限"></div></fieldset>
-      <fieldset><legend>並び順</legend><div class="row"><select data-pf="sort">${[["", "指定なし"], ["hp", "HP"], ["power", "攻撃力"], ["total", "HP+攻撃力"], ["cost", "Cost"], ["skillTurn", "スキルターン"], ["rare", "レア"]].map(([v, l]) => `<option value="${v}" ${f.sort === v ? "selected" : ""}>${l}</option>`).join("")}</select>
+      <fieldset><legend>Cost</legend><div class="row"><input type="number" data-pf="cmin" value="${esc(f.cmin)}" placeholder="下限なし"> 〜 <input type="number" data-pf="cmax" value="${esc(f.cmax)}" placeholder="上限なし"></div></fieldset></section>
+      <section class="filter-card"><h3><span>02</span>スキル条件</h3>
+      <fieldset><legend>ゆるスキル</legend><div class="cks">${checks("skills", SKILL_FILTERS, f.skills)}</div></fieldset>
+      <fieldset><legend>スキルターン</legend><div class="row"><input type="number" data-pf="tmin" value="${esc(f.tmin)}" placeholder="下限なし"> 〜 <input type="number" data-pf="tmax" value="${esc(f.tmax)}" placeholder="上限なし"></div></fieldset></section>
+      <section class="filter-card"><h3><span>03</span>並び順</h3><div class="row"><select data-pf="sort">${[["", "指定なし"], ["hp", "HP"], ["power", "攻撃力"], ["total", "HP+攻撃力"], ["cost", "Cost"], ["skillTurn", "スキルターン"], ["rare", "レア"]].map(([v, l]) => `<option value="${v}" ${f.sort === v ? "selected" : ""}>${l}</option>`).join("")}</select>
         <select data-pf="dir"><option value="desc" ${f.dir === "desc" ? "selected" : ""}>降順</option><option value="asc" ${f.dir === "asc" ? "selected" : ""}>昇順</option></select>
-        <button class="btn sm" data-act="fclear">初期化</button></div></fieldset></div>${grid(list)}`;
+        <button class="btn sm" data-act="fclear">すべて初期化</button></div></section>${grid(list)}`;
   }
-  const nav = P.mode === "cat" ? `<div class="chips lg">${chips(Object.keys(TREE), P.large, "plarge")}</div>
-      <div class="chips">${chips(mids, P.middle, "pmid")}<button class="chip all" data-act="psheet">一覧</button></div>
-      ${smalls.length > 1 ? `<div class="chips sm">${chips(smalls, P.small, "psmall")}</div>` : ""}` : "";
+  const nav = P.mode === "cat" ? `<div class="char-category-bars"><div class="char-large-tabs">${chipsX(Object.keys(TREE), P.large, "plarge")}</div>
+      <div class="char-middle-chips">${chipsX(mids, P.middle, "pmid")}<button type="button" class="char-all" data-act="psheet">一覧</button></div>
+      ${smalls.length > 1 ? `<div class="char-small-chips">${chipsX(smalls, P.small, "psmall")}</div>` : ""}</div>` : "";
+  const path = P.mode === "cat" ? [P.large, P.middle, P.small && P.small !== "その他" ? P.small : ""].filter(Boolean).join(" ＞ ") : ({ temp: "一時保存", filter: "絞り込み", search: "キャラ名で検索" })[P.mode];
+  body = `<div class="char-current"><b>${esc(path)}</b><span>${note || "0件"}</span></div>` + body;
   const sheet = P.sheet ? `<div class="sheet" data-act="psheetclose"><div class="sheetp">${Object.entries(TREE).map(([a, ms]) => `<h3>${esc(a)}</h3><div class="chips">${Object.entries(ms).map(([m, ss]) => Object.keys(ss).map((s) => `<button class="chip ${a === P.large && m === P.middle && s === P.small ? "on" : ""}" data-act="pjump" data-a="${esc(a)}" data-m="${esc(m)}" data-s="${esc(s)}">${esc(s === "その他" ? m : `${m}・${s}`)}</button>`).join("")).join("")}</div>`).join("")}</div></div>` : "";
-  return `<div class="overlay" data-act="closepick"><div class="modal" role="dialog" aria-label="キャラを選ぶ"><div class="mh">
-      <div class="row"><h2>キャラを選ぶ</h2><span class="muted">${note}</span><span class="grow"></span><button class="btn sm" data-act="closepick">閉じる</button></div>
-      <div class="ptabs">${[["cat", "分類"], ["temp", "一時保存"], ["filter", "絞り込み"], ["search", "キャラ名で検索"]].map(([k, l]) => `<button class="ptab" data-act="pmode" data-v="${k}" aria-selected="${P.mode === k}">${l}</button>`).join("")}</div>
+  return `<div class="overlay" data-act="closepick"><div class="modal pk" role="dialog" aria-label="デッキを組む"><div class="mh">
+      <div class="row"><h2>${esc(S.setup[P.t][P.pi].id)} のデッキを組む</h2><span class="muted">${note}</span><span class="grow"></span><button class="btn sm primary" data-act="closepick">完了</button></div>
+      <div class="char-mode-tabs">${[["cat", "分類"], ["temp", "一時保存"], ["filter", "絞り込み"], ["search", "キャラ名で検索"]].map(([k, l]) => `<button type="button" class="${P.mode === k ? "active" : ""}" data-act="pmode" data-v="${k}">${l}</button>`).join("")}</div>
       ${P.mode === "search" ? `<input type="text" id="pq" placeholder="キャラ名またはIDを入力" value="${esc(P.q)}" autocomplete="off">` : ""}${nav}</div>
-    <div class="mb" id="pbody">${body}</div>${sheet}</div></div>`;
+    <div class="mb" id="pbody">${body}</div>${trayHTML(P)}${sheet}</div></div>`;
 }
 /* ---------- 入出力 ---------- */
 function ioHTML() {
@@ -3687,7 +3759,7 @@ function renderNow() {
   const keep = window.scrollY; if (S.anim) fxCleanup(); S.anim = null;
   document.body.classList.toggle("autorun", !!S.autorun);
   $("#tabs").innerHTML = [["select", "キャラ選択"], ["battle", "戦闘"], ["history", "計算履歴"]].map(([k, l]) =>
-    `<button class="tab" role="tab" data-act="tab" data-k="${k}" aria-selected="${S.tab === k}">${l}${k === "battle" && S.battle ? ` <span class="num">T${S.battle.turn}</span>` : ""}</button>`).join("");
+    `<button class="tab" role="tab" data-act="tab" data-k="${k}" aria-selected="${S.tab === k}">${l}</button>`).join("");
   $("#app").innerHTML = S.tab === "select" ? renderSelect() : S.tab === "battle" ? renderBattle() : renderHistory();
   $("#modal").innerHTML = S.picker ? pickerHTML() : S.fx && S.battle ? fxHTML() : S.skc && S.battle ? skcHTML() : "";
   if (S.picker && S.picker.focus) { const el = $("#pq"); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }
@@ -3711,8 +3783,14 @@ document.addEventListener("click", (ev) => {
   else if (act === "tab") { S.tab = el.dataset.k; render(); return; }
   else if (act === "addc") { S.picker = newPicker(c.t, c.pi, null); render(); return; }
   else if (act === "editc") { S.picker = newPicker(c.t, c.pi, c.ci); render(); return; }
-  else if (act === "pickc") { const P = S.picker, deck = S.setup[P.t][P.pi].deck, sp = specOf(Number(el.dataset.id));
-    if (P.ci === null) deck.push(sp); else { sp.limit_break = deck[P.ci].limit_break; sp.theme = deck[P.ci].theme; deck[P.ci] = sp; } S.picker = null; }
+  else if (act === "pickc" || act === "ptarget" || act === "pdel" || act === "pclear") {
+    const P = S.picker, deck = S.setup[P.t][P.pi].deck, sc = $("#pbody")?.scrollTop;
+    if (act === "pickc") deckPlace(Number(el.dataset.id), P.ci !== null && P.ci < deck.length ? P.ci : -1);
+ else if (act === "ptarget") { const i = Number(el.dataset.i); P.ci = i >= deck.length || P.ci === i ? null : i; }
+    else if (act === "pdel") { ev.stopPropagation(); deck.splice(Number(el.dataset.i), 1); P.ci = null; }
+    else { deck.length = 0; P.ci = null; }
+    S.battle = null; save(); render(); if (sc) { const b = $("#pbody"); if (b) b.scrollTop = sc; } return;
+  }
   else if (act === "closepick") { if (ev.target !== el && el.classList.contains("overlay")) return; S.picker = null; }
   else if (act === "tmp") { ev.stopPropagation(); const id = Number(el.dataset.id), k = S.temp.indexOf(id); k < 0 ? S.temp.push(id) : S.temp.splice(k, 1); saveTemp(); const sc = $("#pbody")?.scrollTop; render(); if (sc) $("#pbody").scrollTop = sc; return; }
   else if (act === "tmpclear") { S.temp = []; saveTemp(); render(); return; }
