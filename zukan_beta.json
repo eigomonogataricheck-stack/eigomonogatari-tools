@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-11-06T13:29:23.840Z",
+  "generatedAt": "2026-11-07T16:12:47.378Z",
   "categoryOrder": [
     [
       "特殊ゆる",
@@ -13861,14 +13861,15 @@
         "limitHp": 1,
         "limitPower": 1,
         "skillTurn": 1,
-        "skill": "1ターンの間、自身にダメージを99%カットするシールドを与える。",
+        "skill": "1ターンの間、自身にダメージを99%軽減するシールドを与える。",
         "rare": "MZR",
         "skillEffects": [
           {
             "effect": "シールド",
+            "value": 0.99,
             "duration": 1,
             "applier": "自身",
-            "sourceText": "1ターンの間、自身にダメージを99%カットするシールドを与える。",
+            "sourceText": "1ターンの間、自身にダメージを99%軽減するシールドを与える。",
             "needsReview": false
           }
         ]
