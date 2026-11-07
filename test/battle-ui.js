@@ -337,7 +337,7 @@ async function playAnim(events, preAttrs, tk, log) {
     const i = events.indexOf(e); if (i > lastIx) { lastIx = i; apply(e.snap); }   // 表示順が記録順と違う(シールドとかばう)ときは、新しい方の状態だけ使う
     const m = card(e.pid)?.querySelector(".pt .skmark"); if (m) { m.classList.add("gone"); m.style.visibility = "hidden"; }
   };
-  const skl = () => { let l = document.getElementById("skfx"); if (!l) { l = document.createElement("div"); l.id = "skfx"; document.body.append(l); } return l; };
+  const skl = () => { let l = document.getElementById("skfx"); if (!l) { l = document.createElement("div"); l.id = "skfx"; document.getElementById("page-battle").append(l); } return l; };
   const msg = (e) => {   // キャラの上の「スキル名!」(AnimationMessage)
     const pt = card(e.pid)?.querySelector(".pt"); if (!pt) return;
     const r = pt.getBoundingClientRect(), b = document.createElement("div"); b.className = "skmsg"; b.textContent = (SK_NAME[kindOf(e)] || EFF_NAME[kindOf(e)] || "スキル") + "!";
@@ -453,7 +453,7 @@ function fxAttrName(a) {
 }
 function fxLevel(d) { const th = [100, 500, 1500, 3000, 5000, 10000, 20000, 50000, 100000]; for (let i = 0; i < th.length; i++) if (d < th[i]) return i + 1; return 10; }
 function fxUnit(w) { return Math.max(40, w * 1.7); } // 1ユニット=キャラ画像幅の1.7倍(実機録画のカード幅と爆発の大きさの比から)
-function fxNums() { let n = document.getElementById("fxnums"); if (!n) { n = document.createElement("div"); n.id = "fxnums"; document.body.append(n); } return n; }
+function fxNums() { let n = document.getElementById("fxnums"); if (!n) { n = document.createElement("div"); n.id = "fxnums"; document.getElementById("page-battle").append(n); } return n; }
 function fxVeil(on) { let v = document.getElementById("fxveil"); if (!v) { v = document.createElement("div"); v.id = "fxveil"; document.body.append(v); } requestAnimationFrame(() => { v.style.opacity = on ? 1 : 0; }); }
 function fxCleanup() { try { window.EFX && EFX.clear(); } catch (e) {} document.body.classList.remove("fxon"); for (const id of ["fxveil", "fxnums", "skfx"]) document.getElementById(id)?.remove(); }
 
@@ -775,11 +775,30 @@ function deckPlace(t, pi, id, at) {
   if (at >= 0 && at < deck.length) { sp.theme = deck[at].theme; deck[at] = sp; } else if (deck.length < 5) deck.push(sp); else return toast("デッキがいっぱいです。入れ替えたいキャラを押してください");
   S.battle = null; save(); render();
 }
-function openSlotPicker(t, pi, ci) {
-  const p = S.setup[t][pi];
-  window.openBattlePicker((ch) => { const id = ch?.details?.id ?? ch?.id; if (BYID.has(id)) deckPlace(t, pi, id, ci); else toast("このキャラは対戦に使えません"); },
-    `${p.id} のキャラを選択`);
+/* キャラ選択中は、そのプレイヤーのデッキを選択画面の上に出し続ける(枠を押すとその枠が入れ替え先になる。×で外す) */
+let pk = null;
+function pickerDeckHTML() {
+  const p = S.setup[pk.t][pk.pi], d = p.deck, cost = d.reduce((a, c) => a + (c.cost || 0), 0);
+  return `<div class="pk-deck-head"><b>${esc(p.id)} のデッキ</b><span>${d.length} / 5体 ・ 合計コスト ${cost}</span><span class="pk-deck-hint">${pk.sel != null ? `${pk.sel + 1}番目と入れ替えます` : "押したキャラが空き枠に入ります"}</span><button type="button" class="mini-reset" data-pk="done">完了</button></div>
+    <div class="pk-deck-slots">${[0, 1, 2, 3, 4].map((i) => { const c = d[i];
+      return c ? `<div class="pk-deck-slot ${pk.sel === i ? "on" : ""}">${tileHTML(c.id, c.attrs, `<button type="button" class="x" data-pk="del" data-i="${i}" aria-label="外す">×</button>`, "", "div", `data-pk="sel" data-i="${i}" role="button" tabindex="0" aria-label="${i + 1}番目を入れ替える"`)}</div>`
+        : `<div class="pk-deck-slot"><div class="tile empty" aria-hidden="true">＋</div></div>`; }).join("")}</div>`;
 }
+function renderPickerDeck() { const el = document.getElementById("pickerDeck"); if (el && pk) el.innerHTML = pickerDeckHTML(); }
+function openSlotPicker(t, pi, ci) {
+  pk = { t, pi, sel: ci >= 0 ? ci : null };
+  renderPickerDeck();
+  window.openBattlePicker((ch) => { const id = ch?.details?.id ?? ch?.id; if (BYID.has(id)) { deckPlace(t, pi, id, pk.sel ?? -1); pk.sel = null; } else toast("このキャラは対戦に使えません"); renderPickerDeck(); },
+    `${S.setup[t][pi].id} のキャラを選択`, true);
+}
+document.getElementById("pickerDeck")?.addEventListener("click", (ev) => {
+  const el = ev.target.closest("[data-pk]"); if (!el || !pk) return;
+  const act = el.dataset.pk, i = Number(el.dataset.i), deck = S.setup[pk.t][pk.pi].deck;
+  if (act === "done") { document.getElementById("picker").hidden = true; return; }
+  if (act === "del") { ev.stopPropagation(); if (deck.length > 1) { deck.splice(i, 1); pk.sel = null; S.battle = null; save(); render(); } else toast("デッキは最低1体必要です"); }
+  else if (act === "sel") pk.sel = pk.sel === i ? null : i;
+  renderPickerDeck();
+});
 /* ---------- 入出力 ---------- */
 function ioHTML() {
   return `<div class="overlay"><div class="modal" role="dialog" aria-label="編成のJSON"><div class="mh"><div class="row"><h2>編成のJSON</h2><span class="grow"></span><button class="mini-reset" data-act="closeio">閉じる</button></div>

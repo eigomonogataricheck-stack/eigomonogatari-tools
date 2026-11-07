@@ -1,6 +1,6 @@
 /* 仮想対戦ページ(キャラ選択・戦闘・計算履歴)。ページ内の部品はすべて #page-battle の下に書く(ほかのページと名前がぶつからないように)。
    色は base.css の --ui-* 変数を使い、火・水・風の属性色だけはゲームの色。ボタンは base.css の役割クラス(.reset-btn / .mini-reset / .primary / .danger)を使う */
-#page-battle {
+#page-battle, #pickerDeck {
   --soft: var(--ui-soft); --line: var(--ui-line); --ink: var(--ui-heading); --ink2: var(--ui-muted); --accent: var(--ui-accent);
   --fire: #e0482c; --water: #2b73d6; --wind: #1f9d6b; --good: #1f8a52; --warn: var(--ui-warn); --bad: var(--ui-danger);
   --font-head: inherit;
@@ -26,39 +26,39 @@
 #page-battle .teamtag.A {background: var(--fire);}
 #page-battle .teamtag.B {background: var(--water);}
 #page-battle .field {display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink2);}
-#page-battle .tile {position: relative; width: var(--s, 64px); height: auto; aspect-ratio: 1; border-radius: 0; background: var(--soft); border: 2px solid var(--ring, var(--line)); overflow: hidden; flex: none;}
-#page-battle .tile img {display: block; width: 100%; height: 100%; object-fit: cover;}
-#page-battle .tile .fb {position: absolute; inset: 0; display: none; place-items: center; font-size: 11px; color: var(--ink2); background: var(--soft);}
-#page-battle .tile.noimg .fb {display: grid;}
-#page-battle .tile.noimg img {display: none;}
-#page-battle .tile.a-火 {--ring: var(--fire);}
-#page-battle .tile.a-水 {--ring: var(--water);}
-#page-battle .tile.a-風 {--ring: var(--wind);}
-#page-battle .tile {--cf: #e8504a; --cw: #3b8be0; --cd: #3fae5a; --ca: #efe2a2; --c1: var(--line); --c2: var(--line); --a2: 15%;
+#page-battle .tile, #pickerDeck .tile {position: relative; width: var(--s, 64px); height: auto; aspect-ratio: 1; border-radius: 0; background: var(--soft); border: 2px solid var(--ring, var(--line)); overflow: hidden; flex: none;}
+#page-battle .tile img, #pickerDeck .tile img {display: block; width: 100%; height: 100%; object-fit: cover;}
+#page-battle .tile .fb, #pickerDeck .tile .fb {position: absolute; inset: 0; display: none; place-items: center; font-size: 11px; color: var(--ink2); background: var(--soft);}
+#page-battle .tile.noimg .fb, #pickerDeck .tile.noimg .fb {display: grid;}
+#page-battle .tile.noimg img, #pickerDeck .tile.noimg img {display: none;}
+#page-battle .tile.a-火, #pickerDeck .tile.a-火 {--ring: var(--fire);}
+#page-battle .tile.a-水, #pickerDeck .tile.a-水 {--ring: var(--water);}
+#page-battle .tile.a-風, #pickerDeck .tile.a-風 {--ring: var(--wind);}
+#page-battle .tile, #pickerDeck .tile {--cf: #e8504a; --cw: #3b8be0; --cd: #3fae5a; --ca: #efe2a2; --c1: var(--line); --c2: var(--line); --a2: 15%;
   border: 0; box-sizing: border-box;
   background: linear-gradient(to bottom left, color-mix(in srgb, var(--c1) 50%, transparent), color-mix(in srgb, var(--c2) var(--a2), transparent));}
-#page-battle .tile[class*="f-"]::after {content: ""; position: absolute; inset: 0; padding: 2px; z-index: 3; pointer-events: none; background: linear-gradient(to bottom left, var(--c1) 50%, var(--c2) 50%);
+#page-battle .tile[class*="f-"]::after, #pickerDeck .tile[class*="f-"]::after {content: ""; position: absolute; inset: 0; padding: 2px; z-index: 3; pointer-events: none; background: linear-gradient(to bottom left, var(--c1) 50%, var(--c2) 50%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);}
-#page-battle .tile.f-火 {--c1: var(--cf); --c2: var(--cf);}
-#page-battle .tile.f-水 {--c1: var(--cw); --c2: var(--cw);}
-#page-battle .tile.f-風 {--c1: var(--cd); --c2: var(--cd);}
-#page-battle .tile.f-全 {--c1: var(--ca); --c2: var(--ca);}
-#page-battle .tile.f-火水 {--c1: var(--cf); --c2: var(--cw); --a2: 50%;}
-#page-battle .tile.f-水風 {--c1: var(--cw); --c2: var(--cd); --a2: 50%;}
-#page-battle .tile.f-風火 {--c1: var(--cd); --c2: var(--cf); --a2: 50%;}
-#page-battle .tile .waku {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; z-index: 2;}
-#page-battle .tile.wk {border-width: 0; border-color: transparent; background: transparent; overflow: visible; aspect-ratio: 460 / 680;}
-#page-battle .tile.wk > img:not(.waku) {position: absolute; left: 2.4%; top: 1.6%; width: 95.2%; height: 96.8%; object-fit: cover;}
-#page-battle .tile.indeck {opacity: .4;}
-#page-battle .tile.dead {filter: grayscale(1); opacity: .45;}
+#page-battle .tile.f-火, #pickerDeck .tile.f-火 {--c1: var(--cf); --c2: var(--cf);}
+#page-battle .tile.f-水, #pickerDeck .tile.f-水 {--c1: var(--cw); --c2: var(--cw);}
+#page-battle .tile.f-風, #pickerDeck .tile.f-風 {--c1: var(--cd); --c2: var(--cd);}
+#page-battle .tile.f-全, #pickerDeck .tile.f-全 {--c1: var(--ca); --c2: var(--ca);}
+#page-battle .tile.f-火水, #pickerDeck .tile.f-火水 {--c1: var(--cf); --c2: var(--cw); --a2: 50%;}
+#page-battle .tile.f-水風, #pickerDeck .tile.f-水風 {--c1: var(--cw); --c2: var(--cd); --a2: 50%;}
+#page-battle .tile.f-風火, #pickerDeck .tile.f-風火 {--c1: var(--cd); --c2: var(--cf); --a2: 50%;}
+#page-battle .tile .waku, #pickerDeck .tile .waku {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; z-index: 2;}
+#page-battle .tile.wk, #pickerDeck .tile.wk {border-width: 0; border-color: transparent; background: transparent; overflow: visible; aspect-ratio: 460 / 680;}
+#page-battle .tile.wk > img:not(.waku), #pickerDeck .tile.wk > img:not(.waku) {position: absolute; left: 2.4%; top: 1.6%; width: 95.2%; height: 96.8%; object-fit: cover;}
+#page-battle .tile.indeck, #pickerDeck .tile.indeck {opacity: .4;}
+#page-battle .tile.dead, #pickerDeck .tile.dead {filter: grayscale(1); opacity: .45;}
 #page-battle .dots {position: absolute; left: 3px; bottom: 3px; display: flex; gap: 2px;}
 #page-battle .dots i {width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid #fff; display: block;}
 #page-battle .dots i.火 {background: var(--fire);}
 #page-battle .dots i.水 {background: var(--water);}
 #page-battle .dots i.風 {background: var(--wind);}
-#page-battle button.tile {padding: 0; cursor: pointer;}
-#page-battle .tile.empty {display: grid; place-items: center; border-style: dashed; color: var(--ink2); font-size: 22px; background: #fff;}
-#page-battle .tile .x {position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.9); border: 1px solid var(--line); font-size: 11px; line-height: 16px; text-align: center; padding: 0; color: var(--ink2);}
+#page-battle button.tile, #pickerDeck button.tile {padding: 0; cursor: pointer;}
+#page-battle .tile.empty, #pickerDeck .tile.empty {display: grid; place-items: center; border-style: dashed; color: var(--ink2); font-size: 22px; background: #fff;}
+#page-battle .tile .x, #pickerDeck .tile .x {position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.9); border: 1px solid var(--line); font-size: 11px; line-height: 16px; text-align: center; padding: 0; color: var(--ink2);}
 #page-battle .slotwrap {display: grid; gap: 3px; justify-items: center;}
 #page-battle .tg {display: flex; gap: 3px;}
 #page-battle .tg label {font-size: 10px; color: var(--ink2); border: 1px solid var(--line); border-radius: 5px; padding: 0 4px; cursor: pointer; user-select: none;}
@@ -78,7 +78,7 @@
   #page-battle .pid {display: flex; gap: 6px; align-items: baseline; padding-top: 0;}
   #page-battle .pid .ld {display: inline;}
   #page-battle .popts {gap: 6px 10px; margin-top: 2px;}
-  #page-battle .slotwrap .tile .x {width: 16px; height: 16px; font-size: 10px; line-height: 14px;}
+#page-battle .slotwrap .tile .x {width: 16px; height: 16px; font-size: 10px; line-height: 14px;}
 }
 #page-battle .popts {display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; align-items: center;}
 #page-battle .deckrow {border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; margin-top: 9px;}
@@ -213,7 +213,7 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
   #page-battle .cb {min-height: 24px;}
   #page-battle .hint {line-height: 1.4; margin: 0;}
   #page-battle .trow {gap: 4px;}
-  #page-battle .cb {font-size: 9.5px; padding: 3px 0;}
+  #page-battle .cb {font-size: 9px; padding: 3px 0; letter-spacing: -.02em;}
 }
 #fxl {position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 6;}
 #fxveil {position: fixed; inset: 0; z-index: 50; background: rgba(30, 21, 16, .9); pointer-events: none; opacity: 0; transition: opacity .15s;}
@@ -241,7 +241,7 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
 @media (max-width: 560px) {
   #page-battle .skcut {gap: 8px; padding: 8px 10px; bottom: 8px;}
   #page-battle .skcut .skc-card {width: 60px; height: 60px;}
-  #page-battle .skcut .skc-card .tile {--s: 60px;}
+#page-battle .skcut .skc-card .tile {--s: 60px;}
   #page-battle .skcut .skc-tx b {font-size: 14px;}
   #page-battle .skcut .skc-tx span {font-size: 12px;}
 }
@@ -276,3 +276,20 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
 @media (prefers-reduced-motion: reduce) {
   #page-battle .hp i, #page-battle .hp b {transition: none !important;}
 }
+/* キャラ選択画面の上に出すデッキ(選択中は常に表示) */
+#pickerDeck { display: grid; gap: 6px; margin: 0 0 8px; padding: 8px 10px; border: 1px solid var(--ui-line); border-radius: var(--ui-radius-card); background: var(--ui-soft); }
+#pickerDeck .pk-deck-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: .8rem; color: var(--ui-text-sub); }
+#pickerDeck .pk-deck-head b { color: var(--ui-heading); }
+#pickerDeck .pk-deck-hint { flex: 1 1 8em; min-width: 0; color: var(--ui-muted); }
+#pickerDeck .pk-deck-head .mini-reset { margin-left: auto; white-space: nowrap; }
+#pickerDeck .pk-deck-slots { display: grid; grid-template-columns: repeat(5, minmax(0, 56px)); gap: 6px; }
+#pickerDeck .pk-deck-slot { position: relative; min-width: 0; }
+#pickerDeck .pk-deck-slot .tile { --s: 100%; width: 100%; }
+#pickerDeck .pk-deck-slot .tile.empty { aspect-ratio: 460 / 680; border: 1px dashed var(--ui-border); background: #fff; }
+#pickerDeck .pk-deck-slot.on .tile { outline: 3px solid var(--ui-accent); outline-offset: 1px; }
+@media (max-width: 560px) { #pickerDeck .pk-deck-slots { grid-template-columns: repeat(5, minmax(0, 46px)); } }
+/* ボタンの文字は折り返さない(足りない幅は、ボタンの並びのほうを折り返す) */
+#page-battle :is(.mini-reset, .reset-btn, .primary, .chip) { white-space: nowrap; }
+/* 並んだボタンは高さをそろえる(主ボタンだけ大きくならないように) */
+#page-battle .row > :is(.mini-reset, .reset-btn, .primary) { min-height: 34px; padding: 6px 12px; font-size: .8rem; }
+#page-battle .row:has(> :is(.mini-reset, .reset-btn, .primary)) { gap: 8px; }
