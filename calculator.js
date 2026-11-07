@@ -5,10 +5,10 @@ const CALCULATOR_PREFS_KEY='eigoCalculatorPrefsV1';
 function saveCalculatorPrefs(){try{localStorage.setItem(CALCULATOR_PREFS_KEY,JSON.stringify({detailMode,answerSpeed:$('answerSpeed').value,selfMode:$('selfMode').checked,questionLevel:$('questionLevel').value}))}catch{}}
 function loadCalculatorPrefs(){let p;try{p=JSON.parse(localStorage.getItem(CALCULATOR_PREFS_KEY)||'null')}catch{p=null}if(!p||typeof p!=='object')return;const setSelect=(id,v)=>{let el=$(id);if(el&&[...el.options].some(o=>o.value===String(v)))el.value=String(v)};setSelect('answerSpeed',p.answerSpeed);setSelect('questionLevel',p.questionLevel);if(typeof p.selfMode==='boolean')$('selfMode').checked=p.selfMode;detailMode=p.detailMode===true;syncDetailMode();if(typeof calculatorRefreshStyledSelects==='function')calculatorRefreshStyledSelects()}
 function syncDetailMode(){let b=$('detailMode');if(b){b.textContent=detailMode?'詳細モード ON':'詳細モード OFF';b.setAttribute('aria-pressed',String(detailMode))}document.querySelectorAll('.detail-mode-target').forEach(x=>x.classList.toggle('detail-mode-hidden',!detailMode));syncLimitBreak('attacker');syncLimitBreak('defender')}
-// 詳細モードでは凸数で Power / HP を選ぶ。数値の入力欄は「手入力」のときと、凸のデータがないキャラのときだけ出す
+// キャラを選ぶと凸数で Power / HP を選ぶ(初めは完凸)。数値の入力欄は、キャラ未選択・凸のデータがないキャラ・「手入力」のときだけ出す
 function limitBreakInput(r){return $(r==='attacker'?'attackerPower':'defenderHp')}
 function syncLimitBreak(r){let c=selected[r],sel=$(r+'LimitBreak'),input=limitBreakInput(r);if(!sel)return;let has=!!limitBreakMax(c);sel.innerHTML=has?limitBreakOptions(c,r==='attacker'?'power':'hp',input.value):'';sel.closest('label').hidden=!has;if(has)calculatorSyncStyledSelect(sel);syncLimitBreakInput(r)}
-function syncLimitBreakInput(r){let sel=$(r+'LimitBreak');limitBreakInput(r).closest('label').hidden=detailMode&&!sel.closest('label').hidden&&sel.value!=='manual'}
+function syncLimitBreakInput(r){let sel=$(r+'LimitBreak');limitBreakInput(r).closest('label').hidden=!sel.closest('label').hidden&&sel.value!=='manual'}
 function chooseLimitBreak(r){let sel=$(r+'LimitBreak'),c=selected[r];if(sel.value!=='manual'&&limitBreakMax(c))limitBreakInput(r).value=limitBreakValue(c,r==='attacker'?'power':'hp',Number(sel.value));syncLimitBreakInput(r);calculate()}
 function calculatorSelfModeMultiplier(){return $('selfMode').checked?1.2:1}
 function calculatorSelfModeLabel(){return $('selfMode').checked?'あり（×1.2）':'なし（×1.0）'}
