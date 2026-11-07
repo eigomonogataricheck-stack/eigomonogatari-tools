@@ -22,7 +22,8 @@ function toggleSkill(r){skillEnabled[r]=!skillEnabled[r];syncSkill(r);calculate(
 function syncSkill(r){let b=$(r+'SkillBtn');b.textContent=skillEnabled[r]?'スキル解除':'スキル使用';b.classList.toggle('active',skillEnabled[r])}
 function raw(v){let n=parseFloat(String(v??'').replace('%',''));return Number.isFinite(n)?n:NaN}
 function en(e){let n=String(e?.effect??e?.['スキル効果']??'').trim();if(['被ダメージ減少','ダメージカット','シールド'].includes(n))return'シールド';if(['攻撃集中','集中','かばう'].includes(n))return'集中';if(n==='かわす')return'かわす';if(['攻撃力アップ','攻撃力増加','攻撃力上昇'].includes(n))return'攻撃力アップ';if(['属性変更','属性変化','色変'].includes(n))return'色変';if(['連続攻撃','連撃'].includes(n))return'連撃';return n}
-function amt(e){let n=raw(e?.value??e?.amount??e?.['効果量']);return ['シールド','集中','かわす','攻撃力アップ','回復'].includes(en(e))&&Number.isFinite(n)&&Math.abs(n)<=10?n*100:n}
+// 効果量の単位: zukan_beta.json の数値は「割合」(4 = 400%、17.8 = 1780%)。大きさで%かどうかを推測しない。文字列に % が付いているときだけ、すでに%として扱う
+function amt(e){let v=e?.value??e?.amount??e?.['効果量'],n=raw(v);if(!['シールド','集中','かわす','攻撃力アップ','回復'].includes(en(e))||!Number.isFinite(n))return n;return typeof v==='string'&&/[%％]/.test(v)?n:n*100}
 function effectEntries(r){let out=[],own=selected[r]?.details?.skillEffects;if(skillEnabled[r]&&Array.isArray(own))own.forEach(effect=>out.push({effect,borrowed:false}));for(let i=0;i<(borrowedSkills[r]||[]).length;i++){if(!borrowedEnabled[r]?.[i])continue;let list=borrowedSkills[r][i]?.details?.skillEffects;if(Array.isArray(list))list.forEach(effect=>out.push({effect,borrowed:true}))}return out}
 function effectScope(e){return canon(e?.applier??e?.['適用者']??'')}
 function conditionAttribute(value){let s=canon(value);if(!s||['自身','自分','全員','味方全員','リーダー','敵全員','すべて','全'].includes(s))return null;return ATTRS.filter(a=>a!=='全').sort((a,b)=>b.length-a.length).find(a=>s.includes(a))||null}
