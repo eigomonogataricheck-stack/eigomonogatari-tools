@@ -103,6 +103,7 @@ function autoDecks(opt, setup, only) {
     const ids = GEN.deck(si, b, rnd, DECK_DEFAULT);   // 合計コストは必ず縛りコスト(BANDS[b][1])以下
     if (ids.length < DECK_DEFAULT) short++;
     if (ids.length) p.deck = ids.map(specOf);
+    padDeck(p);
   }
   return short;
 }
@@ -155,7 +156,8 @@ function specOf(id) {
   return { id: c.id, name: c.n, attrs: c.attrs, cost: c.cost, hp: c.hp, power: c.pw, limit_hp: c.lhp ?? null, limit_power: c.lpw ?? null,
     skill: c.sk ?? null, limit_break: true, theme: false };
 }
-function emptyTeam(t) { return [1, 2, 3, 4, 5].map((n) => ({ id: `${t}${n}`, name: `${t}${n}`, level: "難関大学", self_mode: true, cpu: false, deck: [] })); }
+const padDeck = (p) => { p.deck = (p.deck || []).slice(0, 5); while (p.deck.length < 5) p.deck.push(null); return p; };
+function emptyTeam(t) { return [1, 2, 3, 4, 5].map((n) => ({ id: `${t}${n}`, name: `${t}${n}`, level: "難関大学", self_mode: true, cpu: false, deck: [null, null, null, null, null] })); }
 function sampleSetup() { const su = { A: emptyTeam("A"), B: emptyTeam("B") }; autoDecks(S.auto, su); return su; }
 function save() {
   try { localStorage.setItem("eigo2-battle", JSON.stringify({ ver: 4, setup: S.setup, rules: S.rules, auto: S.auto, tab: S.tab, view: S.view || 0, autoAns: S.autoAns || "random", aiSkill3: S.aiSkill || "v7",
@@ -164,8 +166,8 @@ function save() {
 function load() {
   try {
     const j = JSON.parse(localStorage.getItem("eigo2-battle") || "null");
-    if (j && j.setup && !j.ver) for (const t of ["A", "B"]) for (const p of j.setup[t] || []) for (const c of p.deck || []) c.limit_break = true;   // 完凸を既定に(旧データの移行)
-    if (j && j.setup) { S.setup = j.setup; for (const t of ["A", "B"]) for (const p of S.setup[t] || []) { p.cpu = false; for (const c of p.deck || []) c.limit_break = true; } Object.assign(S.rules, j.rules || {}); Object.assign(S.auto, j.auto || {}); S.view = j.view || 0; S.autoAns = j.autoAns || "random"; S.aiSkill = j.aiSkill3 || "v7";
+    if (j && j.setup && !j.ver) for (const t of ["A", "B"]) for (const p of j.setup[t] || []) for (const c of p.deck || []) if (c) c.limit_break = true;   // 完凸を既定に(旧データの移行)
+    if (j && j.setup) { S.setup = j.setup; for (const t of ["A", "B"]) for (const p of S.setup[t] || []) { p.cpu = false; for (const c of p.deck || []) if (c) c.limit_break = true; padDeck(p); } Object.assign(S.rules, j.rules || {}); Object.assign(S.auto, j.auto || {}); S.view = j.view || 0; S.autoAns = j.autoAns || "random"; S.aiSkill = j.aiSkill3 || "v7";
       if (j.battle && startBattle()) {
         S.inputs = Array.isArray(j.inputs) ? j.inputs : []; try { replay(S.inputs.length); } catch (e) { startBattle(); }
         for (const k in (j.draft || {})) if (S.draft[k]) Object.assign(S.draft[k], j.draft[k]);
@@ -186,7 +188,12 @@ function engineRules() {
   return { count_step: Number(S.rules.count_step) || 1, damage_rand: [Number(S.rules.damage_rand[0]), Number(S.rules.damage_rand[1])],
     damage_rounding: S.rules.damage_rounding, max_turns: Number(S.rules.max_turns) || 40, seed: Number(S.rules.seed) || 1 };
 }
-function buildSetup() { return { rules: engineRules(), teams: { A: { players: clone(S.setup.A) }, B: { players: clone(S.setup.B) } } }; }
+function buildSetup() {
+  const players = (t) => S.setup[t].map((p) => ({ ...clone(p), deck: p.deck.filter(Boolean).map(clone) }));
+  const empty = [...S.setup.A, ...S.setup.B].find((p) => !p.deck.some(Boolean));
+  if (empty) throw new Error(`${empty.id} のキャラがいません`);
+  return { rules: engineRules(), teams: { A: { players: players("A") }, B: { players: players("B") } } };
+}
 function startBattle() {
   try { S.battle = new Battle(buildSetup()); } catch (e) { toast(String(e.message || e)); S.battle = null; return false; }
   S.inputs = []; S.openTurns = new Set(); resetDraft(); return true;
@@ -462,10 +469,10 @@ function renderSelect() {
   const team = (t) => `<section class="bt-card"><div class="teamhead"><span class="teamtag ${t}">${t}</span><h2>チーム${t}</h2><span class="grow"></span>
       <label class="field">人数 <select data-size="${t}">${[1, 2, 3, 4, 5].map((n) => `<option ${S.setup[t].length === n ? "selected" : ""}>${n}</option>`).join("")}</select></label></div>
     ${S.setup[t].map((p, pi) => `<div class="prow" data-t="${t}" data-pi="${pi}"><div class="pid">${p.id}${pi === 0 ? `<span class="ld">リーダー</span>` : ""}</div>
-      <div><div class="slots">${p.deck.map((c, ci) => `<div class="slotwrap" data-ci="${ci}">
-          ${tileHTML(c.id, c.attrs, `<button class="x" data-act="delc" aria-label="外す">×</button>`, "", "div", `data-act="editc" role="button" tabindex="0" style="cursor:pointer" aria-label="キャラを変更"`)}
-          <div class="tg"><label title="補正"><input type="checkbox" data-c="theme" ${c.theme ? "checked" : ""}>補正${c.theme ? "ON" : "OFF"}</label></div></div>`).join("")}
-        ${p.deck.length < 5 ? `<div class="slotwrap"><button class="tile empty" data-act="addc" aria-label="キャラを追加">＋</button></div>` : ""}</div>
+      <div><div class="slots">${p.deck.map((c, ci) => { const dr = `data-char-drag="btslot:${t}:${pi}:${ci}"`; return c ? `<div class="slotwrap" data-ci="${ci}">
+          ${tileHTML(c.id, c.attrs, `<button class="x" data-act="delc" aria-label="外す">×</button>`, "", "div", `data-act="editc" role="button" tabindex="0" style="cursor:pointer" aria-label="キャラを変更" ${dr}`)}
+          <div class="tg"><label title="補正"><input type="checkbox" data-c="theme" ${c.theme ? "checked" : ""}>補正${c.theme ? "ON" : "OFF"}</label></div></div>`
+        : `<div class="slotwrap" data-ci="${ci}"><button class="tile empty" data-act="addc" aria-label="キャラを追加" ${dr}>＋</button></div>`; }).join("")}</div>
         <div class="popts"><label class="field">レベル <select data-f="level">${LEVELS.map((l) => `<option ${p.level === l ? "selected" : ""}>${l}</option>`).join("")}</select></label>
           <label class="field"><input type="checkbox" data-f="self_mode" ${p.self_mode ? "checked" : ""}> 自力×1.2</label>
           <button class="mini-reset" data-act="autoone">自動生成</button></div></div></div>`).join("")}
@@ -646,16 +653,6 @@ function cardHTML(p) {
     <button class="cb ${mcls}" data-act="ans" data-pid="${p.id}" ${cpu ? "disabled" : ""} aria-label="${p.id} 正誤判定">${MODE_LABEL[d.mode]}</button></article>`;
 }
 // 操作のしかた(初めての人向け)。閉じた状態はこのブラウザだけに覚える
-function howtoOpen() { try { return localStorage.getItem("eigo2-howto") !== "0"; } catch (e) { return true; } }
-function howtoHTML() {
-  return `<details class="howto" id="howto" ${howtoOpen() ? "open" : ""}><summary>操作のしかた</summary><ol>
-    <li><b>スキル</b>: キャラの画像をタップすると、このターンにスキルを使う/使わないが切り替わります(右上の数字=発動まであと何ターン。0なら使えます)。</li>
-    <li><b>狙う相手</b>: キャラの画像を押したまま、相手のキャラまでドラッグして離します(相手以外で離すと解除)。</li>
-    <li><b>順番</b>: 画像の下の <span class="cb sk unset demo">スキル順 ―</span> <span class="cb at unset demo">攻撃順 ―</span> をタップすると、<span class="cb at set demo">攻撃 1番目</span> → 2番目 → … → ― と切り替わります。同じチームの中で番号は重なりません。<br>「―」(未設定)のキャラは、番号を付けたキャラのあとに、左から順に動きます。何も設定しなければ、全員が左から順に動きます。</li>
-    <li><b>回答</b>: いちばん下のボタンで、回答の結果(Excellent回答/Correct回答/半誤答/完全誤答)を切り替えます。</li>
-    <li>決めたら「ターン実行」。「自動で決める」を押すと、スキル・狙い・順番を自動で決めます。</li></ol></details>`;
-}
-document.addEventListener("toggle", (e) => { if (e.target && e.target.id === "howto") { try { localStorage.setItem("eigo2-howto", e.target.open ? "1" : "0"); } catch (err) {} } }, true);
 function renderBattle() {
   if (!S.battle) return `<section class="bt-card"><p>まだ対戦が始まっていません。</p><button class="primary" data-act="start">現在の編成で開始</button></section>`;
   const b = S.battle, st = b.state(), fin = b.finished, view = S.view || 0;
@@ -671,7 +668,6 @@ function renderBattle() {
     return `<section class="deckrow ${t} ${p.ghost ? "ghost" : ""}"><div class="dhead" style="cursor:default"><h3>${p.id}</h3>${p.cpu ? `<span class="pill">CPU</span>` : ""}${p.ghost ? `<span class="pill">幽霊</span>` : ""}</div><div class="dbody"><div class="dslots">${slots}</div></div></section>`; }).join(""));
   return `${banner}<section class="bt-card"><div class="row"><h2>ターン${fin ? b.turn : b.turn + 1}</h2><span class="grow"></span>
       <button class="mini-reset" data-act="fxtoggle" aria-pressed="${fxOn()}">演出 ${fxOn() ? "ON" : "OFF"}</button><button class="mini-reset" data-act="fxdmg" aria-pressed="${fxDmgOn()}" title="実機の設定「AttackEffectSetting」に相当。ONで着弾時のダメージエフェクト(EffectDamage)を表示">着弾エフェクト ${fxDmgOn() ? "ON" : "OFF"}</button><button class="mini-reset" data-act="speedy" aria-pressed="${speedyOn()}" title="実機の特別ルール「高速」。ONはスキル演出がカットインなしで1人0.3秒。OFFは通常対戦(カットインあり)">高速対戦 ${speedyOn() ? "ON" : "OFF"}</button><button class="mini-reset" data-act="skc">スキル確認</button><button class="mini-reset" data-act="view">視点切替</button><button class="mini-reset" data-act="rankreset">攻撃順リセット</button><button class="mini-reset" data-act="srankreset">スキル順リセット</button></div>
-    ${fin ? "" : howtoHTML()}
     <div class="board" id="board">${side(farT, false)}${side(nearT, true)}<svg id="tgsvg" aria-hidden="true"></svg></div>
     <div class="row" style="justify-content:center;margin-top:6px">
       <button class="mini-reset" data-act="undo" ${S.inputs.length ? "" : "disabled"}>1ターン戻す</button><button class="mini-reset" data-act="restart">やり直す</button>
@@ -768,21 +764,42 @@ function logText() {
 
 const chips = (items, cur, act, extra = "") => items.map((n) => `<button class="chip ${n === cur ? "on" : ""}" data-act="${act}" data-v="${esc(n)}" ${extra}>${esc(n)}</button>`).join("");
 /* キャラ選択は図鑑・計算機と同じ共通の選択画面(catalog.js の openBattlePicker)。選んだキャラは deckPlace でデッキに入れる。同じキャラ・伝2体は不可 */
+/* デッキは常に5枠(空き枠あり)。外しても後ろのキャラは詰めない。同じキャラ・伝2体は同じデッキに入れられない */
+function deckOK(list) {
+  const cs = list.filter(Boolean);
+  return new Set(cs.map((x) => x.id)).size === cs.length && cs.filter((x) => BYID.get(x.id)?.r === "伝").length <= 1;
+}
 function deckPlace(t, pi, id, at) {
   const deck = S.setup[t][pi].deck, sp = specOf(id);
-  if (deck.some((x, k) => x.id === sp.id && k !== at)) return toast("同じキャラは1体までです");
-  if (BYID.get(sp.id).r === "伝" && deck.some((x, k) => k !== at && BYID.get(x.id).r === "伝")) return toast("伝は1デッキに1体までです");
-  if (at >= 0 && at < deck.length) { sp.theme = deck[at].theme; deck[at] = sp; } else if (deck.length < 5) deck.push(sp); else return toast("デッキがいっぱいです。入れ替えたいキャラを押してください");
-  S.battle = null; save(); render();
+  if (at == null || at < 0) at = deck.findIndex((x) => !x);
+  if (at < 0) return toast("デッキがいっぱいです。入れ替えたい枠を押してから選んでください");
+  const next = deck.slice(); sp.theme = !!deck[at]?.theme; next[at] = sp;
+  if (!deckOK(next)) return toast("同じキャラ・伝2体は同じデッキに入れられません");
+  deck[at] = sp; S.battle = null; save(); render();
 }
+const slotAt = (id) => { const [t, pi, ci] = id.split(":"); return { t, pi: +pi, ci: +ci, deck: S.setup[t]?.[+pi]?.deck }; };
+function afterDeckEdit() { S.battle = null; save(); render(); renderPickerDeck(); }
+/* ドラッグ&ドロップ(部品は app.js の registerCharDrag): 枠どうし(同じデッキ内・別のデッキ・キャラ選択画面の上のデッキ)で入れ替え、お気に入りや選択画面の一覧からは枠に置く */
+registerCharDrag("btslot", {
+  get: (id) => { const s = slotAt(id), x = s.deck?.[s.ci]; return x ? chars.find((k) => characterKey(k) === String(x.id)) || null : null; },
+  swap: (a, b) => {
+    const A = slotAt(a), B = slotAt(b), x = A.deck[A.ci], y = B.deck[B.ci], na = A.deck.slice(), nb = A.deck === B.deck ? na : B.deck.slice();
+    na[A.ci] = y; nb[B.ci] = x;
+    if (!deckOK(na) || !deckOK(nb)) return toast("同じキャラ・伝2体は同じデッキに入れられません");
+    if (!na.some(Boolean) || !nb.some(Boolean)) return toast("デッキは最低1体必要です");
+    A.deck.splice(0, 5, ...na); if (B.deck !== A.deck) B.deck.splice(0, 5, ...nb);
+    afterDeckEdit();
+  },
+  place: (id, ch) => { const s = slotAt(id), cid = ch?.details?.id ?? ch?.id; if (!BYID.has(cid)) return toast("このキャラは対戦に使えません"); deckPlace(s.t, s.pi, cid, s.ci); renderPickerDeck(); }
+});
 /* キャラ選択中は、そのプレイヤーのデッキを選択画面の上に出し続ける(枠を押すとその枠が入れ替え先になる。×で外す) */
 let pk = null;
 function pickerDeckHTML() {
-  const p = S.setup[pk.t][pk.pi], d = p.deck, cost = d.reduce((a, c) => a + (c.cost || 0), 0);
-  return `<div class="pk-deck-head"><b>${esc(p.id)} のデッキ</b><span>${d.length} / 5体 ・ 合計コスト ${cost}</span><span class="pk-deck-hint">${pk.sel != null ? `${pk.sel + 1}番目と入れ替えます` : "押したキャラが空き枠に入ります"}</span><button type="button" class="mini-reset" data-pk="done">完了</button></div>
-    <div class="pk-deck-slots">${[0, 1, 2, 3, 4].map((i) => { const c = d[i];
-      return c ? `<div class="pk-deck-slot ${pk.sel === i ? "on" : ""}">${tileHTML(c.id, c.attrs, `<button type="button" class="x" data-pk="del" data-i="${i}" aria-label="外す">×</button>`, "", "div", `data-pk="sel" data-i="${i}" role="button" tabindex="0" aria-label="${i + 1}番目を入れ替える"`)}</div>`
-        : `<div class="pk-deck-slot"><div class="tile empty" aria-hidden="true">＋</div></div>`; }).join("")}</div>`;
+  const d = S.setup[pk.t][pk.pi].deck;
+  return `<div class="pk-deck-slots">${d.map((c, i) => { const dr = `data-char-drag="btslot:${pk.t}:${pk.pi}:${i}"`;
+    return `<div class="pk-deck-slot ${pk.sel === i ? "on" : ""}">${c
+      ? tileHTML(c.id, c.attrs, `<button type="button" class="x" data-pk="del" data-i="${i}" aria-label="外す">×</button>`, "", "div", `data-pk="sel" data-i="${i}" role="button" tabindex="0" aria-label="${i + 1}番目を入れ替える" ${dr}`)
+      : `<button type="button" class="tile empty" data-pk="sel" data-i="${i}" aria-label="${i + 1}番目に入れる" ${dr}>＋</button>`}</div>`; }).join("")}</div>`;
 }
 function renderPickerDeck() { const el = document.getElementById("pickerDeck"); if (el && pk) el.innerHTML = pickerDeckHTML(); }
 function openSlotPicker(t, pi, ci) {
@@ -794,10 +811,8 @@ function openSlotPicker(t, pi, ci) {
 document.getElementById("pickerDeck")?.addEventListener("click", (ev) => {
   const el = ev.target.closest("[data-pk]"); if (!el || !pk) return;
   const act = el.dataset.pk, i = Number(el.dataset.i), deck = S.setup[pk.t][pk.pi].deck;
-  if (act === "done") { document.getElementById("picker").hidden = true; return; }
-  if (act === "del") { ev.stopPropagation(); if (deck.length > 1) { deck.splice(i, 1); pk.sel = null; S.battle = null; save(); render(); } else toast("デッキは最低1体必要です"); }
-  else if (act === "sel") pk.sel = pk.sel === i ? null : i;
-  renderPickerDeck();
+  if (act === "del") { ev.stopPropagation(); if (deck.filter(Boolean).length > 1) { deck[i] = null; pk.sel = null; afterDeckEdit(); } else toast("デッキは最低1体必要です"); return; }
+  pk.sel = pk.sel === i ? null : i; renderPickerDeck();
 });
 /* ---------- 入出力 ---------- */
 function ioHTML() {
@@ -839,9 +854,9 @@ document.addEventListener("click", (ev) => {
   if (el.classList.contains("overlay") && ev.target !== el) return;
   const act = el.dataset.act, c = ctx(el);
   if (S.autorun && act !== "autorun") return;   // 自動操作中は、止めるボタン以外は押せない
-  if (act === "delc" ) { ev.stopPropagation(); if (c.p.deck.length > 1) c.p.deck.splice(c.ci, 1); else toast("デッキは最低1体必要です"); }
+  if (act === "delc" ) { ev.stopPropagation(); if (c.p.deck.filter(Boolean).length > 1) c.p.deck[c.ci] = null; else toast("デッキは最低1体必要です"); }
   else if (act === "tab") { S.tab = el.dataset.k; render(); return; }
-  else if (act === "addc") { openSlotPicker(c.t, c.pi, -1); return; }
+  else if (act === "addc") { openSlotPicker(c.t, c.pi, c.ci); return; }
   else if (act === "editc") { openSlotPicker(c.t, c.pi, c.ci); return; }
   else if (act === "shibari") S.auto.shibari = el.dataset.v;
   else if (act === "band") S.auto.band = el.dataset.v;

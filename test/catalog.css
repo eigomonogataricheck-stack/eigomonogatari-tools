@@ -219,6 +219,10 @@
 /* ===== キャラ選択の小窓 ===== */
 .picker-modal{display:flex;flex-direction:column;width:min(1080px,96vw);height:92vh;overflow:hidden;border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.2)}
 .picker-fixed{flex:0 0 auto;padding:8px 12px 7px;border-bottom:1px solid #e5e9ef;background:#fff}
+.picker-top{display:grid;gap:8px}
+.picker-top:has(>.pk-deck:not([hidden])){grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px 14px;margin-top:6px;padding:8px 10px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:var(--ui-soft)}
+.picker-top-tags{display:grid;gap:6px;min-width:0}
+@media(max-width:700px){.picker-top:has(>.pk-deck:not([hidden])){grid-template-columns:minmax(0,1fr)}.picker-top>.pk-deck{order:-1}}
 .picker-title-row{display:flex;align-items:center;justify-content:space-between;min-height:28px}
 .picker-title-row h2{margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
 .picker-layout{display:flex;flex:1 1 auto;min-height:0;overflow:hidden}

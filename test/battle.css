@@ -71,7 +71,6 @@
 #page-battle .slots {display: grid; grid-template-columns: repeat(5, minmax(0, 64px)); gap: 8px;}
 #page-battle .slotwrap {min-width: 0;}
 #page-battle .slotwrap .tile {--s: 100%; width: 100%;}
-#page-battle .slotwrap .tile.empty {aspect-ratio: 460 / 680;}
 @media (max-width: 560px) {
   #page-battle .slots {grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px;}
   #page-battle .prow {grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 8px 0;}
@@ -186,11 +185,6 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
 #page-battle .cb.unset {border-style: dashed; font-weight: 400;}
 #page-battle .cb.sk.set {background: #6b46a3; color: #fff; border-color: #6b46a3; font-weight: 700;}
 #page-battle .cb.at.set {background: #c2621a; color: #fff; border-color: #c2621a; font-weight: 700;}
-#page-battle .howto {margin: 6px 0 8px; border: 1px solid #f0d9a8; background: #fffaf0; border-radius: 10px; padding: 6px 12px; font-size: 12.5px; line-height: 1.7; color: var(--ink);}
-#page-battle .howto > summary {cursor: pointer; font-weight: 700; color: #8a5a00;}
-#page-battle .howto ol {margin: 4px 0 2px; padding-left: 1.4em;}
-#page-battle .howto li {margin: 2px 0;}
-#page-battle .howto .cb.demo {display: inline-block; width: auto; min-height: 0; padding: 0 6px; font-size: 11.5px; line-height: 1.6; vertical-align: baseline;}
 #page-battle .drow {display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; padding: 4px 0; border-top: 1px solid var(--line);}
 #page-battle .drow:first-of-type {border-top: 0;}
 #page-battle .drow b {font-family: var(--font-head); width: 2em;}
@@ -207,9 +201,6 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
   #page-battle .modal .mh {padding: 8px 10px; gap: 6px;}
   #page-battle .modal .mb {padding: 8px 10px;}
   #page-battle .overlay {padding: 8px;}
-  #page-battle .howto {font-size: 11px; line-height: 1.55; padding: 4px 8px; margin: 4px 0 6px;}
-  #page-battle .howto ol {padding-left: 1.2em;}
-  #page-battle .howto .cb.demo {font-size: 10px; padding: 0 4px;}
   #page-battle .cb {min-height: 24px;}
   #page-battle .hint {line-height: 1.4; margin: 0;}
   #page-battle .trow {gap: 4px;}
@@ -276,18 +267,13 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
 @media (prefers-reduced-motion: reduce) {
   #page-battle .hp i, #page-battle .hp b {transition: none !important;}
 }
-/* キャラ選択画面の上に出すデッキ(選択中は常に表示) */
-#pickerDeck { display: grid; gap: 6px; margin: 0 0 8px; padding: 8px 10px; border: 1px solid var(--ui-line); border-radius: var(--ui-radius-card); background: var(--ui-soft); }
-#pickerDeck .pk-deck-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: .8rem; color: var(--ui-text-sub); }
-#pickerDeck .pk-deck-head b { color: var(--ui-heading); }
-#pickerDeck .pk-deck-hint { flex: 1 1 8em; min-width: 0; color: var(--ui-muted); }
-#pickerDeck .pk-deck-head .mini-reset { margin-left: auto; white-space: nowrap; }
-#pickerDeck .pk-deck-slots { display: grid; grid-template-columns: repeat(5, minmax(0, 56px)); gap: 6px; }
+/* キャラ選択画面の上に出すデッキ(選択中は常に表示。枠は図鑑の分類タブと同じ枠の中、右側に置く) */
+#pickerDeck .pk-deck-slots { display: grid; grid-template-columns: repeat(5, 54px); gap: 6px; }
 #pickerDeck .pk-deck-slot { position: relative; min-width: 0; }
 #pickerDeck .pk-deck-slot .tile { --s: 100%; width: 100%; }
-#pickerDeck .pk-deck-slot .tile.empty { aspect-ratio: 460 / 680; border: 1px dashed var(--ui-border); background: #fff; }
+#pickerDeck .pk-deck-slot .tile.empty { aspect-ratio: 1; border: 1px dashed var(--ui-border); background: #fff; }
 #pickerDeck .pk-deck-slot.on .tile { outline: 3px solid var(--ui-accent); outline-offset: 1px; }
-@media (max-width: 560px) { #pickerDeck .pk-deck-slots { grid-template-columns: repeat(5, minmax(0, 46px)); } }
+@media (max-width: 700px) { #pickerDeck .pk-deck-slots { grid-template-columns: repeat(5, minmax(0, 46px)); } }
 /* ボタンの文字は折り返さない(足りない幅は、ボタンの並びのほうを折り返す) */
 #page-battle :is(.mini-reset, .reset-btn, .primary, .chip) { white-space: nowrap; }
 /* 並んだボタンは高さをそろえる(主ボタンだけ大きくならないように) */
