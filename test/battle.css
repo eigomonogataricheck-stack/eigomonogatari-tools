@@ -268,12 +268,14 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
   #page-battle .hp i, #page-battle .hp b {transition: none !important;}
 }
 /* キャラ選択画面の上に出すデッキ(選択中は常に表示。枠は図鑑の分類タブと同じ枠の中、右側に置く) */
-#pickerDeck .pk-deck-slots { display: grid; grid-template-columns: repeat(5, 54px); gap: 6px; }
+#pickerDeck .pk-deck-cost { margin: 0 0 6px; color: var(--ui-text-sub); font-size: .84rem; font-weight: 700; }
+#pickerDeck .pk-deck-cost b { color: var(--ui-heading); font-size: 1rem; }
+#pickerDeck .pk-deck-slots { display: grid; grid-template-columns: repeat(5, 68px); gap: 10px; }
 #pickerDeck .pk-deck-slot { position: relative; min-width: 0; }
 #pickerDeck .pk-deck-slot .tile { --s: 100%; width: 100%; }
 #pickerDeck .pk-deck-slot .tile.empty { aspect-ratio: 1; border: 1px dashed var(--ui-border); background: #fff; }
 #pickerDeck .pk-deck-slot.on .tile { outline: 3px solid var(--ui-accent); outline-offset: 1px; }
-@media (max-width: 700px) { #pickerDeck .pk-deck-slots { grid-template-columns: repeat(5, minmax(0, 46px)); } }
+@media (max-width: 700px) { #pickerDeck .pk-deck-slots { grid-template-columns: repeat(5, minmax(0, 62px)); gap: 6px; } }
 /* ボタンの文字は折り返さない(足りない幅は、ボタンの並びのほうを折り返す) */
 #page-battle :is(.mini-reset, .reset-btn, .primary, .chip) { white-space: nowrap; }
 /* 並んだボタンは高さをそろえる(主ボタンだけ大きくならないように) */

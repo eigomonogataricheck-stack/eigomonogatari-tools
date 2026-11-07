@@ -795,8 +795,8 @@ registerCharDrag("btslot", {
 /* キャラ選択中は、そのプレイヤーのデッキを選択画面の上に出し続ける(枠を押すとその枠が入れ替え先になる。×で外す) */
 let pk = null;
 function pickerDeckHTML() {
-  const d = S.setup[pk.t][pk.pi].deck;
-  return `<div class="pk-deck-slots">${d.map((c, i) => { const dr = `data-char-drag="btslot:${pk.t}:${pk.pi}:${i}"`;
+  const d = S.setup[pk.t][pk.pi].deck, cost = d.reduce((a, c) => a + (c?.cost || 0), 0);
+  return `<div class="pk-deck-cost">合計コスト <b>${cost}</b></div><div class="pk-deck-slots">${d.map((c, i) => { const dr = `data-char-drag="btslot:${pk.t}:${pk.pi}:${i}"`;
     return `<div class="pk-deck-slot ${pk.sel === i ? "on" : ""}">${c
       ? tileHTML(c.id, c.attrs, `<button type="button" class="x" data-pk="del" data-i="${i}" aria-label="外す">×</button>`, "", "div", `data-pk="sel" data-i="${i}" role="button" tabindex="0" aria-label="${i + 1}番目を入れ替える" ${dr}`)
       : `<button type="button" class="tile empty" data-pk="sel" data-i="${i}" aria-label="${i + 1}番目に入れる" ${dr}>＋</button>`}</div>`; }).join("")}</div>`;

@@ -59,7 +59,7 @@ function openBattle(){
   for(let i=0;i<100&&!(typeof chars!=='undefined'&&chars.length);i++)await new Promise(r=>setTimeout(r,100));
   if(!chars.length)throw new Error('図鑑データがありません');
   for(const f of ['battle-engine','battle-roster','battle-decks','battle-fxdata','battle-fx','battle-brain'])await loadScriptOnce(f+'.js?v=20261107-bt1');
-  await loadScriptOnce('battle-ui.js?v=20261107-bt6');
+  await loadScriptOnce('battle-ui.js?v=20261107-bt8');
   window.initBattle();
  })().catch(e=>{console.error(e);battleLoading=null;app.textContent='仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
 }
