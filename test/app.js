@@ -44,11 +44,30 @@ const PC_MENU=matchMedia('(min-width:1000px)');
 function setSidebarOpen(open){$('sidebar').classList.toggle('open',open);syncMenuToggle()}
 function toggleMenu(){if(!PC_MENU.matches){setSidebarOpen(!$('sidebar').classList.contains('open'));return}let collapsed=document.documentElement.classList.toggle('sidebar-collapsed');try{localStorage.setItem('eigoSidebarCollapsed',collapsed?'1':'0')}catch{}syncMenuToggle()}
 function syncMenuToggle(){let collapsed=document.documentElement.classList.contains('sidebar-collapsed'),open=PC_MENU.matches?!collapsed:$('sidebar').classList.contains('open');$('menuToggle').setAttribute('aria-expanded',String(open));$('menuToggle').setAttribute('aria-label',open?'メニューを閉じる':'メニューを開く');document.querySelectorAll('#sidebar [data-page]').forEach(b=>{if(PC_MENU.matches&&collapsed)b.title=b.textContent.trim();else b.removeAttribute('title')})}
-function showPage(n){if((n==='zukan'||n==='deck')&&typeof mountZukanBrowser==='function')mountZukanBrowser(n);document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
-async function loadData(){try{let r=await fetch('zukan_beta.json',{cache:'no-cache'}).then(x=>{if(!x.ok)throw Error(x.status);return x.json()});chars=Array.isArray(r)?r:(r.characters||[]);if(!chars.length)throw Error('charactersが空です');$('zkStatus').textContent='';initZukanAdvancedFilters();renderZukan();renderTemporaryCharacters();renderPickerTemporary();if(typeof initZukanDeck==='function')initZukanDeck();if(typeof hydrateCoopState==='function')hydrateCoopState()}catch(error){chars=[];$('zkStatus').textContent='図鑑データを読み込めません';console.error(error)}}
+function showPage(n){if(n==='battle')openBattle();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
+async function loadData(){try{let r=await fetch('zukan_beta.json',{cache:'no-cache'}).then(x=>{if(!x.ok)throw Error(x.status);return x.json()});chars=Array.isArray(r)?r:(r.characters||[]);if(!chars.length)throw Error('charactersが空です');$('zkStatus').textContent='';initZukanAdvancedFilters();renderZukan();renderTemporaryCharacters();renderPickerTemporary();if(typeof hydrateCoopState==='function')hydrateCoopState()}catch(error){chars=[];$('zkStatus').textContent='図鑑データを読み込めません';console.error(error)}}
 function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase().includes(q))}
 /* 各ページの「使い方」ボタンで開く短い説明。詳しい仕様は「使い方」ページ(catalog.js の renderComprehensiveHelp) */
+
+// 仮想対戦は重い(エフェクトのデータだけで約1.5MB)ので、ページを最初に開いたときに読み込む
+let battleLoading=null;
+function loadScriptOnce(src){return new Promise((ok,ng)=>{let s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>ng(new Error(src));document.head.append(s)})}
+function openBattle(){
+ if(battleLoading)return;
+ let app=$('battleApp');
+ battleLoading=(async()=>{
+  for(let i=0;i<100&&!(typeof chars!=='undefined'&&chars.length);i++)await new Promise(r=>setTimeout(r,100));
+  if(!chars.length)throw new Error('図鑑データがありません');
+  for(const f of ['battle-engine','battle-roster','battle-decks','battle-fxdata','battle-fx','battle-brain'])await loadScriptOnce(f+'.js?v=20261107-bt1');
+  await loadScriptOnce('battle-ui.js?v=20261107-bt1');
+  window.initBattle();
+ })().catch(e=>{console.error(e);battleLoading=null;app.textContent='仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
+}
 const PAGE_HELP={
+ battle:{title:'仮想対戦の使い方',steps:[
+  '「キャラ選択」で、A・Bそれぞれのチームのデッキを組みます。枠を押すと、図鑑と同じキャラ選択画面が開きます。「キャラ生成」を押すと、縛りとコストに合わせたデッキが自動で入ります。',
+  '「この編成で対戦を始める」を押すと「戦闘」に移ります。各プレイヤーの解答結果・スキルの使用・順番を決めて「ターンを実行」を押します。',
+  '「計算履歴」で、ターンごとのダメージの計算を確認できます。']},
  calculator:{title:'ダメージ計算機の使い方',steps:[
   '「攻撃キャラ」と「攻撃対象キャラ」の枠を押してキャラを選びます。Power(攻撃側)・HP(攻撃対象)・属性が、完凸の値で自動で入ります。',
   'イベント補正・解答結果(Excellent / Correct / 2回目で正解)・自力モード・問題レベルを、実際の対戦に合わせて切り替えます。',
@@ -61,11 +80,6 @@ const PAGE_HELP={
   '「キャラ名で検索」では、名前の一部を入れると該当するキャラが分類ごとに出ます。',
   'キャラを押すと詳細が開きます。詳細から「攻撃キャラに設定」「攻撃対象に設定」「お気に入りに追加」ができます。'],
   tips:['詳細画面は ← →(A・D、J・K でも可)で前後のキャラへ移り、Esc で閉じます。','詳細画面の「凸数」で、無凸〜完凸のHP・Powerを切り替えて見られます(途中の凸は、ゲームの式に図鑑の値を当てはめた推定値)。','絞り込みは、同じ項目の中で複数選ぶと「どれか」、別の項目どうしは「すべて」に当てはまるキャラが出ます。','キャラ画像の右上の☆を押すとお気に入りに登録(★)、もう一度押すと解除できます。','お気に入りのキャラは右上の「お気に入り」と、各ページのキャラ選択から呼び出せます。「お気に入り」のキャラ画像は、各ページのキャラの枠へドラッグしても置けます。']},
- deck:{title:'デッキ作成の使い方',steps:[
-  '「分類」「絞り込み」「キャラ名で検索」でキャラを探します(図鑑と同じ部品で、条件も図鑑と共通です)。',
-  'キャラを押すと、下のデッキ(5枠)の左の空き枠から順に入ります。空き枠を先に押してからキャラを押すと、その枠に入ります。',
-  'デッキの下に、体数と合計コストが出ます。'],
-  tips:['同じキャラは1体までです。デッキに入っているキャラは、一覧で青い枠と「デッキ」の印が付きます。','各キャラの右上の×で外し、「全部外す」で空にします。キャラ画像をドラッグすると枠どうしで入れ替わります(スマホは長押ししてから動かす)。お気に入りのキャラ画像もデッキの枠へドラッグして置けます。','デッキに入っているキャラ画像を押すと、そのキャラの詳細が開きます。','デッキはブラウザーに保存され、次に開いたときも残ります。']},
  coop:{title:'協力ダメージ計算の使い方',steps:[
   '敵を入れます。1〜5層の表の左・真ん中・右の行を押して敵キャラを選ぶと、属性とHP(無凸HP×層の倍率)が自動で出ます。',
   '味方デッキの上の操作欄で、「自力」(自力/他力)と「問題レベル」を実際のプレイに合わせます。全員の火力に掛かります。',

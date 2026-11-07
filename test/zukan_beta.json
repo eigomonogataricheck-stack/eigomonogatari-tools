@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-11-02T08:41:46.981Z",
+  "generatedAt": "2026-11-06T13:29:23.840Z",
   "categoryOrder": [
     [
       "特殊ゆる",
@@ -28179,16 +28179,15 @@
         "limitHp": 6884,
         "limitPower": 3748,
         "skillTurn": 1,
-        "skill": "3ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
+        "skill": "3ターンの間、自身の属性を全属性(3色混合)に変更する。",
         "rare": "MZR",
         "skillEffects": [
           {
             "effect": "色変",
             "value": "全",
             "duration": 3,
-            "applier": "全員",
-            "applierAttribute": "全",
-            "sourceText": "3ターンの間、味方全員の属性を全属性(3色混合)に変更する。",
+            "applier": "自身",
+            "sourceText": "3ターンの間、自身の属性を全属性(3色混合)に変更する。",
             "needsReview": false
           }
         ]

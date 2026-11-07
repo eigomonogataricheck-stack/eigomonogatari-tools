@@ -271,29 +271,3 @@
  .detail-head img{width:88px;height:88px}
  .detail-close{top:10px;right:10px}
 }
-
-/* ===== デッキ作成(#page-deck。処理は deck.js) ===== */
-/* ページの下に貼り付くデッキ欄。上の図鑑の部品(#zukanBrowser)でキャラを押すとここへ入る */
-.deck-tray{position:sticky;bottom:0;z-index:20;display:grid;gap:8px;margin:16px 0 0;padding:12px 14px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--ui-line);border-radius:var(--ui-radius-card) var(--ui-radius-card) 0 0;background:#fff;box-shadow:0 -8px 24px rgba(16,24,40,.12)}
-.deck-tray-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
-.deck-tray-head h2{display:flex;align-items:center;gap:8px;margin:0;color:var(--ui-heading);font-size:1rem;font-weight:850}
-.deck-badge{display:inline-grid;place-items:center;width:29px;height:29px;flex:none;border-radius:8px;background:var(--ui-accent-soft);color:var(--ui-accent);font-size:.7rem;font-weight:900}
-.deck-slots{display:grid;grid-template-columns:repeat(5,minmax(0,72px));justify-content:center;gap:8px}
-.deck-slot{position:relative;display:grid;justify-items:center;gap:3px;min-width:0}
-.deck-slot-pick{display:grid;place-items:center;width:100%;aspect-ratio:1;margin:0;padding:0;overflow:hidden;border:1px solid var(--ui-line);border-radius:10px;background:var(--ui-soft);color:var(--ui-muted);font-weight:850;box-shadow:none;cursor:pointer}
-.deck-slot-pick img{display:block;width:100%;height:100%;object-fit:cover}
-.deck-slot.is-empty .deck-slot-pick{border-style:dashed;border-color:var(--ui-border)}
-.deck-slot.is-target .deck-slot-pick{border:2px solid var(--ui-accent);background:var(--ui-accent-soft);color:var(--ui-accent)}
-.deck-slot small{max-width:100%;overflow-wrap:anywhere;color:var(--ui-text-sub);font-size:.66rem;font-weight:800;line-height:1.2;text-align:center}
-.deck-slot-remove{position:absolute;top:-6px;right:-6px;z-index:1;display:grid;place-items:center;width:22px;height:22px;min-height:0;margin:0;padding:0;border-radius:50%;font-size:13px;line-height:1}
-.deck-summary{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin:0}
-.deck-summary div{display:flex;gap:5px;align-items:baseline}
-.deck-summary dt{color:var(--ui-muted);font-size:.72rem;font-weight:800}
-.deck-summary dd{margin:0;color:var(--ui-heading);font-size:.84rem;font-weight:850;font-variant-numeric:tabular-nums}
-.deck-status{min-height:1.4em;margin:0;color:var(--ui-text-sub);font-size:.78rem;font-weight:700;text-align:center}
-.deck-status[data-state=success]{color:#157347}
-.deck-status[data-state=error]{color:var(--ui-danger)}
-/* デッキに入っているキャラの印 */
-.zk-card-wrap.in-deck .zk-card{outline:2px solid var(--ui-accent);outline-offset:-2px;background:var(--ui-accent-soft)}
-.zk-card-wrap.in-deck::after{content:"デッキ";position:absolute;top:4px;left:4px;padding:1px 5px;border-radius:999px;background:var(--ui-accent);color:#fff;font-size:.6rem;font-weight:850;pointer-events:none}
-@media(max-width:600px){.deck-tray{margin-inline:-6px;padding-inline:10px}.deck-slots{gap:6px}}
