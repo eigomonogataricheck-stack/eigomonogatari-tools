@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-11-07T16:12:47.378Z",
+  "generatedAt": "2026-11-08T11:57:09.836Z",
   "categoryOrder": [
     [
       "特殊ゆる",
@@ -42308,7 +42308,7 @@
         "limitHp": 3578,
         "limitPower": 4771,
         "skillTurn": 4,
-        "skill": "1ターンの間、火属性の敵に対する自身の攻撃力を1780%増加させる。",
+        "skill": "1ターンの間、風属性の敵に対する自身の攻撃力を1780%増加させる。",
         "rare": "MZR",
         "skillEffects": [
           {
@@ -42316,9 +42316,9 @@
             "value": 17.8,
             "duration": 1,
             "applier": "自身",
-            "target": "火",
-            "targetAttribute": "火",
-            "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を1780%増加させる。",
+            "target": "風",
+            "targetAttribute": "風",
+            "sourceText": "1ターンの間、風属性の敵に対する自身の攻撃力を1780%増加させる。",
             "needsReview": false
           }
         ]
