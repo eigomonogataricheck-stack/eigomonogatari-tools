@@ -45,7 +45,7 @@ function closeMoreSheet(){let s=$('moreSheet');if(!s)return;s.hidden=true;$('mor
 function setSidebarOpen(open){$('sidebar').classList.toggle('open',open);syncMenuToggle()}
 function toggleMenu(){if(!PC_MENU.matches){setSidebarOpen(!$('sidebar').classList.contains('open'));return}let collapsed=document.documentElement.classList.toggle('sidebar-collapsed');try{localStorage.setItem('eigoSidebarCollapsed',collapsed?'1':'0')}catch{}syncMenuToggle()}
 function syncMenuToggle(){let collapsed=document.documentElement.classList.contains('sidebar-collapsed'),open=PC_MENU.matches?!collapsed:$('sidebar').classList.contains('open');$('menuToggle').setAttribute('aria-expanded',String(open));$('menuToggle').setAttribute('aria-label',open?'メニューを閉じる':'メニューを開く');document.querySelectorAll('#sidebar [data-page]').forEach(b=>{if(PC_MENU.matches&&collapsed)b.title=b.textContent.trim();else b.removeAttribute('title')})}
-function showPage(n){closeMoreSheet();$('moreToggle')?.classList.toggle('active',['battle','help','migration'].includes(n));if(n==='battle')openBattle();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
+function showPage(n){closeMoreSheet();$('moreToggle')?.classList.toggle('active',['battle','ai','help','migration'].includes(n));if(n==='battle')openBattle();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
 async function loadData(){try{let r=await fetch('zukan_beta.json',{cache:'no-cache'}).then(x=>{if(!x.ok)throw Error(x.status);return x.json()});chars=Array.isArray(r)?r:(r.characters||[]);if(!chars.length)throw Error('charactersが空です');$('zkStatus').textContent='';initZukanAdvancedFilters();renderZukan();renderTemporaryCharacters();renderPickerTemporary();if(typeof hydrateCoopState==='function')hydrateCoopState()}catch(error){chars=[];$('zkStatus').textContent='図鑑データを読み込めません';console.error(error)}}
 function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase().includes(q))}
 /* 各ページの「使い方」ボタンで開く短い説明。詳しい仕様は「使い方」ページ(catalog.js の renderComprehensiveHelp) */
@@ -59,8 +59,8 @@ function openBattle(){
  battleLoading=(async()=>{
   for(let i=0;i<100&&!(typeof chars!=='undefined'&&chars.length);i++)await new Promise(r=>setTimeout(r,100));
   if(!chars.length)throw new Error('図鑑データがありません');
-  for(const f of ['battle-engine','battle-roster','battle-decks','battle-models','battle-compat','battle-fxdata','battle-fx','battle-brain'])await loadScriptOnce(f+'.js?v=20261121-ai6');
-  await loadScriptOnce('battle-ui.js?v=20261121-ai6');
+  for(const f of ['battle-engine','battle-roster','battle-decks','battle-models','battle-compat','battle-fxdata','battle-fx','battle-brain'])await loadScriptOnce(f+'.js?v=20261121-ai8');
+  await loadScriptOnce('battle-ui.js?v=20261121-ai8');
   window.initBattle();
  })().catch(e=>{console.error(e);battleLoading=null;app.textContent='仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
 }
@@ -174,3 +174,5 @@ function registerCharDrag(kind,handler){charDragKinds[kind]=handler}
 registerCharDrag('calc',{get:r=>selected[r]||null,swap:()=>swap(),place:(r,c)=>setCharacter(r,c)});
 registerCharDrag('calc-borrow',{get:()=>null,accepts:(r,c)=>pickerSkillAllowed(c,'skill',r),place:(r,c)=>addBorrowedSkill(r,c)});
 registerCharDrag('temp',{get:key=>chars.find(c=>characterKey(c)===key)||null});
+/* 対戦AIのしくみ: 目次から開く・すべて開く/閉じる */
+document.addEventListener('click',e=>{let l=e.target.closest('[data-ai-open]');if(l){e.preventDefault();let d=document.getElementById(l.dataset.aiOpen);if(d){d.open=true;d.scrollIntoView({behavior:'smooth',block:'start'})}return}let b=e.target.closest('[data-ai-all]');if(b)document.querySelectorAll('#page-ai .ai-sec').forEach(d=>d.open=b.dataset.aiAll==='open')});
