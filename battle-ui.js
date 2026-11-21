@@ -81,10 +81,10 @@ const GEN = (() => {
   }
   const total = (ids) => ids.reduce((a, id) => a + BYID.get(id).cost, 0);
   // 環境再現のデッキ(縛り×コスト帯ごと)。今の図鑑に無いキャラを含むデッキと、上限・縛りに合わないデッキは除く
-  // 比率(その試合の9デッキ:使用率)ごとの結果があり、S.auto.env で選ぶ("" = 実データから1体ずつ)
+  // 比率(その試合の9デッキ:使用率)ごとの結果があり、常に band5(強いデッキ)を使う
   const envCache = new Map();
   function ENVD(si, b) {
-    const vid = (typeof S !== "undefined" && S.auto.env) || "", v = vid && window.ENV_DECKS && (window.ENV_DECKS.variants || []).find((x) => x.id === vid);
+    const vs = (window.ENV_DECKS && window.ENV_DECKS.variants) || [], v = vs.find((x) => x.id === "band5") || vs[0], vid = v ? v.id : "";
     const k = `${vid}|${si},${b}`; if (envCache.has(k)) return envCache.get(k);
     const list = (v && v.envs[`${si},${b}`]) || [], allow = SHIBARI[si][1], decks = [], w = [];
     for (const [ids, share] of list) {
@@ -96,6 +96,14 @@ const GEN = (() => {
   }
   return {
     usesEnv: (si, b) => !!ENVD(si, b),
+    /* n 人分を、使用率の累積に等間隔の点を当てて選ぶ(使用率10%なら10人中ちょうど1人。乱数だけだと同じデッキが重なる)。順番は混ぜる */
+    decks(si, b, rnd, n) {
+      const env = ENVD(si, b); if (!env || !n) return null;
+      const tot = env.w.reduce((a, x) => a + x, 0), out = []; let off = rnd(), acc = 0, i = 0;
+      for (let k = 0; k < n; k++) { const t = ((k + off) / n) * tot; while (i < env.decks.length - 1 && acc + env.w[i] <= t) { acc += env.w[i]; i++; } out.push(env.decks[i].slice()); }
+      for (let k = out.length - 1; k > 0; k--) { const j = Math.floor(rnd() * (k + 1)); [out[k], out[j]] = [out[j], out[k]]; }
+      return out;
+    },
     /* デッキ内の組み合わせの強さの平均(確認用) */
     strength(ids) { let s = 0, n = 0; for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) { s += synLog(ids[i], ids[j]); n++; } return n ? s / n : 0; },
     /* 1人分のデッキ。合計コストは、必ず縛りコスト(BANDS[b][1])以下。
@@ -116,9 +124,10 @@ const GEN = (() => {
 function autoDecks(opt, setup, only) {
   const rnd = mulberry(Number(opt.seed) || 1), si = Math.max(0, SHIBARI.findIndex((x) => x[0] === opt.shibari)), b = Math.max(0, BANDS.findIndex((x) => x[0] === opt.band));
   let short = 0;
-  for (const t of ["A", "B"]) for (const p of setup[t]) {
-    if (only && !only(t, p)) continue;
-    const ids = GEN.deck(si, b, rnd, DECK_DEFAULT);   // 合計コストは必ず縛りコスト(BANDS[b][1])以下
+  const targets = []; for (const t of ["A", "B"]) for (const p of setup[t]) if (!only || only(t, p)) targets.push(p);
+  const pre = GEN.decks(si, b, rnd, targets.length);   // 環境の使用率どおりに等間隔で選ぶ(ばらつき・偏りを減らす)
+  for (const p of targets) {
+    const ids = pre ? pre.pop() : GEN.deck(si, b, rnd, DECK_DEFAULT);   // 合計コストは必ず縛りコスト(BANDS[b][1])以下
     if (ids.length < DECK_DEFAULT) short++;
     if (ids.length) p.deck = ids.map(specOf);
     padDeck(p);
@@ -133,7 +142,7 @@ const n2 = (x) => Number(x).toLocaleString("ja-JP", { maximumFractionDigits: 3 }
 
 const S = {
   tab: "select", setup: null, rules: { count_step: 1, damage_rand: [0.9, 1.1], damage_rounding: "none", max_turns: 40, seed: 1 },
-  auto: { shibari: "全", band: "高", seed: 1, env: (window.ENV_DECKS && window.ENV_DECKS.variants && window.ENV_DECKS.variants[0] && window.ENV_DECKS.variants[0].id) || "" },
+  auto: { shibari: "全", band: "高", seed: 1, env: "" },
   closed: new Set(), inputs: [], battle: null, draft: {}, picker: null, io: null, imgs: new Map(), openTurns: new Set(),
 };
 
@@ -178,7 +187,7 @@ const padDeck = (p) => { p.deck = (p.deck || []).slice(0, 5); while (p.deck.leng
 /* 1人分の自動生成(相性AI): 周りの9デッキ(5体そろった人だけ)に対して、相性表の点数が一番高いデッキを図鑑の全キャラから探す(web/compat_ai.js)。
    周りの9人が全員そろっていれば、2段目で「全体を読む形」(web/compat_set.js。線 s1)が実際の並び(味方・敵・リーダー)の50体を読んで探し直す。
    計算は全部で最大 30 秒(2026-11-21 ユーザー)。縛り・縛りコストは「キャラ生成」で選んだもの。周りにデッキが無ければ false(従来の作り方に任せる) */
-const COMPAT_MS = 30000;
+const COMPAT_MS = 5000;
 let compatBusy = false;
 const fullDeck = (d) => !!d && d.length === 5 && d.every((c) => c && BYID.has(c.id));   // 5枠すべて入っていて、図鑑にいる(サイトの枠は null の穴があり得る)
 function compatOne(p) {
@@ -536,12 +545,9 @@ function renderSelect() {
   const au = S.auto;
   const bandCap = (BANDS.find((x) => x[0] === au.band) || BANDS[2])[1];
   const envOn = GEN.usesEnv(Math.max(0, SHIBARI.findIndex((x) => x[0] === au.shibari)), Math.max(0, BANDS.findIndex((x) => x[0] === au.band)));
-  const autoPanel = `<section class="bt-card"><div class="row"><h2>キャラ生成</h2><span class="muted">${envOn
-    ? "縛りと縛りコストを選んで「キャラ生成」を押すと、環境再現(相性AIで、2連敗したらデッキを変える対戦を使用率が落ち着くまで繰り返したもの)の、その縛り・縛りコストでのデッキの使用率に基づいて、全員のデッキをデッキごと選びます。"
-    : "縛りと縛りコストを選んで「キャラ生成」を押すと、2025年12月4日〜2026年5月24日の対戦データ(その縛りでの、枠ごとの使用率・同じデッキでのキャラの組み合わせ)に基づいて、全員のデッキを作ります。"}</span></div>
+  const autoPanel = `<section class="bt-card"><div class="row"><h2>キャラ生成</h2><span class="muted">強いデッキの環境(相性AIで、2連敗したらデッキを変える対戦を使用率が落ち着くまで繰り返したもの)の、その縛り・縛りコストでのデッキの使用率どおりに、全員のデッキを選びます。縛りと縛りコストを選んで「キャラ生成」を押してください。<br>環境に出ているデッキを、5体そのまま丸ごと使います(キャラごとには選びません)。以前は1人ずつ無作為に選んでいたため人気デッキが重なる偏りがありましたが、今は使用率の割合どおりに、全員分をまとめて均等に割り振ります(使用率10%なら10人中およそ1人)。</span></div>
     <div class="row" style="margin-top:8px;gap:8px"><span class="muted">縛り</span><div class="chips lg">${chips(SHIBARI.map((x) => x[0]), au.shibari, "shibari")}</div></div>
     <div class="row" style="margin-top:8px;gap:8px"><span class="muted">縛りコスト</span><div class="chips lg">${BANDS.map(([n, , r]) => `<button class="chip ${n === au.band ? "on" : ""}" data-act="band" data-v="${n}">${n}<span style="font-weight:400">(${r})</span></button>`).join("")}</div></div>
-    ${(window.ENV_DECKS?.variants || []).length ? `<div class="row" style="margin-top:8px;gap:8px"><span class="muted">環境再現(9デッキ:使用率)</span><div class="chips lg">${[["", "実データ"], ...window.ENV_DECKS.variants.map((v) => [v.id, v.label])].map(([id, l]) => `<button class="chip ${id === (au.env || "") ? "on" : ""}" data-act="envv" data-v="${esc(id)}">${esc(l)}</button>`).join("")}</div><span class="muted">(試算。今は縛り「全」だけ。他の縛りは実データから作ります)</span></div>` : ""}
     <div class="row" style="margin-top:8px"><button class="primary" data-act="autoall">キャラ生成</button>
       <span class="muted">どのデッキも、合計コストは ${bandCap} 以下です。押すたびに別のデッキになります。各プレイヤーの「自動生成」で1人分だけ作り直せます。</span></div></section>`;
   return `${autoPanel}<div class="cols">${team("A")}${team("B")}</div>
@@ -920,7 +926,6 @@ document.addEventListener("click", (ev) => {
   else if (act === "editc") { openSlotPicker(c.t, c.pi, c.ci); return; }
   else if (act === "shibari") S.auto.shibari = el.dataset.v;
   else if (act === "band") S.auto.band = el.dataset.v;
-  else if (act === "envv") S.auto.env = el.dataset.v;
   else if (act === "autoone" && window.CompatAI && compatOne(c.p)) { S.battle = null; }   // 1人分: 周りの9デッキに対して相性AIで一番点数の高いデッキ(計算は少し後で。終わったら描き直す)
   else if (act === "autoall" || act === "autoone") {
     S.auto.seed = Math.floor(Math.random() * 1e9) + 1;
