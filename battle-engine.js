@@ -200,9 +200,9 @@ class Battle {
   attr_mult(atk, def) {
     const beats = this.rules.attr_beats, m = this.rules.attr_mult;
     if (!atk.length || !def.length) return m.same;
-    const vals = [];
-    for (const a of atk) for (const d of def) vals.push(a === d ? m.same : beats[a] === d ? m.advantage : m.disadvantage);
-    return vals.reduce((s, v) => s + v, 0) / vals.length;
+    let s = 0, n = 0;   // 全組み合わせの平均(足す順は以前の配列版と同じなので結果も同じ)
+    for (const a of atk) for (const d of def) { s += a === d ? m.same : beats[a] === d ? m.advantage : m.disadvantage; n++; }
+    return s / n;
   }
   _roll() { const [lo, hi] = this.rules.damage_rand; return lo === hi ? lo : this.rng.uniform(lo, hi); }
   _round_dmg(x) {
@@ -258,6 +258,7 @@ class Battle {
     const acts = this._parse_inputs(inp);
     this.turn += 1; this._events = []; this._acts = []; this._revived_now = new Set(); this._last_used = null;
     for (const p of this.all_players) for (const c of p.deck) c.delayed_now = false; // APK: 毎ターン isCountDelayed を戻す
+    this._cont_tick("cont_shorten", (act, e) => this._do_shorten(act, e.data, true));   // 継続化した短縮(架空キャラ用): 入力の前に毎ターン
     const order = [...(inp.skill_order || [])];
 
     let wanting = order.filter((pid) => this.players[pid]);
@@ -333,6 +334,7 @@ class Battle {
     this._last_used = null;
     this._phase_attack(acts);
     // 蘇生(APK FireSkillAfterEnemyAttack: 蘇生できる相手がいる時だけ発動し、いなければ消費しない)
+    this._cont_tick("cont_revive", (act, e) => this._revive_apply(act, e.data, this.teams[e.team]));   // 継続化した蘇生(架空キャラ用。このターンに発動した分は次のターンから)
     for (const act of [...this._acts]) for (const eff of act.skill.effects || []) if (eff.type === "revive") { this._try_revive(act, eff); break; }
     this._fin_snap();
     this._countdown(acts, counters);
@@ -384,8 +386,9 @@ class Battle {
   }
   // APK: nsCount が -9999(スキル無し/上限) か -9998(このターン使用済み)なら短縮・遅延の対象外
   _no_skill(c) { return !c.skill || c.uses >= this.rules.max_skill_uses || c.used_now; }
-  _do_shorten(act, eff) {
+  _do_shorten(act, eff, tick) {
     const team = this.teams[act.char.team], hit = [], changes = [];
+    if (!tick) this._cont_push(act, eff, "cont_shorten");
     for (const c of this._targets(act, team, eff, "team")) {
       if (this._no_skill(c)) continue;
       const before = c.count; c.count -= parseInt(eff.amount ?? 1, 10);
@@ -399,6 +402,7 @@ class Battle {
   // APK TryToUseSkill(種別9): 遅延だけは発動時に CanUseSkill を見ない(同じターンに相手の遅延を受けても発動する)。
   // ただし遅延できる相手が1体もいなければ発動せず、スキルも消費しない(使用回数・カウントはそのまま)
   _phase_delay() {
+    this._cont_tick("cont_delay", (act, e) => this._do_delay(act, e.data));   // 継続化した遅延(架空キャラ用)
     for (const act of [...this._acts]) {
       const effs = (act.skill.effects || []).filter((e) => e.type === "delay");
       if (!effs.length || act.cancelled) continue;
@@ -410,7 +414,26 @@ class Battle {
         }
         this._commit(act);
       }
-      for (const eff of effs) this._do_delay(act, eff, 6);
+      for (const eff of effs) { this._do_delay(act, eff, 6); this._cont_push(act, eff, "cont_delay"); }
+    }
+  }
+  /* 継続化(架空キャラ用。実在キャラの蘇生・短縮・遅延は turns を持たないので動きは変わらない): turns>=2 なら、発動したターンのあと
+     turns-1 ターン、毎ターン同じタイミングで同じ効果をもう一度出す(短縮=入力の前、遅延=遅延の段、蘇生=攻撃のあと)。
+     効果はチームに付き、発動キャラが倒れても続く(対象が「自身」なら、そのキャラが出場中のときだけ効く) */
+  _cont_push(act, eff, kind) {
+    const turns = parseInt(eff.turns ?? 1, 10);
+    if (turns < 2) return;
+    const data = { ...eff }; delete data.type;
+    this.teams[act.char.team].effects.push(new Effect(kind, data, act.char, act.char.team, turns - 1, this._seq++));
+  }
+  _cont_tick(kind, fn) {
+    for (const t of Object.values(this.teams)) {
+      for (const e of [...t.effects]) {
+        if (e.kind !== kind) continue;
+        fn(new Act(this.players[e.owner.pid], e.owner), e);
+        e.remaining -= 1;
+      }
+      t.effects = t.effects.filter((e) => e.kind !== kind || e.remaining > 0);
     }
   }
   _do_delay(act, eff) {
@@ -616,6 +639,16 @@ class Battle {
     }
     if (!cands.length) { this._ev(12, "skill_unused", `${act.player.id} ${act.char.name} の蘇生は対象がいないため発動しなかった(スキルは残る)`, { pid: act.player.id }); return; }
     if (!act.committed) this._commit(act);
+    this._revive_apply(act, eff, team);
+    this._cont_push(act, eff, "cont_revive");
+  }
+  _revive_apply(act, eff, team) {
+    const cands = [];
+    for (const p of team.players) {
+      const c = p.ghost ? p.deck[p.deck.length - 1] : p.active_char;
+      if (!c || c.alive || c.revived_used) continue;
+      if (this._revive_scope_ok(act, eff, c, team)) cands.push([p, c]);
+    }
     const rate = parseFloat(eff.hp_rate ?? 1.0);
     for (const [p, c] of cands) {
       c.revived_used = true;
@@ -630,7 +663,7 @@ class Battle {
     for (const t of Object.values(this.teams)) {
       const keep = [];
       for (const e of t.effects) {
-        if (e.kind === "regen") { keep.push(e); continue; }
+        if (e.kind === "regen" || e.kind.startsWith("cont_")) { keep.push(e); continue; }   // tick で消費する
         e.remaining -= 1;
         if (e.remaining > 0) keep.push(e);   // APK NextTurn: 残りターンが0で消える(発動キャラが倒れても消えない)
       }

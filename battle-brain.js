@@ -1,4 +1,4 @@
-/* 英語物語 対戦 操作AI「EigoBrain」(ブラウザ/Node 両対応)
+/* 【改善計算の操作(tools/lab/brain_lab.js が web/brain.js から作った物)】英語物語 対戦 操作AI「EigoBrain」(ブラウザ/Node 両対応)
  *
  * 1ターン分の操作を、その時点で見える情報だけから「判断ルール」で決める。対戦を先読み計算(盤面の複製・試行)はしない。
  *   - 回答は全員速答
@@ -116,6 +116,10 @@ function mergeParams(base, p) {
   for (const k of ["att", "tgt", "wrong"]) if (Array.isArray(p[k])) cp(out[k], p[k]);
   for (const k of ["use", "ord"]) if (p[k]) for (const t of TYPES) if (Array.isArray(p[k][t])) cp(out[k][t], p[k][t]);
   if (p.hold7) out.hold7 = JSON.parse(JSON.stringify(p.hold7));
+  if (p.use7_lab) { if (!out.use7) out.use7 = use7Default(out); for (const t of Object.keys(p.use7_lab)) out.use7[t] = p.use7_lab[t].slice(); }   // lab: 学び直したスキルの重み
+  if (Array.isArray(p.rules)) out.rules = p.rules.map((r) => ({ c: r.c.map((c) => [c[0], c[1] > 0.5, c[2]]), w: r.w }));   // lab: 狙いの決まり
+  if (p.search) out.search = Object.assign({}, LAB_SDEF, p.search);   // lab: 探索の定数
+  if (p.value) out.value = Object.assign({ hand: 0, w: 1 }, p.value);   // lab: 盤面の良さ
   if (p.use7) { out.use7 = {}; for (const t of TYPES) { const v = (p.use7[t] || []).slice(0, NF7); while (v.length < NF7) v.push(0); out.use7[t] = v; } }   // 第7版の使う/温存の重み
   return out;
 }
@@ -806,22 +810,33 @@ function nextFight(ctx, A, D, mods) {
   const m = mods || {};
   let cover = -1, coverCut = 0;
   if (m.cover != null) { cover = D.findIndex((d) => d.pid === m.cover); coverCut = m.coverCut || 0; }
-  const dmgOf = (a, k) => {
-    let d = a.pw * r.damage_const * (a.ghost ? r.ghost_attr_mult : a.attrs && D[k].attrs ? b.attr_mult(a.attrs, D[k].attrs) : 1);
-    if (!a.ghost) { d *= (1 + (a.up || 0)); if (m.cut && m.cut[k]) d *= 1 - m.cut[k]; }
-    return d * SIM_F;
+  // 1撃のダメージは攻撃側×守り側で決まるので、先に表にしておく(計算の順番は以前の dmgOf と同じなので値も同じ)
+  const dmgRow = (a) => {
+    const row = new Array(D.length);
+    for (let k = 0; k < D.length; k++) {
+      let d = a.pw * r.damage_const * (a.ghost ? r.ghost_attr_mult : a.attrs && D[k].attrs ? b.attr_mult(a.attrs, D[k].attrs) : 1);
+      if (!a.ghost) { d *= (1 + (a.up || 0)); if (m.cut && m.cut[k]) d *= 1 - m.cut[k]; }
+      row[k] = d * SIM_F;
+    }
+    return row;
   };
-  const att = A.filter((a) => a.ghost || a.hp > 0).map((a) => Object.assign({}, a, a.mod || {}));
+  // 攻撃側は必要な値だけ写す(mod = 次のターンに使えるスキルの上乗せ: up・hits・all)
+  const att = [];
+  for (const a of A) {
+    if (!(a.ghost || a.hp > 0)) continue;
+    const mo = a.mod || {};
+    att.push({ pw: a.pw, ghost: a.ghost, attrs: a.attrs, up: mo.up !== undefined ? mo.up : a.up, hits: mo.hits !== undefined ? mo.hits : a.hits, all: mo.all !== undefined ? mo.all : a.all });
+  }
   att.sort((x, y) => y.pw * (y.hits || 1) - x.pw * (x.hits || 1));
   for (const a of att) {
-    const hits = a.hits || 1;
+    const hits = a.hits || 1, dm = dmgRow(a);
     for (let h = 0; h < hits; h++) {
-      if (a.all) { for (let k = 0; k < D.length; k++) if (alive[k]) { const kk = cover >= 0 && alive[cover] && !a.ghost ? cover : k; hp[kk] -= dmgOf(a, kk) * (kk === cover ? 1 - coverCut : 1); if (hp[kk] <= 0) alive[kk] = false; } continue; }
-      if (cover >= 0 && alive[cover] && !a.ghost) { hp[cover] -= dmgOf(a, cover) * (1 - coverCut); if (hp[cover] <= 0) alive[cover] = false; continue; }
+      if (a.all) { for (let k = 0; k < D.length; k++) if (alive[k]) { const kk = cover >= 0 && alive[cover] && !a.ghost ? cover : k; hp[kk] -= dm[kk] * (kk === cover ? 1 - coverCut : 1); if (hp[kk] <= 0) alive[kk] = false; } continue; }
+      if (cover >= 0 && alive[cover] && !a.ghost) { hp[cover] -= dm[cover] * (1 - coverCut); if (hp[cover] <= 0) alive[cover] = false; continue; }
       let best = -1, bv = -1;
-      for (let k = 0; k < D.length; k++) { if (!alive[k]) continue; const d = dmgOf(a, k); const v = d >= hp[k] ? 2 + hp[k] / Math.max(1, D[k].max || hp[k]) : d / Math.max(1, hp[k]); if (v > bv) { bv = v; best = k; } }
+      for (let k = 0; k < D.length; k++) { if (!alive[k]) continue; const d = dm[k]; const v = d >= hp[k] ? 2 + hp[k] / Math.max(1, D[k].max || hp[k]) : d / Math.max(1, hp[k]); if (v > bv) { bv = v; best = k; } }
       if (best < 0) break;
-      hp[best] -= dmgOf(a, best); if (hp[best] <= 0) alive[best] = false;
+      hp[best] -= dm[best]; if (hp[best] <= 0) alive[best] = false;
     }
   }
   let kills = 0; D.forEach((d, k) => { if (!d.ghost && d.hp > 0 && !alive[k]) kills++; });
@@ -840,12 +855,14 @@ function readyMods(side, other, skip) {
   }
   return { cut, cover, coverCut };
 }
-function projectNext(ctx, ev, ownPid, usedNow, extra) {
+/* fixed = { my, myDef }: 味方側の見積もりが候補ごとに変わらないとき(狙い・攻撃順の探索)に、先に作ったものを使い回す(nextFight は my を書き換えない) */
+function projectNext(ctx, ev, ownPid, usedNow, extra, fixed) {
   const lossMy = (c) => ev.inc.get(c.uid) || 0, lossEn = (c) => (ev.rem && ev.rem.has(c.uid) ? ctx.preHp(c) - Math.max(0, ev.rem.get(c.uid)) : 0);
-  const my = nextSide(ctx, ctx.my, lossMy, ownPid, usedNow), en = nextSide(ctx, ctx.en, lossEn, null, new Set());
-  const myDef = readyMods(my, en, extra && extra.skip), enDef = readyMods(en, my, null);
+  const my = fixed ? fixed.my : nextSide(ctx, ctx.my, lossMy, ownPid, usedNow), en = nextSide(ctx, ctx.en, lossEn, null, new Set());
+  const myDef = fixed ? fixed.myDef : readyMods(my, en, extra && extra.skip), enDef = readyMods(en, my, null);
   if (extra && extra.apply) extra.apply(my, myDef);
   const deaths = nextFight(ctx, en, my, myDef), kills = nextFight(ctx, my, en, enDef);
+  if (fixed) return { my, en, deaths, kills };   // 探索では倒される・倒せる見込みだけ使う
   const cnt = (S, f) => S.filter(f).length;
   return { my, en, deaths, kills,
     enOff: cnt(en, (u) => u.ready && OFF3T.has(u.t)), enDef: cnt(en, (u) => u.ready && (u.t === "cover" || u.t === "shield" || u.t === "heal" || u.t === "revive")),
@@ -1173,6 +1190,17 @@ function skillSoon(b, y) {
   if (!y.skill || y.uses >= b.rules.max_skill_uses) return 0;
   return y.count <= 1 ? 1 : y.count === 2 ? 0.4 : 0;
 }
+/* 狙いの優先(ユーザー指定 2026-11-10): ① 残りキャラが一番多い相手 ② その中でスキルカウントが1(次のターンにスキルが発動する)の相手。あとは今まで通り(点数)。
+   cands のうち、見込みの残りHPが0より多い相手(rem があるとき。全員倒れる見込みなら全員)から選ぶ。opt.prioTarget=false で切る(比較用) */
+function prioTargets(ctx, cands, rem) {
+  if (ctx.opt.prioTarget === false || cands.length <= 1) return cands;
+  const b = ctx.b;
+  let c = rem ? cands.filter((y) => rem.get(y.uid) > 0) : cands; if (!c.length) c = cands;
+  let mx = 0; for (const y of c) mx = Math.max(mx, leftOf(b.players[y.pid]));
+  c = c.filter((y) => leftOf(b.players[y.pid]) >= mx);
+  const c1 = c.filter((y) => y.skill && y.uses < b.rules.max_skill_uses && y.count === 1);
+  return c1.length ? c1 : c;
+}
 function targetFeatures(ctx, ai, y, rem, thr, maxThr, revivable, kanpai) {
   const b = ctx.b, f = new Array(30).fill(0);
   const q = b.players[y.pid], hp = rem.get(y.uid), d = ai.hits * ctx.hit(ai, y, null);
@@ -1212,6 +1240,77 @@ function targetFeatures(ctx, ai, y, rem, thr, maxThr, revivable, kanpai) {
    seq = [{ x: {p, ai}, tgt: 相手キャラ or null }]。ダメージは乱数の下ぶれを見て少し控えめ(SIM_F)に見積もる */
 const SIM_F = 0.95;
 const NEXTW_DEF = { d: 0.5, k: 0.3 };
+/* ---- lab(改善計算の操作。tools/lab/brain_lab.js が足した物) ---- */
+const LAB_SDEF = { nx_d: 0.5, nx_k: 0.3, margin: 0.02, sc_eff: 0.15, sc_stray: 0.05 };
+const labS = (P) => P.search || LAB_SDEF;
+const labTl = (tm) => tm.players.reduce((a, p) => a + (p.ghost ? 0 : leftOf(p)), 0);
+const LAB_K = ["atk_up", "multi_attack", "all_attack", "shield", "cover", "heal", "color_change", "shorten", "delay", "revive"];
+function labQcat(ctx, ai, y, rem, f, maxD, ncand, useSkill) {
+  const b = ctx.b, hp = Math.max(0, rem.get(y.uid)), m = mainEff(y), d = ai.hits * ctx.hit(ai, y, null), maxU = b.rules.max_skill_uses;
+  const q = [hp, hp / Math.max(1, y.max_hp), y.max_hp, y.power, leftOf(b.players[y.pid]), f[13], f[4],
+    y.skill ? Math.max(0, y.count) : 99, y.skill && y.uses < maxU && y.count === 1 ? 1 : 0, y.skill ? Math.max(0, maxU - y.uses) : 0, Math.min(magOf(m), 10), m && m.turns != null ? Number(m.turns) : 0];
+  const kind = m ? m.type : null;
+  for (const k of LAB_K) q.push(kind === k ? 1 : 0);
+  q.push(kind == null ? 1 : 0);
+  const xc = ai.c || null;
+  q.push(d, Math.min(d / Math.max(1, hp), 5), f[0], f[10], f[11], ai.hits, xc ? xc.hp / Math.max(1, xc.max_hp) : 0, ai.base, xc ? leftOf(b.players[xc.pid]) : 0, useSkill ? 1 : 0, ai.ups ? ai.ups.length : 0,
+    b.turn, labTl(ctx.my), labTl(ctx.en), labTl(ctx.my) - labTl(ctx.en), ncand, f[19], f[3], f[24], f[25], f[14]);
+  for (let i = 0; i < 30; i++) q.push(f[i]);
+  q.push(maxD > 0 ? d / maxD : 0);
+  for (let i = 0; i < q.length; i++) if (!Number.isFinite(q[i])) q[i] = 0;
+  return q;
+}
+function labRule(ctx, P, ai, y, rem, f, maxD, ncand, useSkill) {
+  const rs = P.rules; if (!rs || !rs.length) return 0;
+  const q = labQcat(ctx, ai, y, rem, f, maxD, ncand, useSkill);
+  let s = 0;
+  for (const r of rs) if (r.c.every(([i, gt, t]) => (gt ? q[i] > t : q[i] <= t))) s += r.w;
+  return s;
+}
+/* 盤面の良さの入力(36個)。今のターンの攻撃(rem)と相手の攻撃の見込みを当てた後の「次のターンの両チーム」を数字にする(rsim_lab の val_feats と同じ順・同じ計算) */
+function labValFeats(ctx, theirs, rem, my, pj) {
+  const b = ctx.b, r = b.rules, f = new Array(36).fill(0), en = pj.en;
+  const myTl = labTl(ctx.my), enTl = labTl(ctx.en);
+  f[0] = b.turn / Math.max(1, r.max_turns); f[1] = myTl / 25; f[2] = enTl / 25;
+  f[3] = ctx.my.players.filter((p) => !p.ghost && front(p)).length / 5; f[4] = theirs.length / 5;
+  const sideF = (S, o) => {
+    let surv = 0, fresh = 0, ghost = 0, newg = 0, hp = 0, mx = 0, mn = 1, off = 0, def = 0, oth = 0, low = 0, pw = 0, hps = 0;
+    for (const u of S) {
+      pw += u.pw;
+      if (u.ghost) { ghost++; if (u.fresh) newg++; continue; }
+      hps += u.hp;
+      if (u.fresh) { fresh++; continue; }
+      if (u.surv) { surv++; hp += u.hp; mx += u.max; const fr = u.hp / Math.max(1, u.max); if (fr < mn) mn = fr; if (fr < 0.3) low++;
+        if (u.ready) { if (OFF3T.has(u.t)) off++; else if (u.t === "cover" || u.t === "shield" || u.t === "heal" || u.t === "revive") def++; else oth++; } }
+    }
+    f[o] = surv / 5; f[o + 1] = fresh / 5; f[o + 2] = ghost / 5; f[o + 3] = newg / 5; f[o + 4] = mx > 0 ? clamp(hp / mx, 0, 2) : 0; f[o + 5] = mn;
+    f[o + 6] = off / 5; f[o + 7] = def / 5; f[o + 8] = oth / 5; f[o + 9] = low / 5;
+    return [pw, hps];
+  };
+  const [myPw, myHp] = sideF(my, 5), [enPw, enHp] = sideF(en, 15);
+  f[25] = clamp((myPw * r.damage_const) / Math.max(1, enHp), 0, 3);
+  f[26] = clamp((enPw * r.damage_const) / Math.max(1, myHp), 0, 3);
+  let kNow = 0, eff = 0, deny = 0;
+  for (const y of theirs) { const s0 = ctx.preHp(y), rm = rem.get(y.uid); if (rm <= 0) { kNow++; deny += skillSoon(b, y); } eff += (s0 - Math.max(0, rm)) / Math.max(1, s0); }
+  f[27] = kNow / 5; f[28] = eff / 5; f[29] = deny / 5;
+  const adv = (A, D) => { let n = 0, m = 0; for (const x of A) { if (x.ghost || !x.attrs) continue; for (const y of D) { if (y.ghost || !y.attrs) continue; m++; if (b.attr_mult(x.attrs, y.attrs) > 1) n++; } } return m > 0 ? n / m : 0; };
+  f[30] = adv(my, en); f[31] = adv(en, my);
+  f[32] = pj.deaths / 5; f[33] = pj.kills / 5;
+  const myDead = f[3] * 5 - f[5] * 5;
+  f[34] = (myTl - myDead - (enTl - kNow)) / 25;
+  f[35] = (myTl - myDead) / Math.max(1, myTl - myDead + (enTl - kNow));
+  return f;
+}
+function labValEval(V, f) {
+  let x = f.map((v, i) => ((Number.isNaN(v) ? 0 : v) - V.mu[i]) / V.sd[i]);
+  const nl = V.layers.length;
+  for (let li = 0; li < nl; li++) {
+    const W = V.layers[li].W, B = V.layers[li].b, y = new Array(B.length);
+    for (let j = 0; j < B.length; j++) { let a = B[j]; const wj = W[j]; for (let i = 0; i < x.length; i++) a += wj[i] * x[i]; y[j] = li + 1 < nl && a < 0 ? 0 : a; }
+    x = y;
+  }
+  return x[0];
+}
 function simAttack(ctx, theirs, seq) {
   const rem = new Map(); for (const y of theirs) rem.set(y.uid, ctx.preHp(y));
   const covers = ctx.effects(ctx.os).filter((e) => e.kind === "cover" && !(e.owner && ctx.cancel.has(e.owner.uid) && e.seq >= 1e6)).sort((x, y) => y.seq - x.seq);
@@ -1292,9 +1391,9 @@ function assign(ctx, P, out, attackers, quiet) {
     }
     let best = null, bs = -1e9, bf = null;
     const tlog = !quiet && ctx.opt.tgtLog ? (out.tgtFeats = out.tgtFeats || {})[x.p.id] = [] : null;   // 検証用: 狙いの候補ごとの特徴
-    for (const y of theirs) {
+    for (const y of theirs) {   // lab: 狙いの優先で絞らない
       const f = targetFeatures(ctx, ai, y, rem, thr, maxThr, revivable, kanpai);
-      const s = dot(P.tgt, f);
+      const s = dot(P.tgt, f) + labRule(ctx, P, ai, y, rem, f, maxD, theirs.length, out.players[x.p.id].use_skill);
       if (tlog) tlog.push([y.pid, f, s]);
       if (s > bs) { bs = s; best = y; bf = f; }
     }
@@ -1344,7 +1443,7 @@ function assign(ctx, P, out, attackers, quiet) {
   const byPid = new Map(ordered.map((x) => [x.p.id, x]));
   const tgtOf = (pid) => { const tp = out.players[pid].target; return tp ? front(b.players[tp]) : null; };
   let chosen = simAttack(ctx, theirs, out.order.map((pid) => ({ x: byPid.get(pid), tgt: tgtOf(pid) })));
-  const score = (r) => r.kills + 0.15 * r.eff - 0.05 * r.stray;   // 空振り後のランダムな当たりは少しだけ割り引く
+  const score = (r) => r.kills + labS(P).sc_eff * r.eff - labS(P).sc_stray * r.stray;   // 空振り後のランダムな当たりは少しだけ割り引く
   const coverChars = [];
   for (const e of ctx.effects(ctx.os)) {
     if (e.kind !== "cover" || (e.owner && ctx.cancel.has(e.owner.uid) && e.seq >= 1e6)) continue;
@@ -1367,7 +1466,8 @@ function assign(ctx, P, out, attackers, quiet) {
         const tg = new Map();
         for (const x of R) {
           let by = null, bs = -1e9;
-          for (const y of theirs) { if (y === C) continue; const s2 = dot(P.tgt, targetFeatures(ctx, x.ai, y, remR, thr, maxThr, revivable, kanpai)); if (s2 > bs) { bs = s2; by = y; } }
+          const candC = theirs.filter((y2) => y2 !== C);
+          for (const y of candC) { const f2 = targetFeatures(ctx, x.ai, y, remR, thr, maxThr, revivable, kanpai); const s2 = dot(P.tgt, f2) + labRule(ctx, P, x.ai, y, remR, f2, maxD, candC.length, out.players[x.p.id].use_skill); if (s2 > bs) { bs = s2; by = y; } }
           if (!by) continue;
           tg.set(x.p.id, by); remR.set(by.uid, remR.get(by.uid) - x.ai.hits * ctx.hit(x.ai, by, null));
         }
@@ -1389,7 +1489,10 @@ function assign(ctx, P, out, attackers, quiet) {
   //   (撃破数が同じなら学習した狙いのまま。opt.killSearch=false で切る。仮想対戦 5000試合で +0.055±0.015)
   // 次のターンの見積もりも入れて狙い・攻撃順を探す({d: 次のターンに倒される見込みの重み, k: 倒せる見込みの重み}。false で撃破数だけの付け替え)
   //   仮想対戦 5000試合: d0.5・k0.3 は撃破数だけの付け替えより +0.050±0.015、d1・k0.5 は +0.005±0.015
-  const NX = ctx.opt.nextW === undefined ? NEXTW_DEF : ctx.opt.nextW || null;
+  const NX = ctx.opt.nextW === undefined ? { d: labS(P).nx_d, k: labS(P).nx_k } : ctx.opt.nextW || null;
+  // 付け替えで替えてよい相手: 狙いの優先に当てはまる相手(攻撃前の盤面で)と、ここまでに狙いに選ばれた相手だけ(優先を崩さないため)
+  const okT = new Set(prioTargets(ctx, theirs, null));
+  for (const x of ordered) { const t0 = tgtOf(x.p.id); if (t0) okT.add(t0); }
   if (ctx.opt.killSearch !== false && theirs.length > 1 && !quiet && !NX) {
     let cur = out.order.map((pid) => ({ x: byPid.get(pid), tgt: out.players[pid].target ? front(b.players[out.players[pid].target]) : null }));
     for (let it = 0; it < 6; it++) {
@@ -1398,7 +1501,7 @@ function assign(ctx, P, out, attackers, quiet) {
         const s0 = cur[i];
         if (s0.x.ai.all || !s0.tgt) continue;
         for (const y of theirs) {
-          if (y === s0.tgt) continue;
+          if (y === s0.tgt) continue;   // lab: 狙いの優先で絞らない
           const seq = cur.slice(); seq[i] = { x: s0.x, tgt: y };
           const r = simAttack(ctx, theirs, seq);
           if (r.kills > bk || (r.kills === bk && bestMove && r.eff > be + 1e-9)) { bk = r.kills; be = r.eff; bestMove = { i, y, r }; }
@@ -1416,10 +1519,23 @@ function assign(ctx, P, out, attackers, quiet) {
   if (NX && theirs.length > 1 && !quiet) {
     const usedNow = new Set((out.uses || []).map((u) => u.c.uid));
     const incNow = incoming(ctx, ctx.pred || null).inc;
+    const myNext = nextSide(ctx, ctx.my, (c) => incNow.get(c.uid) || 0, null, usedNow), myFix = { my: myNext, myDef: readyMods(myNext, null, null) };   // 味方側は候補で変わらない
+    // 同じ候補(攻撃順と狙い)・同じ当てた後の残りHPは、探索の中で何度も出てくるので結果を覚えておく(盤面はこの探索の間変わらない)
+    const seqMemo = new Map(), pjMemo = new Map();
+    const xIdx = new Map(ordered.map((x, i) => [x, i])), tIdx = new Map(theirs.map((y, i) => [y, i + 1]));
     const evalSeq = (seq) => {
+      let sk = seq.length <= 5 ? 0 : -1;   // 攻撃順と狙いを1つの数に(5人×6通りまで。当てはまらなければ覚えない)
+      for (const q of seq) { const xi = xIdx.get(q.x), ti = q.tgt ? tIdx.get(q.tgt) : 0; if (sk < 0 || xi === undefined || ti === undefined) { sk = -1; break; } sk = sk * 64 + xi * 8 + ti; }
+      const hit = sk >= 0 ? seqMemo.get(sk) : undefined; if (hit) return hit;
       const r = simAttack(ctx, theirs, seq);
-      const pj = projectNext(ctx, { inc: incNow, rem: r.rem }, null, usedNow, null);
-      return { r, v: r.kills + 0.15 * r.eff - 0.05 * r.stray - NX.d * pj.deaths + NX.k * pj.kills };
+      const rk = theirs.map((y) => r.rem.get(y.uid)).join(",");
+      let pj = pjMemo.get(rk);
+      if (!pj) { pj = projectNext(ctx, { inc: incNow, rem: r.rem }, null, usedNow, null, myFix); pjMemo.set(rk, pj); }
+      if (P.value && pj.val === undefined) pj.val = labValEval(P.value, labValFeats(ctx, theirs, r.rem, myNext, pj));   // lab: 盤面の良さ
+      const hand = r.kills + labS(P).sc_eff * r.eff - NX.d * pj.deaths + NX.k * pj.kills;
+      const res = { r, v: P.value ? P.value.hand * hand + P.value.w * pj.val - labS(P).sc_stray * r.stray : r.kills + labS(P).sc_eff * r.eff - labS(P).sc_stray * r.stray - NX.d * pj.deaths + NX.k * pj.kills };
+      if (sk >= 0) seqMemo.set(sk, res);
+      return res;
     };
     let cur = out.order.map((pid) => ({ x: byPid.get(pid), tgt: out.players[pid].target ? front(b.players[out.players[pid].target]) : null }));
     let cv = evalSeq(cur);
@@ -1428,14 +1544,14 @@ function assign(ctx, P, out, attackers, quiet) {
       for (let i = 0; i < cur.length; i++) {
         const s0 = cur[i];
         if (!s0.x.ai.all) for (const y of theirs) {
-          if (y === s0.tgt) continue;
+          if (y === s0.tgt) continue;   // lab: 狙いの優先で絞らない
           const seq = cur.slice(); seq[i] = { x: s0.x, tgt: y };
-          const e2 = evalSeq(seq); if (e2.v > (bm ? bm.e.v : cv.v + 0.02)) bm = { seq, e: e2 };
+          const e2 = evalSeq(seq); if (e2.v > (bm ? bm.e.v : cv.v + labS(P).margin)) bm = { seq, e: e2 };
         }
         for (const pos of [0, cur.length - 1]) {
           if (pos === i) continue;
           const seq = cur.slice(); const [mv] = seq.splice(i, 1); seq.splice(pos, 0, mv);
-          const e2 = evalSeq(seq); if (e2.v > (bm ? bm.e.v : cv.v + 0.02)) bm = { seq, e: e2 };
+          const e2 = evalSeq(seq); if (e2.v > (bm ? bm.e.v : cv.v + labS(P).margin)) bm = { seq, e: e2 };
         }
       }
       if (!bm) break;
@@ -1519,4 +1635,5 @@ if (typeof module !== "undefined" && module.exports) module.exports = api;
 else root.EigoBrain = api;
 })(typeof globalThis !== "undefined" ? globalThis : this);
 
-try { EigoBrain.setMeta(null); EigoBrain.setParams({"use": {"atk_up": [-1.48791, 0.776, 3.07241, 1.88937, 5.99253, 1.74832, -1.79874, 3.3001, -0.95808, -1.16325, 0.12503, -0.16602, 0.38963, -0.23972, -0.49226, 1.61123, 1.56381, 1.62196, 0.5423, 1.27522, -0.59823, 0.2777, 0.34313, 1.04809, 0.22299, 0.81043, -1.76519, 0.21618, -0.19459, 0.45099, 0.30406, 0.0, -0.31322, 0.0], "multi_attack": [-1.85257, 1.30108, -0.29506, 3.33962, 3.01101, 0.17741, -0.81888, 1.1097, 0.35221, -0.60366, -0.46114, 0.3838, 1.36947, -0.81258, 0.63181, 0.39271, -0.73819, 2.38211, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "all_attack": [-0.13485, 0.68306, 1.46255, 2.41782, 1.77976, -0.72739, -1.61938, 1.45928, -1.27458, 0.2401, 0.42888, 1.23029, -0.46904, -0.56771, 0.26795, -0.02853, -0.05395, 1.26678, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "shield": [-2.4123, 0.58587, -0.37008, -0.1189, 0.08626, 2.23169, 1.92489, 1.17515, -1.74869, 0.7164, 0.2211, 2.3265, 0.61951, 0.05002, -0.21737, -0.08315, 1.58238, 2.30818, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "cover": [-2.70267, -0.20691, 0.10214, -0.73981, -0.90232, 1.88896, 1.6868, -0.64444, 0.37986, -0.2877, 1.04932, 1.08356, 0.14991, 0.65148, 0.59843, 0.69727, -0.224, 1.9956, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "heal": [2.04547, -0.2746, 0.43345, 0.0, 0.0, -1.03147, 3.7877, -0.07536, -0.56758, -1.4815, 1.62679, 2.46716, -0.38251, 1.14933, 0.19864, 0.01567, 0.0, -0.02713, 0.91633, 0.62937, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "color_change": [-1.49651, 0.0, -1.11549, 1.25528, 0.18747, -0.35905, 0.0, 0.99253, 0.46705, -2.00985, 1.33569, -0.80132, -0.05049, 2.81584, 0.76205, -0.04208, 2.20433, 0.51333, 0.61104, 0.17625, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "shorten": [-1.80734, 0.06708, -0.28861, 1.34473, 0.58953, -0.49146, -0.00685, 0.60793, -0.4942, 1.72141, 0.68475, 4.48955, -1.25496, -0.43037, 0.1804, -0.63384, -0.79607, 3.02408, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "delay": [-3.22892, 0.3096, 1.28288, -0.1001, -0.93455, -1.2253, 0.1327, 2.6346, -0.86811, -0.10564, 1.37596, 4.25648, 0.96778, -1.52087, 0.09474, -0.10243, -0.05659, 3.39804, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "revive": [-0.05252, 1.5049, -0.26067, -0.10963, 0.18472, 2.36779, 0.105, 0.01766, -0.316, 0.97594, -0.24473, 2.58755, 0.73115, -0.09674, 0.25766, 0.40824, -0.00291, 1.74722, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "ord": {"atk_up": [0, 0, 0, 0, 0, 0, 0], "multi_attack": [0, 0, 0, 0, 0, 0, 0], "all_attack": [0, 0, 0, 0, 0, 0, 0], "shield": [0, 0, 0, 0, 0, 0, 0], "cover": [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.3, 0.0, 0.0, 0.0, 0.0], "heal": [1, 0, 0, 0, 0, 0, 0], "color_change": [0.0, 2.19, 1.208, 0.994, 0.628, -0.352, 0.0, 0.0, 0.0, 0.0, 0.0], "shorten": [0.472, 0.558, 0.73, -0.528, 0.052, -0.318, 0], "delay": [5.232, -0.56, -0.022, 1.288, -0.582, -0.27, 0.0, 0.0, 0.0, 0.0, 0.0], "revive": [2.22528, -1.88655, -4.76893, 1.92451, 1.80866, 0.03816, -0.18834, 0.0, 4.48732, 1.30491, 3.07228]}, "att": [-1.00294, -0.0888, -1.76642, 3.12973, -1.09462, 0.24969, 0.65391, 0.06553, -0.1256, -1.30751, 1.03486, 0.24151, -0.55819, 2.16987, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "tgt": [3.5668975760462702, 3.8691399534375823, -3.0952271867521883, 2.5335319468845015, -0.023429588967616575, -1.0415051789001457, -0.492241697876331, 2.703151910720221, 0.3007823640106551, 0.32238954803599157, 0.601095837826466, -1.3004458292276306, 1.5687664594493151, 0.3146670724729055, -0.6935866872428986, 0.02803542271690443, 0.3665191707230846, 3.8049158378916883, 0.8829900451681192, 4.422782089895084, 0.16795286060651765, -0.5431036601128751, 0.2104065351383963, 0.8677750979262944, 1.2468580707180101, -0.3819745699673567], "wrong": [-99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "hold7": {"cover": [[[51, ">=", 0.5]]], "shield": [[[51, ">=", 0.5]]]}}); } catch (e) {}
+
+try { EigoBrain.setMeta(null); EigoBrain.setParams({"use": {"atk_up": [-1.48791, 0.776, 3.07241, 1.88937, 5.99253, 1.74832, -1.79874, 3.3001, -0.95808, -1.16325, 0.12503, -0.16602, 0.38963, -0.23972, -0.49226, 1.61123, 1.56381, 1.62196, 0.5423, 1.27522, -0.59823, 0.2777, 0.34313, 1.04809, 0.22299, 0.81043, -1.76519, 0.21618, -0.19459, 0.45099, 0.30406, 0, -0.31322, 0], "multi_attack": [-1.85257, 1.30108, -0.29506, 3.33962, 3.01101, 0.17741, -0.81888, 1.1097, 0.35221, -0.60366, -0.46114, 0.3838, 1.36947, -0.81258, 0.63181, 0.39271, -0.73819, 2.38211, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "all_attack": [-0.13485, 0.68306, 1.46255, 2.41782, 1.77976, -0.72739, -1.61938, 1.45928, -1.27458, 0.2401, 0.42888, 1.23029, -0.46904, -0.56771, 0.26795, -0.02853, -0.05395, 1.26678, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "shield": [-2.4123, 0.58587, -0.37008, -0.1189, 0.08626, 2.23169, 1.92489, 1.17515, -1.74869, 0.7164, 0.2211, 2.3265, 0.61951, 0.05002, -0.21737, -0.08315, 1.58238, 2.30818, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "cover": [-2.70267, -0.20691, 0.10214, -0.73981, -0.90232, 1.88896, 1.6868, -0.64444, 0.37986, -0.2877, 1.04932, 1.08356, 0.14991, 0.65148, 0.59843, 0.69727, -0.224, 1.9956, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "heal": [2.04547, -0.2746, 0.43345, 0, 0, -1.03147, 3.7877, -0.07536, -0.56758, -1.4815, 1.62679, 2.46716, -0.38251, 1.14933, 0.19864, 0.01567, 0, -0.02713, 0.91633, 0.62937, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "color_change": [-1.49651, 0, -1.11549, 1.25528, 0.18747, -0.35905, 0, 0.99253, 0.46705, -2.00985, 1.33569, -0.80132, -0.05049, 2.81584, 0.76205, -0.04208, 2.20433, 0.51333, 0.61104, 0.17625, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "shorten": [-1.80734, 0.06708, -0.28861, 1.34473, 0.58953, -0.49146, -0.00685, 0.60793, -0.4942, 1.72141, 0.68475, 4.48955, -1.25496, -0.43037, 0.1804, -0.63384, -0.79607, 3.02408, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "delay": [-3.22892, 0.3096, 1.28288, -0.1001, -0.93455, -1.2253, 0.1327, 2.6346, -0.86811, -0.10564, 1.37596, 4.25648, 0.96778, -1.52087, 0.09474, -0.10243, -0.05659, 3.39804, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "revive": [-0.05252, 1.5049, -0.26067, -0.10963, 0.18472, 2.36779, 0.105, 0.01766, -0.316, 0.97594, -0.24473, 2.58755, 0.73115, -0.09674, 0.25766, 0.40824, -0.00291, 1.74722, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, "ord": {"atk_up": [0, 0, 0, 0, 0, 0, 0], "multi_attack": [0, 0, 0, 0, 0, 0, 0], "all_attack": [0, 0, 0, 0, 0, 0, 0], "shield": [0, 0, 0, 0, 0, 0, 0], "cover": [0, 0, 0, 1, 0, 0, -0.3, 0, 0, 0, 0], "heal": [1, 0, 0, 0, 0, 0, 0], "color_change": [0, 2.19, 1.208, 0.994, 0.628, -0.352, 0, 0, 0, 0, 0], "shorten": [0.472, 0.558, 0.73, -0.528, 0.052, -0.318, 0], "delay": [5.232, -0.56, -0.022, 1.288, -0.582, -0.27, 0, 0, 0, 0, 0], "revive": [2.22528, -1.88655, -4.76893, 1.92451, 1.80866, 0.03816, -0.18834, 0, 4.48732, 1.30491, 3.07228]}, "att": [-1.00294, 0.21277742161910046, -0.03901451249617499, 1.3606845686250297, -0.591802095672668, 0.010025874381966043, 0.11943145335993707, -0.18152721022652707, -0.0772518793092124, -1.30751, 0.6547491776274145, 0.14348669045843354, -0.3009358521382151, 0.2957684259018924, -0.13832097976073243, -0.12160556357798981, 0.06607366259410018, 0.2797800624627953, -0.3722150623532751, 0.006159565486665324, -0.4396126870693307], "tgt": [0.030152513081008855, 0.018266378435125935, 0.18975037865502786, 0.49222797555934145, 0.2172300452650928, -0.28360132936516164, -0.5715987112003589, 1.2482996406959128, 0.36602830634850797, 0.3968589683548702, 0.06363291965450112, -0.11152465472149847, 0.07888257769462492, 0.0505916858846823, -0.5577467772777204, 0.02803542271690443, 0.4152501874993517, 0.12735020375167064, 0.47198647348921385, 0.0646886849385184, 0.0030977676326812476, -0.5307209263510738, -0.05109393670566403, 0.22947920460538962, 0.6786828713808901, -0.08486902523481547, -0.0039449471280286925, 0.002704206084746638, 0.25975142808460916, -0.01904410031245026], "wrong": [-99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "hold7": {"cover": [[[51, ">=", 0.5]]], "shield": [[[51, ">=", 0.5]]]}, "rules": [{"id": "R000_4", "c": [[39, 1, 0.0], [72, 0, 0.0], [2, 0, 9628.0], [21, 0, 0.0]], "w": -0.2557960662653109, "text": "相手が残りキャラ最多 かつ 倒せて自分が攻撃UPか連撃(既存28)でない かつ 相手の最大HP ≦ 9628 かつ 相手のスキルが蘇生でない", "born": 0, "found": {"kind": "over", "loss": 1597.0, "n": 17918, "mean": -0.0891282509208617, "z": -8.218347439674421}}, {"id": "R000_5", "c": [[39, 1, 0.0], [72, 1, 0.0], [7, 0, 0.0], [18, 0, 0.0]], "w": -0.20701805165580658, "text": "相手が残りキャラ最多 かつ 倒せて自分が攻撃UPか連撃(既存28) かつ 相手のスキルカウント ≦ 0 かつ 相手のスキルが属性変更でない", "born": 0, "found": {"kind": "under", "loss": 1099.0, "n": 4534, "mean": 0.24239082487869432, "z": 12.53541764691559}}, {"id": "R000_2", "c": [[39, 1, 0.0], [72, 1, 0.0], [7, 1, 0.0], [33, 1, 0.0]], "w": 0.13890912688593968, "text": "相手が残りキャラ最多 かつ 倒せて自分が攻撃UPか連撃(既存28) かつ 相手のスキルカウント > 0 かつ 自分に掛かった攻撃UPの数 > 0", "born": 0, "found": {"kind": "under", "loss": 2937.0, "n": 3671, "mean": 0.800054481067829, "z": 39.549530987035034}}, {"id": "R003_2118", "c": [[42, 1, 0.0], [39, 0, 0.0], [34, 0, 1.0], [36, 0, 22.0]], "w": -0.08590995063816972, "text": "相手がこのターンスキルを使う見込み かつ 相手が残りキャラ最多でない かつ ターン(0始まり) ≦ 1 かつ 相手チームの残りキャラ ≦ 22", "born": 3, "found": {"kind": "over", "loss": 3260.0, "n": 5353, "mean": -0.6090042966560807, "z": -34.551449111815614}}, {"id": "R002_113", "c": [[42, 0, 0.0], [67, 0, 0.0], [9, 1, 1.0], [1, 0, 0.893363]], "w": 0.06801105187037419, "text": "相手がこのターンスキルを使う見込みでない かつ 残りキャラ最多×倒せる(既存23)でない かつ 相手のスキルの残り回数 > 1 かつ 相手のHP割合 ≦ 0.8934", "born": 2, "found": {"kind": "under", "loss": 2788.0, "n": 10065, "mean": 0.2769995032290114, "z": 19.897199694375715}}, {"id": "R000_1", "c": [[39, 0, 0.0], [8, 0, 0.0], [60, 0, 0.0625], [30, 1, 6625.151855]], "w": -0.06416865794320356, "text": "相手が残りキャラ最多でない かつ 相手のカウントがちょうど1でない かつ 完勝ねらい度×相手の残りの少なさ(既存16) ≦ 0.0625 かつ 自分の攻撃力 > 6625", "born": 0, "found": {"kind": "over", "loss": 5543.0, "n": 11308, "mean": -0.49018394057304565, "z": -39.69054809281932}}, {"id": "R005_432130", "c": [[42, 1, 0.0], [1, 1, 0.829939], [67, 1, 0.0], [34, 0, 0.0]], "w": -0.06298726930565664, "text": "相手がこのターンスキルを使う見込み かつ 相手のHP割合 > 0.8299 かつ 残りキャラ最多×倒せる(既存23) かつ ターン(0始まり) ≦ 0", "born": 5, "found": {"kind": "over", "loss": 1323.0, "n": 5193, "mean": -0.25476603119584057, "z": -12.511177920077904}}, {"id": "R002_112", "c": [[42, 1, 0.0], [39, 0, 0.0], [34, 0, 1.0], [33, 1, 1.0]], "w": -0.06202465335898343, "text": "相手がこのターンスキルを使う見込み かつ 相手が残りキャラ最多でない かつ ターン(0始まり) ≦ 1 かつ 自分に掛かった攻撃UPの数 > 1", "born": 2, "found": {"kind": "over", "loss": 2854.0, "n": 4923, "mean": -0.5797278082470039, "z": -30.508391377552844}}, {"id": "R002_115", "c": [[42, 0, 0.0], [67, 1, 0.0], [33, 1, 1.0], [9, 1, 1.0]], "w": 0.05986018935288126, "text": "相手がこのターンスキルを使う見込みでない かつ 残りキャラ最多×倒せる(既存23) かつ 自分に掛かった攻撃UPの数 > 1 かつ 相手のスキルの残り回数 > 1", "born": 2, "found": {"kind": "under", "loss": 1621.0, "n": 2340, "mean": 0.6927350427350427, "z": 26.051361319203583}}, {"id": "R001_9", "c": [[42, 0, 0.0], [67, 0, 0.0], [9, 1, 1.0], [1, 1, 0.872485]], "w": 0.053275053146964006, "text": "相手がこのターンスキルを使う見込みでない かつ 残りキャラ最多×倒せる(既存23)でない かつ 相手のスキルの残り回数 > 1 かつ 相手のHP割合 > 0.8725", "born": 1, "found": {"kind": "under", "loss": 1873.0, "n": 12598, "mean": 0.14867439276075567, "z": 11.321260448988227}}, {"id": "R001_7", "c": [[42, 1, 0.0], [1, 1, 0.858151], [39, 1, 0.0], [40, 1, 0.638655]], "w": -0.05048951950585778, "text": "相手がこのターンスキルを使う見込み かつ 相手のHP割合 > 0.8582 かつ 相手が残りキャラ最多 かつ 相手の脅威(最大比) > 0.6387", "born": 1, "found": {"kind": "over", "loss": 2631.0, "n": 11035, "mean": -0.23842319891255098, "z": -17.318282786326527}}, {"id": "R004_32122", "c": [[42, 0, 0.0], [1, 0, 0.774277], [9, 1, 1.0], [3, 0, 5964.0]], "w": 0.0454019994806071, "text": "相手がこのターンスキルを使う見込みでない かつ 相手のHP割合 ≦ 0.7743 かつ 相手のスキルの残り回数 > 1 かつ 相手の攻撃 ≦ 5964", "born": 4, "found": {"kind": "under", "loss": 5053.0, "n": 12563, "mean": 0.4022128472498607, "z": 31.97422095038277}}, {"id": "R003_2120", "c": [[42, 1, 0.0], [39, 0, 0.0], [34, 1, 1.0], [60, 0, 0.03125]], "w": -0.04454431299107483, "text": "相手がこのターンスキルを使う見込み かつ 相手が残りキャラ最多でない かつ ターン(0始まり) > 1 かつ 完勝ねらい度×相手の残りの少なさ(既存16) ≦ 0.03125", "born": 3, "found": {"kind": "over", "loss": 1535.0, "n": 3999, "mean": -0.3838459614903726, "z": -20.032841368392994}}, {"id": "R003_2119", "c": [[42, 0, 0.0], [11, 0, 1.0], [9, 1, 1.0], [67, 1, 0.0]], "w": -0.03823285069270573, "text": "相手がこのターンスキルを使う見込みでない かつ 相手のスキルの継続ターン ≦ 1 かつ 相手のスキルの残り回数 > 1 かつ 残りキャラ最多×倒せる(既存23)", "born": 3, "found": {"kind": "under", "loss": 1812.0, "n": 3600, "mean": 0.5033333333333333, "z": 21.354684126965143}}, {"id": "R005_432126", "c": [[42, 1, 0.0], [1, 1, 0.829939], [67, 0, 0.0], [3, 1, 2613.7]], "w": -0.022731671751893247, "text": "相手がこのターンスキルを使う見込み かつ 相手のHP割合 > 0.8299 かつ 残りキャラ最多×倒せる(既存23)でない かつ 相手の攻撃 > 2614", "born": 5, "found": {"kind": "over", "loss": 7320.0, "n": 16668, "mean": -0.43916486681065514, "z": -43.38961988211564}}, {"id": "R004_32124", "c": [[42, 1, 0.0], [1, 1, 0.992593], [3, 1, 2556.0], [67, 1, 0.0]], "w": -0.02258251109027786, "text": "相手がこのターンスキルを使う見込み かつ 相手のHP割合 > 0.9926 かつ 相手の攻撃 > 2556 かつ 残りキャラ最多×倒せる(既存23)", "born": 4, "found": {"kind": "over", "loss": 776.0, "n": 4713, "mean": -0.1646509654148101, "z": -7.666126193240122}}, {"id": "R004_32121", "c": [[42, 1, 0.0], [1, 1, 0.992593], [3, 1, 2556.0], [67, 0, 0.0]], "w": -0.015691333635775507, "text": "相手がこのターンスキルを使う見込み かつ 相手のHP割合 > 0.9926 かつ 相手の攻撃 > 2556 かつ 残りキャラ最多×倒せる(既存23)でない", "born": 4, "found": {"kind": "over", "loss": 6567.0, "n": 15848, "mean": -0.4143740535083291, "z": -39.02463529319431}}, {"id": "R005_432128", "c": [[42, 0, 0.0], [9, 1, 1.0], [64, 0, 0.4], [1, 1, 0.774277]], "w": 0.01360507965964344, "text": "相手がこのターンスキルを使う見込みでない かつ 相手のスキルの残り回数 > 1 かつ スキルの近さ×倒せる(既存20) ≦ 0.4 かつ 相手のHP割合 > 0.7743", "born": 5, "found": {"kind": "under", "loss": 2144.0, "n": 12037, "mean": 0.1781174711306804, "z": 13.55491498343489}}, {"id": "R004_32123", "c": [[42, 0, 0.0], [1, 1, 0.774277], [9, 1, 1.0], [67, 0, 0.0]], "w": 0.010596299607793435, "text": "相手がこのターンスキルを使う見込みでない かつ 相手のHP割合 > 0.7743 かつ 相手のスキルの残り回数 > 1 かつ 残りキャラ最多×倒せる(既存23)でない", "born": 4, "found": {"kind": "under", "loss": 1890.0, "n": 12628, "mean": 0.14966740576496673, "z": 11.312835428777943}}, {"id": "R005_432129", "c": [[42, 0, 0.0], [9, 1, 1.0], [64, 1, 0.4], [33, 1, 0.0]], "w": 0.010512286667631803, "text": "相手がこのターンスキルを使う見込みでない かつ 相手のスキルの残り回数 > 1 かつ スキルの近さ×倒せる(既存20) > 0.4 かつ 自分に掛かった攻撃UPの数 > 0", "born": 5, "found": {"kind": "under", "loss": 1348.0, "n": 2308, "mean": 0.584055459272097, "z": 21.84348087718071}}, {"id": "R004_32125", "c": [[42, 1, 0.0], [1, 1, 0.992593], [3, 0, 2556.0], [0, 0, 5112.0]], "w": 0.005610866890825503, "text": "相手がこのターンスキルを使う見込み かつ 相手のHP割合 > 0.9926 かつ 相手の攻撃 ≦ 2556 かつ 相手のHP ≦ 5112", "born": 4, "found": {"kind": "over", "loss": 644.0, "n": 2890, "mean": -0.22283737024221453, "z": -8.303925317742818}}, {"id": "R005_432127", "c": [[42, 0, 0.0], [9, 1, 1.0], [64, 0, 0.4], [1, 0, 0.774277]], "w": -0.002861705280158762, "text": "相手がこのターンスキルを使う見込みでない かつ 相手のスキルの残り回数 > 1 かつ スキルの近さ×倒せる(既存20) ≦ 0.4 かつ 相手のHP割合 ≦ 0.7743", "born": 5, "found": {"kind": "under", "loss": 3912.0, "n": 12077, "mean": 0.3239215036846899, "z": 25.1801806398189}}], "meta": {"round": 5, "tag": "a", "from": "p005.json"}, "use7_lab": {"atk_up": [-1.7947310744953724, 0.3065515196195824, 0.9032127569892274, 0.36322937172646286, -0.2553012867294215, 1.647312590383678, -1.79874, -0.06424656664884444, -0.4266756480847539, -1.4438337855120278, 0.11471351795995596, -0.037733192136004304, 0.23025733041968396, -0.042848081858728765, -0.3668941026359076, 0.21471334981879348, 1.3829218075230005, 0.4122695592512436, 0.5442202803266478, 0.7265700097374516, -0.47647188235752674, 0.14898799099148252, 0.05324777925808477, 0.6397872734280566, 0.16348233016443683, 0.5686589492259548, -1.1433694597322348, 0.05610756215647857, -0.4064851158799774, 0.4558622520658486, 0.21785486864232279, 0.0, -0.5009787313263823, 0.0, 0.5187914382395218, 0.09334650576822003, 1.0, 0.0, -0.20250211881012986, -0.06706686816476366, -0.03578107400019513, 0.06310546793861638, -0.1443856669259588, 0.03893383720300752, 0.0, 0.0, 0.0, 0.0, 0.00691793823545096, 0.026102187765851204, -0.137214243772328, 0.025229840716624156, -0.5065142780526881, 0.0, 0.04062638288855093, -0.02533834286200142, 0.059352616004915655, 0.18678760826154714, 0.05466595535294545, -0.02697429204902881, 0.03707032011608698, -0.12581760858573418, -0.19268805845342907, 0.2612375950306397, 0.03483208182285976, -0.02241755479057918, -0.11132826574588352, 0.04674742524053726, 0.0022758931257826145, -0.20595487071823096, 0.019184757616016342, 0.010316482040044062, 0.0, 0.0, 0.0], "multi_attack": [-0.5444051147297062, -0.006732741121298195, -0.23941983425671154, 0.29084613403485743, 1.1412779724877404, -0.023114034451641306, -0.81888, 0.3934538128945763, 0.22191050332248863, -0.3842818967862896, -0.5095244196391236, 0.18239061938394102, 0.15423365719264417, -0.2789859815035593, 0.16331650606462864, 0.2886613943679383, -0.6098036224512912, 0.6751766521401724, -0.013143954613189249, 0.059978369739195486, 0.05649060667549524, 0.04645085454855897, 0.06005868654438177, 0.0671062669176032, -0.0683099853841766, 0.16496759710407902, -0.023345842779499994, 0.04339704361365271, 0.004190776077621474, 0.16515687448125918, 0.31416722356703913, 0.0, -0.20491074864824851, 0.0, 0.9915266964912667, 0.07193859312463963, 1.0, 0.0, -0.04789852694451948, 0.05976330071724864, 0.14145645012732902, 0.2691875557098349, 0.019267340758371096, 0.34257807548769487, 0.0, 0.0, 0.0, 0.0, 0.004109567002719692, -0.09326335738969932, -0.11140128682721404, 0.003596860071544683, -0.38582049104308386, 0.0, -0.20556077413720167, 0.10410546246481195, 0.12490956995038545, 0.0715902451990336, 0.031641654100942475, 0.06580209709800917, 0.17619768544570394, -0.29644429019386775, 0.02650918543011212, 0.06149116603263123, 0.008198337935731223, -0.0219427040573671, 0.05894241131216795, -0.008563182353067616, 0.14135470771327577, -0.03968363503757391, -0.0973730477281317, 0.0484089947680586, 0.0, 0.0, 0.0], "all_attack": [-0.055083092413005026, 0.8296046426918099, 0.2615306042739381, 1.1505386848398371, 0.0733266866141352, -0.4080840633773722, -1.61938, 0.4223142413830177, -0.8830205331313001, 0.3500364666716054, 0.38808119850306316, 1.258672368051149, -0.4655891841323006, -0.3562142641394461, 0.3683367884643967, 0.16187322654402533, -0.04529779704373239, 1.3200879092052127, 0.007528368382949345, 0.17444827298289853, -0.06061629872918482, 0.12322924929877009, -0.0621178796266379, -0.2329157144171776, -0.1389267815939638, -0.20352684691909081, -0.061591174761718104, -0.03412797002818767, -0.20352684691909081, -0.11019846157071155, 0.18887342519262337, 0.0, -0.06881293628140911, 0.0, 0.7168962382110041, 0.03676644017085726, 1.0, 0.0, -0.27306207250427394, -0.10930696075665927, -0.027865984953221228, 0.08646016188433268, 0.16712501852156714, 0.017022615488800075, 0.0, 0.0, 0.0, 0.0, -0.12100710185437044, -0.10851370488189678, 0.06854661540702767, 0.009443637448442671, -0.44511311250723856, 0.0, 0.023025018090198825, -0.0828286607460581, -0.014895935449580852, -0.45878040879745324, 0.250293643686206, -0.001269193962296275, 0.189073880025197, 0.23738895026819895, -0.3488405302545256, 0.07234858954691815, 0.009646475827100718, 0.016617800321001703, -0.022549388455046997, 0.0221828907156329, -0.027166714587097473, 0.09143594967744074, 0.012493255217051169, 0.04079880149693683, 0.0, 0.0, 0.0], "shield": [-2.310807311246344, 0.24158268241483732, -0.3968772790836147, -0.1189, 0.08626, 0.15630812757980903, 0.08088701694982336, 0.4565028614750577, -0.5230256214458794, 0.45741332274531343, 0.2858903113852397, 0.24096206859907224, 0.1409383591114475, 0.17342490356867582, -0.04885597673078554, -0.006210548852651234, 1.58238, 1.9780993419672164, 0.005781376020071195, 0.22706827767328597, -0.1294668468717327, 0.10684951515328006, 0.09958618562894185, -0.023431164049103132, -0.0009760039547540974, -0.04652886873395133, -0.3232439828184289, 0.08878407113797174, -0.31958754850373117, 0.241127541271702, -0.0483646558585535, -0.2984058229361609, 0.0, 0.0, 1.0, 0.0, 1.05533833411406, 0.07082521366679412, 0.11520140416559459, -0.1151609185385573, 0.21778713181364895, 0.045245058101459436, 0.24259739705194874, 0.410223879181629, 0.0, 0.0, 0.0, 0.0, 0.19614928589604166, 0.10357805358226699, 0.13216579550477064, 0.0, 0.13582103435234572, 0.0, 0.12080122174918517, 0.17068169587674972, -0.10066006249565218, 0.0045560238468831645, 0.05386642913727275, -0.1675252274153619, 0.1180382865617142, 0.07133471224551537, -0.03652986124312118, 0.05700661289634951, 0.008396630552880561, 0.4814425606398019, 0.10400994297342668, 0.2278869546671847, -0.2993745311640266, -0.10135702628807292, -0.09164504371642467, -0.06479031138523987, 0.0, 0.0, 0.0], "cover": [-2.734672377846318, 0.07456046249762999, 0.10187081295312318, -0.73981, -0.90232, 0.17990657774805344, 0.19143375182091327, -0.538041260289977, 0.14171365300132965, -0.15952768333956543, 0.7211654889781569, 0.4065362277884648, 0.109269493544346, 0.6471941848434469, 0.4573439654977187, 0.2691878195319276, -0.224, 2.0887074246302784, 0.009943051705771998, 0.2880766561192907, 0.15670217192596753, 0.17385043969185301, -0.20188992844647877, -0.1377018827944538, 0.19559543329953039, 0.08065760346186442, -0.016993122882768795, 0.09601168925436983, 0.10066702019429771, 0.01308720667337725, 0.0035967253640338177, 0.02961637798684923, 0.0, 0.0, 1.0, 0.0, 0.14793803095759414, -0.23485898996612048, 0.057224143411454875, 0.025459680516548133, 0.36575790439944006, -0.0042704684295661955, 0.3492317805002146, -0.007884930801700442, 0.0, 0.0, 0.0, 0.0, -0.2435115793161764, -0.20824136422686956, -0.013945988192816491, 0.0, -0.40238271601574677, 0.0, -0.21108293316541102, -0.27371157975937865, -0.05777440446114826, 0.10482096309605153, -0.020748889742650548, 0.3396020657799232, -0.026806894220169287, 0.13136920281991, 0.19135726172672163, -0.06664339018112543, -0.008885440857404704, 0.27602460104377896, 0.13697422281646512, -0.10398965599630018, 0.4355506539638903, -0.2766478819898312, 0.03527029357141613, 0.09675683450126818, 0.0, 0.0, 0.0], "heal": [1.2404890517433216, -0.20261824172280143, 0.2325631557843624, 0.0, 0.0, -0.3041389473141848, 1.0010043020568558, 0.052393022566508254, -0.18471233283537142, -1.0155612792429245, 1.3962970468117306, 1.1222969524951112, -0.09996274586174668, 0.8972499056040777, 0.3543570957728685, 0.23187919423811731, 0.0, -0.34091247441024264, 0.91633, 0.23818910586215436, 0.13237000811114094, -0.22407428894276143, 0.0013991909993385269, -0.2349141781658758, 0.03497195919175168, -0.12637006714751106, -0.023871646031511644, 0.003831939471988087, 0.043794529805065895, -0.005153902003514521, -0.03130825479087743, 0.033102612945198964, 0.0, 0.0, 1.0, 0.0, 0.5930296155341971, 0.04151909709559827, 0.09045839220299874, -0.15486834283635192, 0.1835452811014492, 0.0, -0.3409367195613364, -0.007304650939457418, 0.0, 0.0, 0.0, 0.0, -0.10691229376024153, -0.11202773870549486, -0.01645559453366062, -0.05284573450789323, -0.29416547299823254, 0.0, 0.11161115425323555, -0.07048574278231604, 0.004093232238497346, 0.06058052553257443, 0.0, -0.0733800415203564, 0.09013900712323511, -0.012507260795942663, 0.01859989011018174, 0.11806450315216524, 0.015741965199521153, -0.009715224997380853, -0.1843711055380977, 0.11474384225734577, -0.015913448565797177, -0.09616878846392823, -0.005115451531788213, 0.023411635706144237, 0.0, 0.0, 0.0], "color_change": [-1.1697383587767798, 0.02101481671226723, -0.6191099957394333, 0.7871328285640993, 0.15962330364373975, -0.41309833063659246, 0.0, 0.7647574209936245, 0.42695314354809333, -1.491942648279682, 1.2786748195350262, -0.5262876621820641, 0.09490971226402013, 0.3416990449610688, 0.7268702087613876, 0.14051230089493066, 1.8429955511678016, 0.00036711145488383317, 0.61104, 0.3508690045846894, 0.04006803017059949, 0.17894261242702822, -0.20236866973664352, 0.18173710341519203, 0.07871030552234971, 0.1640073356129505, 0.07636520935146407, -0.30705431533358785, 0.08200370101388556, -0.06948521860618691, -0.13951180588901307, -0.16199452174959172, 0.004268766558829025, 0.0, 0.6442969002442112, -0.017032688680764643, 0.9180457895312151, -0.009929314997120287, -0.15522288881327287, -0.00567429141670239, 0.053271248116389995, -0.09532757972792681, 0.231585036923328, -0.019767093994680518, 0.0, 0.0, 0.0, 0.0, 0.005703085492683916, 0.05059372079677159, -0.038691722607258026, 0.0, -0.08521277950773198, 0.0, -0.29588567439971736, 0.301617530153507, 0.014722253713018914, -0.18862620892492551, 0.029985271176808485, 0.0, 0.04770378863876558, -0.0687800011002404, 0.181183696218875, -0.06691546953134889, -0.008921965925347655, 0.15115612713273724, 0.09341966160704902, 0.05039181754382385, 0.0, 0.10943950326414699, 0.044890598753868444, 0.008151591686445437, 0.0, 0.0, 0.0], "shorten": [-1.80734, 0.06708, -0.28861, 1.34473, 0.58953, -0.49146, -0.00685, 0.60793, -0.4942, 1.72141, 0.68475, 4.48955, -1.25496, -0.43037, 0.1804, -0.63384, -0.79607, 3.02408, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "delay": [-3.22892, 0.3096, 1.28288, -0.1001, -0.93455, -1.2253, 0.1327, 2.6346, -0.86811, -0.10564, 1.37596, 4.25648, 0.96778, -1.52087, 0.09474, -0.10243, -0.05659, 3.39804, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "revive": [-0.13753663991523923, 0.5515805416400843, -0.42878344838375904, -0.10963, 0.18472, 0.48686495416878456, 0.105, 0.14509466943026778, -0.306893023606605, 1.0883315695200964, -0.1962190908091726, -0.06731596817286054, 0.3407688464228277, -0.09674, 0.5003753550842154, 0.3331428155896063, -0.00291, 0.13449522674547937, 0.016218069867186376, 0.23895050348041255, 0.02121206314709874, 0.11969263357667376, -0.03425568410838396, -0.18699921904435524, -0.048296947077473305, -0.02304353572450684, -0.11908017661610405, 0.004937792804385791, -0.1375549766668312, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.030227822769539284, 0.16571344853093, 0.33639687822876213, 0.0, 0.21405478345857026, -0.03011955097287936, 0.0, 0.0, 0.0, 0.0, -0.028458298052545218, -0.04103929539881922, -0.02176805488588166, -0.10490763003314107, 0.0, 0.5469516197580717, 0.0, -0.05761400436114988, 0.0, 0.05327291547355108, 0.0, -0.10344762366191593, -0.25063641624288424, 0.09590691501230988, 0.0030394917018087128, 0.06251502246944418, 0.008371184121271904, -0.03343007315334424, -0.417145623503165, -0.0007383912016480508, 0.05354483730980681, -0.2095135328199062, -0.012596452654513061, -0.04851090919082749, 0.0, 0.0, 0.0]}}); } catch (e) {}
