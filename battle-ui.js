@@ -317,7 +317,7 @@ function aiDraft() {
     const so = d.skill_order;
     for (const p of b.all_players.filter((q) => q.team === side)) {
       const x = d.players[p.id], dr = S.draft[p.id];
-      dr.mode = x.correct ? "fast" : "wrong"; dr.aiWrong = !x.correct;
+      dr.mode = !x.correct ? "wrong" : x.answer_code === 1 ? "fast" : x.answer_code === 6 ? "late" : "normal"; dr.aiWrong = dr.mode !== "fast";
       const oi = d.order.indexOf(p.id); dr.rank = oi >= 0 ? oi + 1 : null;
       dr.target = x.target || ""; dr.priority = "normal"; dr.use = !!x.use_skill;
       dr.order = x.use_skill ? so.indexOf(p.id) + 1 : null;
