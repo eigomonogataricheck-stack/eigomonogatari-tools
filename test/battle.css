@@ -22,7 +22,7 @@
   #page-battle .cols {grid-template-columns: minmax(0, 1fr);}
 }
 #page-battle .teamhead {display: flex; align-items: center; gap: 10px; margin-bottom: 10px;}
-#page-battle .teamtag {font-family: var(--font-head); font-weight: 900; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: #fff;}
+#page-battle .teamtag {font-family: var(--font-head); font-weight:500; width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: #fff;}
 #page-battle .teamtag.A {background: var(--fire);}
 #page-battle .teamtag.B {background: var(--water);}
 #page-battle .field {display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink2);}
@@ -66,7 +66,7 @@
 #page-battle .tg label:has(input:checked) {background: var(--accent); color: #fff; border-color: var(--accent);}
 #page-battle .prow {display: grid; grid-template-columns: 2.6em minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--line);}
 #page-battle .prow:first-of-type {border-top: 0;}
-#page-battle .pid {font-family: var(--font-head); font-weight: 900; color: var(--ink2); padding-top: 4px;}
+#page-battle .pid {font-family: var(--font-head); font-weight:500; color: var(--ink2); padding-top: 4px;}
 #page-battle .pid .ld {display: block; font-size: 10px; color: var(--accent);}
 #page-battle .slots {display: grid; grid-template-columns: repeat(5, minmax(0, 64px)); gap: 8px;}
 #page-battle .slotwrap {min-width: 0;}
@@ -101,14 +101,14 @@
 #page-battle .hp i, #page-battle .hp b {position: absolute; left: 0; top: 0; bottom: 0; width: 0;}
 #page-battle .hp i {background: linear-gradient(#3377bb, #2277dd 40%, #2288dd 55%, #3399ff 75%, #2288dd);}
 #page-battle .hp b {background: linear-gradient(#55cccc, #33dddd 40%, #44eeee 55%, #44ffff 75%, #44eedd);}
-#page-battle .pill {display: inline-block; font-size: 11px; padding: 0 7px; border-radius: 999px; background: var(--soft); color: var(--ink2); font-weight: 700; line-height: 18px;}
-#page-battle .mode {border-radius: 6px; font-weight: 700;}
+#page-battle .pill {display: inline-block; font-size: 11px; padding: 0 7px; border-radius: 999px; background: var(--soft); color: var(--ink2); font-weight:500; line-height: 18px;}
+#page-battle .mode {border-radius: 6px; font-weight:500;}
 #page-battle .mode.m-ok {border-color: var(--good); color: var(--good);}
 #page-battle .mode.m-ng {border-color: var(--bad); color: var(--bad);}
 #page-battle .mode.m-fast {border-color: var(--accent); color: var(--accent);}
-#page-battle .skbtn {border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 2px 10px; font-size: 12px; font-weight: 700;}
+#page-battle .skbtn {border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 2px 10px; font-size: 12px; font-weight:500;}
 #page-battle .skbtn[aria-pressed="true"] {background: var(--good); border-color: var(--good); color: #fff;}
-#page-battle .banner {border-radius: 10px; padding: 12px 16px; font-family: var(--font-head); font-weight: 900; font-size: 17px; background: var(--accent); color: #fff;}
+#page-battle .banner {border-radius: 10px; padding: 12px 16px; font-family: var(--font-head); font-weight:500; font-size: 17px; background: var(--accent); color: #fff;}
 #page-battle .efx {display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; min-height: 22px;}
 #page-battle .board {position: relative; display: grid; gap: 12px; padding: 4px 0; isolation: isolate;}
 #page-battle .tside {display: grid; gap: 6px;}
@@ -124,14 +124,14 @@
 body.autorun #page-battle * {pointer-events: none !important;}
 body.autorun #page-battle [data-act=autorun] {pointer-events: auto !important;}
 body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 2147483100;}
-#page-battle .pt .left {position: absolute; top: -6px; left: -6px; z-index: 3; padding: 1px 5px; border-radius: 9px; background: rgba(40,28,20,.85); color: #fff; font-size: 11px; font-weight: 800; line-height: 1.3; white-space: nowrap; pointer-events: none;}
+#page-battle .pt .left {position: absolute; top: -6px; left: -6px; z-index: 3; padding: 1px 5px; border-radius: 9px; background: rgba(40,28,20,.85); color: #fff; font-size: 11px; font-weight:500; line-height: 1.3; white-space: nowrap; pointer-events: none;}
 #page-battle .pt img, #page-battle .pt .tile * {pointer-events: none; -webkit-user-drag: none; user-select: none;}
-#page-battle .ct {text-align: center; font-size: 11px; line-height: 1.2; font-weight: 700; color: var(--ink2);}
+#page-battle .ct {text-align: center; font-size: 11px; line-height: 1.2; font-weight:500; color: var(--ink2);}
 #page-battle .ct.go {color: var(--good);}
 #page-battle .ct.used {color: var(--bad); font-weight: 500;}
 #page-battle .pt.dragging {filter: brightness(1.08);}
 #page-battle .pt.drop .tile {outline: 3px solid var(--warn); outline-offset: 2px;}
-#page-battle .skmark {position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; border-radius: 11px; background: #ffca28; color: #542f00; font-weight: 900; font-size: 14px; display: grid; place-items: center; box-shadow: 0 0 8px #ffbf24; z-index: 3;}
+#page-battle .skmark {position: absolute; top: -6px; right: -6px; min-width: 22px; height: 22px; border-radius: 11px; background: #ffca28; color: #542f00; font-weight:500; font-size: 14px; display: grid; place-items: center; box-shadow: 0 0 8px #ffbf24; z-index: 3;}
 #page-battle .skmark.on {animation: skp 1.15s ease-in-out infinite;}
 #page-battle .skmark.rdy {background: #fde9a3; box-shadow: none;}
 #page-battle .skmark.wait {background: #5b6b7d; color: #fff; box-shadow: none;}
@@ -139,7 +139,7 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
 #page-battle .pips {position: absolute; top: 3px; left: 3px; display: flex; gap: 2px; z-index: 3; pointer-events: none;}
 #page-battle .pips i {width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.85); border: 1.5px solid #6b7785;}
 #page-battle .pips i.on {background: #6b4bb3; border-color: #fff;}
-#page-battle .stag {position: absolute; bottom: 2px; z-index: 3; pointer-events: none; font-size: 9px; font-weight: 900; line-height: 1; padding: 2px 3px; border-radius: 5px; white-space: nowrap; color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3);}
+#page-battle .stag {position: absolute; bottom: 2px; z-index: 3; pointer-events: none; font-size: 9px; font-weight:500; line-height: 1; padding: 2px 3px; border-radius: 5px; white-space: nowrap; color: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3);}
 #page-battle .stag.cc {left: 2px; background: rgba(44,62,80,.92);}
 #page-battle .stag.rv {right: 2px; background: #c0392b;}
 #page-battle .stag.dl {right: 2px; background: #7a5a00;}
@@ -148,7 +148,7 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
 #page-battle .stag.cc i.水 {background: var(--water);}
 #page-battle .stag.cc i.風 {background: var(--wind);}
 #page-battle .stl {display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; min-height: 0;}
-#page-battle .stl span {font-size: 9.5px; font-weight: 800; padding: 1px 5px; border-radius: 5px; line-height: 1.4;}
+#page-battle .stl span {font-size: 9.5px; font-weight:500; padding: 1px 5px; border-radius: 5px; line-height: 1.4;}
 #page-battle .stl .s-used {background: #efe9fa; color: #5b3e94;}
 #page-battle .stl .s-rv {background: #fde8e6; color: #b03a2e;}
 #page-battle .stl .s-cc {background: #e8edf2; color: #2c3e50;}
@@ -161,9 +161,9 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
 #page-battle .skc .ch {display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; align-items: start;}
 #page-battle .skc .ch .tile {--s: 44px;}
 #page-battle .skc .ch.cur {background: #f3fbf6; border-radius: 8px; padding: 4px;}
-#page-battle .skc .nm {font-weight: 800; font-size: 13px;}
+#page-battle .skc .nm {font-weight:500; font-size: 13px;}
 #page-battle .skc .ln {font-size: 12px; color: var(--ink2); overflow-wrap: anywhere;}
-#page-battle .skc .ok {color: var(--good); font-weight: 700;}
+#page-battle .skc .ok {color: var(--good); font-weight:500;}
 #page-battle .skc .ng {color: var(--ink2); text-decoration: line-through;}
 #page-battle .skc .stl {justify-content: flex-start;}
 #page-battle .skc table {border-collapse: collapse; width: 100%; font-size: 12px;}
@@ -176,20 +176,20 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
 #page-battle .cb.fxb {background: #eef6ff; color: #1f5d99; border-color: #cfe1f3;}
 #page-battle .cb.sk {background: #f1ecfc; color: #654391; border-color: #d9cdf0;}
 #page-battle .cb[disabled] {opacity: .4; cursor: not-allowed;}
-#page-battle .cb.m-ok {border-color: var(--good); color: var(--good); font-weight: 700;}
-#page-battle .cb.m-ng {border-color: var(--bad); color: var(--bad); font-weight: 700;}
-#page-battle .cb.m-fast {border-color: var(--accent); color: var(--accent); font-weight: 700;}
+#page-battle .cb.m-ok {border-color: var(--good); color: var(--good); font-weight:500;}
+#page-battle .cb.m-ng {border-color: var(--bad); color: var(--bad); font-weight:500;}
+#page-battle .cb.m-fast {border-color: var(--accent); color: var(--accent); font-weight:500;}
 #tgsvg {position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 3;}
 #page-battle .hint {font-size: 11px; color: var(--ink2); text-align: center; line-height: 1.7;}
 #page-battle .cb.at {color: #8a4a12; border-color: #f0d2b4; background: #fff8f1;}
 #page-battle .cb.unset {border-style: dashed; font-weight: 400;}
-#page-battle .cb.sk.set {background: #6b46a3; color: #fff; border-color: #6b46a3; font-weight: 700;}
-#page-battle .cb.at.set {background: #c2621a; color: #fff; border-color: #c2621a; font-weight: 700;}
+#page-battle .cb.sk.set {background: #6b46a3; color: #fff; border-color: #6b46a3; font-weight:500;}
+#page-battle .cb.at.set {background: #c2621a; color: #fff; border-color: #c2621a; font-weight:500;}
 #page-battle .drow {display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; padding: 4px 0; border-top: 1px solid var(--line);}
 #page-battle .drow:first-of-type {border-top: 0;}
 #page-battle .drow b {font-family: var(--font-head); width: 2em;}
 #page-battle details.sub {border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 8px 12px;}
-#page-battle details.sub > summary {cursor: pointer; font-weight: 700;}
+#page-battle details.sub > summary {cursor: pointer; font-weight:500;}
 @media (max-width: 560px) {
   #page-battle .board {gap: 4px;}
   #page-battle .tside.far {padding-bottom: 6px;}
@@ -211,14 +211,14 @@ body.fxon #page-battle [data-act=autorun] {position: relative; z-index: 21474831
 body.fxon #page-battle .board {isolation: auto;}
 body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: relative; z-index: 51;}
 #fxnums {position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 2147483001; pointer-events: none;}
-#page-battle .fxnum {position: absolute; font-family: var(--font-head); font-weight: 900; white-space: nowrap; color: #fff; text-align: center; transform: translate(-50%, -50%);
+#page-battle .fxnum {position: absolute; font-family: var(--font-head); font-weight:500; white-space: nowrap; color: #fff; text-align: center; transform: translate(-50%, -50%);
   text-shadow: 1.5px 1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px -1.5px 0 #000, 0 0 3px #000;}
 #page-battle .pt .tile.healfx {animation: healfx .6s ease-out;}
 @keyframes healfx { 0% { box-shadow: 0 0 0 0 #3fd17a; } 50% { box-shadow: 0 0 14px 6px #3fd17acc; } 100% { box-shadow: 0 0 0 0 #3fd17a00; } }
 #page-battle .skmark.cntfx {animation: cntfx .6s ease-out;}
 @keyframes cntfx { 0% { transform: scale(1); } 40% { transform: scale(1.7); background: #ffe27a; } 100% { transform: scale(1); } }
 #skfx {position: fixed; inset: 0; z-index: 2147482999; pointer-events: none; overflow: hidden;}
-#page-battle .skmsg {position: fixed; transform: translate(-50%, -100%); font-family: var(--font-head); font-weight: 900; font-size: clamp(15px, 4.2vw, 22px); color: #fff; white-space: nowrap;
+#page-battle .skmsg {position: fixed; transform: translate(-50%, -100%); font-family: var(--font-head); font-weight:500; font-size: clamp(15px, 4.2vw, 22px); color: #fff; white-space: nowrap;
   text-shadow: 2px 2px 0 #7a3b00, -2px 2px 0 #7a3b00, 2px -2px 0 #7a3b00, -2px -2px 0 #7a3b00, 0 0 6px #000;}
 #page-battle .skcut {position: fixed; left: 0; right: 0; margin: 0 auto; bottom: 14px; width: min(560px, calc(100vw - 24px)); transform-origin: 50% 50%; display: flex; align-items: center; gap: 12px;
   padding: 10px 14px; border-radius: 10px; background: linear-gradient(100deg, #2b1d14f2, #4a3020f2); border: 2px solid #f3c969; box-shadow: 0 6px 24px #000a; color: #fff; overflow: hidden;}
@@ -237,7 +237,7 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
   #page-battle .skcut .skc-tx span {font-size: 12px;}
 }
 #page-battle details.turn {border: 1px solid var(--line); border-radius: 10px; background: #fff;}
-#page-battle details.turn > summary {cursor: pointer; font-weight: 700; padding: 10px 14px; font-family: var(--font-head);}
+#page-battle details.turn > summary {cursor: pointer; font-weight:500; padding: 10px 14px; font-family: var(--font-head);}
 #page-battle .tb {padding: 0 14px 14px; display: grid; gap: 10px;}
 #page-battle table.t {border-collapse: collapse; width: 100%; font-size: 12px;}
 #page-battle table.t th, #page-battle table.t td {border-bottom: 1px solid var(--line); padding: 3px 8px; text-align: left; white-space: nowrap;}
@@ -245,19 +245,19 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
 #page-battle .tw {overflow-x: auto;}
 #page-battle .ev {display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--line); font-size: 13px;}
 #page-battle .ev .st {color: var(--ink2); font-size: 11px; padding-top: 2px;}
-#page-battle .ev.attack .hd {font-weight: 700;}
+#page-battle .ev.attack .hd {font-weight:500;}
 #page-battle .ev.attack.kill .hd {color: var(--bad);}
 #page-battle .ev.heal .tx, #page-battle .ev.regen .tx, #page-battle .ev.revive .tx {color: var(--good);}
 #page-battle .ev.skill_used .tx, #page-battle .ev.effect .tx, #page-battle .ev.shorten .tx, #page-battle .ev.delay .tx {color: var(--accent);}
 #page-battle .ev.skill_invalid .tx, #page-battle .ev.skill_cancelled .tx, #page-battle .ev.wasted .tx {color: var(--warn);}
 #page-battle .fx {font-size: 12px; color: var(--ink2); margin-top: 2px; overflow-wrap: anywhere;}
-#page-battle .fx b {color: var(--ink); font-weight: 700;}
+#page-battle .fx b {color: var(--ink); font-weight:500;}
 #page-battle .ghostmsg {grid-column: 1 / -1; color: var(--ink2); font-size: 12px;}
 #page-battle .overlay {position: fixed; inset: 0; z-index: 50; background: rgba(20,28,45,.35); display: grid; place-items: center; padding: 16px;}
 #page-battle .modal {background: #fff; border-radius: 14px; border: 1px solid var(--line); width: min(920px, 100%); max-height: 88vh; display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; box-shadow: 0 12px 40px rgba(20,28,45,.2);}
 #page-battle .modal .mh {padding: 12px 14px; border-bottom: 1px solid var(--line); display: grid; gap: 8px;}
 #page-battle .modal .mb {overflow: auto; padding: 12px 14px 16px;}
-#page-battle .page-eyebrow {color: #175cd3; font-weight: 900; letter-spacing: .16em; font-size: 11px;}
+#page-battle .page-eyebrow {color: #175cd3; font-weight:500; letter-spacing: .16em; font-size: 11px;}
 #page-battle .chips {display: flex; gap: 6px; flex-wrap: wrap;}
 #page-battle .chip {border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 2px 12px; font-size: 12px;}
 #page-battle .chip.on {background: var(--accent); border-color: var(--accent); color: #fff;}
@@ -268,7 +268,7 @@ body.fxon #page-battle #board .pt, body.fxon #page-battle #board .hp {position: 
   #page-battle .hp i, #page-battle .hp b {transition: none !important;}
 }
 /* キャラ選択画面の上に出すデッキ(選択中は常に表示。枠は図鑑の分類タブと同じ枠の中、右側に置く) */
-#pickerDeck .pk-deck-cost { margin: 0 0 6px; color: var(--ui-text-sub); font-size: .84rem; font-weight: 700; }
+#pickerDeck .pk-deck-cost { margin: 0 0 6px; color: var(--ui-text-sub); font-size: .84rem; font-weight:500; }
 #pickerDeck .pk-deck-cost b { color: var(--ui-heading); font-size: 1rem; }
 #pickerDeck .pk-deck-slots { display: grid; grid-template-columns: repeat(5, 68px); gap: 10px; }
 #pickerDeck .pk-deck-slot { position: relative; min-width: 0; }
