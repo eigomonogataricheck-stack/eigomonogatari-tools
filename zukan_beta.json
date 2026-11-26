@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-11-08T11:57:09.836Z",
+  "generatedAt": "2026-11-22T14:04:38.745Z",
   "categoryOrder": [
     [
       "特殊ゆる",
@@ -5760,6 +5760,40 @@
             "applierAttribute": "全",
             "targetAttribute": "水",
             "sourceText": "2ターンの間、味方全員に水属性の敵からのダメージを55%軽減するシールドを与える。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2309,
+      "name": "瞬け★エイセさん!",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2309.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "対戦",
+      "smallCategory": "国外",
+      "heading": "オランダ",
+      "details": {
+        "id": 2309,
+        "name": "瞬け★エイセさん!",
+        "attribute": "風",
+        "cost": 70,
+        "hp": 5555,
+        "power": 1967,
+        "limitBreak": 7,
+        "limitHp": 9466,
+        "limitPower": 3352,
+        "skillTurn": 7,
+        "skill": "2ターンの間、味方全員の属性を全属性に変更する。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "全",
+            "duration": 2,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "2ターンの間、味方全員の属性を全属性に変更する。",
             "needsReview": false
           }
         ]
@@ -14570,6 +14604,38 @@
       }
     },
     {
+      "id": 2324,
+      "name": "たおやかタオティエん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2324.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "伝",
+      "smallCategory": "協力",
+      "details": {
+        "id": 2324,
+        "name": "たおやかタオティエん",
+        "attribute": "水",
+        "cost": 83,
+        "hp": 5900,
+        "power": 2900,
+        "limitBreak": 7,
+        "limitHp": 10054,
+        "limitPower": 4941,
+        "skillTurn": 3,
+        "skill": "2ターンの間、火属性の味方全員の攻撃が全体攻撃になる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 2,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "2ターンの間、火属性の味方全員の攻撃が全体攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1917,
       "name": "ウサウサ八幡",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1917.png",
@@ -15183,6 +15249,40 @@
             "applier": "水",
             "applierAttribute": "水",
             "sourceText": "死亡している水属性の味方全員を140%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2310,
+      "name": "四札王·ダビデ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2310.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "伝",
+      "smallCategory": "ガチャ",
+      "details": {
+        "id": 2310,
+        "name": "四札王·ダビデ",
+        "attribute": "水",
+        "cost": 91,
+        "hp": 6000,
+        "power": 3000,
+        "limitBreak": 7,
+        "limitHp": 10224,
+        "limitPower": 5112,
+        "skillTurn": 0,
+        "skill": "1ターンの間、火属性の敵に対する自身の攻撃力を60%増加させる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 0.6,
+            "duration": 1,
+            "applier": "自身",
+            "target": "火",
+            "targetAttribute": "火",
+            "sourceText": "1ターンの間、火属性の敵に対する自身の攻撃力を60%増加させる。",
             "needsReview": false
           }
         ]
@@ -15925,6 +16025,39 @@
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "味方全員のスキルカウントを1減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2313,
+      "name": "アキアカネ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2313.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "虫",
+      "details": {
+        "id": 2313,
+        "name": "アキアカネ",
+        "attribute": "水",
+        "cost": 30,
+        "hp": 1600,
+        "power": 2100,
+        "limitBreak": 7,
+        "limitHp": 2726,
+        "limitPower": 3578,
+        "skillTurn": 1,
+        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
             "needsReview": false
           }
         ]
@@ -17042,6 +17175,40 @@
       }
     },
     {
+      "id": 2314,
+      "name": "ヒメアカタテハ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2314.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "虫",
+      "details": {
+        "id": 2314,
+        "name": "ヒメアカタテハ",
+        "attribute": "水",
+        "cost": 40,
+        "hp": 2500,
+        "power": 2500,
+        "limitBreak": 7,
+        "limitHp": 4260,
+        "limitPower": 4260,
+        "skillTurn": 2,
+        "skill": "1ターンの間、敵に対する水属性の味方全員の攻撃力を100%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "水",
+            "applierAttribute": "水",
+            "sourceText": "1ターンの間、敵に対する水属性の味方全員の攻撃力を100%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1819,
       "name": "チュパカブ先輩",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1819.png",
@@ -17980,6 +18147,71 @@
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "死亡している味方全員を4%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2311,
+      "name": "浦島☆パリピ☆たろす",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2311.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "民話",
+      "details": {
+        "id": 2311,
+        "name": "浦島☆パリピ☆たろす",
+        "attribute": "水",
+        "cost": 47,
+        "hp": 3750,
+        "power": 1700,
+        "limitBreak": 7,
+        "limitHp": 6390,
+        "limitPower": 2896,
+        "skillTurn": 4,
+        "skill": "味方全員のスキルカウントを2減少させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "短縮",
+            "value": 2,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "味方全員のスキルカウントを2減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2312,
+      "name": "△バラウルの伝説△",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2312.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "民話",
+      "details": {
+        "id": 2312,
+        "name": "△バラウルの伝説△",
+        "attribute": "火水",
+        "cost": 65,
+        "hp": 2500,
+        "power": 2200,
+        "limitBreak": 7,
+        "limitHp": 4260,
+        "limitPower": 3748,
+        "skillTurn": 3,
+        "skill": "3ターンの間、自身の攻撃が全体攻撃になる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 3,
+            "applier": "自身",
+            "sourceText": "3ターンの間、自身の攻撃が全体攻撃になる。",
             "needsReview": false
           }
         ]
@@ -26676,6 +26908,108 @@
       }
     },
     {
+      "id": 2325,
+      "name": "フムフムさん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2325.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "ゆる狩り",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2325,
+        "name": "フムフムさん",
+        "attribute": "火",
+        "cost": 14,
+        "hp": 1010,
+        "power": 1211,
+        "limitBreak": 7,
+        "limitHp": 1721,
+        "limitPower": 2063,
+        "skillTurn": 3,
+        "skill": "3ターンの間、水属性の攻撃を自身に集中させる(72％カット)。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.72,
+            "duration": 3,
+            "applier": "自身",
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "3ターンの間、水属性の攻撃を自身に集中させる(72％カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2326,
+      "name": "温々なフムフムさん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2326.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "ゆる狩り",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2326,
+        "name": "温々なフムフムさん",
+        "attribute": "水",
+        "cost": 30,
+        "hp": 1515,
+        "power": 1911,
+        "limitBreak": 7,
+        "limitHp": 2572,
+        "limitPower": 3257,
+        "skillTurn": 3,
+        "skill": "3ターンの間、水属性の攻撃を自身に集中させる(75％カット)。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.75,
+            "duration": 3,
+            "applier": "自身",
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "3ターンの間、水属性の攻撃を自身に集中させる(75％カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2327,
+      "name": "アプ嗚呼!フムフム様",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2327.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "ゆる狩り",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2327,
+        "name": "アプ嗚呼!フムフム様",
+        "attribute": "火",
+        "cost": 46,
+        "hp": 2020,
+        "power": 2622,
+        "limitBreak": 7,
+        "limitHp": 3442,
+        "limitPower": 4468,
+        "skillTurn": 3,
+        "skill": "3ターンの間、水属性の攻撃を自身に集中させる(77％カット)。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.77,
+            "duration": 3,
+            "applier": "自身",
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "3ターンの間、水属性の攻撃を自身に集中させる(77％カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1660,
       "name": "まおーちゃん",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1660.png",
@@ -32617,6 +32951,333 @@
             "applier": "全員",
             "applierAttribute": "全",
             "sourceText": "1ターンの間、味方全員の攻撃力を250%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2315,
+      "name": "なまはげっぽい何か",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2315.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2315,
+        "name": "なまはげっぽい何か",
+        "attribute": "火水",
+        "cost": 18,
+        "hp": 1206,
+        "power": 2051,
+        "limitBreak": 7,
+        "limitHp": 2054,
+        "limitPower": 3494,
+        "skillTurn": 3,
+        "skill": "2ターンの間、敵に対する自身の攻撃力を300%増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 3,
+            "duration": 2,
+            "applier": "自身",
+            "sourceText": "2ターンの間、敵に対する自身の攻撃力を300%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2316,
+      "name": "日雇いクランプス",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2316.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2316,
+        "name": "日雇いクランプス",
+        "attribute": "火水",
+        "cost": 34,
+        "hp": 1250,
+        "power": 2500,
+        "limitBreak": 7,
+        "limitHp": 2130,
+        "limitPower": 4260,
+        "skillTurn": 3,
+        "skill": "3ターンの間、敵に対する自身の攻撃力を280%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 2.8,
+            "duration": 3,
+            "applier": "自身",
+            "sourceText": "3ターンの間、敵に対する自身の攻撃力を280%増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2317,
+      "name": "聖ニコラウスと側近",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2317.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2317,
+        "name": "聖ニコラウスと側近",
+        "attribute": "全",
+        "cost": 55,
+        "hp": 3200,
+        "power": 2500,
+        "limitBreak": 7,
+        "limitHp": 5453,
+        "limitPower": 4260,
+        "skillTurn": 6,
+        "skill": "4ターンの間、火属性の味方全員の攻撃が4回連続攻撃になる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "連撃",
+            "value": 4,
+            "duration": 4,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "4ターンの間、火属性の味方全員の攻撃が4回連続攻撃になる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2318,
+      "name": "羊っぽ~い",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2318.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2318,
+        "name": "羊っぽ~い",
+        "attribute": "風",
+        "cost": 15,
+        "hp": 1700,
+        "power": 1300,
+        "limitBreak": 7,
+        "limitHp": 3178,
+        "limitPower": 2356,
+        "skillTurn": 2,
+        "skill": "2ターンの間、風属性の味方全員のHPを35％回復する。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.35,
+            "duration": 2,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "2ターンの間、風属性の味方全員のHPを35％回復する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2319,
+      "name": "トゥロゥちゃん後輩",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2319.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2319,
+        "name": "トゥロゥちゃん後輩",
+        "attribute": "風",
+        "cost": 38,
+        "hp": 2400,
+        "power": 2000,
+        "limitBreak": 7,
+        "limitHp": 4089,
+        "limitPower": 3408,
+        "skillTurn": 2,
+        "skill": "2ターンの間、風属性の味方全員のHPを45％回復する。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "回復",
+            "value": 0.45,
+            "duration": 2,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "2ターンの間、風属性の味方全員のHPを45％回復する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2320,
+      "name": "饕餮盛宴タオティエん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2320.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2320,
+        "name": "饕餮盛宴タオティエん",
+        "attribute": "火",
+        "cost": 44,
+        "hp": 1600,
+        "power": 2800,
+        "limitBreak": 7,
+        "limitHp": 2726,
+        "limitPower": 4771,
+        "skillTurn": 0,
+        "skill": "1ターンの間、水属性の攻撃を自身に集中させる(80％カット)。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "かばう",
+            "value": 0.8,
+            "duration": 1,
+            "applier": "自身",
+            "target": "水",
+            "targetAttribute": "水",
+            "sourceText": "1ターンの間、水属性の攻撃を自身に集中させる(80％カット)。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2321,
+      "name": "シトロンくん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2321.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2321,
+        "name": "シトロンくん",
+        "attribute": "火",
+        "cost": 20,
+        "hp": 1250,
+        "power": 1750,
+        "limitBreak": 7,
+        "limitHp": 2130,
+        "limitPower": 2982,
+        "skillTurn": 4,
+        "skill": "4ターンの間、敵に対する風属性の味方全員の攻撃力を100％増加させる。",
+        "rare": "CR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 4,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "4ターンの間、敵に対する風属性の味方全員の攻撃力を100％増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2322,
+      "name": "レモーンニアちゃん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2322.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2322,
+        "name": "レモーンニアちゃん",
+        "attribute": "火",
+        "cost": 36,
+        "hp": 2000,
+        "power": 2800,
+        "limitBreak": 7,
+        "limitHp": 3408,
+        "limitPower": 4771,
+        "skillTurn": 4,
+        "skill": "4ターンの間、敵に対する風属性の味方全員の攻撃力を120％増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1.2,
+            "duration": 4,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "4ターンの間、敵に対する風属性の味方全員の攻撃力を120％増加させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2323,
+      "name": "レモン祭り☆ﾚﾓｰﾝﾆｱ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2323.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2323,
+        "name": "レモン祭り☆ﾚﾓｰﾝﾆｱ",
+        "attribute": "火",
+        "cost": 44,
+        "hp": 2400,
+        "power": 3200,
+        "limitBreak": 7,
+        "limitHp": 4089,
+        "limitPower": 5453,
+        "skillTurn": 3,
+        "skill": "風属性の味方全員のスキルカウントを3減少させる。",
+        "rare": "MZR",
+        "skillEffects": [
+          {
+            "effect": "短縮",
+            "value": 3,
+            "applier": "風",
+            "applierAttribute": "風",
+            "sourceText": "風属性の味方全員のスキルカウントを3減少させる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2324,
+      "name": "たおやかタオティエん",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2324.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "協力",
+      "smallCategory": "その他",
+      "details": {
+        "id": 2324,
+        "name": "たおやかタオティエん",
+        "attribute": "水",
+        "cost": 83,
+        "hp": 5900,
+        "power": 2900,
+        "limitBreak": 7,
+        "limitHp": 10054,
+        "limitPower": 4941,
+        "skillTurn": 3,
+        "skill": "2ターンの間、火属性の味方全員の攻撃が全体攻撃になる。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "全体攻撃",
+            "duration": 2,
+            "applier": "火",
+            "applierAttribute": "火",
+            "sourceText": "2ターンの間、火属性の味方全員の攻撃が全体攻撃になる。",
             "needsReview": false
           }
         ]
