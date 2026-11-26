@@ -1,6 +1,6 @@
 {
   "schemaVersion": 5,
-  "generatedAt": "2026-11-22T14:04:38.745Z",
+  "generatedAt": "2026-11-26T08:42:47.882Z",
   "categoryOrder": [
     [
       "特殊ゆる",
@@ -5783,7 +5783,7 @@
         "limitBreak": 7,
         "limitHp": 9466,
         "limitPower": 3352,
-        "skillTurn": 7,
+        "skillTurn": 2,
         "skill": "2ターンの間、味方全員の属性を全属性に変更する。",
         "rare": "伝",
         "skillEffects": [
@@ -13812,6 +13812,39 @@
       }
     },
     {
+      "id": 2309,
+      "name": "瞬け★エイセさん!",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2309.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "伝",
+      "smallCategory": "対戦",
+      "details": {
+        "id": 2309,
+        "name": "瞬け★エイセさん!",
+        "attribute": "風",
+        "cost": 70,
+        "hp": 5555,
+        "power": 1967,
+        "limitBreak": 7,
+        "limitHp": 9466,
+        "limitPower": 3352,
+        "skillTurn": 2,
+        "skill": "2ターンの間、味方全員の属性を全属性に変更する。",
+        "rare": "伝",
+        "skillEffects": [
+          {
+            "effect": "色変",
+            "value": "全",
+            "duration": 2,
+            "applier": "全員",
+            "applierAttribute": "全",
+            "sourceText": "2ターンの間、味方全員の属性を全属性に変更する。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
       "id": 1936,
       "name": "ルナのたまご",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1936.png",
@@ -16031,39 +16064,6 @@
       }
     },
     {
-      "id": 2313,
-      "name": "アキアカネ",
-      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2313.png",
-      "largeCategory": "特殊ゆる",
-      "middleCategory": "EXTRA",
-      "smallCategory": "その他",
-      "heading": "虫",
-      "details": {
-        "id": 2313,
-        "name": "アキアカネ",
-        "attribute": "水",
-        "cost": 30,
-        "hp": 1600,
-        "power": 2100,
-        "limitBreak": 7,
-        "limitHp": 2726,
-        "limitPower": 3578,
-        "skillTurn": 1,
-        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
-        "rare": "ZR",
-        "skillEffects": [
-          {
-            "effect": "攻撃力アップ",
-            "value": 1,
-            "duration": 1,
-            "applier": "自身",
-            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
-            "needsReview": false
-          }
-        ]
-      }
-    },
-    {
       "id": 1802,
       "name": "ナナホシ",
       "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon1802.png",
@@ -17169,6 +17169,39 @@
             "applier": "火",
             "applierAttribute": "火",
             "sourceText": "死亡している火属性の味方全員を1%のHPで蘇らせる。",
+            "needsReview": false
+          }
+        ]
+      }
+    },
+    {
+      "id": 2313,
+      "name": "アキアカネ",
+      "imageUrl": "https://englishstoryserver.com/Icon/Icon/Icon2313.png",
+      "largeCategory": "特殊ゆる",
+      "middleCategory": "EXTRA",
+      "smallCategory": "その他",
+      "heading": "虫",
+      "details": {
+        "id": 2313,
+        "name": "アキアカネ",
+        "attribute": "水",
+        "cost": 30,
+        "hp": 1600,
+        "power": 2100,
+        "limitBreak": 7,
+        "limitHp": 2726,
+        "limitPower": 3578,
+        "skillTurn": 1,
+        "skill": "1ターンの間、自身の攻撃力を100%増加させる。",
+        "rare": "ZR",
+        "skillEffects": [
+          {
+            "effect": "攻撃力アップ",
+            "value": 1,
+            "duration": 1,
+            "applier": "自身",
+            "sourceText": "1ターンの間、自身の攻撃力を100%増加させる。",
             "needsReview": false
           }
         ]
