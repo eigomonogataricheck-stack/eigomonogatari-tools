@@ -1,13 +1,27 @@
-/* 英語物語 非公式ツール: キャラ診断 (現行 k17 相性AIによる既存・未実装キャラ単一スコア診断)
+/* 英語物語 非公式ツール: キャラ診断 (現行 k17 相性AI・純相性ベクトル方式)
  *   依存: battle-roster.js (zukanToRoster), battle-models.js (SET_MODEL=k17), battle-compat.js (CompatSet), char-diag-data.js (CHAR_DIAG_BASE)
- *   Python版 (本体/tools/char_diag_k17.py) と完全同一の特徴量エンコード・シェル採点・偏差値換算ロジック
+ *   Python版 (本体/tools/char_diag_k17.py) と完全同一の特徴量エンコード・35次元相性ベクトル抽出・連続コスト機会費用・特効LogSumExp集約ロジック
  */
 (function (root) {
   "use strict";
 
   const ATTRS3 = ["火", "水", "風"];
   const TYPES = ["none", "atk_up", "multi_attack", "all_attack", "shield", "heal", "revive", "color_change", "shorten", "delay", "cover", "cover_leader"];
-  const BANDS = [["低", 150], ["中", 220], ["高", 350], ["超高", 500]];
+
+  // Python版 char_diag_k17.py と完全一致する数理定数
+  const W_SLOT_BEST = 0.92;
+  const W_SLOT_SECOND = 0.08;
+  const COST_SAT = 60.0;
+  const COST_LOG_SHIFT = 12.0;
+  const COST_OPT_FLOOR = -0.10;
+  const LEGEND_PENALTY = 0.08;
+  const OFF_ATTR_SYNERGY_PENALTY = 0.20;
+  const LSE_TAU = 0.18;
+  const LSE_REF_DENOM = 6.0;
+  const W_GEN = 0.20;
+  const W_LSE = 0.80;
+  const SOFT_U_KINK = 2.4;
+  const SOFT_U_SCALE = 1.6;
 
   /* Python の round() (最近接偶数丸め) と完全一致 */
   function pyRound(x) {
@@ -114,12 +128,12 @@
   }
 
   function tierOf(score) {
-    if (score >= 80.0) return ["SS", "環境支配・最上位クラス（複数帯でトップ編成を更新する水準）", "kill"];
-    if (score >= 70.0) return ["S", "環境トップ主力級（実戦の主力として第一線で採用される水準）", "kill"];
-    if (score >= 60.0) return ["A", "優秀・環境採用圏（得意コスト帯やシナジー編成で主力になる水準）", "chance"];
-    if (score >= 50.0) return ["B", "標準〜準主力級（全キャラ平均以上・縛りやイベント補正で活躍）", "chance"];
-    if (score >= 40.0) return ["C", "やや控えめ（資産制限やイベント補正×1.5があれば採用圏）", "safe"];
-    return ["D", "対戦では厳しい（コスト過多またはステータス・スキル不足）", "safe"];
+    if (score >= 78.0) return ["SS", "環境支配・最上位級（汎用または特効で突出した決定力）", "kill"];
+    if (score >= 68.0) return ["S", "環境トップ主力級（多くの編成・得意環境で第一線）", "kill"];
+    if (score >= 58.0) return ["A", "優秀・環境採用圏（得意相手への対策や主力パーツとして活躍）", "chance"];
+    if (score >= 48.0) return ["B", "標準〜準主力級（全キャラ平均前後・条件や補正次第で活躍）", "chance"];
+    if (score >= 40.0) return ["C", "やや控えめ（イベント補正×1.5や資産制限下で採用圏）", "safe"];
+    return ["D", "対戦では厳しい（コスト負担に対してステータス・スキルが不足）", "safe"];
   }
 
   function clipWarnings(feat, setModel) {
@@ -143,7 +157,29 @@
     if ((typ === 10 || typ === 11) && amt >= 75 && cnt <= 1) {
       warns.push("1ターン発動の高倍率「かばう／かわす」は、現行 k17 が実戦よりやや高めに評価しやすい傾向があります。");
     }
+    if (typ === 6 && feat[2] < 1500) {
+      warns.push("現行 k17 は全体攻撃による控え巻き込み死を甘めに見積もるため、極低HPの蘇生キャラは実戦より高く出やすい傾向があります。");
+    }
     return warns;
+  }
+
+  function computeCostOffset(cost, phiA, phiB) {
+    const phi = (w) => phiA + phiB * Math.log(Math.min(COST_SAT, Math.max(4.0, w)) + COST_LOG_SHIFT);
+    const w = Number(cost);
+    const pw = phi(w);
+    let sqSum = 0;
+    const nCaps = 43;
+    for (let idx = 0; idx < nCaps; idx++) {
+      const C = 80.0 + 10.0 * idx;
+      if (w + 24.0 <= C) {
+        let sWc = pw + 4.0 * phi((C - w) / 4.0) - 5.0 * phi(C / 5.0);
+        if (C < 1.8 * w + 20.0 && sWc < COST_OPT_FLOOR) sWc = COST_OPT_FLOOR;
+        sqSum += sWc;
+      } else {
+        sqSum += COST_OPT_FLOOR;
+      }
+    }
+    return -pw + sqSum / nCaps;
   }
 
   /* SetModel (k17) 高速推論器 (Float32Array・アロケーションゼロ・Block0固定45体事前計算・最終層Q5体限定) */
@@ -187,7 +223,6 @@
     const h0w = W["head.0.weight"], h0b = W["head.0.bias"], h2w = W["head.2.weight"], h2b = W["head.2.bias"][0];
     const inpw = W["inp.weight"], inpb = W["inp.bias"];
 
-    // 各トークン i と関係 r (0:自デッキ, 1:味方, 2:敵) の対象 j インデックス配列を事前構築 (分岐ゼロ化)
     const relTargets = Array.from({ length: 50 }, () => [[], [], []]);
     for (let i = 0; i < 50; i++) {
       const pi = (i / 5) | 0, ti = (i / 25) | 0;
@@ -197,7 +232,6 @@
       }
     }
 
-    // 再利用ワークバッファ (ヒープ確保ゼロ)
     const xBuf = new Float32Array(50 * D);
     const nxBuf = new Float32Array(50 * D);
     const qkvBuf = new Float32Array(50 * 3 * D);
@@ -226,13 +260,12 @@
       hotTmp[4] = OFF[4] + c1; hotTmp[5] = OFF[5] + c11; hotTmp[6] = OFF[6] + (t % 5); hotTmp[7] = OFF[7] + ((((t / 5) | 0) % 5) === 0 ? 1 : 0);
       for (let i = 0; i < D; i++) {
         const r = i * 56;
-        let s = inpb[i]
+        out[o + i] = inpb[i]
           + inpw[r] * numTmp[0] + inpw[r + 1] * numTmp[1] + inpw[r + 2] * numTmp[2]
           + inpw[r + 3] * numTmp[3] + inpw[r + 4] * numTmp[4] + inpw[r + 5] * numTmp[5]
           + inpw[r + 6] * numTmp[6] + inpw[r + 7] * numTmp[7] + inpw[r + 8] * numTmp[8]
           + inpw[r + 9 + hotTmp[0]] + inpw[r + 9 + hotTmp[1]] + inpw[r + 9 + hotTmp[2]] + inpw[r + 9 + hotTmp[3]]
           + inpw[r + 9 + hotTmp[4]] + inpw[r + 9 + hotTmp[5]] + inpw[r + 9 + hotTmp[6]] + inpw[r + 9 + hotTmp[7]];
-        out[o + i] = s;
       }
     }
 
@@ -342,14 +375,12 @@
         qkvBuf.set(q0);
         for (let k = 0; k < 5; k++) embed(deck[k], mStart + k, xBuf, (mStart + k) * D);
 
-        // 中間層 (0 .. NB-2)
         let curX = xBuf, nextX = nxBuf;
         for (let bi = 0; bi < NB - 1; bi++) {
           runFullBlock(blk[bi], curX, qkvBuf, bi === 0 ? mStart : -1, nextX);
           const sw = curX; curX = nextX; nextX = sw;
         }
 
-        // 最終層 (NB-1): KV は全50体、Q と FFN は自デッキ5体のみ!
         const BL = blk[NB - 1];
         for (let t = 0; t < 50; t++) {
           ln(curX, t * D, BL.n1w, BL.n1b, hn, 0);
@@ -417,154 +448,107 @@
 
   function createEngine(compatSet, baseData, setModelMeta) {
     const fastSet = setModelMeta ? makeFastSet(setModelMeta) : compatSet;
-    const mu = baseData.mu, sd = baseData.sd;
-    const refChars = baseData.ref_chars; // { "id": [name, cost, leg, feat13] }
-    const ranking = baseData.ranking;   // [[id, name, cost, rare, attrs, score, bq], ...]
+    const refChars = baseData.ref_chars; // { "id": feat13 }
+    const ranking = baseData.ranking;    // [[id, name, cost, rare, attrs, score, themeScore, bestCtx, bestSlot, genVal, peakVal], ...]
     const rankScores = ranking.map((x) => x[5]);
+    const q55Mat = baseData.q55;
+    const scaleMat = baseData.scale;
+    const phiA = Number(baseData.phi_a);
+    const phiB = Number(baseData.phi_b);
+    const rawMed = Number(baseData.raw_med);
+    const rawRsd = Number(baseData.raw_rsd);
+    const uMean = Number(baseData.u_mean);
+    const uStd = Number(baseData.u_std);
+    const ctxDefs = baseData.contexts;
 
-    // ブラウザ快適応答のため各バンド上位2試合 × [seat=0(0.2), seat=1(0.8)] = 4レイアウトを事前構築
-    const bandScorers = {};
-    for (let bi = 0; bi < 4; bi++) {
-      const bd = baseData.bands[String(bi)];
-      const draws = bd.env_draws_ids;
-      const nEnv = Math.min(2, draws.length);
-      const list = [];
-      for (let ei = 0; ei < nEnv; ei++) {
-        const decks10 = draws[ei].map((dk) => dk.map((cid) => refChars[String(cid)][3]));
-        const fixed0 = decks10.slice(); fixed0[0] = null;
-        const fixed1 = decks10.slice(); fixed1[1] = null;
-        list.push({ w: 0.2 / nEnv, seat: 0, fn: fastSet.scorer(fixed0, 0) });
-        list.push({ w: 0.8 / nEnv, seat: 1, fn: fastSet.scorer(fixed1, 1) });
-      }
-      bandScorers[bi] = list;
-    }
-
-    /* 2段採点: まず代表1レイアウト(seat1[0], 非リーダー80%側)で全候補シェル(最大12個)を下見し、上位5シェルを残り3レイアウトで本採点 */
-    function scoreShellsTwoStage(bi, shellDecks, envMean) {
-      const list = bandScorers[bi];
-      const n = shellDecks.length;
-      const quick = new Array(n);
-      for (let i = 0; i < n; i++) {
-        const s1 = list[1].fn(shellDecks[i][1]);
-        quick[i] = [i, s1];
-      }
-      quick.sort((a, b) => b[1] - a[1]);
-      const topK = Math.min(n, 5);
-      const fullScored = [];
-      for (let k = 0; k < topK; k++) {
-        const idx = quick[k][0], dk = shellDecks[idx][1];
-        let acc = list[1].w * quick[k][1] + list[0].w * list[0].fn(dk);
-        for (let li = 2; li < list.length; li++) acc += list[li].w * list[li].fn(dk);
-        fullScored.push([shellDecks[idx][0], acc - envMean]);
-      }
-      fullScored.sort((a, b) => b[1] - a[1]);
-      return fullScored;
-    }
-
-    function peerBase(bi, shi, cCost) {
-      const curve = baseData.bands[String(bi)].peer_curves[shi];
-      if (!curve || !curve.length) return 0;
-      const idx = Math.max(0, Math.min(curve.length - 1, Math.floor((Math.max(2, cCost) - 2) / 2)));
-      return curve[idx];
-    }
+    // 7つの相性環境それぞれに seat0(20%) + seat1(80%) の2つの高速採点器と中立5枠プローブを事前構築 (初期化 約15ms)
+    const ctxRunners = ctxDefs.map((cc) => {
+      const b0Decks = cc.board_ids[0].map((dk) => dk.map((cid) => refChars[String(cid)]));
+      const b1Decks = cc.board_ids[1].map((dk) => dk.map((cid) => refChars[String(cid)]));
+      b0Decks[0] = null;
+      b1Decks[1] = null;
+      const fn0 = fastSet.scorer(b0Decks, 0);
+      const fn1 = fastSet.scorer(b1Decks, 1);
+      const probes = cc.probe_ids.map((pr) => pr.map((cid) => refChars[String(cid)]));
+      return {
+        key: cc.key,
+        label: cc.label,
+        reqAttr: cc.req_attr || null,
+        evalDeck: (dk) => 0.2 * fn0(dk) + 0.8 * fn1(dk),
+        probes,
+        probeBase: cc.probe_base_scores,
+      };
+    });
 
     function scoreVariant(ch) {
+      const K = ctxRunners.length;
       const cCost = ch.cost | 0;
-      const cLeg = ch.rare === "伝";
-      const cid = ch.id != null ? ch.id : -1;
-      const bandOut = {};
+      const attrs = ch.attrs;
+      const rare = ch.rare;
+      const cf = ch.feat;
 
-      for (let bi = 0; bi < 4; bi++) {
-        const [bname, cap] = BANDS[bi];
-        const bd = baseData.bands[String(bi)];
-        const shells = bd.shells;
-        const maxSlack = Math.max(35, Math.trunc(cap * 0.30));
-        const vSh = [];
-        for (let shi = 0; shi < shells.length; shi++) {
-          const sh = shells[shi];
-          if (sh.rem_cost >= cCost && !(cLeg && sh.has_leg) && !sh.core.includes(cid)) {
-            vSh.push(shi);
-          }
-        }
-        if (vSh.length < 3) {
-          bandOut[bname] = { eligible: false, cap, q: Number(baseData.unusable_pen[String(bi)]) };
-          continue;
-        }
-        const tight = vSh.filter((shi) => shells[shi].rem_cost <= cCost + maxSlack);
-        let useSh = tight.length >= 6
-          ? tight
-          : vSh.slice().sort((a, b) => (shells[a].rem_cost - cCost) - (shells[b].rem_cost - cCost)).slice(0, 12);
-        if (useSh.length > 12) {
-          useSh = useSh.slice().sort((a, b) => {
-            const va = shells[a].base_sc - 0.008 * (shells[a].rem_cost - cCost);
-            const vb = shells[b].base_sc - 0.008 * (shells[b].rem_cost - cCost);
-            return vb - va;
-          }).slice(0, 12);
-        }
+      const vCal = Array.from({ length: K }, () => new Float64Array(5));
+      const vCtx = new Float64Array(K);
+      const ctxBestSlot = new Int32Array(K);
 
-        const shellDecks = [];
-        for (let i = 0; i < useSh.length; i++) {
-          const shi = useSh[i], sh = shells[shi], core = sh.core, s = sh.slot;
-          const dk = [];
-          for (let k = 0; k < s; k++) dk.push(refChars[String(core[k])][3]);
-          dk.push(ch.feat);
-          for (let k = s; k < 4; k++) dk.push(refChars[String(core[k])][3]);
-          shellDecks.push([shi, dk]);
+      for (let ki = 0; ki < K; ki++) {
+        const runner = ctxRunners[ki];
+        const p0 = runner.probes[0], p1 = runner.probes[1];
+        const b0 = runner.probeBase[0], b1 = runner.probeBase[1];
+        for (let s = 0; s < 5; s++) {
+          const dk0 = p0.slice(); dk0[s] = cf;
+          const dk1 = p1.slice(); dk1[s] = cf;
+          const rMean = 0.5 * ((runner.evalDeck(dk0) - b0) + (runner.evalDeck(dk1) - b1));
+          vCal[ki][s] = (rMean - q55Mat[ki][s]) / scaleMat[ki][s];
         }
-        const scored = scoreShellsTwoStage(bi, shellDecks, bd.env_mean);
+        const orderS = [0, 1, 2, 3, 4].sort((a, b) => vCal[ki][b] - vCal[ki][a]);
+        ctxBestSlot[ki] = orderS[0] + 1;
+        vCtx[ki] = W_SLOT_BEST * vCal[ki][orderS[0]] + W_SLOT_SECOND * vCal[ki][orderS[1]];
+      }
 
-        const top4 = [], seenC = new Set();
-        for (let i = 0; i < scored.length; i++) {
-          const [shi, sc] = scored[i];
-          const crKey = shells[shi].core.slice().sort((a, b) => a - b).join(",");
-          if (!seenC.has(crKey)) {
-            seenC.add(crKey);
-            top4.push([shi, sc]);
-            if (top4.length >= 4) break;
-          }
-        }
-        let sTop4 = 0, dPeer = 0;
-        for (let i = 0; i < top4.length; i++) {
-          sTop4 += top4[i][1];
-          dPeer += top4[i][1] - peerBase(bi, top4[i][0], cCost);
-        }
-        sTop4 /= top4.length;
-        dPeer /= top4.length;
-        const dCeil = sTop4 - bd.ceil;
-        const q = 0.5 * dCeil + 0.5 * dPeer;
+      const cOff = computeCostOffset(cCost, phiA, phiB);
+      const legOff = rare === "伝" ? -LEGEND_PENALTY : 0.0;
+      const delta = new Float64Array(K);
+      const contexts = new Array(K);
 
-        const [bestShi, bestSc] = top4[0];
-        const bsh = shells[bestShi];
-        const deckMembers = [];
-        for (let k = 0; k < bsh.slot; k++) deckMembers.push({ id: bsh.core[k], name: refChars[String(bsh.core[k])][0], self: false });
-        deckMembers.push({ id: cid, name: ch.name || "診断キャラ", self: true });
-        for (let k = bsh.slot; k < 4; k++) deckMembers.push({ id: bsh.core[k], name: refChars[String(bsh.core[k])][0], self: false });
-
-        bandOut[bname] = {
-          eligible: true,
-          cap,
-          q,
-          s_top4: sTop4,
-          d_ceil: dCeil,
-          d_peer: dPeer,
-          best_slot: bsh.slot + 1,
-          best_deck_score: bestSc,
-          best_deck: deckMembers,
+      for (let ki = 0; ki < K; ki++) {
+        const reqA = ctxRunners[ki].reqAttr;
+        const offAttr = !!(reqA && !attrs.includes(reqA));
+        const dk = vCtx[ki] + cOff + legOff + (offAttr ? -OFF_ATTR_SYNERGY_PENALTY : 0.0);
+        delta[ki] = dk;
+        contexts[ki] = {
+          key: ctxRunners[ki].key,
+          label: ctxRunners[ki].label,
+          delta: dk,
+          rawV: vCtx[ki],
+          bestSlot: ctxBestSlot[ki],
+          offAttr,
         };
       }
 
-      const qf = BANDS.map(([bn]) => bandOut[bn].q);
-      const qs = qf.slice().sort((a, b) => b - a);
-      const raw = 0.60 * ((qs[0] + qs[1]) / 2) + 0.40 * ((qf[0] + qf[1] + qf[2] + qf[3]) / 4);
-      const score = 50.0 + 10.0 * (raw - mu) / sd;
-      const scoreR = Math.round(score * 10) / 10;
+      const genVal = 0.25 * (delta[0] + delta[1] + delta[2] + delta[3]);
+      let mx = -1e30, bestKi = 0;
+      for (let ki = 0; ki < K; ki++) {
+        if (delta[ki] > mx) { mx = delta[ki]; bestKi = ki; }
+      }
+      let expSum = 0;
+      for (let ki = 0; ki < K; ki++) expSum += Math.exp((delta[ki] - mx) / LSE_TAU);
+      const lseVal = mx + LSE_TAU * Math.log(expSum / LSE_REF_DENOM);
+      const raw = W_GEN * genVal + W_LSE * lseVal;
+
+      const u = (raw - rawMed) / rawRsd;
+      const uSoft = u <= SOFT_U_KINK ? u : (SOFT_U_KINK + SOFT_U_SCALE * Math.tanh((u - SOFT_U_KINK) / SOFT_U_SCALE));
+      const scoreExact = 50.0 + 10.0 * (uSoft - uMean) / uStd;
+      const scoreR = Math.round(scoreExact * 10) / 10;
+
       let higher = 0;
-      for (let i = 0; i < rankScores.length; i++) if (rankScores[i] > score) higher++;
+      for (let i = 0; i < rankScores.length; i++) if (rankScores[i] > scoreR) higher++;
       const rankEq = higher + 1;
-      const [tier, tierDesc, state] = tierOf(score);
+      const [tier, tierDesc, state] = tierOf(scoreExact);
+
       return {
         score: scoreR,
-        scoreExact: score,
+        scoreExact,
         raw,
         tier,
         tierDesc,
@@ -572,7 +556,14 @@
         rankEq,
         nRoster: rankScores.length,
         topPct: Math.max(0.1, Math.round((rankEq / Math.max(1, rankScores.length)) * 1000) / 10),
-        bands: bandOut,
+        bestCtxIdx: bestKi,
+        bestCtx: ctxRunners[bestKi].label,
+        bestSlot: ctxBestSlot[bestKi],
+        genVal,
+        peakVal: mx,
+        lseVal,
+        costOffset: cOff + legOff,
+        contexts,
       };
     }
 
@@ -590,15 +581,15 @@
       const featNorm = encodeChar(cost, attrs, lhp, lpw, skill);
       const featTheme = encodeChar(cost, attrs, pyRound(lhp * 1.5), pyRound(lpw * 1.5), skill);
 
-      const normal = scoreVariant({ id: cid, name: opts.name, cost, rare, feat: featNorm });
-      const theme15x = scoreVariant({ id: cid, name: opts.name, cost, rare, feat: featTheme });
+      const normal = scoreVariant({ id: cid, name: opts.name, cost, attrs, rare, feat: featNorm });
+      const theme15x = scoreVariant({ id: cid, name: opts.name, cost, attrs, rare, feat: featTheme });
 
       const nearExisting = ranking
         .filter((x) => x[0] !== cid)
         .slice()
-        .sort((a, b) => Math.abs(a[5] - normal.scoreExact) - Math.abs(b[5] - normal.scoreExact))
+        .sort((a, b) => Math.abs(a[5] - normal.score) - Math.abs(b[5] - normal.score))
         .slice(0, 4)
-        .map((x) => ({ id: x[0], name: x[1], cost: x[2], rare: x[3], attrs: x[4], score: x[5] }));
+        .map((x) => ({ id: x[0], name: x[1], cost: x[2], rare: x[3], attrs: x[4], score: x[5], bestCtx: x[7] }));
 
       const dt = ((typeof performance !== "undefined" ? performance.now() : Date.now()) - t0) / 1000;
       return {
@@ -623,9 +614,9 @@
 
   /* ========== ブラウザ画面 (#page-diag) 制御 ========== */
   let engine = null;
-  let selectedChar = null;   // zukan_beta.json の character オブジェクト (未実装モード時は null)
-  let rosterMap = null;      // id -> zukanToRoster 変換済みオブジェクト
-  let charByIdMap = null;    // id -> zukan_beta.json の character オブジェクト
+  let selectedChar = null;
+  let rosterMap = null;
+  let charByIdMap = null;
 
   function ensureMaps() {
     if (!rosterMap && root.zukanToRoster && typeof chars !== "undefined" && chars.length) {
@@ -644,7 +635,7 @@
     if (el && typeof calculatorSyncStyledSelect === "function") calculatorSyncStyledSelect(el);
   }
 
-  function sgn(v, d = 3) {
+  function sgn(v, d = 2) {
     return (v >= 0 ? "+" : "") + Number(v).toFixed(d);
   }
 
@@ -667,11 +658,9 @@
       else lbl.textContent = "攻撃力増加（%）";
     }
 
-    // 範囲選択: かばう(自身固定)・かわす(リーダー固定)・遅延(敵固定)では隠す
     const hideScope = isNone || tp === "cover" || tp === "cover_leader" || tp === "delay";
     $("diagScopeWrap").hidden = hideScope;
 
-    // 対象属性 / 色変先
     const showTargetAttr = !isNone && !["cover", "cover_leader"].includes(tp) && (tp === "color_change" || tp === "delay" || $("diagScope").value === "team");
     $("diagTargetAttrWrap").hidden = !showTargetAttr;
     if (showTargetAttr) {
@@ -693,7 +682,6 @@
       syncSelect("diagTargetAttr");
     }
 
-    // 対属性（バフ・軽減・かばう・かわす）
     const showVs = ["atk_up", "shield", "cover", "cover_leader"].includes(tp);
     $("diagVsAttrWrap").hidden = !showVs;
   }
@@ -718,7 +706,6 @@
     syncSelect("diagRare");
     syncSelect("diagAttr");
 
-    // 凸数セレクタ設定
     const maxLb = typeof limitBreakMax === "function" ? limitBreakMax(c) : 0;
     const lbSel = $("diagLimitBreak");
     if (maxLb > 0) {
@@ -740,7 +727,6 @@
       syncSelect("diagStatMode");
     }
 
-    // スキル反映
     $("diagOrigSkillBox").hidden = false;
     $("diagOrigSkillText").textContent = d.skill ? `元のスキル文: ${d.skill}` : "元のスキル: なし";
 
@@ -833,7 +819,6 @@
       targetAttr
     );
 
-    // 既存キャラと完全に同一パラメータか判定 (同一なら本人の重複デッキ除外 ID を使う)
     let cid = -1;
     let isUnlimit = true;
     if (selectedChar) {
@@ -853,7 +838,6 @@
           cid = origId;
         }
       }
-      // 既存キャラ選択時は入力欄にその凸のHP/Powerが直接入っているためそのまま評価する
       if (!$("diagLimitBreakWrap").hidden) isUnlimit = true;
       else isUnlimit = $("diagStatMode").value === "1";
     } else {
@@ -875,16 +859,19 @@
 
   function renderDiagnosisResult(res) {
     const nm = res.normal, th = res.theme15x, inp = res.input;
-    const scoreEl = $("diagScoreValue");
-    scoreEl.textContent = `${nm.score.toFixed(1)} 点`;
+    $("diagScoreValue").textContent = `${nm.score.toFixed(1)} 点`;
     const tierEl = $("diagTierLabel");
     tierEl.textContent = `${nm.tier}ランク｜${nm.tierDesc}`;
     tierEl.dataset.state = nm.state;
 
-    $("diagSubMeta").textContent = `既存${nm.nRoster.toLocaleString()}体中 ${nm.rankEq.toLocaleString()}位相当（上位${nm.topPct}% / 期待寄与 ${sgn(nm.raw, 4)}）`;
+    $("diagSubMeta").textContent = `既存${nm.nRoster.toLocaleString()}体中 ${nm.rankEq.toLocaleString()}位相当（上位${nm.topPct}%）`;
     $("diagThemeScore").textContent = `${th.score.toFixed(1)} 点`;
     $("diagThemeMeta").textContent = `${th.tier}ランク / 既存${th.rankEq.toLocaleString()}位相当`;
     $("diagSpecEcho").textContent = `${inp.name}（${inp.attrs} / Cost ${inp.cost} / ${inp.rare} / 評価HP ${inp.lhp.toLocaleString()}・Power ${inp.lpw.toLocaleString()} / ${(res.elapsedSec * 1000).toFixed(0)}ms）`;
+
+    $("diagBestMatch").textContent = `${nm.bestCtx}（${nm.bestSlot}枠目）`;
+    $("diagGenPeak").textContent = `汎用 ${sgn(nm.genVal, 2)} / 特効 ${sgn(nm.peakVal, 2)}`;
+    $("diagCostEff").textContent = `${sgn(nm.costOffset, 2)}（Cost ${inp.cost}${inp.rare === "伝" ? "・伝" : ""}）`;
 
     const warnBox = $("diagWarnings");
     if (res.warnings && res.warnings.length) {
@@ -895,28 +882,24 @@
       warnBox.innerHTML = "";
     }
 
-    const tbody = $("diagBandsBody");
-    tbody.innerHTML = BANDS.map(([bn]) => {
-      const b = nm.bands[bn];
-      if (!b.eligible) {
-        return `<tr><td><b>${esc(bn)}</b><small>〜${b.cap}</small></td><td colspan="4" class="diag-unusable">編成不可（コスト超過・補完基準値 ${sgn(b.q, 3)}）</td></tr>`;
-      }
-      const chips = b.best_deck.map((m) => {
-        if (m.self) return `<span class="diag-deck-chip is-self">★${esc(m.name)}</span>`;
-        return `<button type="button" class="diag-deck-chip" data-diag-load="${m.id}">${esc(m.name)}</button>`;
-      }).join("");
-      return `<tr>
-        <td><b>${esc(bn)}</b><small>〜${b.cap}</small></td>
-        <td class="diag-num"><b>${sgn(b.q, 3)}</b></td>
-        <td class="diag-num"><span>対天井 ${sgn(b.d_ceil, 3)}</span><small>対同コス ${sgn(b.d_peer, 3)}</small></td>
-        <td class="diag-slot">${b.best_slot}枠目</td>
-        <td><div class="diag-deck-chips">${chips}</div></td>
+    const tbody = $("diagContextsBody");
+    tbody.innerHTML = nm.contexts.map((cx, idx) => {
+      const isBest = idx === nm.bestCtxIdx;
+      const pct = Math.min(100, Math.round((Math.abs(cx.delta) / 2.2) * 100));
+      const sign = cx.delta >= 0 ? "pos" : "neg";
+      const subNote = cx.offAttr ? `<small>2色・全縛り時</small>` : (isBest ? `<small>★最も刺さる環境</small>` : "");
+      return `<tr${isBest ? ' class="is-best-ctx"' : ""}>
+        <td><b>${esc(cx.label)}</b>${subNote}</td>
+        <td class="diag-num"><b>${sgn(cx.delta, 2)}</b></td>
+        <td><div class="diag-bar-track"><span class="diag-bar-fill" data-sign="${sign}" style="--diag-bar-w:${pct}%"></span></div></td>
+        <td class="diag-num"><span>${sgn(cx.rawV, 2)}</span></td>
+        <td class="diag-slot">${cx.bestSlot}枠目</td>
       </tr>`;
     }).join("");
 
     const nearBox = $("diagNearList");
     nearBox.innerHTML = res.nearExisting.map((x) =>
-      `<button type="button" class="reset-btn diag-near-btn" data-diag-load="${x.id}"><span>${esc(x.name)}</span><small>${x.score.toFixed(1)}点 (C${x.cost} ${esc(x.rare)})</small></button>`
+      `<button type="button" class="reset-btn diag-near-btn" data-diag-load="${x.id}"><span>${esc(x.name)}</span><small>${x.score.toFixed(1)}点 (C${x.cost} ${esc(x.rare)} / 得意:${esc(x.bestCtx || "")})</small></button>`
     ).join("");
   }
 
@@ -924,16 +907,16 @@
   function runCurrentDiagnosis() {
     if (!engine) return;
     const btn = $("diagRunBtn");
-    if (btn) { btn.disabled = true; btn.textContent = "計算中..."; }
+    if (btn) btn.disabled = true;
     clearTimeout(diagTimer);
     diagTimer = setTimeout(() => {
       try {
         const res = readFormAndDiagnose();
         renderDiagnosisResult(res);
       } finally {
-        if (btn) { btn.disabled = false; btn.textContent = "この性能で診断する"; }
+        if (btn) btn.disabled = false;
       }
-    }, 16);
+    }, 0);
   }
 
   function renderRankingTable() {
@@ -947,13 +930,13 @@
     });
     $("diagRankCount").textContent = `${list.length.toLocaleString()}体`;
     const slice = list.slice(0, 100);
-    $("diagRankList").innerHTML = slice.map((x, idx) => {
-      const id = x[0], nm = x[1], cost = x[2], rr = x[3], at = x[4], sc = x[5];
+    $("diagRankList").innerHTML = slice.map((x) => {
+      const id = x[0], nm = x[1], cost = x[2], rr = x[3], at = x[4], sc = x[5], thSc = x[6], bCtx = x[7], bSl = x[8];
       const [tier] = tierOf(sc);
       const origRank = engine.ranking.indexOf(x) + 1;
       return `<button type="button" class="diag-rank-row" data-diag-load="${id}">
         <span class="diag-rank-no">#${origRank}</span>
-        <span class="diag-rank-name"><b>${esc(nm)}</b><small>${esc(at)} / Cost ${cost} / ${esc(rr)}</small></span>
+        <span class="diag-rank-name"><b>${esc(nm)}</b><small>${esc(at)} / Cost ${cost} / ${esc(rr)} ・ 得意:${esc(bCtx)}(${bSl}枠) / ×1.5:${Number(thSc).toFixed(1)}点</small></span>
         <span class="diag-rank-tier">${tier}</span>
         <span class="diag-rank-sc">${sc.toFixed(1)}点</span>
       </button>`;
@@ -1000,7 +983,6 @@
     $("diagLoading").hidden = true;
     $("diagMount").hidden = false;
 
-    // セレクト初期化
     ["diagRare", "diagAttr", "diagStatMode", "diagSkillType", "diagScope", "diagTargetAttr", "diagVsAttr", "diagRankRare"].forEach(syncSelect);
 
     $("diagPicker").onclick = () => {
@@ -1032,7 +1014,6 @@
     };
     const markManualLb = () => {
       if (selectedChar && !$("diagLimitBreakWrap").hidden) {
-        const d = selectedChar.details || {};
         const hitHp = limitBreakFind(selectedChar, "hp", Number($("diagHp").value));
         const hitPw = limitBreakFind(selectedChar, "power", Number($("diagPw").value));
         $("diagLimitBreak").value = (hitHp >= 0 && hitHp === hitPw) ? String(hitHp) : "manual";
@@ -1067,7 +1048,6 @@
     if (firstChar) {
       populateFromExisting(firstChar);
     } else {
-      // 初期状態: 未実装入力モードで1回計算して見本を表示
       resetToUnimplemented();
     }
   };

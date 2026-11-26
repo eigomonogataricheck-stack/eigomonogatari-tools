@@ -133,18 +133,21 @@
 #page-diag .diag-spec-echo{grid-column:1/-1;padding-top:8px;border-top:1px solid rgba(255,255,255,.12);color:var(--ui-band-sub);font-size:.78rem;font-variant-numeric:tabular-nums}
 #page-diag .diag-warnings{grid-column:1/-1;display:grid;gap:4px;padding:9px 12px;border-radius:var(--ui-radius);background:var(--ui-warn-soft);color:var(--ui-heading);font-size:.8rem;line-height:1.5}
 #page-diag .diag-warnings p{margin:0}
+#page-diag .diag-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+#page-diag .diag-metric-card{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--ui-line);border-radius:10px;background:#fff;box-shadow:var(--ui-shadow-card)}
+#page-diag .diag-metric-card small{color:var(--ui-muted);font-size:.74rem}
+#page-diag .diag-metric-card b{color:var(--ui-heading);font-size:.86rem;font-weight:500;font-variant-numeric:tabular-nums}
 #page-diag .diag-section{margin-top:14px;padding:16px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
 #page-diag .diag-section h2{margin:0 0 10px;color:var(--ui-heading);font-size:.95rem;font-weight:500}
 #page-diag .diag-table th,#page-diag .diag-table td{padding:8px 8px;font-size:.82rem;vertical-align:middle}
-#page-diag .diag-table td:first-child small{display:block;color:var(--ui-muted);font-size:.74rem;font-weight:400}
+#page-diag .diag-table td:first-child small{display:block;color:var(--ui-muted);font-size:.73rem;font-weight:400}
+#page-diag .diag-table tr.is-best-ctx td{background:var(--ui-soft)}
+#page-diag .diag-table tr.is-best-ctx td:first-child b{color:var(--ui-vermilion)}
 #page-diag .diag-num{font-variant-numeric:tabular-nums;white-space:nowrap}
-#page-diag .diag-num small{display:block;color:var(--ui-muted);font-size:.74rem}
 #page-diag .diag-slot{white-space:nowrap;color:var(--ui-text-sub)}
-#page-diag .diag-unusable{color:var(--ui-muted);font-size:.8rem}
-#page-diag .diag-deck-chips{display:flex;flex-wrap:wrap;gap:4px}
-#page-diag .diag-deck-chip{display:inline-flex;align-items:center;margin:0;padding:3px 7px;border:1px solid var(--ui-border);border-radius:6px;background:var(--ui-soft);color:var(--ui-text);font-size:.75rem;line-height:1.3}
-#page-diag button.diag-deck-chip:hover{border-color:var(--ui-accent);background:var(--ui-accent-soft)}
-#page-diag .diag-deck-chip.is-self{border-color:var(--ui-vermilion);background:var(--ui-accent-soft);color:var(--ui-vermilion);font-weight:500}
+#page-diag .diag-bar-track{width:92px;height:7px;overflow:hidden;border-radius:999px;background:var(--ui-line)}
+#page-diag .diag-bar-fill{display:block;width:var(--diag-bar-w,0%);height:100%;border-radius:999px;background:var(--ui-border-strong)}
+#page-diag .diag-bar-fill[data-sign="pos"]{background:var(--ui-vermilion)}
 #page-diag .diag-near-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 #page-diag .diag-near-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:8px 10px;text-align:left}
 #page-diag .diag-near-btn span{color:var(--ui-heading);font-size:.82rem;font-weight:500}
@@ -169,6 +172,6 @@
 }
 @media(max-width:640px){
  #page-diag .diag-hero{grid-template-columns:minmax(0,1fr);padding:16px}
- #page-diag .diag-near-list,#page-diag .diag-rank-controls{grid-template-columns:minmax(0,1fr)}
+ #page-diag .diag-metrics,#page-diag .diag-near-list,#page-diag .diag-rank-controls{grid-template-columns:minmax(0,1fr)}
  #page-diag .diag-rank-controls input{font-size:14px}
 }
