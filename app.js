@@ -51,7 +51,7 @@ function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toL
 /* 各ページの「使い方」ボタンで開く短い説明。詳しい仕様は「使い方」ページ(catalog.js の renderComprehensiveHelp) */
 
 // 仮想対戦・キャラ診断は重いモデルデータを使うため、ページを最初に開いたときに読み込む(共通の battle-roster / models / compat は1回だけ共有読込)
-let battleLoading=null,diagLoading=null;
+let battleLoading=null,diagLoading=null,compatWasmPromise=null;
 const scriptPromises=new Map();
 function loadScriptOnce(src){if(!scriptPromises.has(src))scriptPromises.set(src,new Promise((ok,ng)=>{let s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{scriptPromises.delete(src);ng(new Error(src))};document.head.append(s)}));return scriptPromises.get(src)}
 async function loadBattleWasm(ver){
@@ -68,6 +68,27 @@ async function loadBattleWasm(ver){
   window.EigoBrain=br.EigoBrain;
  }
 }
+async function loadCompatWasm(ver){
+ if(window.DeckOpt&&window.CompatAI&&window.CompatSet&&window.CompatAI._isWasm)return true;
+ if(!compatWasmPromise){
+  compatWasmPromise=(async()=>{
+   if(typeof WebAssembly!=='object')throw new Error('WebAssembly未対応');
+   await loadScriptOnce('wasm/bridge_compat.js?v='+ver);
+   const wm=await import('./wasm/rcompat_wasm.js?v='+ver);
+   const res=await fetch(new URL('wasm/rcompat_wasm_bg.wasm?v='+ver,location.href));
+   if(!res.ok)throw new Error('WASM取得失敗 HTTP '+res.status);
+   await wm.default({module_or_path:res});
+   const br=window.createCompatBridge(wm,{vecModel:window.VEC_MODEL,setModel:window.SET_MODEL});
+   if(br.CompatAI)br.CompatAI._isWasm=true;
+   if(br.CompatSet)br.CompatSet._isWasm=true;
+   window.DeckOpt=br.DeckOpt;
+   window.CompatAI=br.CompatAI;
+   window.CompatSet=br.CompatSet;
+   return true;
+  })().catch(e=>{console.warn('rcompat WASM読込失敗、JS版へフォールバックします:',e);return false});
+ }
+ return compatWasmPromise;
+}
 function openBattle(){
  if(battleLoading)return;
  let app=$('battleApp');
@@ -78,7 +99,9 @@ function openBattle(){
   phase='wasm';
   await loadBattleWasm('20261127-wasm1');
   phase='scripts';
-  for(const f of ['battle-roster','battle-decks','battle-models','battle-compat','battle-fxdata','battle-fx'])await loadScriptOnce(f+'.js?v=20261121-ai8');
+  for(const f of ['battle-roster','battle-decks','battle-models'])await loadScriptOnce(f+'.js?v=20261121-ai8');
+  if(!await loadCompatWasm('20261127-wasm2'))await loadScriptOnce('battle-compat.js?v=20261121-ai8');
+  for(const f of ['battle-fxdata','battle-fx'])await loadScriptOnce(f+'.js?v=20261121-ai8');
   await loadScriptOnce('battle-ui.js?v=20261125-ai9');
   window.initBattle();
  })().catch(e=>{console.error(e);battleLoading=null;app.textContent=phase==='wasm'?'仮想対戦の WebAssembly エンジンを読み込めませんでした（'+(e&&e.message?e.message:String(e))+'）。通信環境や対応ブラウザを確認し、ページを再読み込みしてください。':'仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
@@ -89,7 +112,8 @@ function openDiag(){
  diagLoading=(async()=>{
   for(let i=0;i<100&&!(typeof chars!=='undefined'&&chars.length);i++)await new Promise(r=>setTimeout(r,100));
   if(!chars.length)throw new Error('図鑑データがありません');
-  for(const f of ['battle-roster','battle-models','battle-compat'])await loadScriptOnce(f+'.js?v=20261121-ai8');
+  for(const f of ['battle-roster','battle-models'])await loadScriptOnce(f+'.js?v=20261121-ai8');
+  if(!await loadCompatWasm('20261127-wasm2'))await loadScriptOnce('battle-compat.js?v=20261121-ai8');
   await loadScriptOnce('char-diag-data.js?v=20261126-diag2');
   await loadScriptOnce('char-diag.js?v=20261126-diag2');
   window.initCharDiag();
