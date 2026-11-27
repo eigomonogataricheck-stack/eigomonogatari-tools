@@ -11,7 +11,8 @@
  --ui-heading:#24262b;--ui-text:#474a51;--ui-text-sub:#474a51;--ui-muted:#666b73;
  --ui-border:#dcdcdf;--ui-border-strong:#c4c5c9;--ui-line:#e8e8ea;--ui-soft:#f6f6f7;--ui-hover:#f6f6f7;--ui-bg:#f6f6f7;
  --ui-danger:#b42318;--ui-danger-border:#fda29b;--ui-danger-soft:#fef3f2;
- --ui-attack:#d92d20;--ui-attack-soft:#fee4e2;--ui-guard:#1570ef;--ui-guard-soft:#e0eaff;--ui-warn:#dc6803;--ui-warn-soft:#fffaeb;
+ --ui-success:#067647;--ui-success-soft:#ecfdf3;
+ --ui-attack:#d92d20;--ui-attack-soft:#fee4e2;--ui-guard:#1570ef;--ui-guard-soft:#e0eaff;--ui-warn:#dc6803;--ui-warn-soft:#fffaeb;--ui-warn-text:#b54708;
  --ui-radius:8px;--ui-radius-card:14px;--ui-shadow-card:0 6px 24px rgba(36,38,43,.05);
  --topbar-h:42px;--sidebar-w:204px;--sidebar-rail-w:56px;--tabbar-h:56px;--sticky-top:var(--topbar-h)
 }

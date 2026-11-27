@@ -7,33 +7,53 @@
 .coop-fold-card,.coop-enemies,.coop-decks,.coop-manual-judge{min-width:0;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
 .coop-fold-card{margin-top:14px;overflow:hidden}
 /* 開閉できるカードの見出し */
-.coop-enemies-toggle,.coop-decks-toggle,.coop-proposal-toggle,.coop-history-toggle{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;margin:0;padding:10px 16px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:#fff;color:var(--ui-heading);font-size:.95rem;font-weight:500;text-align:left;box-shadow:none;cursor:pointer}
-.coop-enemies-toggle>span:first-child,.coop-decks-toggle>span:first-child,.coop-proposal-toggle>span:first-child,.coop-history-toggle>span:first-child{flex:1 1 auto}
+.coop-proposal-toggle,.coop-history-toggle{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;margin:0;padding:10px 16px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:#fff;color:var(--ui-heading);font-size:.95rem;font-weight:500;text-align:left;box-shadow:none;cursor:pointer}
+.coop-proposal-toggle>span:first-child,.coop-history-toggle>span:first-child{flex:1 1 auto}
 .coop-proposal-toggle small,.coop-history-toggle small{color:var(--ui-muted);font-size:.74rem;font-weight:500}
-.coop-enemies-toggle[aria-expanded="false"],.coop-decks-toggle[aria-expanded="false"],.coop-proposal-toggle[aria-expanded="false"],.coop-history-toggle[aria-expanded="false"]{border-bottom-color:transparent}
-.coop-enemies-arrow,.coop-decks-arrow,.coop-layer-arrow,.coop-deck-arrow,.coop-proposal-arrow,.coop-proposal-usage-arrow,.coop-history-arrow,.coop-scale-history-arrow{flex:none;color:#8a8e96;font-size:.7rem}
-.coop-enemies-body.closed,.coop-layer.closed .coop-layer-body,.coop-deck-row.mobile-closed .coop-deck-body{display:none}
+.coop-proposal-toggle[aria-expanded="false"],.coop-history-toggle[aria-expanded="false"]{border-bottom-color:transparent}
+.coop-layer-arrow,.coop-deck-arrow,.coop-proposal-arrow,.coop-proposal-usage-arrow,.coop-history-arrow,.coop-scale-history-arrow{flex:none;color:#8a8e96;font-size:.7rem}
+.coop-layer.closed .coop-layer-body,.coop-deck-row.mobile-closed .coop-deck-body{display:none}
 
 /* ===== 協力ダメージ計算 =====
-   主役は「敵」と「味方デッキ」。PCでは2つの欄を画面の高さいっぱいに並べ、それぞれの中でスクロールする。
-   操作欄・判定・提案結果は脇役なので小さくまとめる(判定はデッキ欄の下端に常に表示)。 */
+   ①敵キャラ ②味方デッキ ③結果 ・記録 のタブ(.coop-tabs)で、今の手順の欄だけを出す。切り替えは coop.js の coopSetTab。
+   タブはページの上端に残し、②では判定の一行と「結果を見る」を画面の下端に残す(.coop-deck-foot) */
 #page-coop>.panel{max-width:none;padding:14px 16px}
 #page-coop .page-head{margin-bottom:10px}
-.coop-input-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
-@media(min-width:1000px){
- .coop-input-layout{grid-template-columns:minmax(0,2fr) minmax(0,3fr);align-items:stretch;height:calc(100vh - var(--topbar-h) - 120px);min-height:560px}
- .coop-input-layout>.coop-enemies,.coop-input-layout>.coop-decks{display:flex;flex-direction:column;min-height:0;overflow:auto;overscroll-behavior:contain}
- .coop-input-layout>.coop-enemies .coop-enemies-toggle,.coop-input-layout>.coop-decks .coop-decks-toggle{position:sticky;top:0;z-index:3;flex:none}
- #coopDecksBody{flex:1 0 auto}
+.coop-tabs{position:sticky;top:var(--sticky-top);z-index:6;width:min(100%,560px);margin:0 0 12px;box-shadow:0 0 0 6px #fff}
+.coop-tabs button{display:grid;justify-items:center;align-content:center;gap:1px;min-height:42px;line-height:1.25}
+.coop-tab-label{display:inline-flex;align-items:center;gap:5px;max-width:100%}
+.coop-tab-num{display:inline-grid;place-items:center;flex:none;width:16px;height:16px;border-radius:50%;background:#fff;color:var(--ui-muted);font-size:.66rem;font-weight:500;font-variant-numeric:tabular-nums}
+.coop-tabs button.active .coop-tab-num{background:var(--ui-accent);color:#fff}
+.coop-tabs small{max-width:100%;overflow:hidden;color:var(--ui-muted);font-size:.66rem;font-weight:400;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+/* ③結果のタブには判定を点の色でも出す(文字は灰色のまま) */
+.coop-tabs :is([data-status="certain"],[data-status="random"],[data-status="failed"]) small::before{content:"";display:inline-block;width:6px;height:6px;margin:0 4px 1px 0;border-radius:50%;background:var(--ui-success);vertical-align:middle}
+.coop-tabs [data-status="random"] small::before{background:var(--ui-warn)}
+.coop-tabs [data-status="failed"] small::before{background:var(--ui-attack)}
+.coop-step-hint{margin:0 0 10px;color:var(--ui-muted);font-size:.8rem;line-height:1.5}
+.coop-step-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px 12px;margin-top:12px}
+.coop-step-foot-note{margin-right:auto;color:var(--ui-muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+.coop-step-next{min-width:140px}
+/* ②味方デッキ: PCでは横に広げすぎず、枠の画像が小さく見えない幅にする */
+#coopPanel-deck{max-width:900px}
+.coop-deck-foot{position:sticky;bottom:8px;z-index:4;flex-wrap:nowrap;padding:8px 10px;border:1px solid var(--ui-line);border-radius:12px;background:#fff;box-shadow:0 -6px 18px -10px rgba(16,24,40,.3)}
+.coop-deck-judge{display:flex;align-items:center;gap:8px;min-width:0;margin-right:auto}
+.coop-deck-judge span{flex:none;color:var(--ui-muted);font-size:.72rem}
+.coop-deck-judge b{min-width:0;padding:4px 10px;border-radius:99px;background:var(--ui-soft);color:var(--ui-muted);font-size:.82rem;font-weight:500;line-height:1.35}
+.coop-deck-judge[data-status="certain"] b{background:var(--ui-success-soft);color:var(--ui-success)}
+.coop-deck-judge[data-status="random"] b{background:var(--ui-warn-soft);color:var(--ui-warn-text)}
+.coop-deck-judge[data-status="failed"] b{background:var(--ui-danger-soft);color:var(--ui-danger)}
+@media(max-width:640px){
+ .coop-deck-foot{bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom,0px) + 6px);padding:6px 8px}
+ .coop-step-next{min-width:0}
 }
-/* 詳細モードは敵欄に入力列が増えるので、中くらいのPC幅では左右を1:1にして名前の列を確保する */
-@media(min-width:1000px) and (max-width:1279px){
- .coop-detail-on .coop-input-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-}
+/* 記録: 上に「記録」ボタン、下に記録データ */
+.coop-record-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.coop-record-bar small{color:var(--ui-muted);font-size:.76rem}
 
 /* 敵: 1層=3行の表。列見出し(.coop-enemy-columns)を層ごとに1回だけ出し、各行は1体分。
    通常モードは「キャラ|属性|倍率後のHP」、詳細モードは「キャラ|無凸HP|属性|倍率後のHP」(属性と無凸HPは入力欄になる) */
-.coop-enemies-body{display:grid;gap:8px;padding:10px;container-type:inline-size}
+.coop-enemies-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));align-items:start;gap:8px;padding:10px;container-type:inline-size}
+.coop-detail-on .coop-enemies-body{grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr))}
 .coop-layer{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
 .coop-layer-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:32px;margin:0;padding:5px 10px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:var(--ui-soft);color:var(--ui-heading);font-size:.8rem;font-weight:500;text-align:left;box-shadow:none;cursor:pointer}
 .coop-layer.closed .coop-layer-toggle{border-bottom-color:transparent}
@@ -76,8 +96,6 @@
 
 /* 味方デッキ */
 #coopDecksBody{padding:10px 12px 12px}
-.coop-section-title{display:block}
-.coop-section-title>div:first-child{display:none}
 /* 操作欄(デッキ提案・計算条件・整理): 枠を重ねず1本のツールバーにまとめる。
    各入力には自分の小見出しがあるので、グループ名は読み上げ用にだけ残す。幅が足りなければグループ単位で折り返す */
 .coop-section-actions{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 16px;padding:7px 10px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
@@ -95,7 +113,15 @@
 .coop-action-group .coop-styled-select{display:block;width:100%;min-width:0}
 .coop-action-group .coop-styled-select-button{width:100%;height:32px;min-height:32px;padding:0 10px;font-size:.76rem}
 
-#coopDeckRows{display:grid;gap:8px;margin-top:10px;container-type:inline-size}
+/* 各層の敵: デッキの枠と同じ5列(左右の余白=デッキの枠線1px+内側8px、列の間6px)にそろえ、何枠目がどの層を攻撃するかを見せる */
+.coop-enemy-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:12px;padding:0 9px}
+.coop-strip-layer{display:grid;justify-items:center;gap:3px;min-width:0}
+.coop-strip-label{color:var(--ui-muted);font-size:.66rem;font-weight:500}
+.coop-strip-faces{display:flex;justify-content:center;gap:3px;width:100%}
+.coop-strip-face{flex:1 1 0;max-width:24px;min-width:0;margin:0;padding:0;border:0;border-radius:6px;background:transparent;box-shadow:none;cursor:pointer}
+.coop-strip-face .coop-portrait{border-radius:6px}
+.coop-strip-face:hover .coop-portrait{box-shadow:0 0 0 2px var(--ui-accent)}
+#coopDeckRows{display:grid;gap:8px;margin-top:6px;container-type:inline-size}
 .coop-deck-row{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
 .coop-deck-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-height:36px;padding:4px 10px;border-bottom:1px solid var(--ui-line);background:var(--ui-soft);cursor:pointer}
 .coop-deck-row.mobile-closed .coop-deck-head{border-bottom-color:transparent}
@@ -135,30 +161,28 @@
 .coop-row-result{margin-top:6px;color:var(--ui-text-sub);font-size:.76rem}
 
 /* 手動デッキ判定: デッキ欄の下端に小さく固定し、どこまでスクロールしても見える */
-.coop-manual-judge{position:sticky;bottom:0;z-index:2;flex:none;display:grid;max-height:min(36vh,280px);overflow:auto;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:10px;margin:0;padding:8px 12px;border-width:1px 0 0;border-radius:0 0 var(--ui-radius-card) var(--ui-radius-card);box-shadow:0 -6px 14px -10px rgba(16,24,40,.35);text-align:left}
+.coop-manual-judge{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:12px;margin:0;padding:12px 16px;text-align:left}
 .coop-manual-judge-title{display:grid;gap:0;margin:0}
 .coop-manual-judge>:not(.coop-manual-judge-title):not(#coopClearResult){grid-column:1/-1}
-.coop-manual-judge-title h2{margin:0;color:var(--ui-heading);font-size:.84rem;font-weight:500}
+.coop-manual-judge-title h2{margin:0;color:var(--ui-heading);font-size:.92rem;font-weight:500}
 .coop-manual-judge-title small{color:var(--ui-muted);font-size:.68rem}
 #coopClearResult{display:block;padding:6px 10px;border-radius:10px;background:#f6f6f7;color:var(--ui-muted);font-size:.84rem;font-weight:500;text-align:center}
-.coop-manual-judge[data-status="certain"] #coopClearResult{background:#ecfdf3;color:#067647;font-size:1.05rem;font-weight:500}
-.coop-manual-judge[data-status="random"] #coopClearResult{background:var(--ui-warn-soft);color:var(--ui-warn);font-size:1.05rem;font-weight:500}
-.coop-manual-judge[data-status="failed"] #coopClearResult{background:#fef3f2;color:var(--ui-attack);font-size:1.05rem;font-weight:500}
+.coop-manual-judge[data-status="certain"] #coopClearResult{background:var(--ui-success-soft);color:var(--ui-success);font-size:1.05rem;font-weight:500}
+.coop-manual-judge[data-status="random"] #coopClearResult{background:var(--ui-warn-soft);color:var(--ui-warn-text);font-size:1.05rem;font-weight:500}
+.coop-manual-judge[data-status="failed"] #coopClearResult{background:var(--ui-danger-soft);color:var(--ui-danger);font-size:1.05rem;font-weight:500}
 #coopDamageResult:not(:empty){margin-top:4px;color:var(--ui-text);font-size:.76rem}
-#coopResultDetails{max-height:72px;margin-top:4px;overflow:auto;color:var(--ui-text-sub);font-size:.72rem;line-height:1.5}
+#coopResultDetails{margin-top:6px;color:var(--ui-text-sub);font-size:.72rem;line-height:1.5}
 .coop-random-reason{margin-top:4px;padding:6px 8px;border-radius:8px;background:var(--ui-soft)}
 .coop-random-reason summary{color:var(--ui-accent);font-weight:500;cursor:pointer}
-@media(max-width:999px){
- .coop-enemies,.coop-decks{margin:0}
- .coop-manual-judge{border-width:1px;border-radius:12px;margin:10px 10px 10px}
-}
 @media(max-width:600px){
+ .coop-enemy-strip{gap:4px;padding:0 7px}
+ .coop-strip-faces{gap:2px}
  .coop-enemies-body{padding:8px}
  #coopDecksBody{padding:8px}
  .coop-deck-body{padding:6px}
  .coop-deck-slots{gap:4px}
  .coop-deck-slot{padding:3px}
- .coop-slot-actions .mini-reset{min-height:24px;padding:1px;font-size:.58rem;white-space:normal}
+ .coop-slot-actions .mini-reset:not(.coop-character-delete){min-height:24px;padding:1px;font-size:.58rem;white-space:normal}
  .coop-deck-actions .mini-reset{padding:2px 6px;font-size:.64rem}
 }
 
