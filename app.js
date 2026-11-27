@@ -54,17 +54,34 @@ function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toL
 let battleLoading=null,diagLoading=null;
 const scriptPromises=new Map();
 function loadScriptOnce(src){if(!scriptPromises.has(src))scriptPromises.set(src,new Promise((ok,ng)=>{let s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{scriptPromises.delete(src);ng(new Error(src))};document.head.append(s)}));return scriptPromises.get(src)}
+async function loadBattleWasm(ver){
+ if(typeof WebAssembly!=='object')throw new Error('このブラウザは WebAssembly に対応していません');
+ await loadScriptOnce('wasm/bridge.js?v='+ver);
+ if(!window.EigoBattle||!window.EigoBrain){
+  const wm=await import('./wasm/rsim_wasm.js?v='+ver);
+  const res=await fetch(new URL('wasm/rsim_wasm_bg.wasm?v='+ver,location.href));
+  if(!res.ok)throw new Error('WASM取得失敗 HTTP '+res.status);
+  await wm.default({module_or_path:res});
+  wm.warm_policy();
+  const br=window.EigoWasmBridge.createBridge(wm);
+  window.EigoBattle=br.EigoBattle;
+  window.EigoBrain=br.EigoBrain;
+ }
+}
 function openBattle(){
  if(battleLoading)return;
  let app=$('battleApp');
+ let phase='init';
  battleLoading=(async()=>{
   for(let i=0;i<100&&!(typeof chars!=='undefined'&&chars.length);i++)await new Promise(r=>setTimeout(r,100));
   if(!chars.length)throw new Error('図鑑データがありません');
-  for(const f of ['battle-engine','battle-roster','battle-decks','battle-models','battle-compat','battle-fxdata','battle-fx'])await loadScriptOnce(f+'.js?v=20261121-ai8');
-  await loadScriptOnce('battle-brain.js?v=20261125-ai9');
+  phase='wasm';
+  await loadBattleWasm('20261127-wasm1');
+  phase='scripts';
+  for(const f of ['battle-roster','battle-decks','battle-models','battle-compat','battle-fxdata','battle-fx'])await loadScriptOnce(f+'.js?v=20261121-ai8');
   await loadScriptOnce('battle-ui.js?v=20261125-ai9');
   window.initBattle();
- })().catch(e=>{console.error(e);battleLoading=null;app.textContent='仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
+ })().catch(e=>{console.error(e);battleLoading=null;app.textContent=phase==='wasm'?'仮想対戦の WebAssembly エンジンを読み込めませんでした（'+(e&&e.message?e.message:String(e))+'）。通信環境や対応ブラウザを確認し、ページを再読み込みしてください。':'仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
 }
 function openDiag(){
  if(diagLoading){if(window.initCharDiag)window.initCharDiag();return}
