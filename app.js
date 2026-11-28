@@ -45,12 +45,12 @@ function closeMoreSheet(){let s=$('moreSheet');if(!s)return;s.hidden=true;$('mor
 function setSidebarOpen(open){$('sidebar').classList.toggle('open',open);syncMenuToggle()}
 function toggleMenu(){if(!PC_MENU.matches){setSidebarOpen(!$('sidebar').classList.contains('open'));return}let collapsed=document.documentElement.classList.toggle('sidebar-collapsed');try{localStorage.setItem('eigoSidebarCollapsed',collapsed?'1':'0')}catch{}syncMenuToggle()}
 function syncMenuToggle(){let collapsed=document.documentElement.classList.contains('sidebar-collapsed'),open=PC_MENU.matches?!collapsed:$('sidebar').classList.contains('open');$('menuToggle').setAttribute('aria-expanded',String(open));$('menuToggle').setAttribute('aria-label',open?'メニューを閉じる':'メニューを開く');document.querySelectorAll('#sidebar [data-page]').forEach(b=>{if(PC_MENU.matches&&collapsed)b.title=b.textContent.trim();else b.removeAttribute('title')})}
-function showPage(n){closeMoreSheet();$('moreToggle')?.classList.toggle('active',['battle','guide','diag','ai','help','migration'].includes(n));if(n==='battle')openBattle();if(n==='guide')window.openBattleTutorial?.();if(n==='diag')openDiag();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
+function showPage(n){closeMoreSheet();$('moreToggle')?.classList.toggle('active',['battle','guide','help','migration'].includes(n));if(n==='battle')openBattle();if(n==='guide')window.openBattleTutorial?.();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
 async function loadData(){try{let r=await fetch('zukan_beta.json',{cache:'no-cache'}).then(x=>{if(!x.ok)throw Error(x.status);return x.json()});chars=Array.isArray(r)?r:(r.characters||[]);if(!chars.length)throw Error('charactersが空です');$('zkStatus').textContent='';initZukanAdvancedFilters();renderZukan();renderTemporaryCharacters();renderPickerTemporary();if(typeof hydrateCoopState==='function')hydrateCoopState()}catch(error){chars=[];$('zkStatus').textContent='図鑑データを読み込めません';console.error(error)}}
 function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase().includes(q))}
 /* 各ページの「使い方」ボタンで開く短い説明。詳しい仕様は「使い方」ページ(catalog.js の renderComprehensiveHelp) */
 
-// 仮想対戦・キャラ診断は重いモデルデータを使うため、ページを最初に開いたときに読み込む(共通の battle-roster / models / compat は1回だけ共有読込)
+// 仮想対戦は重いモデルデータを使うため、ページを最初に開いたときに読み込む(共通の battle-roster / models / compat は1回だけ共有読込)
 let battleLoading=null,diagLoading=null,compatWasmPromise=null;
 const scriptPromises=new Map();
 function loadScriptOnce(src){if(!scriptPromises.has(src))scriptPromises.set(src,new Promise((ok,ng)=>{let s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{scriptPromises.delete(src);ng(new Error(src))};document.head.append(s)}));return scriptPromises.get(src)}
@@ -107,26 +107,7 @@ function openBattle(){
   window.initBattle();
  })().catch(e=>{console.error(e);battleLoading=null;app.textContent=phase==='wasm'?'仮想対戦の WebAssembly エンジンを読み込めませんでした（'+(e&&e.message?e.message:String(e))+'）。通信環境や対応ブラウザを確認し、ページを再読み込みしてください。':'仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
 }
-function openDiag(){
- if(diagLoading){if(window.initCharDiag)window.initCharDiag();return}
- let box=$('diagLoading');
- diagLoading=(async()=>{
-  for(let i=0;i<100&&!(typeof chars!=='undefined'&&chars.length);i++)await new Promise(r=>setTimeout(r,100));
-  if(!chars.length)throw new Error('図鑑データがありません');
-  for(const f of ['battle-roster','battle-models'])await loadScriptOnce(f+'.js?v=20261121-ai8');
-  if(!await loadCompatWasm('20261127-wasm2'))await loadScriptOnce('battle-compat.js?v=20261121-ai8');
-  await loadScriptOnce('char-diag-data.js?v=20261126-diag2');
-  await loadScriptOnce('char-diag.js?v=20261126-diag2');
-  window.initCharDiag();
- })().catch(e=>{console.error(e);diagLoading=null;if(box)box.textContent='キャラ診断を読み込めませんでした。ページを再読み込みしてください'});
-}
 const PAGE_HELP={
- diag:{title:'キャラ診断の使い方',steps:[
-  '既存キャラを診断するときは、左上のキャラ枠を押して図鑑・お気に入り・絞り込み・名前検索から選びます(下の「既存キャラ 診断スコア一覧」や、図鑑の詳細画面の「キャラ診断で開く」からも選べます)。',
-  '凸のデータがあるキャラは「凸数」で完凸〜無凸を切り替えられます。さらに必要ターンや効果量、Costなどを書き換えると「もしこの性能だったら何点になるか」が即座に再計算されます(「元の値に戻す」で戻せます)。',
-  '未実装キャラを新しく診断するときは「未実装（新規入力）」を押し、Cost・属性・レア(伝は1デッキ1体制限)・HP・Power・ゆるスキルの種類と数値を入力します。',
-  '右側に「総合診断スコア(通常時)」と「イベント補正あり(×1.5)時スコア」、最も活きる相手・配置枠、および7つの相手・属性環境ごとの相性ベクトル内訳が表示されます。'],
-  tips:['特定のデッキを組んだりコストを4分割したりせず、7つの相手・属性環境×5枠の「相性ベクトル」から直接スコアを算出しています。','「どの相手にも強い汎用力」と「特定の属性や環境で刺さる特効ピーク」の両方を拾う集約式と、連続コスト上限(80〜500)での機会費用積分を組み合わせています(全既存キャラ平均 50.0・標準偏差 10.0)。','現行の相性AI(k17)の特性上、1ターン高倍率の「かばう / かわす」や低HPの全体蘇生は実戦よりやや高めに、高カウント遅延などはやや控えめに出る傾向があります。']},
  battle:{title:'仮想対戦の使い方',steps:[
   '「キャラ選択」で、A・Bそれぞれのチームのデッキ(最大5体)を組みます。「人数」でチームの人数(1〜5人)を変えられます。リーダーは各チームの先頭(A1 / B1)です。',
   'キャラの枠(＋や画像)を押すと、図鑑と同じキャラ選択画面が開きます。分類などのタブの右に、そのプレイヤーのデッキが出たままなので、続けて選べます。デッキの枠を押してから新しいキャラを押すと、その枠のキャラと入れ替わります。×で外しても、後ろのキャラは詰めません。「完了」の代わりに右上の×で閉じます。',
