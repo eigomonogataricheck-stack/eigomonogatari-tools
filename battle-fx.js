@@ -448,7 +448,7 @@
   function frame(ts, fixedDt) {
     raf = 0; if (!gl) return;
     const dt = fixedDt != null ? fixedDt : Math.min(0.05, lastT ? (ts - lastT) / 1000 : 1 / 60); lastT = ts;
-    resize(); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+    resize(); gl.disable(gl.SCISSOR_TEST); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
     for (let i = insts.length - 1; i >= 0; i--) {
       const I = insts[i];
       if (I.wait > 0) { I.wait -= dt; continue; }
@@ -460,7 +460,18 @@
     const list = [];
     for (const I of insts) if (!(I.wait > 0)) { const l = []; collect(I.root, l); for (const e of l) { e.I = I; list.push(e); } }
     list.sort((a, b) => a.layer - b.layer || a.order - b.order || b.z - a.z || a.seq - b.seq);
-    for (const e of list) { if (e.kind === "ps") drawPS(e.I, e.nd); else drawSprite(e.I, e.nd); }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    for (const e of list) {
+      if (e.I.clip) {
+        const r = e.I.clip.getBoundingClientRect();
+        const sx = Math.max(0, Math.floor(r.left * dpr)), sy = Math.max(0, cv.height - Math.ceil(r.bottom * dpr));
+        const ex = Math.min(cv.width, Math.ceil(r.right * dpr)), ey = Math.min(cv.height, cv.height - Math.floor(r.top * dpr));
+        if (ex <= sx || ey <= sy) continue;
+        gl.enable(gl.SCISSOR_TEST); gl.scissor(sx, sy, ex - sx, ey - sy);
+      } else gl.disable(gl.SCISSOR_TEST);
+      if (e.kind === "ps") drawPS(e.I, e.nd); else drawSprite(e.I, e.nd);
+    }
+    gl.disable(gl.SCISSOR_TEST);
     if (manual) return;
     if (insts.length) raf = requestAnimationFrame(frame); else { lastT = 0; if (cv && cv.parentNode) cv.remove(); }
   }
@@ -476,7 +487,7 @@
       const pf = FX.prefabs[name]; if (!pf) return null;
       if (!API.ok()) return null;
       if (!cv.parentNode) document.body.append(cv);
-      const I = { name, ox: x, oy: y, ppw, scale, age: 0, wait: opt.wait || 0, life: opt.life, pathFn: opt.path, anim: opt.anim, onEnd: opt.onEnd, alpha: 1, hold: !!opt.hold };
+      const I = { name, ox: x, oy: y, ppw, scale, age: 0, wait: opt.wait || 0, life: opt.life, pathFn: opt.path, anim: opt.anim, onEnd: opt.onEnd, alpha: 1, hold: !!opt.hold, clip: opt.clip || null };
       I.root = makeNode(pf, null, I);
       insts.push(I); if (!raf && !manual) raf = requestAnimationFrame(frame);
       return I;

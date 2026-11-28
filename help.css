@@ -175,3 +175,433 @@
  #page-diag .diag-metrics,#page-diag .diag-near-list,#page-diag .diag-rank-controls{grid-template-columns:minmax(0,1fr)}
  #page-diag .diag-rank-controls input{font-size:14px}
 }
+
+/* ===== 対戦の遊び方(#page-guide) ===== */
+.guide-page{max-width:860px}
+.guide-page>section{margin:16px 0;padding:18px 20px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card);scroll-margin-top:80px}
+.guide-page h2{display:flex;align-items:center;gap:9px;margin:0 0 10px;color:var(--ui-heading);font-size:1.05rem;font-weight:500}
+.guide-page p,.guide-page li,.guide-page dd{color:var(--ui-text);line-height:1.8}
+.guide-page p{margin:6px 0}
+.guide-page b{color:var(--ui-heading);font-weight:500}
+.guide-link{display:inline;margin:0;padding:0;border:0;background:none;color:var(--ui-vermilion);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+/* まずはこれだけ */
+.guide-summary{margin:4px 0 12px;padding:16px 20px;border:1px solid var(--ui-line);border-radius:var(--ui-radius-card);background:#fff;box-shadow:var(--ui-shadow-card)}
+.guide-summary>b{display:block;margin-bottom:10px;color:var(--ui-muted);font-size:.8rem;font-weight:500}
+.guide-summary ol{display:grid;gap:8px;margin:0;padding:0;list-style:none;counter-reset:guide-sum}
+.guide-summary li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;color:var(--ui-heading);font-size:1rem;line-height:1.7;counter-increment:guide-sum}
+.guide-summary li::before{content:counter(guide-sum);display:grid;place-items:center;width:24px;height:24px;margin-top:2px;border-radius:50%;background:var(--ui-heading);color:#fff;font-size:.75rem;font-variant-numeric:tabular-nums}
+.guide-summary em{font-style:normal;color:var(--ui-heading);font-weight:500;text-decoration:underline;text-decoration-color:var(--ui-state);text-decoration-thickness:2px;text-underline-offset:4px}
+/* 目次 */
+.guide-toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px}
+.guide-toc a{padding:6px 11px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:#fff;color:var(--ui-text-sub);font-size:.8rem;text-decoration:none}
+.guide-toc a:hover{background:var(--ui-accent-soft);color:var(--ui-heading)}
+/* 対戦の形の図 */
+.guide-board{margin:12px 0;padding:14px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.guide-team-name{display:flex;align-items:center;gap:8px;margin-bottom:8px;color:var(--ui-heading);font-size:.88rem;font-weight:500}
+.guide-tag{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--ui-heading);color:#fff;font-size:.72rem}
+.guide-players{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.guide-player{position:relative;display:grid;justify-items:center;gap:5px;padding:8px 4px;border:1px solid var(--ui-line);border-radius:var(--ui-radius);background:#fff}
+.guide-player.is-me{border-color:var(--ui-heading)}
+.guide-player small{position:absolute;top:-9px;padding:0 6px;border-radius:6px;background:var(--ui-heading);color:#fff;font-size:.66rem;line-height:1.5}
+.guide-slot{display:grid;place-items:center;width:40px;height:40px;border:1.5px solid var(--ui-heading);border-radius:7px;background:#fff;color:var(--ui-heading);font-size:.74rem;font-variant-numeric:tabular-nums}
+.guide-slot.is-mini{width:14px;height:14px;border-radius:4px}
+.guide-bench{display:flex;gap:3px}
+.guide-bench i{width:8px;height:8px;border:1px solid var(--ui-border-strong);border-radius:2px;background:var(--ui-soft)}
+.guide-vs{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--ui-muted);font-size:.8rem;text-align:center}
+.guide-vs::before,.guide-vs::after{content:"";flex:1;border-top:1px dashed var(--ui-border-strong)}
+.guide-vs span{flex:0 1 auto}
+.guide-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;color:var(--ui-muted);font-size:.8rem}
+.guide-legend>span{display:inline-flex;align-items:center;gap:7px}
+/* 1ターンの流れ */
+.guide-flow{display:grid;gap:0;margin:10px 0 0;padding:0;list-style:none;counter-reset:guide-flow}
+.guide-flow li{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:12px;margin:0;padding:12px 14px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:var(--ui-soft);counter-increment:guide-flow}
+.guide-flow li::before{content:counter(guide-flow);grid-row:span 2;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ui-heading);color:#fff;font-size:.8rem}
+.guide-flow li+li{margin-top:20px}
+.guide-flow li+li::after{content:"";position:absolute;left:27px;top:-20px;height:20px;border-left:1px solid var(--ui-border-strong)}
+.guide-flow b{color:var(--ui-heading);font-weight:500}
+.guide-flow span{color:var(--ui-text);font-size:.9rem;line-height:1.7}
+.guide-loop{margin:12px 0 0;color:var(--ui-muted);font-size:.86rem;text-align:center}
+.guide-loop::before{content:"↻ ";color:var(--ui-vermilion)}
+/* 表 */
+.guide-table{width:100%;margin:10px 0;border-collapse:collapse;font-size:.9rem}
+.guide-table th,.guide-table td{padding:8px 10px;border-bottom:1px solid var(--ui-line);text-align:left;vertical-align:top;line-height:1.6}
+.guide-table thead th{border-bottom-color:var(--ui-border);color:var(--ui-muted);font-size:.78rem;font-weight:400}
+.guide-table tbody th{width:38%;color:var(--ui-heading);font-weight:500}
+.guide-table td{color:var(--ui-text)}
+.guide-num{font-variant-numeric:tabular-nums}
+.guide-note{padding:10px 12px;border-radius:10px;background:var(--ui-soft);color:var(--ui-muted);font-size:.86rem}
+/* 属性 */
+.guide-attr{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;margin:10px 0;padding:12px 14px;border:1px solid var(--ui-line);border-radius:12px;font-size:.92rem}
+.guide-attr-item{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border:1px solid var(--ui-border);border-radius:999px;color:var(--ui-heading);font-weight:500}
+.guide-attr-item i{width:8px;height:8px;border-radius:50%}
+.guide-attr-arrow{margin-right:6px;color:var(--ui-text)}
+.guide-attr .dot-fire{background:var(--ui-attr-fire)}
+.guide-attr .dot-water{background:var(--ui-attr-water)}
+.guide-attr .dot-wind{background:var(--ui-attr-wind)}
+/* 戦闘画面の見方 */
+.guide-card-demo{display:grid;grid-template-columns:190px minmax(0,1fr);gap:20px;align-items:start;margin:14px 0;padding:16px;border:1px solid var(--ui-line);border-radius:12px;background:var(--ui-soft)}
+.guide-mock{display:grid;gap:6px;padding:12px;border:1px solid var(--ui-line);border-radius:10px;background:#fff}
+.guide-mock-top{display:flex;align-items:center;justify-content:center;gap:4px}
+.guide-mock-left{padding:1px 7px;border-radius:6px;background:var(--ui-heading);color:#fff;font-size:.7rem}
+.guide-mock-count{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ui-state);color:var(--ui-heading);font-size:.74rem;font-variant-numeric:tabular-nums}
+.guide-mock-portrait{position:relative;display:grid;place-items:center;justify-self:center;width:72px;height:72px;border:1.5px solid var(--ui-border-strong);border-radius:8px;color:var(--ui-muted);font-size:.7rem}
+.guide-mock-portrait .guide-mark{position:absolute;right:-26px;top:24px}
+.guide-mock-hp{height:6px;border-radius:3px;background:var(--ui-heading)}
+.guide-mock-btn{position:relative;padding:4px 6px;border:1px solid var(--ui-line);border-radius:7px;color:var(--ui-muted);font-size:.72rem;text-align:center}
+.guide-mock-btn.is-strong{border-color:var(--ui-heading);color:var(--ui-heading)}
+.guide-mock-btn .guide-mark{position:absolute;right:-28px;top:2px}
+.guide-mark{display:inline-grid;place-items:center;width:20px;height:20px;flex:none;border-radius:50%;background:var(--ui-vermilion-mark);color:#fff;font-size:.68rem;font-variant-numeric:tabular-nums;line-height:1}
+.guide-keys{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.guide-keys li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;font-size:.9rem;line-height:1.7}
+.guide-keys .guide-mark{margin-top:3px}
+.guide-go{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+/* よくある疑問 */
+.guide-faq{border-top:1px solid var(--ui-line)}
+.guide-faq:last-child{border-bottom:1px solid var(--ui-line)}
+.guide-faq>summary{display:flex;align-items:center;gap:8px;padding:12px 2px;color:var(--ui-heading);font-weight:500;cursor:pointer;list-style:none}
+.guide-faq>summary::-webkit-details-marker{display:none}
+.guide-faq>summary::after{content:"+";margin-left:auto;color:var(--ui-muted);font-size:1.1rem;line-height:1}
+.guide-faq[open]>summary::after{content:"−"}
+.guide-faq>p{margin:0 2px 12px}
+@media(max-width:640px){
+ .guide-page>section{padding:16px 14px}
+ .guide-summary{padding:14px 16px}
+ .guide-board{padding:10px}
+ .guide-players{gap:4px}
+ .guide-player{padding:8px 2px}
+ .guide-slot{width:34px;height:34px;font-size:.7rem}
+ .guide-bench i{width:6px;height:6px}
+ .guide-bench{gap:2px}
+ .guide-card-demo{grid-template-columns:minmax(0,1fr)}
+ .guide-mock{justify-self:center;width:190px}
+ .guide-table tbody th{width:44%}
+}
+/* ===== 遊べる対戦チュートリアル(battle-tutorial.js) =====
+   .tg-stage の中は実機の座標(720×1280)そのまま。JS が幅に合わせて縮小する。
+   絵は APK から取り出した tg/*.webp、位置・文字の大きさ・色は APK のプレハブの値。文字は APK の元の日本語フォント(FontJP.ttf)を丸ごと使う */
+@font-face{font-family:"TGKeifont";src:url(tg/FontJP.ttf?v=20261128-sub1) format("truetype");font-display:block}
+.tg-wrap{margin:4px 0 16px}
+.tg-layout{display:flex;justify-content:center}
+.tg-stagewrap{position:relative;width:100%;max-width:440px;overflow:hidden;border-radius:var(--ui-radius-card);background:var(--ui-tg-bg);box-shadow:var(--ui-shadow-card);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.tg-stage{position:absolute;left:0;top:0;width:720px;height:1280px;transform-origin:0 0;overflow:hidden;font-family:"TGKeifont",sans-serif;color:var(--ui-tg-ink);line-height:1.2}
+.tg-sp{position:absolute;display:block;max-width:none;pointer-events:none}
+.tg-tx{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;text-align:center;pointer-events:none}
+.tg-stage button{position:absolute;margin:0;padding:0;border:0;background:none;font:inherit;color:inherit;cursor:pointer}
+.tg-stage button:disabled{cursor:default}
+.tg-stage button:focus-visible{outline:4px solid var(--ui-tg-gold);outline-offset:-4px}
+.tg-lines{position:absolute;left:0;top:0;width:720px;height:1280px;pointer-events:none;z-index:2}
+.tg-ln{fill:var(--ui-tg-light-b);opacity:.9}
+.tg-ln-b{fill:var(--ui-tg-line)}
+.tg-ln-atk{opacity:.95}
+.tg-ln-core{fill:var(--ui-tg-white);opacity:.85}
+/* 問題(SetQuestion): 題は上端中央(360,450)・28.9px、英語は左上(30,510)・32.4px、どちらも黒 */
+.tg-q{position:absolute;left:0;top:0;width:720px;height:740px;pointer-events:none;z-index:0}
+.tg-q.is-down{transform:translateY(325px)}
+.tg-qtitle{transform:translate(-50%,0);font-size:28.9px}
+.tg-qword{transform:translate(-50%,-50%);font-size:40px;text-align:center;white-space:nowrap}
+.tg-banner{position:absolute;inset:0;opacity:0;pointer-events:none}
+.tg-banner.is-on{opacity:1}
+.tg-bup{position:absolute;inset:0;transform-origin:360px 656px}
+/* 4択(PartOneEventSelection): 文字は帯の上から51px・32px、英語は71px、残念の文字は x369・25.6px・紺 */
+.tg-popback{z-index:1}
+.tg-sels{position:absolute;left:0;top:0;width:0;height:0;z-index:2}
+.tg-sel{left:0;width:722.8px;height:96px}
+.tg-selbg{left:0;top:0}
+.tg-seljp,.tg-selen,.tg-selmiss{position:absolute;left:360px;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none}
+.tg-seljp{top:51px;font-size:32px}
+.tg-selen{top:71px;font-size:28px;display:none}
+.tg-selmiss{left:369px;top:50px;font-size:25.6px;line-height:1;color:var(--ui-tg-note);display:none;text-align:center}
+.tg-sel.is-res .tg-seljp{top:33px}
+.tg-sel.is-res .tg-selen{display:block}
+.tg-sel::after{content:"";position:absolute;left:18px;top:8px;width:690px;height:82px;border-radius:6px;background:var(--ui-tg-shade);opacity:0;pointer-events:none}
+.tg-sel.is-dim::after{opacity:1}
+.tg-sel.is-miss .tg-seljp{display:none}
+.tg-sel.is-miss .tg-selmiss{display:block;z-index:1}
+.tg-mk{display:none;z-index:1}
+.tg-sel.is-ok .tg-mk-ok,.tg-sel.is-ng .tg-mk-ng{display:block}
+.tg-kaitou{opacity:0;z-index:3;transform-origin:50% 50%}
+.tg-kaitou.is-on{opacity:1}
+/* 下のバー(AttackTurnGroup): 「攻撃順番」は左端 x131.1・21.6px、ボタンの字は 32px、どちらも白 */
+.tg-bar,.tg-turn{position:absolute;left:0;top:0;width:0;height:0;z-index:4}
+.tg-turnlabel{transform:translate(0,-50%);font-size:21.6px;line-height:1.1;text-align:left;color:var(--ui-tg-white)}
+.tg-prio{width:90px;height:60px}
+.tg-prio .tg-sp{filter:brightness(.62)}
+.tg-prio.is-on .tg-sp{filter:none}
+.tg-priotx{font-size:32px;color:var(--ui-tg-white)}
+.tg-chatbtn{left:564px;top:1220px;width:144px;height:60px}
+.tg-chap{position:absolute;left:14px;top:14px;z-index:7;padding:5px 14px;border-radius:999px;border:2px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);color:var(--ui-tg-white);font-size:21px;line-height:1.2;pointer-events:none;text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-chap em{font-style:normal;color:var(--ui-tg-gold);margin-right:8px}
+/* 第1部 3番: 自分の5体デッキを場の下に左から1列で表示 */
+.tg-deck5{position:absolute;left:24px;top:468px;width:672px;padding:18px 24px 20px;border-radius:18px;border:4px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);z-index:7;pointer-events:none}
+.tg-deck5-row{display:flex;justify-content:space-between;gap:12px}
+.tg-deck5-slot{position:relative;width:116px;height:116px;flex:0 0 116px}
+.tg-deck5-num{position:absolute;left:4px;top:4px;z-index:2;min-width:30px;height:30px;padding:0 6px;border-radius:8px;background:var(--ui-tg-shade-deep);border:2px solid var(--ui-tg-gold);color:var(--ui-tg-gold);font-size:20px;line-height:26px;text-align:center}
+/* 第2部: 項目選択メニュー */
+.tg-menu{position:absolute;inset:0;z-index:9}
+.tg-menu-box{position:absolute;left:36px;top:110px;width:648px;padding:28px 26px 30px;border-radius:22px;border:5px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep)}
+.tg-menu-head{margin:0 0 22px;text-align:center;font-size:38px;color:var(--ui-tg-gold);text-shadow:2px 2px 0 var(--ui-tg-ink)}
+.tg-menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tg-menu-box .tg-menu-item{position:relative;width:100%;height:96px}
+.tg-menu-item .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-menu-item .tg-tx{left:50%;top:50%;font-size:30px;color:var(--ui-tg-btn-text);text-shadow:2px 2px 0 var(--ui-tg-btn-shadow)}
+.tg-menu-foot{display:flex;justify-content:center;margin-top:26px}
+.tg-menu-box .tg-menu-back{position:relative;width:300px;height:76px}
+.tg-menu-back .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-menu-back .tg-tx{left:50%;top:50%;font-size:28px;color:var(--ui-tg-btn-text);text-shadow:2px 2px 0 var(--ui-tg-btn-shadow)}
+/* チャット(PartTGEventComment: APK のプレハブ・画像・3列×4行・A/B/C切替を再現) */
+.tg-cmt{position:absolute;left:0;top:740px;width:720px;height:540px;z-index:9}
+.tg-cmt-bg{left:0;top:0;width:720px;height:540px}
+.tg-cmt-line{left:24px;top:102px;width:672px;height:7px}
+.tg-cmt-title{left:360px;top:116px;font-size:22px;color:var(--ui-tg-gold);text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-cmt-mute{left:18px;top:30px;width:150px;height:58px}
+.tg-cmt-mute .tg-cmt-mbg{left:0;top:0;width:150px;height:58px}
+.tg-cmt-mute .tg-cmt-mico{left:12px;top:11px;width:38px;height:34px}
+.tg-cmt-mute .tg-tx{left:98px;top:29px;font-size:22px;color:var(--ui-tg-white);text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-cmt-nav{position:absolute;left:195px;top:30px;width:490px;height:58px}
+.tg-cmt-arrow{top:9px;width:44px;height:40px}
+.tg-cmt-arrow .tg-sp{left:0;top:0;width:44px;height:40px}
+.tg-cmt-prev{left:12px}
+.tg-cmt-next{left:414px}
+.tg-cmt-tab{top:4px;width:86px;height:52px}
+.tg-cmt-tab .tg-sp{left:0;top:0;width:86px;height:52px;filter:brightness(.62)}
+.tg-cmt-tab.is-on .tg-sp{filter:none}
+.tg-cmt-tab .tg-tx{left:43px;top:26px;font-size:28px;color:var(--ui-tg-white);text-shadow:2px 2px 0 var(--ui-tg-ink)}
+.tg-cmt-grid{position:absolute;left:36px;top:138px;width:648px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px 16px}
+.tg-cmt-grid .tg-cmt-item{position:relative;width:100%;height:78px}
+.tg-cmt-item .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-cmt-item .tg-tx{left:50%;top:50%;font-size:24px;color:var(--ui-tg-white);text-shadow:2px 2px 0 var(--ui-tg-ink)}
+.tg-cmt-item.is-small .tg-tx{font-size:19px}
+/* スキルそのほか一覧 */
+.tg-skillpop{position:absolute;left:28px;top:120px;width:664px;padding:22px 22px 24px;border-radius:18px;border:4px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);color:var(--ui-tg-white);z-index:9}
+.tg-skhead{margin:0 0 16px;text-align:center;font-size:30px;color:var(--ui-tg-gold);text-shadow:2px 2px 0 var(--ui-tg-ink)}
+.tg-skgrid{display:grid;grid-template-columns:1fr;gap:12px}
+.tg-skrow{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;background:var(--ui-tg-shade)}
+.tg-skico{position:relative;width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:8px;background:var(--ui-tg-bg)}
+.tg-skico img{width:42px;height:42px;object-fit:contain}
+.tg-skico span{font-size:24px;color:var(--ui-tg-gold)}
+.tg-skinfo{min-width:0;line-height:1.35}
+.tg-skname{font-size:24px;color:var(--ui-tg-gold)}
+.tg-skdesc{margin-top:3px;font-size:21px;color:var(--ui-tg-white)}
+.tg-skfoot{display:flex;justify-content:center;margin-top:20px}
+.tg-skillpop .tg-sknext{position:relative;width:240px;height:68px}
+.tg-sknext .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-sknext .tg-tx{left:50%;top:50%;font-size:28px;color:var(--ui-tg-btn-text);text-shadow:2px 2px 0 var(--ui-tg-btn-shadow)}
+/* キャラのカード(PartTGEventEnemy / PartTGEventAlly) */
+.tg-rows{position:absolute;left:0;top:0;width:0;height:0;z-index:2}
+.tg-card{position:absolute;left:0;top:0;width:120px;height:130px;transform-origin:0 0;cursor:pointer;z-index:1}
+.tg-card.is-skill-on,.tg-card.has-talk{z-index:4}
+.tg-card.is-hide{opacity:0}
+.tg-light{position:absolute;left:-17.4px;top:-39.8px;width:154.8px;height:39.6px;-webkit-mask:url(tg/Light3.webp?v=20261128-tg1) center/100% 100% no-repeat;mask:url(tg/Light3.webp?v=20261128-tg1) center/100% 100% no-repeat;opacity:0;pointer-events:none}
+.tg-card.prio-first .tg-light{opacity:1;background:var(--ui-tg-light-b)}
+.tg-card.prio-last .tg-light{opacity:1;background:var(--ui-tg-light-r)}
+.tg-hp,.tg-hp-ex{pointer-events:none}
+.tg-ank{pointer-events:none}
+.tg-left{left:2px;top:-22px;transform:none;text-align:left;font-size:19.2px;color:var(--ui-tg-white);text-shadow:1.5px 1.5px 0 var(--ui-tg-outline)}
+.tg-left em{font-style:normal;color:var(--ui-tg-line)}
+.tg-cnt{position:absolute;left:79px;top:-1px;width:42.4px;height:42.4px;pointer-events:none}
+.tg-cntnum{left:50%;top:52%;font-size:28px;color:var(--ui-tg-miss)}
+.tg-cntnum.is-zero{color:var(--ui-tg-note)}
+.tg-fire{position:absolute;left:64px;top:-12px;width:62px;height:62px;transform-origin:50% 50%;pointer-events:none}
+.tg-firecnt{position:absolute;left:38px;top:36px;width:28px;height:28px;pointer-events:none}
+.tg-firecnt-bg{filter:sepia(1) hue-rotate(42deg) saturate(5) brightness(1.15)}
+.tg-firecnt .tg-cntnum{font-size:19px}
+.tg-wait{position:absolute;left:79px;top:-1px;width:42.4px;height:42.4px;pointer-events:none}
+.tg-waitspin{transform-origin:50% 50%}
+.tg-buff{transform-origin:0 100%}
+.tg-coin,.tg-talk{position:absolute;left:0;top:0;width:120px;height:0;pointer-events:none}
+.tg-coin .tg-sp{transform-origin:50% 50%}
+.tg-talk{opacity:0;z-index:2;transform-origin:19px 10px}
+.tg-talk.is-on{opacity:1}
+.tg-talk .tg-tx{left:19px;top:-6.5px;font-size:22.4px;color:var(--ui-tg-ink)}
+.tg-die{opacity:.92}
+.tg-die-icon,.tg-die-star{pointer-events:none}
+.tg-die-star{opacity:0}
+/* エフェクト・スキル演出(EffectCharactorSkill / EffectCorrectSpeedy / EffectsWrong / EffectTimeUp / EffectWin / EffectGameover) */
+.tg-fx{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden}
+.tg-dmg{font-size:38px;color:var(--ui-tg-white);text-shadow:2px 2px 0 var(--ui-tg-ink),-2px 2px 0 var(--ui-tg-ink),2px -2px 0 var(--ui-tg-ink),-2px -2px 0 var(--ui-tg-ink),0 2px 0 var(--ui-tg-ink),0 -2px 0 var(--ui-tg-ink),2px 0 0 var(--ui-tg-ink),-2px 0 0 var(--ui-tg-ink)}
+.tg-hitflash{position:absolute;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;background:radial-gradient(circle,var(--ui-tg-white) 0%,var(--ui-tg-gold) 38%,transparent 72%);pointer-events:none}
+.tg-ef{position:absolute;left:360px;top:210px;width:0;height:0;pointer-events:none}
+.tg-ef-bg{transform-origin:50% 50%}
+.tg-ef-ring{transform-origin:50% 50%}
+.tg-ef-exc,.tg-ef-inc{transform-origin:50% 50%}
+.tg-ef-wgrp{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
+.tg-ef-tu{transform-origin:50% 50%}
+.tg-sparkle{position:absolute;left:0;top:0;width:36px;height:36px;margin:-18px 0 0 -18px;opacity:0;mix-blend-mode:screen;pointer-events:none}
+.tg-win,.tg-lose{position:absolute;left:360px;top:380px;width:0;height:0;pointer-events:none}
+.tg-win{transform-origin:0 0}
+.tg-win-ch{transform-origin:50% 50%}
+.tg-cut{position:absolute;inset:0;opacity:0;pointer-events:none;z-index:6;overflow:hidden}
+.tg-cut.is-on{opacity:1}
+.tg-cut{transform-origin:360px 257px}
+.tg-cutbody{position:absolute;left:0;top:0;width:720px;height:480px}
+.tg-cutbody>.tg-cutgrad{top:35px}
+.tg-cutbody .tg-cuttext{width:690px;white-space:normal;line-height:1.25;text-align:center}
+.tg-cutband{position:absolute;left:0;top:35px;width:720px;height:445px;transform-origin:50% 50%;overflow:hidden}
+.tg-cutfaded{position:absolute;left:0;top:0;width:720px;height:445px;background:url(tg/FadedLarge512_sheet.webp?v=20261128-tg5) 0 0 / 2200% 100% no-repeat;opacity:.88}
+.tg-cutgrad{position:absolute;left:0;top:0;width:720px;height:445px;mix-blend-mode:multiply;opacity:.88}
+.tg-cutcard{object-fit:contain;object-position:50% 100%}
+.tg-cutlabel{transform-origin:50% 50%}
+.tg-cutname{left:360px;top:384px;transform:translate(-50%,0);font-size:40px;color:var(--ui-tg-white);text-shadow:2px 2px 0 var(--ui-tg-ink),-2px -2px 0 var(--ui-tg-ink),2px -2px 0 var(--ui-tg-ink),-2px 2px 0 var(--ui-tg-ink)}
+.tg-cuttext{left:360px;top:450px;transform:translate(-50%,0);font-size:25px;color:var(--ui-tg-white);text-shadow:2px 2px 0 var(--ui-tg-ink),-2px -2px 0 var(--ui-tg-ink),2px -2px 0 var(--ui-tg-ink),-2px 2px 0 var(--ui-tg-ink)}
+/* 開始前のVS画面(Team A vs Team B) */
+.tg-vs{position:absolute;inset:0;z-index:7;pointer-events:none}
+.tg-vs-head{position:absolute;left:0;top:34px;width:720px;height:86px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,var(--ui-tg-line) 0%,var(--ui-tg-line) 46%,var(--ui-tg-ink) 46%,var(--ui-tg-ink) 54%,var(--ui-tg-hp) 54%,var(--ui-tg-hp) 100%);box-shadow:0 4px 12px var(--ui-tg-shade)}
+.tg-vs-team{width:300px;text-align:center;font-size:42px;color:var(--ui-tg-white);text-shadow:3px 3px 0 var(--ui-tg-ink)}
+.tg-vs-mid{width:120px;text-align:center;font-size:52px;color:var(--ui-tg-white);text-shadow:0 0 10px var(--ui-tg-ink)}
+.tg-vs-grid{position:absolute;left:22px;top:148px;width:676px;display:grid;grid-template-columns:1fr 1fr;gap:18px 28px}
+.tg-vs-col{display:flex;flex-direction:column;gap:18px}
+.tg-vs-row{display:flex;align-items:center;gap:14px;height:132px;padding:10px 14px;border-radius:24px;border:5px solid var(--ui-tg-outline);box-shadow:inset 0 0 0 3px var(--ui-tg-white),0 4px 10px var(--ui-tg-shade)}
+.tg-vs-row-A{background:color-mix(in srgb,var(--ui-tg-line) 18%,var(--ui-tg-white))}
+.tg-vs-row-B{background:color-mix(in srgb,var(--ui-tg-hp) 18%,var(--ui-tg-white))}
+.tg-vs-ico{position:relative;width:104px;height:104px;flex:0 0 104px}
+.tg-vs-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.tg-vs-name{font-size:26px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg-vs-row-A .tg-vs-name{color:color-mix(in srgb,var(--ui-tg-line) 65%,var(--ui-tg-ink))}
+.tg-vs-row-B .tg-vs-name{color:color-mix(in srgb,var(--ui-tg-hp) 65%,var(--ui-tg-ink))}
+.tg-vs-rank{font-size:28px;color:var(--ui-tg-ink)}
+.tg-vs-wait{position:absolute;left:70px;top:1080px;width:580px;height:132px;display:flex;align-items:center;justify-content:center;border-radius:16px;border:4px solid var(--ui-tg-outline);background:var(--ui-tg-shade-deep);color:var(--ui-tg-white);font-size:36px}
+.tg-finger{transform-origin:112px 52px;z-index:2}
+/* 説明(EffectTutorial): 文字は中央基準・28px・行間1.45・黒 */
+.tg-guide{position:absolute;inset:0;display:none;z-index:10;pointer-events:none}
+.tg-guide.is-on{display:block}
+.tg-guide.is-tap{pointer-events:auto;cursor:pointer}
+.tg-dim{position:absolute;inset:0;background:var(--ui-tg-shade)}
+.tg-spot{position:absolute;border-radius:12px;border:4px solid var(--ui-tg-gold);box-shadow:0 0 0 2400px var(--ui-tg-shade)}
+.tg-gbox{position:absolute;left:0;top:0;width:0;height:0}
+.tg-gtext{position:absolute;left:0;width:720px;padding:0 52px;transform:translateY(-50%);text-align:center;font-size:27px;line-height:1.45;color:var(--ui-tg-ink)}
+.tg-gtext span{display:inline-block;text-align:left}
+/* 結果(ScreenTagPlayResult): ボタンの字は #eee に黒い影(TextShadow) */
+.tg-result{position:absolute;inset:0;z-index:9}
+.tg-resrow{position:absolute;left:60px;top:310px;display:flex}
+.tg-resrow .tg-card{cursor:default}
+.tg-restext,.tg-btn .tg-tx{color:var(--ui-tg-btn-text);text-shadow:3.9px 3.8px 0 var(--ui-tg-btn-shadow)}
+.tg-restext{left:360px;top:620px;width:620px;white-space:normal;font-size:28px;line-height:1.6}
+.tg-btn{width:340px;height:84px}
+.tg-btn .tg-tx{left:170px;top:42px;font-size:30px}
+.tg-btn-sub{width:220px;height:68px}
+.tg-btn-sub .tg-tx{left:110px;top:34px;font-size:26px}
+.tg-rankbox{position:absolute;left:120px;top:520px;width:480px;padding:20px 24px;border-radius:18px;border:4px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);text-align:center;color:var(--ui-tg-white)}
+.tg-rank-cur{font-size:44px;color:var(--ui-tg-gold);text-shadow:2px 2px 0 var(--ui-tg-ink)}
+.tg-rank-arrow{font-size:30px;margin:8px 0}
+/* デッキ編成(ScreenDeckEdit) & 対戦確認(ConfirmTGEventChallenge) & 警告(ConfirmTeamOverDeckCost) */
+.tg-deckedit,.tg-confirm{position:absolute;inset:0;z-index:8}
+.tg-de-head{position:absolute;left:0;top:0;width:720px;height:444px}
+.tg-de-title{left:270px;top:84px;font-size:32px;color:var(--ui-tg-ink);text-shadow:none}
+.tg-de-limit{position:absolute;left:502px;top:8px;width:206px;height:56px}
+.tg-de-limit .tg-tx{left:103px;top:28px;font-size:21px;color:var(--ui-tg-white);text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-de-costbox{position:absolute;left:506px;top:70px;width:198px;height:78px}
+.tg-de-costval{left:99px;top:48px;font-size:26px;color:var(--ui-tg-white);text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-de-costval.is-over{color:var(--ui-tg-miss)}
+.tg-de-slots{position:absolute;left:22px;top:186px;width:676px;display:flex;justify-content:space-between;align-items:flex-end}
+.tg-de-slots .tg-de-slot{position:relative;width:124px;height:150px;flex:0 0 124px}
+.tg-de-slot-empty{position:absolute;left:2px;top:22px;width:120px;height:120px;border-radius:10px;border:3px dashed var(--ui-tg-gold);background:var(--ui-tg-shade);display:flex;align-items:center;justify-content:center;color:var(--ui-tg-gold);font-size:24px}
+.tg-de-slot-num{position:absolute;left:4px;top:-4px;z-index:3;padding:2px 8px;border-radius:6px;background:var(--ui-tg-shade-deep);border:2px solid var(--ui-tg-gold);color:var(--ui-tg-gold);font-size:18px}
+.tg-de-slot-cost{position:absolute;right:4px;bottom:8px;z-index:3;padding:1px 6px;border-radius:6px;background:var(--ui-tg-shade-deep);color:var(--ui-tg-white);font-size:16px}
+.tg-de-slot-del{position:absolute;right:-4px;top:14px;z-index:4;width:28px;height:28px;border-radius:50%;background:var(--ui-tg-miss);color:var(--ui-tg-white);font-size:18px;line-height:28px;text-align:center}
+.tg-de-helper{position:absolute;left:22px;top:338px;width:118px;height:30px}
+.tg-de-rulebar{position:absolute;left:18px;top:380px;width:684px;padding:6px 12px;border-radius:10px;background:var(--ui-tg-shade-deep);border:2px solid var(--ui-tg-gold);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tg-de-rule{font-size:20px;color:var(--ui-tg-white);text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-de-rulebar .tg-de-auto{position:relative;width:184px;height:48px;flex:0 0 184px}
+.tg-de-auto .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-de-auto .tg-tx{left:50%;top:50%;font-size:21px;color:var(--ui-tg-white);text-shadow:1.5px 1.5px 0 var(--ui-tg-ink)}
+.tg-de-poolwrap{position:absolute;left:18px;top:450px;width:684px;height:698px;padding:14px;border-radius:14px;border:3px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);overflow-y:auto}
+.tg-de-pool{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 10px}
+.tg-de-pool .tg-de-cand{position:relative;width:100%;height:164px;padding:6px;border-radius:10px;border:2px solid var(--ui-tg-outline);background:var(--ui-tg-shade);text-align:center}
+.tg-de-cand.is-in{border-color:var(--ui-tg-gold);opacity:.62}
+.tg-de-cand-ico{position:relative;width:104px;height:104px;margin:0 auto}
+.tg-de-cand-meta{margin-top:4px;font-size:16px;color:var(--ui-tg-white);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tg-de-cand-cost{font-size:17px;color:var(--ui-tg-gold)}
+.tg-de-cand-tag{position:absolute;left:6px;top:6px;z-index:3;padding:2px 6px;border-radius:6px;background:var(--ui-tg-gold);color:var(--ui-tg-ink);font-size:15px}
+.tg-de-foot{position:absolute;left:0;top:1164px;width:720px;height:104px;display:flex;justify-content:center;align-items:center;gap:24px}
+.tg-de-foot .tg-de-go{position:relative;width:300px;height:78px}
+.tg-de-go .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-de-go:disabled .tg-sp{filter:grayscale(.8) brightness(.6)}
+.tg-de-go .tg-tx{left:50%;top:50%;font-size:30px;color:var(--ui-tg-btn-text);text-shadow:2px 2px 0 var(--ui-tg-btn-shadow)}
+/* 対戦確認画面(ConfirmTGEventChallenge) */
+.tg-cf-win{position:absolute;left:30px;top:160px;width:660px;padding:34px 28px 36px;border-radius:20px;border:5px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);color:var(--ui-tg-white)}
+.tg-cf-head{text-align:center;font-size:36px;color:var(--ui-tg-gold);text-shadow:2px 2px 0 var(--ui-tg-ink);margin-bottom:20px}
+.tg-cf-note{padding:14px 16px;border-radius:12px;background:var(--ui-tg-shade);font-size:22px;line-height:1.5;margin-bottom:22px}
+.tg-cf-meta{display:flex;justify-content:space-between;align-items:center;font-size:24px;margin-bottom:18px;padding:0 6px}
+.tg-cf-meta b{color:var(--ui-tg-gold);font-weight:400}
+.tg-cf-row{display:flex;justify-content:space-between;gap:8px;margin-bottom:30px}
+.tg-cf-slot{position:relative;width:112px;height:112px;flex:0 0 112px}
+.tg-cf-btns{display:flex;justify-content:center;gap:24px}
+.tg-cf-btns .tg-cf-btn{position:relative;width:250px;height:76px}
+.tg-cf-btn .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-cf-btn .tg-tx{left:50%;top:50%;font-size:28px;color:var(--ui-tg-btn-text);text-shadow:2px 2px 0 var(--ui-tg-btn-shadow)}
+/* ルール違反ポップアップ(ConfirmTeamOverDeckCost) */
+.tg-alert{position:absolute;inset:0;z-index:11;background:var(--ui-tg-shade);display:flex;align-items:center;justify-content:center}
+.tg-alert-box{width:600px;padding:34px 30px 28px;border-radius:20px;border:5px solid var(--ui-tg-gold);background:var(--ui-tg-shade-deep);text-align:center;color:var(--ui-tg-white)}
+.tg-alert-title{font-size:30px;color:var(--ui-tg-gold);margin-bottom:16px;text-shadow:2px 2px 0 var(--ui-tg-ink)}
+.tg-alert-body{font-size:24px;line-height:1.55;margin-bottom:26px}
+.tg-alert-box .tg-alert-ok{position:relative;width:220px;height:68px;margin:0 auto;display:block}
+.tg-alert-ok .tg-sp{left:0;top:0;width:100%;height:100%}
+.tg-alert-ok .tg-tx{left:50%;top:50%;font-size:28px;color:var(--ui-tg-btn-text);text-shadow:2px 2px 0 var(--ui-tg-btn-shadow)}
+/* 実機の演出なので「動きを減らす」設定でも動かす(仮想対戦と同じ) */
+@media all{
+ .tg-card{transition:transform .55s cubic-bezier(.4,0,.2,1),opacity .25s}
+ .tg-q{transition:transform .55s cubic-bezier(.4,0,.2,1)}
+ .tg-hp,.tg-hp-ex{transition:width .5s ease-out}
+ .tg-banner.is-on .tg-blbl{animation:tg-qlabel .45s ease-out both}
+ .tg-banner.is-on .tg-bup{animation:tg-qup .45s ease-out both}
+ .tg-kaitou.is-on{animation:tg-wait-in .6s ease-out both,tg-wait-pulse 1s .6s ease-in-out infinite}
+ .tg-talk.is-on{animation:tg-msgpop .3s ease-out both}
+ .tg-coin-pop{animation:tg-coinpop .25s cubic-bezier(.2,.9,.3,1.2) both}
+ .tg-buff-pop{animation:tg-buffpop .45s ease-out both}
+ .tg-cut.is-on .tg-cutband{animation:tg-qup .2s ease-out both}
+ .tg-cut.is-on .tg-cutfaded{animation:tg-faded .367s steps(22) infinite}
+ .tg-cutbody{animation:tg-cutin .2s ease-out both}
+ .tg-cutbody.is-out{animation:tg-cutout .2s ease-in forwards}
+ .tg-cut.is-closing{animation:tg-cutclose .2s ease-in forwards}
+ .tg-ef-bg{animation:tg-qup .33s ease-out both}
+ .tg-ef-exc{animation:tg-scalex .33s ease-out both}
+ .tg-ef-ring{animation:tg-ring 1s ease-out both}
+ .tg-ef-wgrp{animation:tg-qup .33s ease-out both}
+ .tg-ef-inc{animation:tg-inc .33s ease-out both}
+ .tg-ef-tu{animation:tg-qup .33s ease-out both}
+ .tg-sparkle{animation:tg-spark .65s ease-out var(--d,.33s) both}
+ .tg-win{animation:tg-qup .17s ease-out both}
+ .tg-win-ch{animation:tg-winch .25s ease-out var(--d,.17s) both}
+ .tg-lose-gahi{animation:tg-gahi 1.5s ease-out both}
+ .tg-lose-ow{animation:tg-ow 1.35s ease-out both}
+ .tg-dmg{animation:tg-rise 1.1s ease-out forwards}
+ .tg-hitflash{animation:tg-hitflash .35s ease-out forwards}
+ .tg-die-icon{animation:tg-icondie 1s linear forwards}
+ .tg-die-star{animation:tg-deathstar 1s linear forwards}
+ .tg-finger{animation:tg-tap 1s ease-in-out infinite}
+ .tg-next{animation:tg-blink .9s ease-in-out infinite}
+ .tg-gbox{animation:tg-fade .2s ease-out}
+ .tg-fire{animation:tg-firepulse .983s ease-in-out infinite}
+ .tg-waitspin{animation:tg-spin 1.517s linear infinite}
+ .tg-ready{animation:tg-ready 2s ease-in-out infinite}
+ .tg-resimg{animation:tg-in .4s ease-out}
+}
+@keyframes tg-qlabel{0%{transform:scale(0)}100%{transform:scale(1)}}
+@keyframes tg-qup{0%{transform:scaleY(0)}100%{transform:scaleY(1)}}
+@keyframes tg-scalex{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+@keyframes tg-in{0%{opacity:0;transform:scale(1.6)}100%{opacity:1;transform:scale(1)}}
+@keyframes tg-msgpop{0%{opacity:0;transform:scale(0)}55%{opacity:1;transform:scale(1.35)}100%{opacity:1;transform:scale(1)}}
+@keyframes tg-coinpop{0%{opacity:0;transform:scale(0)}65%{opacity:1;transform:scale(1.18)}100%{opacity:1;transform:scale(1)}}
+@keyframes tg-buffpop{0%{transform:scale(0)}67%{transform:scale(2.4)}100%{transform:scale(1)}}
+@keyframes tg-fade{0%{opacity:0}100%{opacity:1}}
+@keyframes tg-blink{50%{opacity:.35}}
+@keyframes tg-ready{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes tg-firepulse{0%,100%{transform:scale(.85)}27%{transform:scale(1.38)}}
+@keyframes tg-spin{0%{transform:rotate(0deg)}100%{transform:rotate(-360deg)}}
+@keyframes tg-wait-in{0%{transform:scale(0)}65%{transform:scale(1.22)}100%{transform:scale(.88)}}
+@keyframes tg-wait-pulse{0%,100%{transform:scale(.88)}75%{transform:scale(1)}}
+@keyframes tg-faded{0%{background-position:0 0}100%{background-position:100% 0}}
+@keyframes tg-cutin{0%{opacity:0;transform:translateX(100%)}100%{opacity:1;transform:translateX(0)}}
+@keyframes tg-cutout{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(-130%)}}
+@keyframes tg-cutclose{0%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+@keyframes tg-ring{0%{transform:scale(0) rotate(0deg)}42%{transform:scale(1.5) rotate(-18deg)}50%{transform:scale(1.2) rotate(-22deg)}58%{transform:scale(1) rotate(-26deg)}100%{transform:scale(1) rotate(-42deg)}}
+@keyframes tg-inc{0%{transform:translateX(21px) scaleX(0)}100%{transform:translateX(0) scaleX(1)}}
+@keyframes tg-spark{0%{opacity:0;transform:translate(0,0) scale(.3) rotate(0deg)}25%{opacity:1;transform:translate(calc(var(--dx)*.5),calc(var(--dy)*.5)) scale(1.1) rotate(90deg)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2) rotate(220deg)}}
+@keyframes tg-winch{0%{transform:scale(1)}45%{transform:scale(1.5)}100%{transform:scale(1)}}
+@keyframes tg-gahi{0%{opacity:1;transform:translate(-645px,0)}17%,55%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(0,178px)}}
+@keyframes tg-ow{0%{opacity:1;transform:translate(692px,0)}19%,49%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(0,218px)}}
+@keyframes tg-icondie{0%,50%{opacity:1}100%{opacity:0}}
+@keyframes tg-deathstar{0%,49.9%{opacity:0}50%,67%{opacity:1}100%{opacity:0}}
+@keyframes tg-hitflash{0%{opacity:1;transform:scale(.25)}45%{opacity:.95;transform:scale(1.25)}100%{opacity:0;transform:scale(1.6)}}
+@keyframes tg-rise{0%{opacity:0;translate:0 18px}12%{opacity:1;translate:0 0}75%{opacity:1}100%{opacity:0;translate:0 -55px}}
+@keyframes tg-tap{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}

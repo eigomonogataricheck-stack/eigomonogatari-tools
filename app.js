@@ -45,7 +45,7 @@ function closeMoreSheet(){let s=$('moreSheet');if(!s)return;s.hidden=true;$('mor
 function setSidebarOpen(open){$('sidebar').classList.toggle('open',open);syncMenuToggle()}
 function toggleMenu(){if(!PC_MENU.matches){setSidebarOpen(!$('sidebar').classList.contains('open'));return}let collapsed=document.documentElement.classList.toggle('sidebar-collapsed');try{localStorage.setItem('eigoSidebarCollapsed',collapsed?'1':'0')}catch{}syncMenuToggle()}
 function syncMenuToggle(){let collapsed=document.documentElement.classList.contains('sidebar-collapsed'),open=PC_MENU.matches?!collapsed:$('sidebar').classList.contains('open');$('menuToggle').setAttribute('aria-expanded',String(open));$('menuToggle').setAttribute('aria-label',open?'メニューを閉じる':'メニューを開く');document.querySelectorAll('#sidebar [data-page]').forEach(b=>{if(PC_MENU.matches&&collapsed)b.title=b.textContent.trim();else b.removeAttribute('title')})}
-function showPage(n){closeMoreSheet();$('moreToggle')?.classList.toggle('active',['battle','diag','ai','help','migration'].includes(n));if(n==='battle')openBattle();if(n==='diag')openDiag();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
+function showPage(n){closeMoreSheet();$('moreToggle')?.classList.toggle('active',['battle','guide','diag','ai','help','migration'].includes(n));if(n==='battle')openBattle();if(n==='guide')window.openBattleTutorial?.();if(n==='diag')openDiag();document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+n));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===n));setSidebarOpen(false)}
 async function loadData(){try{let r=await fetch('zukan_beta.json',{cache:'no-cache'}).then(x=>{if(!x.ok)throw Error(x.status);return x.json()});chars=Array.isArray(r)?r:(r.characters||[]);if(!chars.length)throw Error('charactersが空です');$('zkStatus').textContent='';initZukanAdvancedFilters();renderZukan();renderTemporaryCharacters();renderPickerTemporary();if(typeof hydrateCoopState==='function')hydrateCoopState()}catch(error){chars=[];$('zkStatus').textContent='図鑑データを読み込めません';console.error(error)}}
 function results(q=''){q=String(q).normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase();return chars.map((c,i)=>({c,i})).filter(x=>!q||String(x.c.name||'').normalize('NFKC').replace(/[\s　]+/g,'').toLowerCase().includes(q))}
 /* 各ページの「使い方」ボタンで開く短い説明。詳しい仕様は「使い方」ページ(catalog.js の renderComprehensiveHelp) */
@@ -101,7 +101,8 @@ function openBattle(){
   phase='scripts';
   for(const f of ['battle-roster','battle-decks','battle-models'])await loadScriptOnce(f+'.js?v=20261121-ai8');
   if(!await loadCompatWasm('20261127-wasm2'))await loadScriptOnce('battle-compat.js?v=20261121-ai8');
-  for(const f of ['battle-fxdata','battle-fx'])await loadScriptOnce(f+'.js?v=20261121-ai8');
+  await loadScriptOnce('battle-fxdata.js?v=20261121-ai8');
+   await loadScriptOnce('battle-fx.js?v=20261128-tg6');// 対戦の遊び方と同じ版にする(2回読み込まないため)
   await loadScriptOnce('battle-ui.js?v=20261125-ai9');
   window.initBattle();
  })().catch(e=>{console.error(e);battleLoading=null;app.textContent=phase==='wasm'?'仮想対戦の WebAssembly エンジンを読み込めませんでした（'+(e&&e.message?e.message:String(e))+'）。通信環境や対応ブラウザを確認し、ページを再読み込みしてください。':'仮想対戦を読み込めませんでした。ページを再読み込みしてください'});
@@ -139,7 +140,7 @@ const PAGE_HELP={
   '回答: いちばん下のボタンで、回答の結果(Excellent回答 / Correct回答 / 半誤答 / 完全誤答)を切り替えます。',
   '決めたら「ターン実行」です。「自動で決める」はスキル・狙い・順番を自動で決め、「決着まで自動操作」は決着がつくまで自動で進めます。「1ターン戻す」「やり直す」で戻れます。',
   '「計算履歴」で、ターンごとのダメージ計算の内訳を確認できます。「テキストでコピー」で、文章として持ち出せます。'],
-  tips:['「演出」は攻撃やスキルの演出、「着弾エフェクト」は着弾時のダメージエフェクト、「高速対戦」は実機の特別ルール「高速」と同じくスキル演出を省く設定で、それぞれ ON / OFF を切り替えます。「視点切替」で手前に出すチームを入れ替えられ、「スキル確認」「効果」で各キャラのスキルや、かかっている効果を確認できます。','ゲームの実際の対戦と同じ結果になるとは限りません(独自の調査にもとづく再現です)。編成と対戦の途中経過はこの端末に保存され、次に開いたときに続きから再開できます。']},
+  tips:['対戦のルールから知りたいときは、見出しの右の「はじめての方へ」(対戦の遊び方)を見てください。','「演出」は攻撃やスキルの演出、「着弾エフェクト」は着弾時のダメージエフェクト、「高速対戦」は実機の特別ルール「高速」と同じくスキル演出を省く設定で、それぞれ ON / OFF を切り替えます。「視点切替」で手前に出すチームを入れ替えられ、「スキル確認」「効果」で各キャラのスキルや、かかっている効果を確認できます。','ゲームの実際の対戦と同じ結果になるとは限りません(独自の調査にもとづく再現です)。編成と対戦の途中経過はこの端末に保存され、次に開いたときに続きから再開できます。']},
  calculator:{title:'ダメージ計算機の使い方',steps:[
   '「攻撃キャラ」と「攻撃対象キャラ」の枠を押してキャラを選びます。Power(攻撃側)・HP(攻撃対象)・属性が、完凸の値で自動で入ります。',
   'イベント補正・解答結果(Excellent / Correct / 2回目で正解)・自力モード・問題レベルを、実際の対戦に合わせて切り替えます。',

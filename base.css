@@ -7,6 +7,10 @@
 :root{
  --ui-accent:#24262b;--ui-accent-hover:#111214;--ui-accent-soft:#efeeee;--ui-accent-ring:rgba(36,38,43,.14);
  --ui-vermilion:#b73a17;--ui-vermilion-mark:#c8401c;--ui-state:#e0b252;
+ --ui-attr-fire:#e5603f;--ui-attr-water:#2b73d6;--ui-attr-wind:#3b9a62;
+ /* 対戦チュートリアルの実機画面(色は APK のプレハブと画像の値) */
+ --ui-tg-bg:#17100b;--ui-tg-ink:#000;--ui-tg-white:#fff;--ui-tg-outline:#2a1408;--ui-tg-shade:rgba(0,0,0,.5);--ui-tg-shade-deep:rgba(0,0,0,.72);--ui-tg-gauge-cover:#1b1b1b;
+ --ui-tg-hp:#2288dd;--ui-tg-hp-frame:#0d1a2b;--ui-tg-line:#ff0000;--ui-tg-light-b:rgb(99,99,255);--ui-tg-light-r:rgb(255,99,99);--ui-tg-note:#000094;--ui-tg-btn-text:#eeeeee;--ui-tg-btn-shadow:#000a17;--ui-tg-miss:#d0202a;--ui-tg-gold:#f2c14e;--ui-tg-strong:#c8401c;
  --ui-band:#24262b;--ui-band-text:#d6d8db;--ui-band-sub:#b0b3b9;
  --ui-heading:#24262b;--ui-text:#474a51;--ui-text-sub:#474a51;--ui-muted:#666b73;
  --ui-border:#dcdcdf;--ui-border-strong:#c4c5c9;--ui-line:#e8e8ea;--ui-soft:#f6f6f7;--ui-hover:#f6f6f7;--ui-bg:#f6f6f7;
