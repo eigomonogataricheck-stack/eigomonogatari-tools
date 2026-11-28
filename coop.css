@@ -11,8 +11,8 @@
 .coop-proposal-toggle>span:first-child,.coop-history-toggle>span:first-child{flex:1 1 auto}
 .coop-proposal-toggle small,.coop-history-toggle small{color:var(--ui-muted);font-size:.74rem;font-weight:500}
 .coop-proposal-toggle[aria-expanded="false"],.coop-history-toggle[aria-expanded="false"]{border-bottom-color:transparent}
-.coop-layer-arrow,.coop-deck-arrow,.coop-proposal-arrow,.coop-proposal-usage-arrow,.coop-history-arrow,.coop-scale-history-arrow{flex:none;color:#8a8e96;font-size:.7rem}
-.coop-layer.closed .coop-layer-body,.coop-deck-row.mobile-closed .coop-deck-body{display:none}
+.coop-deck-arrow,.coop-proposal-arrow,.coop-proposal-usage-arrow,.coop-history-arrow,.coop-scale-history-arrow{flex:none;color:#8a8e96;font-size:.7rem}
+.coop-deck-row.mobile-closed .coop-deck-body{display:none}
 
 /* ===== 協力ダメージ計算 =====
    ①敵キャラ ②味方デッキ ③結果 ・記録 のタブ(.coop-tabs)で、今の手順の欄だけを出す。切り替えは coop.js の coopSetTab。
@@ -50,49 +50,20 @@
 .coop-record-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .coop-record-bar small{color:var(--ui-muted);font-size:.76rem}
 
-/* 敵: 1層=3行の表。列見出し(.coop-enemy-columns)を層ごとに1回だけ出し、各行は1体分。
-   通常モードは「キャラ|属性|倍率後のHP」、詳細モードは「キャラ|無凸HP|属性|倍率後のHP」(属性と無凸HPは入力欄になる) */
-.coop-enemies-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));align-items:start;gap:8px;padding:10px;container-type:inline-size}
-.coop-detail-on .coop-enemies-body{grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr))}
-.coop-layer{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
-.coop-layer-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:32px;margin:0;padding:5px 10px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:var(--ui-soft);color:var(--ui-heading);font-size:.8rem;font-weight:500;text-align:left;box-shadow:none;cursor:pointer}
-.coop-layer.closed .coop-layer-toggle{border-bottom-color:transparent}
-.coop-layer-body{display:grid;padding:0 10px 2px}
-.coop-enemy-columns,.coop-enemy-card{display:grid;grid-template-columns:minmax(0,1fr) 44px 76px;align-items:center;gap:8px;min-width:0}
-.coop-detail-on .coop-enemy-columns,.coop-detail-on .coop-enemy-card{grid-template-columns:minmax(0,1fr) 84px 58px 68px;gap:6px}
-.coop-enemy-columns{padding:5px 0 3px;border-bottom:1px solid var(--ui-line);color:var(--ui-muted);font-size:.6rem;font-weight:500;line-height:1.3}
-.coop-enemy-columns>span:nth-child(3){text-align:center}
-.coop-enemy-columns>span:last-child{text-align:right}
-#page-coop:not(.coop-detail-on) .coop-enemy-columns>.coop-col-detail{display:none}
-.coop-enemy-card{padding:5px 0;border-bottom:1px solid var(--ui-line)}
-.coop-enemy-card:last-child{border-bottom:0}
-.coop-enemy-card>.coop-character{grid-column:1;grid-row:1;display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto auto;align-items:start;align-content:center;row-gap:2px;column-gap:8px;width:100%;min-width:0;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:var(--ui-heading);text-align:left;box-shadow:none;cursor:pointer}
-.coop-enemy-card>.coop-character .coop-portrait{grid-row:1/3;width:34px;border-radius:8px}
+/* 敵: 5層×3体。画像だけを並べ、押して選ぶ(詳細モードのときだけ画像の下に無凸HPと属性) */
+.coop-enemies-body{display:grid;gap:8px;max-width:440px;margin:0 auto;padding:10px}
+.coop-layer{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:center;gap:8px}
+.coop-layer-title{margin:0;color:var(--ui-muted);font-size:.78rem;font-weight:500}
+.coop-layer-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:8px;min-width:0}
+.coop-enemy-card{display:grid;justify-items:center;gap:4px;min-width:0}
+.coop-enemy-card>.coop-character{width:100%;max-width:84px;margin:0;padding:0;border:0;border-radius:10px;background:transparent;box-shadow:none;cursor:pointer}
 .coop-enemy-card>.coop-character:hover .coop-portrait{box-shadow:0 0 0 2px var(--ui-accent)}
-.coop-enemy-card>.coop-character strong{min-width:0;font-size:.72rem;font-weight:500;line-height:1.25;overflow-wrap:anywhere}
-.coop-enemy-card>.coop-character small{justify-self:start;padding:0 6px;border-radius:99px;background:#efeeee;color:var(--ui-muted);font-size:.6rem;font-weight:500;line-height:1.6}
-/* 表示用の属性・HP。見出しは列見出しにあるので各行の「属性」「HP」の文字は読み上げ用にだけ残す */
-.coop-enemy-summary,.coop-enemy-manual{display:contents}
-.coop-enemy-attr{grid-column:2;grid-row:1;text-align:center}
-.coop-enemy-hp{grid-column:-2;grid-row:1;text-align:right}
-.coop-detail-on .coop-enemy-attr{display:none}
-.coop-enemy-summary b{color:var(--ui-heading);font-size:.8rem;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
-.coop-enemy-summary i,.coop-enemy-manual label>span:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-.coop-enemy-manual label{grid-row:1;min-width:0}
-.coop-enemy-manual label:first-child{grid-column:2}
-.coop-enemy-manual label:last-child{grid-column:3}
+.coop-enemy-manual{display:grid;gap:4px;width:100%;min-width:0}
+.coop-enemy-manual label{position:relative;min-width:0}
+.coop-enemy-manual label>span:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .coop-enemy-manual input{width:100%;min-width:0;height:30px;padding:2px 4px;font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
 .coop-enemy-manual .coop-styled-select{display:block;width:100%;min-width:0}
 .coop-enemy-manual .coop-styled-select-button{width:100%;height:30px;min-height:30px;padding:0 6px;font-size:.74rem}
-/* 敵欄が狭いとき(スマホ・PCの中くらいの幅)は、画面幅ではなく敵欄の幅で列を詰める */
-@container (max-width:420px){
- .coop-layer-body{padding:0 6px 2px}
- .coop-enemy-columns,.coop-enemy-card{grid-template-columns:minmax(0,1fr) 36px 64px;gap:6px}
- .coop-detail-on .coop-enemy-columns,.coop-detail-on .coop-enemy-card{grid-template-columns:minmax(0,1fr) 66px 48px 54px;gap:4px}
- .coop-enemy-card>.coop-character{grid-template-columns:30px minmax(0,1fr);column-gap:5px}
- .coop-enemy-card>.coop-character .coop-portrait{width:30px}
- .coop-detail-on .coop-enemy-summary b{font-size:.7rem}
-}
 
 /* 味方デッキ */
 #coopDecksBody{padding:10px 12px 12px}
@@ -114,13 +85,6 @@
 .coop-action-group .coop-styled-select-button{width:100%;height:32px;min-height:32px;padding:0 10px;font-size:.76rem}
 
 /* 各層の敵: デッキの枠と同じ5列(左右の余白=デッキの枠線1px+内側8px、列の間6px)にそろえ、何枠目がどの層を攻撃するかを見せる */
-.coop-enemy-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:12px;padding:0 9px}
-.coop-strip-layer{display:grid;justify-items:center;gap:3px;min-width:0}
-.coop-strip-label{color:var(--ui-muted);font-size:.66rem;font-weight:500}
-.coop-strip-faces{display:flex;justify-content:center;gap:3px;width:100%}
-.coop-strip-face{flex:1 1 0;max-width:24px;min-width:0;margin:0;padding:0;border:0;border-radius:6px;background:transparent;box-shadow:none;cursor:pointer}
-.coop-strip-face .coop-portrait{border-radius:6px}
-.coop-strip-face:hover .coop-portrait{box-shadow:0 0 0 2px var(--ui-accent)}
 #coopDeckRows{display:grid;gap:8px;margin-top:6px;container-type:inline-size}
 .coop-deck-row{overflow:hidden;border:1px solid var(--ui-line);border-radius:12px;background:#fff}
 .coop-deck-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-height:36px;padding:4px 10px;border-bottom:1px solid var(--ui-line);background:var(--ui-soft);cursor:pointer}
@@ -175,8 +139,6 @@
 .coop-random-reason{margin-top:4px;padding:6px 8px;border-radius:8px;background:var(--ui-soft)}
 .coop-random-reason summary{color:var(--ui-accent);font-weight:500;cursor:pointer}
 @media(max-width:600px){
- .coop-enemy-strip{gap:4px;padding:0 7px}
- .coop-strip-faces{gap:2px}
  .coop-enemies-body{padding:8px}
  #coopDecksBody{padding:8px}
  .coop-deck-body{padding:6px}
